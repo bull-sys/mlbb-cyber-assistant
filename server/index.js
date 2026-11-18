@@ -62,215 +62,239 @@ app.get("/api/players",auth,(req,res)=>{
 });
 app.post("/api/players/:id/like",auth,(req,res)=>{const target=Number(req.params.id);if(!Number.isInteger(target)||target===req.user.id||!safeUser(target))return res.status(400).json({error:"Некорректный игрок"});db.prepare("INSERT OR IGNORE INTO likes(from_user,to_user) VALUES(?,?)").run(req.user.id,target);const mutual=!!db.prepare("SELECT 1 FROM likes WHERE from_user=? AND to_user=?").get(target,req.user.id);res.json({liked:true,mutual})});
 app.get("/api/matches",auth,(req,res)=>{const rows=db.prepare(`SELECT u.id,u.nickname,p.hero,p.role,p.rank,p.style,p.game_id FROM likes l JOIN users u ON u.id=l.to_user JOIN profiles p ON p.user_id=u.id WHERE l.from_user=? AND EXISTS(SELECT 1 FROM likes x WHERE x.from_user=l.to_user AND x.to_user=l.from_user)`).all(req.user.id);res.json({matches:rows})});
-function analyze({lane,enemies=[],allies=[],myHero=""}){
+
+function analyze({lane, enemies = [], allies = [], myHero = ""}) {
   const enemy = heroes.filter(h => enemies.includes(h.name));
   const team = heroes.filter(h => allies.includes(h.name));
   const selected = heroes.find(h => h.name === myHero);
 
   const enemyTags = new Set(enemy.flatMap(h => h.tags || []));
-  const enemyTypes = enemy.map(h => h.type);
-  const has = tag => enemyTags.has(tag);
-
-  const threats = [];
-  if (has("heal") || has("sustain")) threats.push("Отхил и устойчивость");
-  if (enemyTypes.filter(t => t === "mage").length >= 2) threats.push("Много магического урона");
-  if (has("attack-speed")) threats.push("Высокая скорость атаки");
-  if (enemy.some(h => h.type === "tank")) threats.push("Плотный фронтлайн");
-  if (has("control")) threats.push("Много контроля");
-  if (has("burst")) threats.push("Взрывной урон");
-  if (has("mobility")) threats.push("Высокая мобильность");
-
   const allyTags = new Set(team.flatMap(h => h.tags || []));
+  const enemyTypes = enemy.map(h => h.type);
+
+  const has = tag => enemyTags.has(tag);
+  const enemyHas = type => enemy.some(h => h.type === type);
   const hasFrontline = team.some(h =>
     h.type === "tank" || (h.tags || []).includes("frontline")
   );
 
+  // Угрозы вражеского состава
+  const threats = [];
+
+  if (has("heal") || has("sustain"))
+    threats.push("Восстановление здоровья и устойчивость");
+
+  if (enemyTypes.filter(t => t === "mage").length >= 2)
+    threats.push("Высокая магическая угроза");
+
+  if (has("attack-speed"))
+    threats.push("Высокая скорость атаки");
+
+  if (enemyHas("tank"))
+    threats.push("Плотная передняя линия");
+
+  if (has("control"))
+    threats.push("Много контроля");
+
+  if (has("burst"))
+    threats.push("Высокий взрывной урон");
+
+  if (has("mobility"))
+    threats.push("Высокая мобильность");
+
+  // Подбор контрпиков с учётом состава
   const candidates = heroes
-    .filter(h => h.role === lane && !enemies.includes(h.name))
+    .filter(h =>
+      h.role === lane &&
+      !enemies.includes(h.name) &&
+      h.name !== myHero
+    )
     .map(h => {
       const tags = new Set(h.tags || []);
       let score = 0;
       const reasons = [];
 
       if (has("control") && tags.has("anti-control")) {
-        score += 3;
-        reasons.push("полезен против контроля");
+        score += 4;
+        reasons.push("Снижает угрозу вражеского контроля");
       }
 
-      if (enemy.some(e => e.type === "tank") && tags.has("tank-shred")) {
-        score += 3;
-        reasons.push("хорош против плотных целей");
+      if (enemyHas("tank") && tags.has("tank-shred")) {
+        score += 4;
+        reasons.push("Эффективен против выносливых целей");
       }
 
-      if (enemy.some(e => e.type === "marksman") &&
-          (tags.has("burst") || tags.has("pickoff"))) {
-        score += 2;
-        reasons.push("может угрожать задней линии");
+      if (
+        (enemyHas("marksman") || enemyHas("mage")) &&
+        (tags.has("burst") || tags.has("pickoff"))
+      ) {
+        score += 3;
+        reasons.push("Может быстро устранять уязвимые цели");
       }
 
       if (has("mobility") && tags.has("control")) {
-        score += 2;
-        reasons.push("имеет инструменты против мобильных целей");
+        score += 3;
+        reasons.push("Помогает ограничивать мобильных противников");
       }
 
       if (allyTags.has("engage") &&
           (tags.has("burst") || tags.has("pickoff"))) {
         score += 2;
-        reasons.push("сочетается с инициацией союзников");
+        reasons.push("Хорошо реализует инициацию союзников");
       }
 
-      if ((allyTags.has("heal") || allyTags.has("protect")) &&
-          (tags.has("frontline") || tags.has("sustain"))) {
-        score += 1;
-        reasons.push("получает пользу от поддержки");
+      if (
+        (allyTags.has("heal") || allyTags.has("protect")) &&
+        (tags.has("frontline") || tags.has("sustain"))
+      ) {
+        score += 2;
+        reasons.push("Хорошо сочетается с поддержкой союзников");
       }
 
       if (!hasFrontline && tags.has("frontline")) {
-        score += 2;
-        reasons.push("помогает команде с передней линией");
+        score += 3;
+        reasons.push("Помогает закрыть недостаток передней линии");
       }
-
-      if (h.name === myHero) score += 1;
 
       return {
         hero: h,
         score,
-        reason: reasons.length
-          ? reasons.join("; ")
-          : "подходит по выбранной роли и составу"
+        reason: reasons.join("; ")
       };
     })
-    .sort((a,b) => b.score - a.score)
-    .slice(0,3);
+    .filter(x => x.score > 0)
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 3);
 
-
+  // Подбор предметов
   const physicalAssassin = selected?.type === "assassin";
   const physicalFighter = selected?.type === "fighter";
   const magicMage = selected?.type === "mage";
+  const marksman = selected?.type === "marksman";
 
   const itemScores = items.map(item => {
     const tags = new Set(item.tags || []);
     let score = 0;
     const reasons = [];
 
-    // Базовая совместимость с героем
-    if (physicalAssassin && (tags.has("physical") || tags.has("burst"))) {
+    // Совместимость с выбранным героем
+    if (physicalAssassin && item.category === "Атака" &&
+        (tags.has("burst") || tags.has("penetration"))) {
       score += 4;
-      reasons.push("подходит физическому убийце");
+      reasons.push("Подходит физическому убийце");
     }
 
     if (physicalFighter && tags.has("fighter")) {
       score += 4;
-      reasons.push("подходит бойцу");
+      reasons.push("Подходит бойцу");
     }
 
     if (magicMage && tags.has("magic")) {
       score += 4;
-      reasons.push("подходит магу");
+      reasons.push("Усиливает магический урон");
     }
 
-    // Ответы на угрозы противника
-    if ((has("heal") || has("sustain")) && tags.has("anti-heal")) {
-      score += 5;
-      reasons.push("против восстановления здоровья");
+    if (marksman && tags.has("marksman")) {
+      score += 4;
+      reasons.push("Подходит стрелку");
+    }
+
+    // Ответы на угрозы
+    if ((has("heal") || has("sustain")) &&
+        tags.has("anti-heal")) {
+      score += 6;
+      reasons.push("Снижает эффективность восстановления здоровья");
     }
 
     if (enemyTypes.filter(t => t === "mage").length >= 2 &&
         tags.has("magic-burst")) {
       score += 5;
-      reasons.push("против магического взрывного урона");
+      reasons.push("Защищает от магического взрывного урона");
     }
 
-    if (has("attack-speed") && tags.has("anti-attack-speed")) {
-      score += 4;
-      reasons.push("против высокой скорости атаки");
+    if (has("attack-speed") &&
+        tags.has("anti-attack-speed")) {
+      score += 5;
+      reasons.push("Ослабляет героев с частыми автоатаками");
     }
 
-    if (enemy.some(h => h.type === "tank") && tags.has("penetration")) {
+    if (enemyHas("tank") && tags.has("penetration")) {
       score += 4;
-      reasons.push("пробивание защиты");
+      reasons.push("Помогает пробивать защиту противников");
     }
 
     if (has("burst") && tags.has("survival")) {
       score += 3;
-      reasons.push("повышает выживаемость");
+      reasons.push("Повышает шансы пережить взрывной урон");
     }
 
-    return {name:item.name, score, reasons};
+    if (has("attack-speed") && tags.has("attack-speed")) {
+      score += 3;
+      reasons.push("Даёт дополнительную защиту от физических атак");
+    }
+
+    return {
+      name: item.name,
+      score,
+      reasons,
+      category: item.category,
+      tags: [...tags]
+    };
   });
 
-  // Не допускаем несколько предметов с одинаковой функцией антихила
-  const antiHealItems = itemScores
-    .filter(x => items.find(i => i.name === x.name)?.tags.includes("anti-heal"))
-    .sort((a,b) => b.score - a.score);
+  const compatible = itemScores.filter(item => {
+    if (item.score <= 0) return false;
 
-  const chosen = [];
-  const usedRoles = new Set();
+    if (physicalAssassin &&
+        (item.category === "Магия" ||
+         item.category === "Магия / защита")) return false;
 
-  
-  for (const item of itemScores.sort((a,b) => b.score - a.score)) {
-    const data = items.find(i => i.name === item.name);
-    if (!data || item.score <= 0) continue;
+    if (magicMage && item.category === "Атака") return false;
 
-    const isMagicItem =
-      data.category === "Магия" ||
-      data.category === "Магия / защита";
+    return true;
+  });
 
-    const isPhysicalItem = data.category === "Атака";
+  // Не более одного предмета с антихилом
+  const buildDetails = [];
+  const usedTags = new Set();
 
-    if (physicalAssassin && isMagicItem) continue;
-    if (magicMage && isPhysicalItem) continue;
+  compatible.sort((a, b) => b.score - a.score);
 
+  for (const item of compatible) {
+    if (buildDetails.length >= 6) break;
 
-    if (data.tags.includes("anti-heal")) {
-      if (usedRoles.has("anti-heal")) continue;
-      usedRoles.add("anti-heal");
+    if (item.tags.includes("anti-heal")) {
+      if (usedTags.has("anti-heal")) continue;
+      usedTags.add("anti-heal");
     }
 
-    if (chosen.length < 6) chosen.push(item);
-  }
-
-  const build = chosen.map(x => x.name);
-
-  
-  while (build.length < 6) {
-    const fallback = items.find(i => {
-      if (build.includes(i.name)) return false;
-
-      const isMagic =
-        i.category === "Магия" ||
-        i.category === "Магия / защита";
-
-      const isPhysical = i.category === "Атака";
-
-      if (physicalAssassin && isMagic) return false;
-      if (magicMage && isPhysical) return false;
-
-      if (physicalAssassin) {
-        return i.tags.includes("physical") ||
-          i.tags.includes("burst") ||
-          i.tags.includes("survival");
-      }
-
-      if (physicalFighter) {
-        return i.tags.includes("fighter") ||
-          i.tags.includes("physical") ||
-          i.tags.includes("survival");
-      }
-
-      if (magicMage) {
-        return i.tags.includes("magic") ||
-          i.tags.includes("survival");
-      }
-
-      return i.tags.includes("survival");
+    buildDetails.push({
+      name: item.name,
+      reasons: item.reasons
     });
-
-    if (!fallback) break;
-    build.push(fallback.name);
   }
 
-  
+  // Заполняем оставшиеся слоты подходящими защитными предметами
+  const fallbacks = items.filter(item => {
+    if (buildDetails.some(x => x.name === item.name)) return false;
+
+    if (physicalAssassin &&
+        (item.category === "Магия" ||
+         item.category === "Магия / защита")) return false;
+
+    if (magicMage && item.category === "Атака") return false;
+
+    return item.tags.includes("survival");
+  });
+
+  for (const item of fallbacks) {
+    if (buildDetails.length >= 6) break;
+
+    buildDetails.push({
+      name: item.name,
+      reasons: ["Дополнительная выживаемость"]
+    });
+  }
 
   const emblem = selected?.type === "mage" ? "Мага"
     : selected?.type === "marksman" ? "Стрелка"
@@ -282,21 +306,25 @@ function analyze({lane,enemies=[],allies=[],myHero=""}){
   return {
     threats,
     counters: candidates.map(x => ({
-      name:x.hero.name,
-      role:x.hero.role,
-      reason:x.reason,
-      score:x.score
+      name: x.hero.name,
+      role: x.hero.role,
+      reason: x.reason,
+      score: x.score
     })),
-    build,
+    build: buildDetails.map(x => x.name),
+    buildDetails,
     emblem,
-    talentTiers:["Разрыв","Мастер-убийца","Серия убийств"],
-    spell:lane === "Лес" ? "Возмездие" : "Вспышка",
-    timing:{
-      early:"Оценивай расположение врагов и не начинай рискованный бой без информации о леснике.",
-      mid:"Используй преимущество после ключевого предмета и помогай союзникам на объектах.",
-      late:"Следи за позициями задней линии и не расходуй ключевые навыки до начала командной драки."
+    talentTiers: ["Разрыв", "Мастер-убийца", "Серия убийств"],
+    spell: lane === "Лес" ? "Возмездие" : "Вспышка",
+    timing: {
+      early: "Контролируй ключевые участки карты и отслеживай перемещения противника.",
+      mid: "Используй преимущество после покупки основных предметов и участвуй в борьбе за объекты.",
+      late: "Выбирай момент для командного боя с учётом расположения главных угроз."
     },
-    note:"Анализ состава на основе локального справочника и тегов. Не является live-статистикой или гарантией победы."
+    note: "Рекомендации основаны на локальной базе героев и предметов. Точные показатели текущего патча не используются."
+  };
+}
+победы."
   };
 }
 app.post("/api/ai/draft",auth,async(req,res)=>{
