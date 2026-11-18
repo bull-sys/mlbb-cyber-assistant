@@ -232,16 +232,44 @@ function analyze({lane,enemies=[],allies=[],myHero=""}){
 
   const build = chosen.map(x => x.name);
 
+  
   while (build.length < 6) {
-    const fallback = items.find(i =>
-      !build.includes(i.name) &&
-      (physicalAssassin ? i.tags.includes("physical") || i.tags.includes("burst")
-      : physicalFighter ? i.tags.includes("fighter") || i.tags.includes("physical")
-      : magicMage ? i.tags.includes("magic") : i.tags.includes("survival"))
-    );
+    const fallback = items.find(i => {
+      if (build.includes(i.name)) return false;
+
+      const isMagic =
+        i.category === "Магия" ||
+        i.category === "Магия / защита";
+
+      const isPhysical = i.category === "Атака";
+
+      if (physicalAssassin && isMagic) return false;
+      if (magicMage && isPhysical) return false;
+
+      if (physicalAssassin) {
+        return i.tags.includes("physical") ||
+          i.tags.includes("burst") ||
+          i.tags.includes("survival");
+      }
+
+      if (physicalFighter) {
+        return i.tags.includes("fighter") ||
+          i.tags.includes("physical") ||
+          i.tags.includes("survival");
+      }
+
+      if (magicMage) {
+        return i.tags.includes("magic") ||
+          i.tags.includes("survival");
+      }
+
+      return i.tags.includes("survival");
+    });
 
     if (!fallback) break;
     build.push(fallback.name);
+  }
+
   }
 
   const emblem = selected?.type === "mage" ? "Мага"
