@@ -103,6 +103,7 @@ function analyze({lane, enemies = [], allies = [], myHero = ""}) {
   if (has("mobility"))
     threats.push("Высокая мобильность");
 
+  
   // Подбор контрпиков с учётом состава
   const candidates = heroes
     .filter(h =>
@@ -112,60 +113,107 @@ function analyze({lane, enemies = [], allies = [], myHero = ""}) {
     )
     .map(h => {
       const tags = new Set(h.tags || []);
+      const strengths = new Set(h.strengths || []);
+      const style = new Set(h.style || []);
       let score = 0;
       const reasons = [];
 
-      if (has("control") && tags.has("anti-control")) {
-        score += 4;
-        reasons.push("Снижает угрозу вражеского контроля");
-      }
+      const add = (points, reason) => {
+        score += points;
+        reasons.push(reason);
+      };
 
-      if (enemyHas("tank") && tags.has("tank-shred")) {
-        score += 4;
-        reasons.push("Эффективен против выносливых целей");
-      }
-
+      // Давление на стрелков и магов
       if (
         (enemyHas("marksman") || enemyHas("mage")) &&
-        (tags.has("burst") || tags.has("pickoff"))
+        (strengths.has("backline") ||
+         strengths.has("squishy-targets"))
       ) {
-        score += 3;
-        reasons.push("Может быстро устранять уязвимые цели");
+        add(4, "Имеет инструменты для давления на стрелков и магов");
       }
 
-      if (has("mobility") && tags.has("control")) {
-        score += 3;
-        reasons.push("Помогает ограничивать мобильных противников");
-      }
-
-      if (allyTags.has("engage") &&
-          (tags.has("burst") || tags.has("pickoff"))) {
-        score += 2;
-        reasons.push("Хорошо реализует инициацию союзников");
-      }
-
+      // Охота на одиночные цели
       if (
-        (allyTags.has("heal") || allyTags.has("protect")) &&
-        (tags.has("frontline") || tags.has("sustain"))
+        strengths.has("isolated-targets") &&
+        (has("burst") || has("mobility"))
       ) {
-        score += 2;
-        reasons.push("Хорошо сочетается с поддержкой союзников");
+        add(4, "Эффективен против изолированных противников");
       }
 
+      // Ответ на мобильных героев
+      if (
+        has("mobility") &&
+        (tags.has("control") ||
+         strengths.has("mobile-targets"))
+      ) {
+        add(4, "Может сдерживать мобильных противников");
+      }
+
+      // Ответ на плотную переднюю линию
+      if (
+        enemyHas("tank") &&
+        (tags.has("tank-shred") ||
+         tags.has("armor-break") ||
+         strengths.has("frontline"))
+      ) {
+        add(4, "Полезен против плотной передней линии");
+      }
+
+      // Контроль и защита от инициации
+      if (
+        has("control") &&
+        (tags.has("anti-control") ||
+         style.has("counter-engage") ||
+         style.has("anti-dive"))
+      ) {
+        add(4, "Помогает переживать вражескую инициацию");
+      }
+
+      // Ответ на затяжные сражения
+      if (
+        (has("heal") || has("sustain")) &&
+        (tags.has("anti-heal") ||
+         strengths.has("extended-fight"))
+      ) {
+        add(3, "Полезен в затяжных боях против устойчивых целей");
+      }
+
+      // Командная синергия
+      if (
+        allyTags.has("engage") &&
+        (style.has("teamfight") ||
+         style.has("burst") ||
+         tags.has("burst"))
+      ) {
+        add(2, "Хорошо сочетается с инициацией союзников");
+      }
+
+      // Недостаток передней линии
       if (!hasFrontline && tags.has("frontline")) {
-        score += 3;
-        reasons.push("Помогает закрыть недостаток передней линии");
+        add(3, "Укрепляет переднюю линию команды");
+      }
+
+      // Специализация на подборе целей
+      if (
+        style.has("pickoff") ||
+        style.has("hunt") ||
+        style.has("catch")
+      ) {
+        if (enemyHas("marksman") || enemyHas("mage")) {
+          add(2, "Может создавать давление на ключевые цели");
+        }
       }
 
       return {
         hero: h,
         score,
-        reason: reasons.join("; ")
+        reason: [...new Set(reasons)].join("; ")
       };
     })
     .filter(x => x.score > 0)
     .sort((a, b) => b.score - a.score)
     .slice(0, 3);
+
 
   // Подбор предметов
   const physicalAssassin = selected?.type === "assassin";
