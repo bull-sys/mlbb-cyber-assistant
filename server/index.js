@@ -207,9 +207,20 @@ function analyze({lane,enemies=[],allies=[],myHero=""}){
   const chosen = [];
   const usedRoles = new Set();
 
+  
   for (const item of itemScores.sort((a,b) => b.score - a.score)) {
     const data = items.find(i => i.name === item.name);
     if (!data || item.score <= 0) continue;
+
+    const isMagicItem =
+      data.category === "Магия" ||
+      data.category === "Магия / защита";
+
+    const isPhysicalItem = data.category === "Атака";
+
+    if (physicalAssassin && isMagicItem) continue;
+    if (magicMage && isPhysicalItem) continue;
+
 
     if (data.tags.includes("anti-heal")) {
       if (usedRoles.has("anti-heal")) continue;
