@@ -26,6 +26,7 @@ CREATE TABLE IF NOT EXISTS profiles(user_id INTEGER PRIMARY KEY REFERENCES users
 CREATE TABLE IF NOT EXISTS likes(from_user INTEGER NOT NULL,to_user INTEGER NOT NULL,created_at TEXT DEFAULT CURRENT_TIMESTAMP,PRIMARY KEY(from_user,to_user));
 `);
 const app=express();
+app.set("trust proxy", 1);
 app.use(helmet({contentSecurityPolicy:false,crossOriginEmbedderPolicy:false}));
 app.use(cors({origin:process.env.APP_URL||true}));
 app.use(express.json({limit:"1mb"}));
