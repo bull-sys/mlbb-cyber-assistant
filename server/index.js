@@ -143,28 +143,95 @@ function analyze({lane,enemies=[],allies=[],myHero=""}){
     .sort((a,b) => b.score - a.score)
     .slice(0,3);
 
+
+  const physicalAssassin = selected?.type === "assassin";
+  const physicalFighter = selected?.type === "fighter";
+  const magicMage = selected?.type === "mage";
+
   const itemScores = items.map(item => {
     const tags = new Set(item.tags || []);
     let score = 0;
+    const reasons = [];
 
-    if ((has("heal") || has("sustain")) && tags.has("anti-heal")) score += 5;
+    // Базовая совместимость с героем
+    if (physicalAssassin && (tags.has("physical") || tags.has("burst"))) {
+      score += 4;
+      reasons.push("подходит физическому убийце");
+    }
+
+    if (physicalFighter && tags.has("fighter")) {
+      score += 4;
+      reasons.push("подходит бойцу");
+    }
+
+    if (magicMage && tags.has("magic")) {
+      score += 4;
+      reasons.push("подходит магу");
+    }
+
+    // Ответы на угрозы противника
+    if ((has("heal") || has("sustain")) && tags.has("anti-heal")) {
+      score += 5;
+      reasons.push("против восстановления здоровья");
+    }
+
     if (enemyTypes.filter(t => t === "mage").length >= 2 &&
-        tags.has("magic-burst")) score += 4;
-    if (has("attack-speed") && tags.has("anti-attack-speed")) score += 4;
-    if (enemy.some(h => h.type === "tank") && tags.has("penetration")) score += 3;
-    if (enemy.some(h => h.type === "tank") && tags.has("tank")) score += 2;
-    if (has("burst") && tags.has("survival")) score += 2;
-    if (has("attack-speed") && tags.has("attack-speed")) score += 2;
+        tags.has("magic-burst")) {
+      score += 5;
+      reasons.push("против магического взрывного урона");
+    }
 
-    if (selected?.type === "mage" && tags.has("magic")) score += 2;
-    if (selected?.type === "marksman" && tags.has("marksman")) score += 2;
-    if (selected?.type === "fighter" && tags.has("fighter")) score += 2;
-    if (selected?.type === "assassin" && tags.has("burst")) score += 2;
+    if (has("attack-speed") && tags.has("anti-attack-speed")) {
+      score += 4;
+      reasons.push("против высокой скорости атаки");
+    }
 
-    return {name:item.name,score};
-  }).sort((a,b) => b.score - a.score);
+    if (enemy.some(h => h.type === "tank") && tags.has("penetration")) {
+      score += 4;
+      reasons.push("пробивание защиты");
+    }
 
-  const build = itemScores.slice(0,6).map(x => x.name);
+    if (has("burst") && tags.has("survival")) {
+      score += 3;
+      reasons.push("повышает выживаемость");
+    }
+
+    return {name:item.name, score, reasons};
+  });
+
+  // Не допускаем несколько предметов с одинаковой функцией антихила
+  const antiHealItems = itemScores
+    .filter(x => items.find(i => i.name === x.name)?.tags.includes("anti-heal"))
+    .sort((a,b) => b.score - a.score);
+
+  const chosen = [];
+  const usedRoles = new Set();
+
+  for (const item of itemScores.sort((a,b) => b.score - a.score)) {
+    const data = items.find(i => i.name === item.name);
+    if (!data || item.score <= 0) continue;
+
+    if (data.tags.includes("anti-heal")) {
+      if (usedRoles.has("anti-heal")) continue;
+      usedRoles.add("anti-heal");
+    }
+
+    if (chosen.length < 6) chosen.push(item);
+  }
+
+  const build = chosen.map(x => x.name);
+
+  while (build.length < 6) {
+    const fallback = items.find(i =>
+      !build.includes(i.name) &&
+      (physicalAssassin ? i.tags.includes("physical") || i.tags.includes("burst")
+      : physicalFighter ? i.tags.includes("fighter") || i.tags.includes("physical")
+      : magicMage ? i.tags.includes("magic") : i.tags.includes("survival"))
+    );
+
+    if (!fallback) break;
+    build.push(fallback.name);
+  }
 
   const emblem = selected?.type === "mage" ? "Мага"
     : selected?.type === "marksman" ? "Стрелка"
