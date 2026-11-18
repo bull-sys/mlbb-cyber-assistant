@@ -325,8 +325,6 @@ function analyze({lane, enemies = [], allies = [], myHero = ""}) {
     note: "Рекомендации основаны на локальной базе героев и предметов. Точные показатели текущего патча не используются."
   };
 }
-победы."
-  };
 
 app.post("/api/ai/draft",auth,async(req,res)=>{
  const b=req.body||{};if(!roles.includes(b.lane)||!Array.isArray(b.enemies)||b.enemies.length>5||!b.enemies.every(x=>heroes.some(h=>h.name===x)))return res.status(400).json({error:"Некорректный состав или линия"});
