@@ -1,0 +1,76 @@
+export const heroes = [
+  {name:"Хелкарт",role:"Лес",type:"assassin",tags:["burst","pickoff"]},
+  {name:"Ханзо",role:"Лес",type:"assassin",tags:["burst","split"]},
+  {name:"Роджер",role:"Лес",type:"fighter",tags:["sustain","marksman"]},
+  {name:"Линг",role:"Лес",type:"assassin",tags:["mobility","burst"]},
+  {name:"Нолан",role:"Лес",type:"assassin",tags:["burst","mobility"]},
+  {name:"Су Ё",role:"Лес",type:"fighter",tags:["burst","control"]},
+  {name:"Кусака",role:"Лес",type:"assassin",tags:["burst","pickoff"]},
+  {name:"Кэрри",role:"Золото",type:"marksman",tags:["tank-shred","true-damage"]},
+  {name:"Бруно",role:"Золото",type:"marksman",tags:["crit","burst"]},
+  {name:"Лейла",role:"Золото",type:"marksman",tags:["range","scaling"]},
+  {name:"Мия",role:"Золото",type:"marksman",tags:["attack-speed","scaling"]},
+  {name:"Грейнджер",role:"Золото",type:"marksman",tags:["burst","physical"]},
+  {name:"Теризла",role:"Опыт",type:"fighter",tags:["frontline","control"]},
+  {name:"Диррот",role:"Опыт",type:"fighter",tags:["sustain","armor-break"]},
+  {name:"Чу",role:"Опыт",type:"fighter",tags:["pickoff","control"]},
+  {name:"Лукас",role:"Опыт",type:"fighter",tags:["duel","sustain"]},
+  {name:"Тамуз",role:"Опыт",type:"fighter",tags:["sustain","frontline"]},
+  {name:"Эудора",role:"Мид",type:"mage",tags:["burst","magic"]},
+  {name:"Кагура",role:"Мид",type:"mage",tags:["mobility","burst"]},
+  {name:"Фарса",role:"Мид",type:"mage",tags:["range","magic"]},
+  {name:"Циклоп",role:"Мид",type:"mage",tags:["dps","magic"]},
+  {name:"Нана",role:"Мид",type:"mage",tags:["control","magic"]},
+  {name:"Джулиан",role:"Мид",type:"mage",tags:["burst","control"]},
+  {name:"Тигрил",role:"Роум",type:"tank",tags:["engage","control"]},
+  {name:"Атлас",role:"Роум",type:"tank",tags:["engage","control"]},
+  {name:"Франко",role:"Роум",type:"tank",tags:["pickoff","control"]},
+  {name:"Минотавр",role:"Роум",type:"tank",tags:["heal","engage"]},
+  {name:"Ангела",role:"Роум",type:"support",tags:["heal","protect"]},
+  {name:"Эстес",role:"Роум",type:"support",tags:["heal","protect"]},
+  {name:"Дигги",role:"Роум",type:"support",tags:["anti-control","protect"]},
+  {name:"Валир",role:"Мид",type:"mage",tags:["anti-engage","magic"]},
+  {name:"Алиса",role:"Мид",type:"mage",tags:["sustain","magic"]}
+];
+
+export const items = [
+ {name:"Господство льда",category:"Защита",tags:["anti-heal","anti-attack-speed"],description:"Ситуационный защитный предмет против восстановления здоровья и быстрых базовых атак. Проверяйте актуальную механику пассивного эффекта."},
+ {name:"Щит Афины",category:"Защита",tags:["magic-burst"],description:"Защитный ответ на сильный магический взрывной урон."},
+ {name:"Сияющая броня",category:"Защита",tags:["magic-dps"],description:"Вариант защиты против повторяющегося магического урона."},
+ {name:"Древняя кираса",category:"Защита",tags:["physical"],description:"Защитный предмет против физического урона; особенно полезен в затяжных разменах."},
+ {name:"Шипованная броня",category:"Защита",tags:["attack-speed","physical"],description:"Ситуативная защита против частых физических базовых атак."},
+ {name:"Бессмертие",category:"Защита",tags:["survival"],description:"Дополнительная возможность пережить позднюю командную драку."},
+ {name:"Зимняя корона",category:"Магия / защита",tags:["survival","active"],description:"Активный защитный эффект, позволяющий пережить опасный момент. Сверяйте текущую версию предмета."},
+ {name:"Топор войны",category:"Атака",tags:["fighter","sustain"],description:"Предмет для подходящих бойцов и продолжительных сражений."},
+ {name:"Пылающий жезл",category:"Магия",tags:["magic","burn"],description:"Усиление магического урона с эффектом горения."},
+ {name:"Ожерелье заточения",category:"Магия",tags:["anti-heal"],description:"Магический вариант антихила."},
+ {name:"Трезубец",category:"Атака",tags:["anti-heal"],description:"Физический вариант антихила."},
+ {name:"Злобный рык",category:"Атака",tags:["penetration","tank"],description:"Физическое пробивание против защищённых целей."},
+ {name:"Палочка гения",category:"Магия",tags:["penetration","magic"],description:"Магическое пробивание для подходящих магов."},
+ {name:"Божественный меч",category:"Магия",tags:["penetration","magic"],description:"Магическое пробивание против высокой магической защиты."},
+ {name:"Ветер природы",category:"Атака",tags:["survival","marksman"],description:"Активная защитная опция для стрелков против физического урона."},
+ {name:"Ярость берсерка",category:"Атака",tags:["critical","marksman"],description:"Усиление критической сборки."},
+ {name:"Клинок отчаяния",category:"Атака",tags:["physical","burst"],description:"Высокий физический урон для подходящих героев."}
+];
+
+export const talents = [
+ {name:"Ловкость",tier:1,description:"Скорость передвижения."},
+ {name:"Твёрдость",tier:1,description:"Дополнительная защита."},
+ {name:"Разрыв",tier:1,description:"Адаптивное пробивание."},
+ {name:"Стремительность",tier:1,description:"Скорость атаки."},
+ {name:"Острота",tier:1,description:"Адаптивная атака."},
+ {name:"Вдохновение",tier:1,description:"Сокращение перезарядки."},
+ {name:"Фестиваль крови",tier:2,description:"Усиление вампиризма от навыков."},
+ {name:"Мастер-убийца",tier:2,description:"Усиление против одиночной цели."},
+ {name:"Мастер оружия",tier:2,description:"Усиление характеристик от предметов."},
+ {name:"Упорство",tier:2,description:"Защитный эффект в опасных ситуациях."},
+ {name:"Охотник за скидками",tier:2,description:"Экономическое преимущество при покупке предметов."},
+ {name:"Серия убийств",tier:3,description:"Бонус после успешного устранения противника."},
+ {name:"Смертельное воспламенение",tier:3,description:"Дополнительный урон при выполнении условий таланта."},
+ {name:"Сокрушительный взрыв",tier:3,description:"Дополнительный урон при выполнении условий."},
+ {name:"Поиск слабости",tier:3,description:"Ослабление выбранной цели."},
+ {name:"Нечистая ярость",tier:3,description:"Дополнительный эффект для урона навыками."}
+];
+
+export const spells = ["Возмездие","Вспышка","Очищение","Вдохновение","Пламя","Исцеление","Спринт"];
+export const emblems = ["Общая","Танк","Убийцы","Мага","Бойца","Стрелка","Поддержки"];
