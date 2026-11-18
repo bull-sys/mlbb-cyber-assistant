@@ -270,7 +270,7 @@ function analyze({lane,enemies=[],allies=[],myHero=""}){
     build.push(fallback.name);
   }
 
-  }
+  
 
   const emblem = selected?.type === "mage" ? "Мага"
     : selected?.type === "marksman" ? "Стрелка"
