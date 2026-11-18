@@ -63,12 +63,135 @@ app.get("/api/players",auth,(req,res)=>{
 app.post("/api/players/:id/like",auth,(req,res)=>{const target=Number(req.params.id);if(!Number.isInteger(target)||target===req.user.id||!safeUser(target))return res.status(400).json({error:"Некорректный игрок"});db.prepare("INSERT OR IGNORE INTO likes(from_user,to_user) VALUES(?,?)").run(req.user.id,target);const mutual=!!db.prepare("SELECT 1 FROM likes WHERE from_user=? AND to_user=?").get(target,req.user.id);res.json({liked:true,mutual})});
 app.get("/api/matches",auth,(req,res)=>{const rows=db.prepare(`SELECT u.id,u.nickname,p.hero,p.role,p.rank,p.style,p.game_id FROM likes l JOIN users u ON u.id=l.to_user JOIN profiles p ON p.user_id=u.id WHERE l.from_user=? AND EXISTS(SELECT 1 FROM likes x WHERE x.from_user=l.to_user AND x.to_user=l.from_user)`).all(req.user.id);res.json({matches:rows})});
 function analyze({lane,enemies=[],allies=[],myHero=""}){
- const enemy=heroes.filter(h=>enemies.includes(h.name));const tags=enemy.flatMap(h=>h.tags);const magic=enemy.filter(h=>h.type==="mage").length;
- const threats=[];if(tags.includes("heal")||tags.includes("sustain"))threats.push("Отхил / устойчивость");if(magic>=2)threats.push("Несколько магов");if(tags.includes("attack-speed"))threats.push("Скорость атаки");if(enemy.some(h=>h.type==="tank"))threats.push("Фронтлайн");if(tags.includes("control"))threats.push("Контроль");if(tags.includes("burst"))threats.push("Взрывной урон");
- const candidates=heroes.filter(h=>h.role===lane&&!enemies.includes(h.name));const ranked=candidates.map(h=>({hero:h,score:(h.tags.includes("anti-control")&&tags.includes("control")?3:0)+(h.tags.includes("tank-shred")&&enemy.some(e=>e.type==="tank")?3:0)+(h.tags.includes("burst")&&enemy.some(e=>e.type==="marksman")?2:0)+(h.tags.includes("mobility")?1:0)})).sort((a,b)=>b.score-a.score).slice(0,3);
- const build=lane==="Мид"?["Пылающий жезл","Палочка гения","Божественный меч","Зимняя корона","Щит Афины","Бессмертие"]:lane==="Золото"?["Ярость берсерка","Ветер природы","Клинок отчаяния","Злобный рык","Бессмертие","Господство льда"]:lane==="Роум"?["Прочные сапоги","Господство льда","Щит Афины","Древняя кираса","Бессмертие","Сияющая броня"]:lane==="Опыт"?["Сапоги воина","Топор войны","Господство льда","Древняя кираса","Злобный рык","Бессмертие"]:["Сапоги воина","Топор войны","Клинок отчаяния","Злобный рык","Бессмертие","Зимняя корона"];
- if(threats.some(x=>x.includes("Отхил")))build[2]="Господство льда";if(threats.includes("Несколько магов"))build[3]="Щит Афины";
- return {threats,counters:ranked.map(x=>({name:x.hero.name,role:x.hero.role,reason:"Подбор по роли и тегам матчапа; проверьте навыки и текущий патч."})),build,emblem:lane==="Мид"?"Мага":lane==="Золото"?"Стрелка":lane==="Роум"?"Танка":lane==="Опыт"?"Бойца":"Убийцы",talentTiers:["Разрыв","Мастер-убийца","Серия убийств"],spell:lane==="Лес"?"Возмездие":"Вспышка",timing:{early:"Ищи изолированную цель без мобильности. Не форсируй заход без информации о вражеском леснике.",mid:"После первого ключевого предмета оценивай дуэли и выбирай цели без защитных навыков.",late:"В первую очередь угроза задней линии и ключевой контроль; не трать весь прокаст на танка."},note:"Эвристический анализ, не live-статистика и не гарантия победы."};
+  const enemy = heroes.filter(h => enemies.includes(h.name));
+  const team = heroes.filter(h => allies.includes(h.name));
+  const selected = heroes.find(h => h.name === myHero);
+
+  const enemyTags = new Set(enemy.flatMap(h => h.tags || []));
+  const enemyTypes = enemy.map(h => h.type);
+  const has = tag => enemyTags.has(tag);
+
+  const threats = [];
+  if (has("heal") || has("sustain")) threats.push("Отхил и устойчивость");
+  if (enemyTypes.filter(t => t === "mage").length >= 2) threats.push("Много магического урона");
+  if (has("attack-speed")) threats.push("Высокая скорость атаки");
+  if (enemy.some(h => h.type === "tank")) threats.push("Плотный фронтлайн");
+  if (has("control")) threats.push("Много контроля");
+  if (has("burst")) threats.push("Взрывной урон");
+  if (has("mobility")) threats.push("Высокая мобильность");
+
+  const allyTags = new Set(team.flatMap(h => h.tags || []));
+  const hasFrontline = team.some(h =>
+    h.type === "tank" || (h.tags || []).includes("frontline")
+  );
+
+  const candidates = heroes
+    .filter(h => h.role === lane && !enemies.includes(h.name))
+    .map(h => {
+      const tags = new Set(h.tags || []);
+      let score = 0;
+      const reasons = [];
+
+      if (has("control") && tags.has("anti-control")) {
+        score += 3;
+        reasons.push("полезен против контроля");
+      }
+
+      if (enemy.some(e => e.type === "tank") && tags.has("tank-shred")) {
+        score += 3;
+        reasons.push("хорош против плотных целей");
+      }
+
+      if (enemy.some(e => e.type === "marksman") &&
+          (tags.has("burst") || tags.has("pickoff"))) {
+        score += 2;
+        reasons.push("может угрожать задней линии");
+      }
+
+      if (has("mobility") && tags.has("control")) {
+        score += 2;
+        reasons.push("имеет инструменты против мобильных целей");
+      }
+
+      if (allyTags.has("engage") &&
+          (tags.has("burst") || tags.has("pickoff"))) {
+        score += 2;
+        reasons.push("сочетается с инициацией союзников");
+      }
+
+      if ((allyTags.has("heal") || allyTags.has("protect")) &&
+          (tags.has("frontline") || tags.has("sustain"))) {
+        score += 1;
+        reasons.push("получает пользу от поддержки");
+      }
+
+      if (!hasFrontline && tags.has("frontline")) {
+        score += 2;
+        reasons.push("помогает команде с передней линией");
+      }
+
+      if (h.name === myHero) score += 1;
+
+      return {
+        hero: h,
+        score,
+        reason: reasons.length
+          ? reasons.join("; ")
+          : "подходит по выбранной роли и составу"
+      };
+    })
+    .sort((a,b) => b.score - a.score)
+    .slice(0,3);
+
+  const itemScores = items.map(item => {
+    const tags = new Set(item.tags || []);
+    let score = 0;
+
+    if ((has("heal") || has("sustain")) && tags.has("anti-heal")) score += 5;
+    if (enemyTypes.filter(t => t === "mage").length >= 2 &&
+        tags.has("magic-burst")) score += 4;
+    if (has("attack-speed") && tags.has("anti-attack-speed")) score += 4;
+    if (enemy.some(h => h.type === "tank") && tags.has("penetration")) score += 3;
+    if (enemy.some(h => h.type === "tank") && tags.has("tank")) score += 2;
+    if (has("burst") && tags.has("survival")) score += 2;
+    if (has("attack-speed") && tags.has("attack-speed")) score += 2;
+
+    if (selected?.type === "mage" && tags.has("magic")) score += 2;
+    if (selected?.type === "marksman" && tags.has("marksman")) score += 2;
+    if (selected?.type === "fighter" && tags.has("fighter")) score += 2;
+    if (selected?.type === "assassin" && tags.has("burst")) score += 2;
+
+    return {name:item.name,score};
+  }).sort((a,b) => b.score - a.score);
+
+  const build = itemScores.slice(0,6).map(x => x.name);
+
+  const emblem = selected?.type === "mage" ? "Мага"
+    : selected?.type === "marksman" ? "Стрелка"
+    : selected?.type === "tank" ? "Танка"
+    : selected?.type === "support" ? "Поддержки"
+    : selected?.type === "fighter" ? "Бойца"
+    : "Убийцы";
+
+  return {
+    threats,
+    counters: candidates.map(x => ({
+      name:x.hero.name,
+      role:x.hero.role,
+      reason:x.reason,
+      score:x.score
+    })),
+    build,
+    emblem,
+    talentTiers:["Разрыв","Мастер-убийца","Серия убийств"],
+    spell:lane === "Лес" ? "Возмездие" : "Вспышка",
+    timing:{
+      early:"Оценивай расположение врагов и не начинай рискованный бой без информации о леснике.",
+      mid:"Используй преимущество после ключевого предмета и помогай союзникам на объектах.",
+      late:"Следи за позициями задней линии и не расходуй ключевые навыки до начала командной драки."
+    },
+    note:"Анализ состава на основе локального справочника и тегов. Не является live-статистикой или гарантией победы."
+  };
 }
 app.post("/api/ai/draft",auth,async(req,res)=>{
  const b=req.body||{};if(!roles.includes(b.lane)||!Array.isArray(b.enemies)||b.enemies.length>5||!b.enemies.every(x=>heroes.some(h=>h.name===x)))return res.status(400).json({error:"Некорректный состав или линия"});
