@@ -12,6 +12,7 @@ import path from "node:path";
 import fs from "node:fs";
 import { fileURLToPath } from "node:url";
 import { heroes, items, talents, spells, emblems } from "./data.js";
+import { heroProfiles, validateHeroProfiles } from "./hero-profiles.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, "..");
@@ -43,12 +44,19 @@ const safeUser=id=>db.prepare("SELECT u.id,u.email,u.nickname,p.hero,p.role,p.ra
 function auth(req,res,next){const h=req.headers.authorization||"";try{if(!h.startsWith("Bearer "))throw 0;req.user=jwt.verify(h.slice(7),tokenSecret);next()}catch{return res.status(401).json({error:"Требуется авторизация"})}}
 function issue(id){return jwt.sign({id},tokenSecret,{expiresIn:"14d"})}
 app.get("/api/health",(req,res)=>res.json({ok:true,service:"MLBB Cyber Assistant",version:"1.0.0"}));
-app.get("/api/data",(req,res)=>res.json({heroes,items,talents,spells,emblems,roles,ranks,styles,disclaimer:"Справочник — стартовый фанатский набор. Сверяйте данные с текущим клиентом MLBB."}));
-app.post("/api/auth/register",async(req,res)=>{
- const {email,password,nickname}=req.body||{};
- if(typeof email!=="string"||!/^.+@.+\..+$/.test(email)||typeof password!=="string"||password.length<10||password.length>100||typeof nickname!=="string"||nickname.trim().length<2||nickname.trim().length>24)return res.status(400).json({error:"Укажи email, ник 2–24 символа и пароль от 10 символов"});
- try{const info=db.prepare("INSERT INTO users(email,password_hash,nickname) VALUES(?,?,?)").run(email.toLowerCase().trim(),await bcrypt.hash(password,12),nickname.trim());db.prepare("INSERT INTO profiles(user_id) VALUES(?)").run(info.lastInsertRowid);res.json({token:issue(info.lastInsertRowid),user:safeUser(info.lastInsertRowid)})}catch(e){res.status(409).json({error:"Этот email уже зарегистрирован"})}
-});
+app.get("/api/data",(req,res)=>res.json({
+  heroes,
+  heroProfiles,
+  heroProfilesValidation: validateHeroProfiles(),
+  items,
+  talents,
+  spells,
+  emblems,
+  roles,
+  ranks,
+  styles,
+  disclaimer:"Справочник — стартовый фанатский набор. Сверяйте данные с текущим клиентом MLBB."
+}));
 app.post("/api/auth/login",async(req,res)=>{const {email,password}=req.body||{};const u=db.prepare("SELECT * FROM users WHERE email=?").get(String(email||"").toLowerCase().trim());if(!u||!await bcrypt.compare(String(password||""),u.password_hash))return res.status(401).json({error:"Неверный email или пароль"});res.json({token:issue(u.id),user:safeUser(u.id)})});
 app.get("/api/me",auth,(req,res)=>{const u=safeUser(req.user.id);if(!u)return res.status(404).json({error:"Пользователь не найден"});res.json({user:u})});
 app.put("/api/profile",auth,(req,res)=>{
