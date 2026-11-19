@@ -3,16 +3,105 @@ import { readFile } from "node:fs/promises";
 import test from "node:test";
 import { heroes, items } from "../server/data.js";
 
-// Keep production code untouched: load the existing local analyze() declaration
-// from server/index.js and evaluate only that function with the real catalogue.
-// This avoids starting Express or creating/modifying the SQLite database in tests.
+// Keep production code untouched: load the local analyze() declaration from
+// server/index.js and evaluate only that function with the real catalogue.
+// This avoids starting Express, initializing SQLite, or requiring OpenAI/network.
 const serverSource = await readFile(new URL("../server/index.js", import.meta.url), "utf8");
-const analyzeStart = serverSource.indexOf("function analyze(");
-const analyzeEnd = serverSource.indexOf('\napp.post("/api/ai/draft"', analyzeStart);
-assert.ok(analyzeStart >= 0, "Could not find analyze() in server/index.js");
-assert.ok(analyzeEnd > analyzeStart, "Could not determine the end of analyze()");
-const analyzeSource = serverSource.slice(analyzeStart, analyzeEnd).trim();
-const analyze = new Function("heroes", "items", `${analyzeSource}\nreturn analyze;`)(heroes, items);
+const analyzeDeclaration = "function analyze(";
+const analyzeStart = serverSource.indexOf(analyzeDeclaration);
+if (analyzeStart < 0) {
+  throw new Error(`Draft analysis tests could not find ${analyzeDeclaration} in server/index.js`);
+}
+
+const signatureEnd = serverSource.indexOf(") {", analyzeStart);
+if (signatureEnd < 0) {
+  throw new Error("Draft analysis tests found function analyze( but could not find its body opener `) {` in server/index.js");
+}
+const bodyStart = signatureEnd + 2;
+
+// Match the function's closing brace rather than slicing up to an endpoint
+// string. Ignore braces inside quoted strings and comments so the extraction
+// cannot silently truncate at a brace in a message or comment.
+function findFunctionEnd(source, openBraceIndex) {
+  let depth = 0;
+  let state = "code";
+  let escaped = false;
+
+  for (let i = openBraceIndex; i < source.length; i += 1) {
+    const char = source[i];
+    const next = source[i + 1];
+
+    if (state === "line-comment") {
+      if (char === "\n") state = "code";
+      continue;
+    }
+    if (state === "block-comment") {
+      if (char === "*" && next === "/") {
+        state = "code";
+        i += 1;
+      }
+      continue;
+    }
+    if (state === "single-quote" || state === "double-quote" || state === "template") {
+      if (escaped) {
+        escaped = false;
+      } else if (char === "\\") {
+        escaped = true;
+      } else if (
+        (state === "single-quote" && char === "'") ||
+        (state === "double-quote" && char === '"') ||
+        (state === "template" && char === "`")
+      ) {
+        state = "code";
+      }
+      continue;
+    }
+
+    if (char === "/" && next === "/") {
+      state = "line-comment";
+      i += 1;
+    } else if (char === "/" && next === "*") {
+      state = "block-comment";
+      i += 1;
+    } else if (char === "'") {
+      state = "single-quote";
+    } else if (char === '"') {
+      state = "double-quote";
+    } else if (char === "`") {
+      state = "template";
+    } else if (char === "{") {
+      depth += 1;
+    } else if (char === "}") {
+      depth -= 1;
+      if (depth === 0) return i + 1;
+      if (depth < 0) break;
+    }
+  }
+
+  return -1;
+}
+
+const analyzeEnd = findFunctionEnd(serverSource, bodyStart);
+if (analyzeEnd < 0) {
+  throw new Error("Draft analysis tests found function analyze() but could not find its matching closing brace in server/index.js");
+}
+
+const endpointMarker = 'app.post("/api/ai/draft"';
+const endpointStart = serverSource.indexOf(endpointMarker, analyzeEnd);
+if (endpointStart < 0) {
+  throw new Error(`Draft analysis tests found the end of analyze() but could not find endpoint marker ${endpointMarker} after it in server/index.js`);
+}
+if (serverSource.slice(analyzeEnd, endpointStart).trim() !== "") {
+  throw new Error(`Draft analysis tests expected ${endpointMarker} immediately after analyze(), but found other code between them`);
+}
+
+const analyzeSource = serverSource.slice(analyzeStart, analyzeEnd);
+let analyze;
+try {
+  analyze = new Function("heroes", "items", `${analyzeSource}\nreturn analyze;`)(heroes, items);
+} catch (error) {
+  throw new Error(`Draft analysis tests could not compile the complete analyze() function from server/index.js: ${error.message}`, { cause: error });
+}
 
 const run = (overrides = {}) => analyze({ lane: "Лес", ...overrides });
 
