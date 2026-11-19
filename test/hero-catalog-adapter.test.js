@@ -28,6 +28,23 @@ test("catalog API fields are additive and leave legacy heroes as the legacy list
   assert.equal(Object.hasOwn(fields, "heroes"), false);
 });
 
+test("API and validation routes are wired to additive catalog fields and legacy names", async () => {
+  const serverSource = await readFile(new URL("../server/index.js", import.meta.url), "utf8");
+
+  assert.match(
+    serverSource,
+    /app\.get\("\/api\/data"[\s\S]*?heroes,\s*\.\.\.getHeroCatalogApiFields\(\)/
+  );
+  assert.match(
+    serverSource,
+    /app\.put\("\/api\/profile"[\s\S]*?isLegacyHeroName\(hero\)/
+  );
+  assert.match(
+    serverSource,
+    /app\.post\("\/api\/ai\/draft"[\s\S]*?b\.enemies\.every\(isLegacyHeroName\)/
+  );
+});
+
 test("legacy-name validation preserves names used by profiles and draft requests", () => {
   for (const hero of heroLegacyBaseline) {
     assert.equal(isLegacyHeroName(hero.name), true, hero.name);
