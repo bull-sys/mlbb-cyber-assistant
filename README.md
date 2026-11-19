@@ -16,7 +16,7 @@
 Это независимый фанатский помощник, не продукт Moonton и не подключён к внутреннему API игры. В репозитории есть стартовый набор справочных данных и эвристики, а не подтверждённая live-мета. Патчи, названия, характеристики, таланты и доступность предметов меняются. Перед соревновательным использованием сверяйте данные с текущим клиентом игры. Не выдавайте локальные эвристики за win-rate или статистику матчей.
 
 ## Запуск локально
-Требуется Node.js 20+.
+Требуется Node.js 22.x.
 1. Распакуйте архив.
 2. Скопируйте `.env.example` в `.env`, задайте уникальный `JWT_SECRET`.
 3. Выполните:
@@ -61,12 +61,12 @@ PWA требует HTTPS (кроме localhost). Самый простой ва�
 ## API
 - `POST /api/auth/register` `{email,password,nickname}`
 - `POST /api/auth/login` `{email,password}`
-- `GET /api/me` (Bearer token)
-- `PUT /api/profile` (Bearer token)
-- `GET /api/players?hero=&role=&rank=&style=` (Bearer token)
-- `POST /api/players/:id/like` (Bearer token)
-- `GET /api/matches` (Bearer token)
-- `POST /api/ai/draft` (Bearer token) `{lane,enemies,allies,myHero}`
+- `GET /api/me` (******
+- `PUT /api/profile` (******
+- `GET /api/players?hero=&role=&rank=&style=` (******
+- `POST /api/players/:id/like` (******
+- `GET /api/matches` (******
+- `POST /api/ai/draft` (****** `{lane,enemies,allies,myHero}`
 - `GET /api/health`
 
 ## Ограничения и следующие production-шаги
