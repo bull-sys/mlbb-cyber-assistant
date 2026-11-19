@@ -6,11 +6,19 @@ const STATUS_VALUES = {
   tacticalProfile: new Set(["missing", "partial", "complete"])
 };
 
+const isRecord = value =>
+  value !== null && typeof value === "object" && !Array.isArray(value);
+
+const ownValue = (object, key) => {
+  if (!Object.hasOwn(object, key)) return { present: false };
+  return { present: true, value: object[key] };
+};
+
 /**
- * Validate the structure and verification statuses of a hero catalog.
- * This function deliberately does not validate or infer game data.
+ * Validate catalog shape, unique IDs, and verification/completeness statuses.
+ * This function does not infer, normalize, or add hero data.
  *
- * @param {Array<object>} catalog
+ * @param {unknown} catalog
  * @returns {{ ok: boolean, count: number, errors: string[] }}
  */
 export function validateHeroCatalog(catalog) {
@@ -20,36 +28,63 @@ export function validateHeroCatalog(catalog) {
     return { ok: false, count: 0, errors: ["Catalog must be an array"] };
   }
 
-  const ids = new Set();
+  const normalizedIds = new Set();
 
-  catalog.forEach((hero, index) => {
+  for (let index = 0; index < catalog.length; index += 1) {
     const label = `Hero at index ${index}`;
-    if (!hero || typeof hero !== "object" || Array.isArray(hero)) {
+
+    if (!Object.hasOwn(catalog, index)) {
+      errors.push(`${label} is a sparse array slot`);
+      continue;
+    }
+
+    const hero = catalog[index];
+    if (!isRecord(hero)) {
       errors.push(`${label} must be an object`);
-      return;
+      continue;
     }
 
-    if (typeof hero.id !== "string" || hero.id.trim() === "") {
+    const idField = ownValue(hero, "id");
+    const id = idField.value;
+    let heroLabel = label;
+
+    if (!idField.present || typeof id !== "string" || id.trim() === "") {
       errors.push(`${label} has a missing or invalid ID`);
-    } else if (ids.has(hero.id)) {
-      errors.push(`Duplicate ID: ${hero.id}`);
     } else {
-      ids.add(hero.id);
-    }
-
-    for (const [field, allowed] of Object.entries(STATUS_VALUES)) {
-      const status = hero[field]?.status;
-      if (!allowed.has(status)) {
-        errors.push(`${hero.id || label}: invalid ${field} status`);
+      const normalizedId = id.trim().replace(/\s+/gu, " ").toLowerCase();
+      heroLabel = id;
+      if (normalizedIds.has(normalizedId)) {
+        errors.push(`Duplicate ID after normalization: ${id}`);
+      } else {
+        normalizedIds.add(normalizedId);
       }
     }
-  });
+
+    for (const [section, allowedStatuses] of Object.entries(STATUS_VALUES)) {
+      const sectionField = ownValue(hero, section);
+      if (!sectionField.present || !isRecord(sectionField.value)) {
+        errors.push(`${heroLabel}: missing or invalid ${section} section`);
+        continue;
+      }
+
+      const statusField = ownValue(sectionField.value, "status");
+      if (!statusField.present) {
+        errors.push(`${heroLabel}: ${section}.status must be an own property`);
+      } else if (typeof statusField.value !== "string" ||
+                 !allowedStatuses.has(statusField.value)) {
+        errors.push(`${heroLabel}: invalid ${section} status`);
+      }
+    }
+  }
 
   return { ok: errors.length === 0, count: catalog.length, errors };
 }
 
 export const HERO_CATALOG_STATUS_VALUES = Object.freeze(
   Object.fromEntries(
-    Object.entries(STATUS_VALUES).map(([field, values]) => [field, [...values]])
+    Object.entries(STATUS_VALUES).map(([field, values]) => [
+      field,
+      Object.freeze([...values])
+    ])
   )
 );
