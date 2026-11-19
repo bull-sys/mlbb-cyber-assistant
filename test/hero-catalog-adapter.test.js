@@ -20,6 +20,15 @@ test("catalog API fields are additive and leave legacy heroes as the legacy list
     count: 32,
     errors: []
   });
+  assert.deepEqual(
+    Object.keys(fields).sort(),
+    [
+      "heroCatalog",
+      "heroCatalogLegacyMappings",
+      "heroCatalogRosterStatus",
+      "heroCatalogValidation"
+    ]
+  );
   assert.deepEqual(fields.heroCatalogLegacyMappings, [
     { id: "jawhead", legacyName: "Кусака" },
     { id: "dyrroth", legacyName: "Диррот" }
@@ -74,7 +83,49 @@ test("catalog-to-legacy mappings require an explicit ID, unique records, and ver
   );
 });
 
+test("duplicate, ambiguous, malformed, and nonexistent mappings are rejected", () => {
+  const jawheadMapping = { id: "jawhead", legacyName: "Кусака" };
+  assert.deepEqual(
+    getVerifiedHeroCatalogLegacyMappings(heroCatalog, heroes, [
+      jawheadMapping,
+      jawheadMapping
+    ]),
+    []
+  );
+  assert.deepEqual(
+    getVerifiedHeroCatalogLegacyMappings(heroCatalog, heroes, [
+      { id: "jawhead", legacyName: "Кусака" },
+      { id: "another-id", legacyName: "Кусака" }
+    ]),
+    []
+  );
+  assert.deepEqual(
+    getVerifiedHeroCatalogLegacyMappings(heroCatalog, heroes, [
+      { id: "missing-id", legacyName: "Кусака" },
+      { id: "jawhead", legacyName: "Missing legacy hero" },
+      { id: "", legacyName: "Кусака" },
+      null
+    ]),
+    []
+  );
+  assert.deepEqual(
+    getVerifiedHeroCatalogLegacyMappings(heroCatalog, [
+      ...heroes,
+      { ...heroes.find(hero => hero.name === "Кусака") }
+    ], [jawheadMapping]),
+    []
+  );
+  assert.deepEqual(
+    getVerifiedHeroCatalogLegacyMappings(null, heroes, [jawheadMapping]),
+    []
+  );
+});
+
 test("browser OCR continues to read the legacy name field", async () => {
   const appSource = await readFile(new URL("../public/app.js", import.meta.url), "utf8");
   assert.match(appSource, /data\.heroes\.map\(h\s*=>\s*h\.name\)/);
+  assert.deepEqual(
+    heroes.map(hero => hero.name),
+    heroLegacyBaseline.map(hero => hero.name)
+  );
 });
