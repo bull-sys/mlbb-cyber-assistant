@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { spawn } from "node:child_process";
 import { once } from "node:events";
-import { copyFile, mkdtemp, mkdir, readFile, readdir, rm, symlink } from "node:fs/promises";
+import { copyFile, mkdtemp, mkdir, readFile, readdir, realpath, rm, symlink } from "node:fs/promises";
 import net from "node:net";
 import os from "node:os";
 import path from "node:path";
@@ -71,7 +71,14 @@ before(async () => {
     }
   }
 
-  await symlink(path.join(repoRoot, "node_modules"), path.join(serverRoot, "node_modules"), "dir");
+  let nodeModules;
+  try {
+    nodeModules = await realpath(path.join(repoRoot, "node_modules"));
+  } catch (error) {
+    if (error.code !== "ENOENT") throw error;
+    throw new Error("HTTP tests require project dependencies; run npm install first", { cause: error });
+  }
+  await symlink(nodeModules, path.join(serverRoot, "node_modules"), "dir");
   const port = await findAvailablePort();
   baseUrl = `http://127.0.0.1:${port}`;
   server = spawn(process.execPath, ["server/index.js"], {

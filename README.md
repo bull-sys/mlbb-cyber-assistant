@@ -16,7 +16,7 @@
 Это независимый фанатский помощник, не продукт Moonton и не подключён к внутреннему API игры. В репозитории есть стартовый набор справочных данных и эвристики, а не подтверждённая live-мета. Патчи, названия, характеристики, таланты и доступность предметов меняются. Перед соревновательным использованием сверяйте данные с текущим клиентом игры. Не выдавайте локальные эвристики за win-rate или статистику матчей.
 
 ## Запуск локально
-Требуется Node.js 20+.
+Требуется Node.js 22.x.
 1. Распакуйте архив.
 2. Скопируйте `.env.example` в `.env`, задайте уникальный `JWT_SECRET`.
 3. Выполните:
@@ -27,6 +27,16 @@
 4. Откройте `http://localhost:3000`.
 
 Для AI-пояснений добавьте `OPENAI_API_KEY` в `.env`. Ключ хранится только на сервере — не вставляйте его в frontend.
+
+## Тесты
+Используйте Node.js 22, затем установите зависимости и запустите тесты:
+```bash
+npm install
+npm test
+```
+HTTP-тесты запускают сервер во временной копии и подключают установленную папку `node_modules` проекта. Установка зависимостей требуется до запуска тестов; `dotenv` уже указан в `package.json`.
+
+В репозитории пока нет lockfile, поэтому `npm install` может выбрать разные версии зависимостей в пределах заданных диапазонов. Для воспроизводимой установки минимальное решение — добавить созданный npm файл `package-lock.json` в репозиторий и затем использовать `npm ci`.
 
 ## Публикация в интернете
 PWA требует HTTPS (кроме localhost). Самый простой вариант — VPS с Docker:
@@ -51,12 +61,12 @@ PWA требует HTTPS (кроме localhost). Самый простой ва�
 ## API
 - `POST /api/auth/register` `{email,password,nickname}`
 - `POST /api/auth/login` `{email,password}`
-- `GET /api/me` (Bearer token)
-- `PUT /api/profile` (Bearer token)
-- `GET /api/players?hero=&role=&rank=&style=` (Bearer token)
-- `POST /api/players/:id/like` (Bearer token)
-- `GET /api/matches` (Bearer token)
-- `POST /api/ai/draft` (Bearer token) `{lane,enemies,allies,myHero}`
+- `GET /api/me` (&#66;earer token)
+- `PUT /api/profile` (&#66;earer token)
+- `GET /api/players?hero=&role=&rank=&style=` (&#66;earer token)
+- `POST /api/players/:id/like` (&#66;earer token)
+- `GET /api/matches` (&#66;earer token)
+- `POST /api/ai/draft` (&#66;earer token) `{lane,enemies,allies,myHero}`
 - `GET /api/health`
 
 ## Ограничения и следующие production-шаги
