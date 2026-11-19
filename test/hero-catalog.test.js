@@ -20,6 +20,45 @@ test("catalog contains 32 entries with unique IDs and valid status structure", (
   assert.equal(new Set(heroCatalog.map(hero => hero.id.trim().replace(/\s+/gu, " ").toLowerCase())).size, 32);
 });
 
+test("validator accepts an empty catalog", () => {
+  assert.deepEqual(validateHeroCatalog([]), {
+    ok: true,
+    count: 0,
+    errors: []
+  });
+});
+
+test("validator rejects entries missing required fields", () => {
+  const validEntry = heroCatalog[0];
+
+  for (const field of [
+    "id",
+    "identity",
+    "localization",
+    "role",
+    "lanes",
+    "tacticalProfile"
+  ]) {
+    const incompleteEntry = { ...validEntry };
+    delete incompleteEntry[field];
+
+    assert.equal(
+      validateHeroCatalog([incompleteEntry]).ok,
+      false,
+      `Validator should reject an entry missing ${field}`
+    );
+  }
+});
+
+test("validator rejects a sparse catalog array", () => {
+  const sparseCatalog = [];
+  sparseCatalog.length = 1;
+
+  const result = validateHeroCatalog(sparseCatalog);
+  assert.equal(result.ok, false);
+  assert.ok(result.errors.some(error => error.includes("sparse")));
+});
+
 test("Jawhead and Dyrroth have the approved catalog identities", () => {
   const jawhead = heroCatalog.find(hero => hero.id === "jawhead");
   const dyrroth = heroCatalog.find(hero => hero.id === "dyrroth");
@@ -53,7 +92,11 @@ test("Popol and Kupa is not conflated with Jawhead", () => {
   const jawhead = heroCatalog.find(hero => hero.id === "jawhead");
   assert.equal(jawhead.nameEn, "Jawhead");
   const popolAndKupa = heroCatalog.find(hero => hero.nameEn === "Popol and Kupa");
-  if (popolAndKupa) assert.notEqual(popolAndKupa.id, jawhead.id);
+  assert.equal(
+    popolAndKupa,
+    undefined,
+    "Popol and Kupa is absent from the current partial catalog of 32 entries"
+  );
 });
 
 test("validator rejects normalized duplicate IDs and invalid or inherited statuses", () => {
