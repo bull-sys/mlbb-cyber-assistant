@@ -12,6 +12,7 @@ import path from "node:path";
 import fs from "node:fs";
 import { fileURLToPath } from "node:url";
 import { heroes, items, talents, spells, emblems } from "./data.js";
+import { getHeroCatalogApiFields, isLegacyHeroName } from "./hero-catalog-adapter.js";
 import { heroProfiles, validateHeroProfiles } from "./hero-profiles.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -46,6 +47,7 @@ function issue(id){return jwt.sign({id},tokenSecret,{expiresIn:"14d"})}
 app.get("/api/health",(req,res)=>res.json({ok:true,service:"MLBB Cyber Assistant",version:"1.0.0"}));
 app.get("/api/data",(req,res)=>res.json({
   heroes,
+  ...getHeroCatalogApiFields(),
   heroProfiles,
   heroProfilesValidation: validateHeroProfiles(),
   items,
@@ -61,7 +63,7 @@ app.post("/api/auth/login",async(req,res)=>{const {email,password}=req.body||{};
 app.get("/api/me",auth,(req,res)=>{const u=safeUser(req.user.id);if(!u)return res.status(404).json({error:"Пользователь не найден"});res.json({user:u})});
 app.put("/api/profile",auth,(req,res)=>{
  const b=req.body||{};const hero=String(b.hero||"");const role=String(b.role||"");const rank=String(b.rank||"");const style=String(b.style||"");
- if(!heroes.some(h=>h.name===hero)||!roles.includes(role)||!ranks.includes(rank)||!styles.includes(style))return res.status(400).json({error:"Проверь героя, роль, ранг и стиль"});
+ if(!isLegacyHeroName(hero)||!roles.includes(role)||!ranks.includes(rank)||!styles.includes(style))return res.status(400).json({error:"Проверь героя, роль, ранг и стиль"});
  db.prepare("UPDATE profiles SET hero=?,role=?,rank=?,style=?,game_id=?,bio=? WHERE user_id=?").run(hero,role,rank,style,String(b.game_id||"").slice(0,40),String(b.bio||"").slice(0,240),req.user.id);res.json({user:safeUser(req.user.id)});
 });
 app.get("/api/players",auth,(req,res)=>{
@@ -383,7 +385,7 @@ function analyze({lane, enemies = [], allies = [], myHero = ""}) {
 }
 
 app.post("/api/ai/draft",auth,async(req,res)=>{
- const b=req.body||{};if(!roles.includes(b.lane)||!Array.isArray(b.enemies)||b.enemies.length>5||!b.enemies.every(x=>heroes.some(h=>h.name===x)))return res.status(400).json({error:"Некорректный состав или линия"});
+ const b=req.body||{};if(!roles.includes(b.lane)||!Array.isArray(b.enemies)||b.enemies.length>5||!b.enemies.every(isLegacyHeroName))return res.status(400).json({error:"Некорректный состав или линия"});
  const result=analyze(b);
  if(openai){try{const response=await openai.chat.completions.create({model:process.env.OPENAI_MODEL||"gpt-4.1-mini",messages:[{role:"system",content:"Ты тактический помощник MLBB. Не выдумывай live статистику и точные параметры патча. Используй только переданные варианты. Кратко объясни тактику на русском."},{role:"user",content:JSON.stringify({lane:b.lane,enemies:b.enemies,allies:b.allies||[],myHero:b.myHero||"",rulesResult:result})}],max_tokens:450,temperature:.3});result.aiExplanation=response.choices[0]?.message?.content||""}catch{result.aiExplanation="AI-сервис временно недоступен; показан базовый анализ."}}
  res.json(result);
