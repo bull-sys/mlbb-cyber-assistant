@@ -61,12 +61,12 @@ PWA требует HTTPS (кроме localhost). Самый простой ва�
 ## API
 - `POST /api/auth/register` `{email,password,nickname}`
 - `POST /api/auth/login` `{email,password}`
-- `GET /api/me` (******
-- `PUT /api/profile` (******
-- `GET /api/players?hero=&role=&rank=&style=` (******
-- `POST /api/players/:id/like` (******
-- `GET /api/matches` (******
-- `POST /api/ai/draft` (****** `{lane,enemies,allies,myHero}`
+- `GET /api/me` (&#66;earer token)
+- `PUT /api/profile` (&#66;earer token)
+- `GET /api/players?hero=&role=&rank=&style=` (&#66;earer token)
+- `POST /api/players/:id/like` (&#66;earer token)
+- `GET /api/matches` (&#66;earer token)
+- `POST /api/ai/draft` (&#66;earer token) `{lane,enemies,allies,myHero}`
 - `GET /api/health`
 
 ## Ограничения и следующие production-шаги
