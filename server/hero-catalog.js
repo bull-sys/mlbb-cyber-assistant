@@ -561,8 +561,10 @@ export const heroCatalog = [
     tacticalProfileStatus: "partial",
     research: { checkedAt:"2026-11-22", roleAndLaneSources:["https://mlbbhub.com/ru/heroes/hilda","https://mlbb.io/en/hero/hilda","https://mlbbdex.com/en/heroes/hilda"], competitiveReviewStatus:"pending", method:"Fighter/Tank role and Roam primary lane with EXP flexibility cross-checked across three hero databases." },
   }),  catalogEntry("hirara", "Hirara", "Хирара", {
-    identityStatus: "pending_review",
-    localizationStatus: "pending_review"
+    identityStatus: "source_verified", localizationStatus: "pending_review",
+    roleValues: ["Assassin"], roleStatus: "verified", primaryLane: "Jungle",
+    laneStatus: "verified", tacticalProfileStatus: "partial",
+    research: { checkedAt: "2026-11-22", roleAndLaneSources: ["https://liquipedia.net/mobilelegends/Hirara", "https://mlbb.io/en/hero/hirara", "https://www.mobilelegends.com/en/news/detail/hero-difficulty-explained"], mechanicsSources: ["https://www.mobilelegends.com/en/news/detail/hero-difficulty-explained", "https://liquipedia.net/mobilelegends/Hirara", "https://mlbbanalytics.com/heroes?search=Hirara"], rankedMetaSources: ["https://mlbb.io/en/hero/hirara", "https://mlbbanalytics.com/heroes?search=Hirara"], competitiveReviewStatus: "partial", method: "Assassin/Jungle identity and the two-weapon combo system cross-checked against Moonton's hero description, Liquipedia and MLBB.io. Tournament aggregates are available, but no specific current-patch VOD review has been completed." }
   }),
   catalogEntry("hylos", "Hylos", "Хилос", {
     identityStatus: "source_verified", localizationStatus: "pending_review",
@@ -603,13 +605,17 @@ export const heroCatalog = [
     }
   }),
   catalogEntry("kalea", "Kalea", "Калеа", {
-    identityStatus: "pending_review",
-    localizationStatus: "pending_review"
+    identityStatus: "source_verified", localizationStatus: "pending_review",
+    roleValues: ["Support", "Fighter"], roleStatus: "verified", primaryLane: "Roam",
+    laneStatus: "verified", tacticalProfileStatus: "partial",
+    research: { checkedAt: "2026-11-22", roleAndLaneSources: ["https://mlbb-knowledge.vercel.app/heroes/128", "https://www.mobilelegends.com/en/hero/56/skill", "https://www.mlbbguides.com/heroes/kalea/"], mechanicsSources: ["https://www.mobilelegends.com/en/hero/56/skill", "https://mlbb.io/en/hero/kalea", "https://mlbb-knowledge.vercel.app/heroes/128"], rankedMetaSources: ["https://mlbb.io/en/hero/kalea", "https://mlbb-knowledge.vercel.app/heroes/128"], competitiveReviewStatus: "pending", method: "Support/Fighter identity, Roam placement, Water Zone passive, healing attacks and control kit cross-checked against Moonton and independent hero references. Ranked data is kept separate from professional evidence; VOD review remains pending." }
   }),
   catalogEntry("karina", "Karina", "Карина", { identityStatus:"source_verified", localizationStatus:"pending_review", roleValues:["Assassin"], roleStatus:"verified", primaryLane:"Jungle", flexibleLanes:[], laneStatus:"verified", tacticalProfileStatus:"partial", research:{ checkedAt:"2026-11-22", roleAndLaneSources:["https://mlbb-knowledge.vercel.app/heroes/8","https://mlbb.io/en/hero/karina","https://liquipedia.net/mobilelegends/Karina"], mechanicsSources:["https://mlbb-knowledge.vercel.app/heroes/8","https://mlbb.io/en/hero/karina","https://liquipedia.net/mobilelegends/Karina"], rankedMetaSources:["https://mlbb-knowledge.vercel.app/heroes/8","https://mlbb.io/en/hero/karina"], competitiveReviewStatus:"pending", method:"Assassin/Jungle role and passive true-damage, basic-attack block and shadow-return mechanics cross-checked across three hero references. Ranked and professional evidence are kept separate." } }),
   catalogEntry("khaleed", "Khaleed", "Халид", {
-    identityStatus: "pending_review",
-    localizationStatus: "pending_review"
+    identityStatus: "source_verified", localizationStatus: "pending_review",
+    roleValues: ["Fighter"], roleStatus: "verified", primaryLane: "EXP Lane",
+    flexibleLanes: ["Roam"], laneStatus: "verified", tacticalProfileStatus: "partial",
+    research: { checkedAt: "2026-11-22", roleAndLaneSources: ["https://mlbb-knowledge.vercel.app/heroes/98", "https://www.mlbbguides.com/heroes/khaleed/", "https://liquipedia.net/mobilelegends/Khaleed"], mechanicsSources: ["https://liquipedia.net/mobilelegends/Khaleed", "https://metammo.com/mobile-legends-guide/heroes/khaleed", "https://mlbb.tools/heroes/khaleed"], rankedMetaSources: ["https://mlbb-knowledge.vercel.app/heroes/98", "https://www.mlbbguides.com/heroes/khaleed/"], competitiveReviewStatus: "partial", method: "Fighter identity and EXP/Roam usage cross-checked across MLBB Knowledge, MLBBGuides and Liquipedia. Sand Walk, three-cast Desert Tornado, interruptible Quicksand Guard and control-immune ultimate checked against multiple skill references. Current professional VOD review remains pending." }
   }),
   catalogEntry("khufra", "Khufra", "Хуфра", {
     roleValues: ["Tank"], roleStatus: "verified",
@@ -617,13 +623,17 @@ export const heroCatalog = [
     research: { checkedAt: "2026-11-22", roleAndLaneSources: ["https://mlbbhub.com/ru/heroes/khufra", "https://mlbb.io/en/hero/khufra"], mechanicsSources: ["https://liquipedia.net/mobilelegends/Khufra", "https://metammo.com/mobile-legends-guide/heroes/khufra"], rankedMetaSources: ["https://mlbbhub.com/ru/heroes/khufra", "https://mlbbdex.com/en/statistics"], competitiveReviewStatus: "pending", method: "Tank/Roam role, anti-dash function and skill mechanics cross-checked across independent references; pro VOD review remains pending." }
   }),
   catalogEntry("kimmy", "Kimmy", "Кимми", {
-    identityStatus: "pending_review",
-    localizationStatus: "pending_review"
+    identityStatus: "source_verified", localizationStatus: "pending_review",
+    roleValues: ["Marksman", "Mage"], roleStatus: "verified", primaryLane: "Gold Lane",
+    flexibleLanes: ["Mid Lane"], laneStatus: "verified", tacticalProfileStatus: "partial",
+    research: { checkedAt: "2026-11-22", roleAndLaneSources: ["https://www.mlbb.io/en/hero/kimmy", "https://www.mlbbguides.com/heroes/kimmy/"], mechanicsSources: ["https://www.mlbb.io/en/hero/kimmy", "https://www.mlbbguides.com/heroes/kimmy/"], rankedMetaSources: ["https://www.mlbb.io/en/hero/kimmy"], competitiveReviewStatus: "pending", method: "Marksman/Mage identity and Gold/Mid lane usage cross-checked across MLBB.io and MLBBGuides. Starlium resource, manual directional fire and attack-speed conversion verified; individual active-skill details are intentionally left for a later deeper review." }
   }),
   catalogEntry("lancelot", "Lancelot", "Ланселот", { identityStatus:"source_verified", localizationStatus:"pending_review", roleValues:["Assassin"], roleStatus:"verified", primaryLane:"Jungle", flexibleLanes:[], laneStatus:"verified", tacticalProfileStatus:"partial", research:{ checkedAt:"2026-11-22", roleAndLaneSources:["https://mlbb-knowledge.vercel.app/heroes/47","https://liquipedia.net/mobilelegends/Lancelot","https://mlbb.io/en/hero/lancelot"], mechanicsSources:["https://mlbb-knowledge.vercel.app/heroes/47","https://liquipedia.net/mobilelegends/Lancelot","https://mlbb.io/en/hero/lancelot"], rankedMetaSources:["https://mlbb-knowledge.vercel.app/heroes/47","https://mlbb.io/en/hero/lancelot"], competitiveReviewStatus:"pending", method:"Assassin/Jungle classification and resettable Puncture, untargetable Thorned Rose and Phantom Execution checked across three references. MLBB Knowledge displayed a zeroed current aggregate, treated as incomplete data rather than a balance conclusion." } }),
   catalogEntry("lapu-lapu", "Lapu-Lapu", "Лапу-Лапу", {
-    identityStatus: "pending_review",
-    localizationStatus: "pending_review"
+    identityStatus: "source_verified", localizationStatus: "pending_review",
+    roleValues: ["Fighter"], roleStatus: "verified", primaryLane: "EXP Lane",
+    laneStatus: "verified", tacticalProfileStatus: "partial",
+    research: { checkedAt: "2026-11-22", roleAndLaneSources: ["https://mlbbhub.com/heroes/lapu-lapu", "https://www.mlbbguides.com/heroes/lapu-lapu/", "https://mlbb.io/en/hero/lapu-lapu"], mechanicsSources: ["https://mlbb.io/en/hero/lapu-lapu", "https://metammo.com/mobile-legends-guide/heroes/lapu-lapu", "https://www.mlbbguides.com/heroes/lapu-lapu/"], rankedMetaSources: ["https://mlbbhub.com/heroes/lapu-lapu", "https://www.mlbbguides.com/heroes/lapu-lapu/"], competitiveReviewStatus: "pending", method: "Fighter/EXP identity, Bravery Blessing passive and Heavy Sword stance checked across MLBBHub, MLBB.io, MLBBGuides and METAMMO. Ranked aggregates are kept separate; current-patch professional VOD review remains pending." }
   }),
   catalogEntry("leomord", "Leomord", "Леоморд", { identityStatus:"source_verified", localizationStatus:"pending_review", roleValues:["Fighter"], roleStatus:"verified", primaryLane:"Jungle", flexibleLanes:[], laneStatus:"verified", tacticalProfileStatus:"partial", research:{ checkedAt:"2026-11-22", roleAndLaneSources:["https://mlbb-knowledge.vercel.app/heroes/67","https://liquipedia.net/mobilelegends/Leomord","https://mlbb.io/en/hero/leomord"], mechanicsSources:["https://mlbb-knowledge.vercel.app/heroes/67","https://liquipedia.net/mobilelegends/Leomord","https://mlbb.io/en/hero/leomord"], rankedMetaSources:["https://mlbb-knowledge.vercel.app/heroes/67","https://mlbb.io/en/hero/leomord"], competitiveReviewStatus:"pending", method:"Fighter/Jungle classification, Oath Keeper passive and mounted Barbiel skill set cross-checked across three current hero references. Professional VOD review remains pending." } }),
   catalogEntry("lesley", "Lesley", "Лесли", {
