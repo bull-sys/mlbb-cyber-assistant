@@ -445,3 +445,38 @@ test("Faramis, Fredrinn, Gatotkaca, Gloo and Gord have sourced partial tactical 
   const faramis = heroProfiles.find(item => item.id === "faramis");
   assert.ok(faramis.mechanics.some(note => note.includes("Царство Бездны")));
 });
+
+
+test("Grock, Guinevere, Gusion, Harith and Harley have sourced partial tactical profiles", () => {
+  const expected = [
+    ["grock", "Грок", "https://mlbb-knowledge.vercel.app/heroes/44"],
+    ["guinevere", "Гвиневра", "https://mlbb-knowledge.vercel.app/heroes/80"],
+    ["gusion", "Госсен", "https://mlbb-knowledge.vercel.app/heroes/56"],
+    ["harith", "Харит", "https://mlbb-knowledge.vercel.app/heroes/73"],
+    ["harley", "Харли", "https://mlbb-knowledge.vercel.app/heroes/42"]
+  ];
+  for (const [id, name, source] of expected) {
+    const hero = heroProfiles.find(item => item.id === id);
+    assert.ok(hero, id + " profile exists");
+    assert.equal(hero.names.ru, name);
+    assert.ok(hero.mechanics.length >= 4, id + " mechanics");
+    assert.ok(hero.strengths.length >= 3, id + " strengths");
+    assert.ok(hero.weaknesses.length >= 3, id + " weaknesses");
+    assert.ok(hero.sources.includes(source), id + " source");
+    assert.equal(hero.confidence, "partial");
+    assert.equal(hero.patch.version, HERO_DB_PATCH);
+    assert.equal(hero.patch.reviewedAt, "2026-11-22");
+    assert.deepEqual(hero.matchups.strongAgainst, []);
+    assert.deepEqual(hero.matchups.weakAgainst, []);
+  }
+  const grock = heroProfiles.find(item => item.id === "grock");
+  assert.ok(grock.mechanics.some(note => note.includes("препятств")));
+  const guinevere = heroProfiles.find(item => item.id === "guinevere");
+  assert.ok(guinevere.mechanics.some(note => note.includes("три метки")));
+  const gusion = heroProfiles.find(item => item.id === "gusion");
+  assert.ok(gusion.mechanics.some(note => note.includes("маны")));
+  const harith = heroProfiles.find(item => item.id === "harith");
+  assert.ok(harith.mechanics.some(note => note.includes("разлом")));
+  const harley = heroProfiles.find(item => item.id === "harley");
+  assert.ok(harley.mechanics.some(note => note.includes("шляпу")));
+});
