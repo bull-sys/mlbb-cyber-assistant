@@ -108,3 +108,28 @@ test("Ling has a cross-checked Assassin/Jungle profile with explicit uncertainty
   assert.match(notes, /Профессиональные данные/);
   assert.match(notes, /VOD/);
 });
+
+test("Nolan has a cross-checked Assassin/Jungle profile with explicit uncertainty", () => {
+  const nolan = heroProfiles.find(hero => hero.id === "nolan");
+  assert.ok(nolan);
+  assert.equal(nolan.names.en, "Nolan");
+  assert.equal(nolan.names.ru, "Нолан");
+  assert.deepEqual(nolan.roles, ["Убийца"]);
+  assert.deepEqual(nolan.lanes, ["Лес"]);
+  assert.ok(nolan.mechanics.length >= 5);
+  assert.ok(nolan.mechanics.some(note => note.includes("разлом")));
+  assert.ok(nolan.strengths.length >= 3);
+  assert.ok(nolan.weaknesses.length >= 3);
+  assert.ok(nolan.sources.some(source => source.includes("mlbb.io")));
+  assert.ok(nolan.sources.some(source => source.includes("mlbbhub.com")));
+  assert.ok(nolan.sources.some(source => source.includes("mlbbdex.com")));
+  assert.equal(nolan.confidence, "partial");
+  assert.equal(nolan.patch.version, HERO_DB_PATCH);
+  assert.equal(nolan.patch.reviewedAt, "2026-11-22");
+  assert.deepEqual(nolan.matchups.strongAgainst, []);
+  assert.deepEqual(nolan.matchups.weakAgainst, []);
+  const notes = nolan.patch.notes.join(" ");
+  assert.match(notes, /Рейтинговая статистика/);
+  assert.match(notes, /Профессиональная выборка/);
+  assert.match(notes, /VOD/);
+});
