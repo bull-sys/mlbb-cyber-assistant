@@ -12,7 +12,7 @@ const app = await readFile(
 );
 
 test("service worker keeps the game catalog available offline after a successful load", () => {
-  assert.match(serviceWorker, /const CACHE="mlbb-cyber-v6"/);
+  assert.match(serviceWorker, /const CACHE="mlbb-cyber-v9"/);
   assert.match(serviceWorker, /const DATA_CACHE="mlbb-cyber-data-v1"/);
   assert.match(serviceWorker, /url\.pathname==="\/api\/data"/);
   assert.match(serviceWorker, /cache\.put\(request,copy\)/);
@@ -104,4 +104,14 @@ test("draft picker renders hero portraits with readable names and fallback", asy
  assert.match(app, /"yi-sun-shin":"yi_sun-shin"/);
  assert.match(css, /hero-portrait-wrap/);
  assert.match(css, /object-fit:cover/);
+});
+
+
+test("draft picker supports role and lane filters and concise tactical card facts", () => {
+ assert.match(app, /pickerRoleFilter/);
+ assert.match(app, /data-picker-role/);
+ assert.match(app, /hero-card-fact/);
+ assert.match(app, /heroProfiles/);
+ assert.match(app, /strengths/);
+ assert.match(app, /weaknesses/);
 });
