@@ -9,9 +9,10 @@ function extractFunction(source, name) {
   const marker = `function ${name}(`;
   const start = source.indexOf(marker);
   assert.notEqual(start, -1, `Missing ${marker}`);
-  const signatureEnd = source.indexOf("){", start);
-  assert.notEqual(signatureEnd, -1, `Missing body for ${name}`);
-  const open = signatureEnd + 1;
+  const signatureEnd = source.indexOf(")", start);
+  assert.notEqual(signatureEnd, -1, `Missing signature end for ${name}`);
+  const open = source.indexOf("{", signatureEnd);
+  assert.notEqual(open, -1, `Missing body for ${name}`);
   let depth = 0;
   let state = "code";
   let escaped = false;
