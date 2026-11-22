@@ -1,5 +1,6 @@
 const $=id=>document.getElementById(id);
 const DRAFT_STORAGE_KEY="mlbb_draft_state_v1";
+let draftSyncTimer=null,draftSyncInFlight=false;
 let token=localStorage.getItem("mlbb_token")||"",data={heroes:[],draftHeroOptions:[],heroCatalog:[],heroProfiles:[],items:[],talents:[],emblems:[],roles:[],ranks:[],styles:[]},enemies=[],allies=[],threats=new Set(),encyFilter="all",ocrWorker=null;
 const threatDefs=[["heal","💚 Отхил / вампиризм"],["magic","🔮 2+ мага / прокаст"],["speed","⚡ Скорость атаки"],["tank","🛡 Жирные танки"],["cc","⛓ Тяжёлый контроль"],["physical","⚔ Много физического урона"],["burst","💥 Взрывной урон"]];
 const $api=async(path,opts={})=>{let r=await fetch("/api"+path,{...opts,headers:{"Content-Type":"application/json",...(token?{Authorization:"Bearer "+token}:{}),...(opts.headers||{})}});let d=await r.json().catch(()=>({error:"Ошибка сервера"}));if(!r.ok)throw Error(d.error||"Ошибка");return d};
@@ -29,7 +30,55 @@ $("threats").innerHTML=threatDefs.map(([id,name])=>`<button class="chip" data-th
 restoreDraft();drawTeams();renderEncy();if(token)await refreshMe();
 }
 function drawTeams(){for(let [side,arr] of [["enemies",enemies],["allies",allies]])$(side).innerHTML=arr.map((x,i)=>`<button class="chip active" data-side="${side}" data-i="${i}">${esc(draftHeroLabel(x))} ×</button>`).join("")||""}
-function saveDraft(){try{localStorage.setItem(DRAFT_STORAGE_KEY,JSON.stringify({version:1,enemies,allies,lane:$("lane").value,myHero:$("myHero").value,threats:[...threats],savedAt:Date.now()}))}catch{}}
+function draftSnapshot(){return {version:1,enemies:[...enemies],allies:[...allies],lane:$("lane").value,myHero:$("myHero").value,threats:[...threats],savedAt:Date.now()}}
+function setDraftStatus(message){const el=$("draftSaveStatus");if(el)el.textContent=message}
+function saveDraft(){
+ const snapshot=draftSnapshot();
+ try{localStorage.setItem(DRAFT_STORAGE_KEY,JSON.stringify(snapshot));setDraftStatus("✓ Сохранено на этом устройстве")}
+ catch{setDraftStatus("Не удалось сохранить локально. Проверь свободное место в браузере.");return}
+ if(token){clearTimeout(draftSyncTimer);draftSyncTimer=setTimeout(syncDraftState,900)}
+}
+function readLocalDraft(){try{return JSON.parse(localStorage.getItem(DRAFT_STORAGE_KEY)||"null")}catch{return null}}
+function applyDraftState(saved){
+ if(!saved||saved.version!==1)return;
+ const names=new Set([...data.heroes.map(h=>h.name),...(data.draftHeroOptions||[]).map(h=>h.id)]);
+ enemies=Array.isArray(saved.enemies)?saved.enemies.filter(x=>names.has(x)).slice(0,5):[];
+ allies=Array.isArray(saved.allies)?saved.allies.filter(x=>names.has(x)).slice(0,5):[];
+ if(data.roles.includes(saved.lane))$("lane").value=saved.lane;
+ if(names.has(saved.myHero))$("myHero").value=saved.myHero;
+ const allowed=new Set(threatDefs.map(([id])=>id));
+ threats=new Set(Array.isArray(saved.threats)?saved.threats.filter(x=>allowed.has(x)):[]);
+ document.querySelectorAll("#threats [data-threat]").forEach(b=>b.classList.toggle("active",threats.has(b.dataset.threat)));
+ drawTeams();
+}
+function restoreDraft(){
+ const saved=readLocalDraft();
+ if(!saved)return;
+ try{applyDraftState(saved);setDraftStatus("Черновик восстановлен с этого устройства")}
+ catch{try{localStorage.removeItem(DRAFT_STORAGE_KEY)}catch{}}
+}
+async function syncDraftState(){
+ if(!token||draftSyncInFlight)return;
+ if(!navigator.onLine){setDraftStatus("Офлайн: черновик сохранён на устройстве, синхронизация будет позже");return}
+ draftSyncInFlight=true;
+ try{
+  const remote=await $api("/draft-state");
+  const local=readLocalDraft();
+  if(remote.state&&(!local||Number(remote.state.savedAt)>Number(local.savedAt))){
+   applyDraftState(remote.state);
+   localStorage.setItem(DRAFT_STORAGE_KEY,JSON.stringify(remote.state));
+   setDraftStatus("✓ Более свежий черновик восстановлен с сервера");
+  }else if(local&&(!remote.state||Number(local.savedAt)>Number(remote.state.savedAt))){
+   await $api("/draft-state",{method:"PUT",body:JSON.stringify({state:local})});
+   setDraftStatus("✓ Черновик синхронизирован с аккаунтом");
+  }else if(local&&remote.state){
+   setDraftStatus("✓ Черновик синхронизирован");
+  }else{
+   setDraftStatus("Черновик пока сохраняется только на устройстве");
+  }
+ }catch(error){setDraftStatus("Серверная синхронизация отложена; локальная копия сохранена")}
+ finally{draftSyncInFlight=false}
+}
 function restoreDraft(){try{const saved=JSON.parse(localStorage.getItem(DRAFT_STORAGE_KEY)||"null");if(!saved||saved.version!==1)return;const names=new Set([...data.heroes.map(h=>h.name),...(data.draftHeroOptions||[]).map(h=>h.id)]);enemies=Array.isArray(saved.enemies)?saved.enemies.filter(x=>names.has(x)).slice(0,5):[];allies=Array.isArray(saved.allies)?saved.allies.filter(x=>names.has(x)).slice(0,5):[];if(data.roles.includes(saved.lane))$("lane").value=saved.lane;if(names.has(saved.myHero))$("myHero").value=saved.myHero;const allowed=new Set(threatDefs.map(([id])=>id));threats=new Set(Array.isArray(saved.threats)?saved.threats.filter(x=>allowed.has(x)):[]);document.querySelectorAll("#threats [data-threat]").forEach(b=>b.classList.toggle("active",threats.has(b.dataset.threat)))}catch{try{localStorage.removeItem(DRAFT_STORAGE_KEY)}catch{}}}
 function addHero(side){let id=side==="enemies"?"enemyPick":"allyPick",arr=side==="enemies"?enemies:allies,v=$(id).value;if(!v)return;if(arr.length>=5)return toast("Максимум 5 героев");if(arr.includes(v))return toast("Уже добавлен");arr.push(v);drawTeams();saveDraft()}
 $("addEnemy").onclick=()=>addHero("enemies");$("addAlly").onclick=()=>addHero("allies");
@@ -79,8 +128,8 @@ $("buildBtn").onclick=()=>{
 };
 async function auth(action){let body={email:$("email").value,password:$("password").value,nickname:$("nickname").value};try{let d=await $api("/auth/"+action,{method:"POST",body:JSON.stringify(body)});token=d.token;localStorage.setItem("mlbb_token",token);$("authMessage").textContent="Успешный вход";await refreshMe()}catch(e){$("authMessage").textContent=e.message}}
 $("login").onclick=()=>auth("login");$("register").onclick=()=>auth("register");
-async function refreshMe(){try{let d=await $api("/me"),u=d.user;$("authBadge").textContent="● "+u.nickname;$("authPanel").classList.add("hidden");$("logout").classList.remove("hidden");if(u.hero){$("profileHero").value=u.hero;$("profileRole").value=u.role;$("profileRank").value=u.rank;$("profileStyle").value=u.style;$("gameId").value=u.game_id||"";$("bio").value=u.bio||""}}catch{logout()}}
-function logout(){token="";localStorage.removeItem("mlbb_token");$("authPanel").classList.remove("hidden");$("authBadge").textContent="● DEMO MODE";$("logout").classList.add("hidden")}
+async function refreshMe(){try{let d=await $api("/me"),u=d.user;$("authBadge").textContent="● "+u.nickname;$("authPanel").classList.add("hidden");$("logout").classList.remove("hidden");if(u.hero){$("profileHero").value=u.hero;$("profileRole").value=u.role;$("profileRank").value=u.rank;$("profileStyle").value=u.style;$("gameId").value=u.game_id||"";$("bio").value=u.bio||""}await syncDraftState()}catch{logout()}}
+function logout(){clearTimeout(draftSyncTimer);token="";localStorage.removeItem("mlbb_token");$("authPanel").classList.remove("hidden");$("authBadge").textContent="● DEMO MODE";$("logout").classList.add("hidden");setDraftStatus("Черновик сохранён на устройстве; синхронизация доступна после входа")}
 $("logout").onclick=logout;
 $("saveProfile").onclick=async()=>{try{let d=await $api("/profile",{method:"PUT",body:JSON.stringify({hero:$("profileHero").value,role:$("profileRole").value,rank:$("profileRank").value,style:$("profileStyle").value,game_id:$("gameId").value,bio:$("bio").value})});$("profileStatus").textContent="Анкета сохранена: "+d.user.nickname;toast("Профиль обновлён")}catch(e){toast(e.message)}};
 async function searchPlayers(ideal=false){try{let q=new URLSearchParams();for(let k of ["hero","role","rank","style"]){let el=$("filter"+k[0].toUpperCase()+k.slice(1));if(el.value)q.set(k,el.value)}if(ideal){let role=$("profileRole").value;let partner=({Лес:"Роум",Золото:"Роум",Опыт:"Лес",Мид:"Лес",Роум:"Лес"})[role];q.set("role",partner)}let d=await $api("/players?"+q);$("players").innerHTML=d.players.map(p=>`<article class="player"><h3>${esc(p.nickname)}</h3><small>${esc(p.hero)} · ${p.role} · ${p.rank} · ${p.style}</small><p>${esc(p.bio||"Без описания")}</p><button class="btn" data-like="${p.id}">♥ Пригласить / лайк</button></article>`).join("")||'<p class="hint">Пока нет игроков с такими фильтрами. Пригласи друзей зарегистрироваться.</p>'}catch(e){toast(e.message)}}
@@ -112,4 +161,6 @@ function renderEncy(){
 }
 $("encySearch").oninput=renderEncy;$("encyFilters").onclick=e=>{let b=e.target.closest("[data-filter]");if(!b)return;encyFilter=b.dataset.filter;document.querySelectorAll("#encyFilters .chip").forEach(x=>x.classList.toggle("active",x===b));renderEncy()};
 $("ocr").onclick=async()=>{let f=$("screenshot").files[0];if(!f)return toast("Выбери скриншот");$("ocrStatus").textContent="Загружаю OCR-движок и распознаю текст...";try{if(!window.Tesseract){await new Promise((ok,no)=>{let s=document.createElement("script");s.src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js";s.onload=ok;s.onerror=no;document.head.append(s)})}let result=await Tesseract.recognize(f,"eng+rus");let text=result.data.text.toLowerCase();let found=data.heroes.map(h=>h.name).filter(n=>text.includes(n.toLowerCase()));$("ocrStatus").textContent=found.length?"Кандидаты распознавания: "+found.join(", ")+". Добавь проверенных героев вручную.":"Не удалось уверенно распознать названия. Попробуй более чёткий скриншот или добавь героев вручную.";if(found.length)found.forEach(h=>{if(enemies.length<5&&!enemies.includes(h))enemies.push(h)});drawTeams();saveDraft()}catch(e){$("ocrStatus").textContent="OCR не загрузился. Проверь подключение к интернету и попробуй ещё раз."}};
+document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="visible")syncDraftState()});
+window.addEventListener("online",syncDraftState);
 init();
