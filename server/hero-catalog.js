@@ -57,7 +57,37 @@ export const heroCatalog = [
       method: "Assassin role and Jungle/Roam usage cross-checked across independent hero references. Skill mechanics cross-checked against Liquipedia and MLBB.io. Ranked statistics are recorded separately from professional draft evidence; pro VOD review remains pending."
     }
   }),
-  catalogEntry("hanzo", "Hanzo", "Ханзо"),
+  catalogEntry("hanzo", "Hanzo", "Ханзо", {
+    roleValues: ["Assassin"],
+    roleStatus: "verified",
+    primaryLane: "Jungle",
+    flexibleLanes: [],
+    laneStatus: "verified",
+    tacticalProfileStatus: "partial",
+    research: {
+      checkedAt: "2026-11-22",
+      roleAndLaneSources: [
+        "https://metammo.com/mobile-legends-guide/heroes/hanzo",
+        "https://www.mlbb.io/en/hero/hanzo",
+        "https://mlbbhub.com/heroes/hanzo"
+      ],
+      mechanicsSources: [
+        "https://metammo.com/mobile-legends-guide/heroes/hanzo",
+        "https://www.mlbb.io/en/hero/hanzo",
+        "https://mlbbhub.com/heroes/hanzo"
+      ],
+      rankedMetaSources: [
+        "https://metammo.com/mobile-legends-guide/heroes/hanzo",
+        "https://www.mlbb.io/en/hero/hanzo"
+      ],
+      professionalMetaSources: [
+        "https://metammo.com/mobile-legends-guide/heroes/hanzo",
+        "https://www.mlbbanalytics.com/heroes?search=Hanzo"
+      ],
+      competitiveReviewStatus: "partial",
+      method: "Assassin role and Jungle lane cross-checked across three independent hero references. Skill mechanics compared against Moonton skill text reproduced by METAMMO and MLBB.io, with the current reworked Hanekage form and its penalties checked against MLBBHub. Ranked statistics, individual tournament samples, and professional VOD review are kept separate; VOD review remains pending."
+    }
+  }),
   catalogEntry("roger", "Roger", "Роджер"),
   catalogEntry("ling", "Ling", "Линг"),
   catalogEntry("nolan", "Nolan", "Нолан"),
