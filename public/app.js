@@ -102,9 +102,21 @@ function rememberPickerHero(value){
  try{localStorage.setItem("mlbb_recent_draft_heroes",JSON.stringify([value,...pickerRecent().filter(x=>x!==value)].slice(0,6)))}catch{}
 }
 function heroPortraitUrl(hero){
- const catalog=(data.draftHeroOptions||[]).find(h=>h.id===hero.value||h.name===hero.name||h.nameEn===hero.nameEn);
+ const aliases={"Эудора":"eudora"};
+ const catalog=(data.draftHeroOptions||[]).find(h=>
+  h.id===hero.value||h.displayNameRu===hero.name||h.name===hero.name||
+  (aliases[hero.name]&&h.id===aliases[hero.name])||
+  (hero.nameEn&&h.nameEn===hero.nameEn)
+ );
  const id=(catalog&&catalog.id)||hero.id||(hero.nameEn||"").toLocaleLowerCase("en").replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");
- const filename=id==="chang-e"?"chang27e":id;
+ const filenames={
+  "chang-e":"chang27e",
+  "luo-yi":"luo_yi",
+  "popol-and-kupa":"popol_and_kupa",
+  "yi-sun-shin":"yi_sun-shin",
+  "yu-zhong":"yu_zhong"
+ };
+ const filename=filenames[id]||id;
  return "https://raw.githubusercontent.com/Ceplin03/database-mlbb.Mobile-Legends-Bang-Bang/master/images-hero/"+encodeURIComponent(filename)+".png";
 }
 function heroTileMarkup(h,extra=""){
