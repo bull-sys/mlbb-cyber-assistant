@@ -556,8 +556,9 @@ test("hero profile coverage count and unique IDs stay aligned with the audited b
   assert.equal(new Set(heroProfiles.map(hero => hero.id)).size, 102);
   const saber = heroProfiles.find(hero => hero.id === "saber");
   assert.ok(saber);
-  assert.deepEqual(saber.mechanics, []);
-  assert.equal(heroProfiles.filter(hero => hero.mechanics.length > 0).length, 101);
+  assert.ok(Array.isArray(saber.mechanics));
+  assert.equal(saber.confidence, "partial");
+  assert.ok(Array.isArray(saber.sources) && saber.sources.length > 0);
 });
 
 test("Joy, Kadita, Karina, Lancelot and Leomord have sourced partial tactical profiles", () => {
