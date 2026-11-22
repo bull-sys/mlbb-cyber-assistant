@@ -1,9 +1,12 @@
 const $=id=>document.getElementById(id);
-const DRAFT_STORAGE_KEY="mlbb_draft_state_v1";
+const LEGACY_DRAFT_STORAGE_KEY="mlbb_draft_state_v1";
+const GUEST_DRAFT_STORAGE_KEY="mlbb_draft_state_v1_guest";
+let draftStorageKey=GUEST_DRAFT_STORAGE_KEY;
+try{if(!localStorage.getItem(GUEST_DRAFT_STORAGE_KEY)&&localStorage.getItem(LEGACY_DRAFT_STORAGE_KEY))localStorage.setItem(GUEST_DRAFT_STORAGE_KEY,localStorage.getItem(LEGACY_DRAFT_STORAGE_KEY));localStorage.removeItem(LEGACY_DRAFT_STORAGE_KEY)}catch{}
 let draftSyncTimer=null,draftSyncInFlight=false,draftSyncAgain=false;
-let token=localStorage.getItem("mlbb_token")||"",data={heroes:[],draftHeroOptions:[],heroCatalog:[],heroProfiles:[],items:[],talents:[],emblems:[],roles:[],ranks:[],styles:[]},enemies=[],allies=[],threats=new Set(),encyFilter="all",ocrWorker=null;
+let token=localStorage.getItem("mlbb_token")||"",activeUserId=null,data={heroes:[],draftHeroOptions:[],heroCatalog:[],heroProfiles:[],items:[],talents:[],emblems:[],roles:[],ranks:[],styles:[]},enemies=[],allies=[],threats=new Set(),encyFilter="all",ocrWorker=null;
 const threatDefs=[["heal","💚 Отхил / вампиризм"],["magic","🔮 2+ мага / прокаст"],["speed","⚡ Скорость атаки"],["tank","🛡 Жирные танки"],["cc","⛓ Тяжёлый контроль"],["physical","⚔ Много физического урона"],["burst","💥 Взрывной урон"]];
-const $api=async(path,opts={})=>{let r=await fetch("/api"+path,{...opts,headers:{"Content-Type":"application/json",...(token?{Authorization:"Bearer "+token}:{}),...(opts.headers||{})}});let d=await r.json().catch(()=>({error:"Ошибка сервера"}));if(!r.ok)throw Error(d.error||"Ошибка");return d};
+const $api=async(path,opts={})=>{let r=await fetch("/api"+path,{...opts,headers:{"Content-Type":"application/json",...(token?{Authorization:"Bearer "+token}:{}),...(opts.headers||{})}});let d=await r.json().catch(()=>({error:"Ошибка сервера"}));if(!r.ok){if(r.status===401&&token&&!path.startsWith("/auth/"))logout();throw Error(d.error||"Ошибка")}return d};
 function toast(s){let el=document.createElement("div");el.textContent=s;el.style="position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#18384a;border:1px solid #39e5ff;padding:12px 17px;border-radius:10px;z-index:99;font-size:12px";document.body.append(el);setTimeout(()=>el.remove(),2500)}
 function options(el,arr,placeholder="Выбери..."){el.innerHTML=(placeholder?`<option value="">${placeholder}</option>`:"")+arr.map(x=>`<option>${typeof x==="string"?x:x.name}</option>`).join("")}
 function draftOptions(el){
@@ -34,11 +37,11 @@ function draftSnapshot(){return {version:1,enemies:[...enemies],allies:[...allie
 function setDraftStatus(message){const el=$("draftSaveStatus");if(el)el.textContent=message}
 function saveDraft(){
  const snapshot=draftSnapshot();
- try{localStorage.setItem(DRAFT_STORAGE_KEY,JSON.stringify(snapshot));setDraftStatus("✓ Сохранено на этом устройстве")}
+ try{localStorage.setItem(draftStorageKey,JSON.stringify(snapshot));setDraftStatus("✓ Сохранено на этом устройстве")}
  catch{setDraftStatus("Не удалось сохранить локально. Проверь свободное место в браузере.");return}
  if(token){clearTimeout(draftSyncTimer);draftSyncTimer=setTimeout(syncDraftState,900)}
 }
-function readLocalDraft(){try{return JSON.parse(localStorage.getItem(DRAFT_STORAGE_KEY)||"null")}catch{return null}}
+function readLocalDraft(){try{return JSON.parse(localStorage.getItem(draftStorageKey)||"null")}catch{return null}}
 function applyDraftState(saved){
  if(!saved||saved.version!==1)return;
  const names=new Set([...data.heroes.map(h=>h.name),...(data.draftHeroOptions||[]).map(h=>h.id)]);
@@ -51,6 +54,9 @@ function applyDraftState(saved){
  document.querySelectorAll("#threats [data-threat]").forEach(b=>b.classList.toggle("active",threats.has(b.dataset.threat)));
  drawTeams();
 }
+function accountDraftKey(userId){return "mlbb_draft_state_v1_user_"+String(userId)}
+function clearDraftUI(){enemies=[];allies=[];threats.clear();$("lane").value="";$("myHero").value="";document.querySelectorAll("#threats [data-threat]").forEach(b=>b.classList.remove("active"));drawTeams()}
+function selectDraftStorage(userId){const nextKey=userId===null?GUEST_DRAFT_STORAGE_KEY:accountDraftKey(userId);if(nextKey===draftStorageKey)return;draftStorageKey=nextKey;clearDraftUI();restoreDraft()}
 function restoreDraft(){
  const saved=readLocalDraft();
  if(!saved)return;
@@ -127,10 +133,10 @@ $("buildBtn").onclick=()=>{
   ?`<h3>Рекомендованный порядок</h3>${result.map((item,i)=>`<div class="result"><b>${i+1}. ${esc(item.name)}</b><small> · ${esc(item.category)}</small><p>${esc(item.reasons.join(" · "))}</p><p class="hint">${esc(item.description||"Ситуативный предмет")}</p></div>`).join("")}<p class="hint">Учитываются архетип и отмеченные угрозы. Это рекомендация по тегам каталога, а не расчёт винрейта или точных параметров текущего патча.</p>`
   :'<p class="hint">Для этого сочетания архетипа и угроз в каталоге пока нет подходящих предметов.</p>';
 };
-async function auth(action){let body={email:$("email").value,password:$("password").value,nickname:$("nickname").value};try{let d=await $api("/auth/"+action,{method:"POST",body:JSON.stringify(body)});token=d.token;localStorage.setItem("mlbb_token",token);$("authMessage").textContent="Успешный вход";await refreshMe()}catch(e){$("authMessage").textContent=e.message}}
+async function auth(action){let body={email:$("email").value,password:$("password").value,nickname:$("nickname").value};try{let d=await $api("/auth/"+action,{method:"POST",body:JSON.stringify(body)});token=d.token;localStorage.setItem("mlbb_token",token);const restored=await refreshMe();$("authMessage").textContent=restored?"Успешный вход":"Не удалось подтвердить сессию. Войди ещё раз."}catch(e){$("authMessage").textContent=e.message}}
 $("login").onclick=()=>auth("login");$("register").onclick=()=>auth("register");
-async function refreshMe(){try{let d=await $api("/me"),u=d.user;$("authBadge").textContent="● "+u.nickname;$("authPanel").classList.add("hidden");$("logout").classList.remove("hidden");if(u.hero){$("profileHero").value=u.hero;$("profileRole").value=u.role;$("profileRank").value=u.rank;$("profileStyle").value=u.style;$("gameId").value=u.game_id||"";$("bio").value=u.bio||""}await syncDraftState()}catch{logout()}}
-function logout(){clearTimeout(draftSyncTimer);token="";localStorage.removeItem("mlbb_token");$("authPanel").classList.remove("hidden");$("authBadge").textContent="● DEMO MODE";$("logout").classList.add("hidden");setDraftStatus("Черновик сохранён на устройстве; синхронизация доступна после входа")}
+async function refreshMe(){try{let d=await $api("/me"),u=d.user;activeUserId=u.id;selectDraftStorage(u.id);$("authBadge").textContent="● "+u.nickname;$("authPanel").classList.add("hidden");$("logout").classList.remove("hidden");if(u.hero){$("profileHero").value=u.hero;$("profileRole").value=u.role;$("profileRank").value=u.rank;$("profileStyle").value=u.style;$("gameId").value=u.game_id||"";$("bio").value=u.bio||""}await syncDraftState();return true}catch{logout();return false}}
+function logout(){clearTimeout(draftSyncTimer);token="";activeUserId=null;localStorage.removeItem("mlbb_token");selectDraftStorage(null);$("authPanel").classList.remove("hidden");$("authBadge").textContent="● DEMO MODE";$("logout").classList.add("hidden");setDraftStatus("Черновик сохранён на устройстве; синхронизация доступна после входа")}
 $("logout").onclick=logout;
 $("saveProfile").onclick=async()=>{try{let d=await $api("/profile",{method:"PUT",body:JSON.stringify({hero:$("profileHero").value,role:$("profileRole").value,rank:$("profileRank").value,style:$("profileStyle").value,game_id:$("gameId").value,bio:$("bio").value})});$("profileStatus").textContent="Анкета сохранена: "+d.user.nickname;toast("Профиль обновлён")}catch(e){toast(e.message)}};
 async function searchPlayers(ideal=false){try{let q=new URLSearchParams();for(let k of ["hero","role","rank","style"]){let el=$("filter"+k[0].toUpperCase()+k.slice(1));if(el.value)q.set(k,el.value)}if(ideal){let role=$("profileRole").value;let partner=({Лес:"Роум",Золото:"Роум",Опыт:"Лес",Мид:"Лес",Роум:"Лес"})[role];q.set("role",partner)}let d=await $api("/players?"+q);$("players").innerHTML=d.players.map(p=>`<article class="player"><h3>${esc(p.nickname)}</h3><small>${esc(p.hero)} · ${p.role} · ${p.rank} · ${p.style}</small><p>${esc(p.bio||"Без описания")}</p><button class="btn" data-like="${p.id}">♥ Пригласить / лайк</button></article>`).join("")||'<p class="hint">Пока нет игроков с такими фильтрами. Пригласи друзей зарегистрироваться.</p>'}catch(e){toast(e.message)}}
