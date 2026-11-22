@@ -40,3 +40,12 @@ The project is an independent fan-made MLBB assistant. It does not claim access 
 - Free preview storage can be erased on restart or redeploy.
 - Search and mutual matching only include users registered on the same deployed instance.
 - Chat, push notifications, email verification, password reset, moderation, and production-grade account lifecycle controls are not implemented yet.
+
+## Social product direction: Cyber DNA + Squad DNA
+
+The approved social direction is persistent ranked-team formation, not dating. The detailed product/technical architecture and phased MVP acceptance criteria live in:
+
+- [Cyber DNA + Squad DNA architecture](CYBER_DNA_SQUAD_DNA_ARCHITECTURE.md)
+- [Cyber DNA + Squad DNA MVP delivery plan](CYBER_DNA_SQUAD_DNA_MVP.md)
+
+These are planning documents. They do not mean the social features are implemented. The existing teammate finder remains a starter implementation until the phases, safety requirements, tests, and production readiness gates are completed.
