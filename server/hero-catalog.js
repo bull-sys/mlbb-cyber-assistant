@@ -365,80 +365,28 @@ export const heroCatalog = [
     research: { checkedAt: "2026-11-22", roleAndLaneSources: ["https://liquipedia.net/mobilelegends/Chang%27e", "https://mlbb.io/en/hero/chang%27e", "https://www.mlbbanalytics.com/heroes?hero=Chang%27e"], mechanicsSources: ["https://liquipedia.net/mobilelegends/Chang%27e", "https://mlbb.io/en/hero/chang%27e", "https://www.mlbbanalytics.com/heroes?hero=Chang%27e"], rankedMetaSources: ["https://mlbbdex.com/en/meta"], competitiveReviewStatus: "pending", method: "Mage/Mid Lane cross-checked across independent references. Trouble Maker, Starmoon Shockwave, Crescent Moon and Meteor Shower checked against skill data. Patch 2.2.23 did not list Chang'e among adjusted heroes; stale build-page patch labels prevent a fixed build recommendation. Historical pro samples are not treated as current VOD review." }
   }),
   catalogEntry("chip", "Chip", "Чип", {
-    identityStatus: "pending_review",
-    localizationStatus: "pending_review",
-    roleValues: ["Support", "Tank"],
-    roleStatus: "verified",
-    primaryLane: "Roam",
-    flexibleLanes: [],
-    laneStatus: "verified",
-    research: {
-      checkedAt: "2026-11-22",
-      roleAndLaneSources: [
-        "https://www.mlbbguides.com/heroes/",
-        "https://www.propublic.gg/heroes/stats?dir=asc&sort=name",
-        "https://mlbbhub.com/heroes"
-      ],
-      competitiveReviewStatus: "pending",
-      method: "Role tags cross-checked against MLBBHub; lane placement checked against MLBB Guides and Propublic's Mythic+ 15-day lane table. Pro tournament usage is tracked separately and does not automatically determine ranked primary lane."
-    },
+    identityStatus: "source_verified", localizationStatus: "source_verified",
+    roleValues: ["Support", "Tank"], roleStatus: "verified", primaryLane: "Roam", laneStatus: "verified",
+    tacticalProfileStatus: "partial",
+    research: { checkedAt: "2026-11-22", roleAndLaneSources: ["https://mlbbhub.com/ru/heroes/chip", "https://mlbb-knowledge.vercel.app/heroes/124", "https://mlbb.io/en/hero/chip"], mechanicsSources: ["https://mlbb-knowledge.vercel.app/heroes/124", "https://mlbb.io/en/hero/chip"], rankedMetaSources: ["https://mlbbhub.com/ru/heroes/chip"], competitiveReviewStatus: "pending", method: "Support/Tank and Roam role cross-checked across MLBBHub, MLBB Knowledge and MLBB.io. Snack Time, Crash Course, Overtime, Shortcut and the fixed Beacon travel skill checked against the current skill reference. Ranked build data kept separate from tournament/VOD review; current-patch professional VOD review pending." }
   }),
   catalogEntry("cici", "Cici", "Сиси", {
-    identityStatus: "pending_review",
-    localizationStatus: "pending_review",
-    roleValues: ["Fighter"],
-    roleStatus: "verified",
-    primaryLane: "EXP Lane",
-    flexibleLanes: [],
-    laneStatus: "verified",
-    research: {
-      checkedAt: "2026-11-22",
-      roleAndLaneSources: [
-        "https://www.mlbbguides.com/heroes/",
-        "https://www.propublic.gg/heroes/stats?dir=asc&sort=name",
-        "https://mlbbhub.com/heroes"
-      ],
-      competitiveReviewStatus: "pending",
-      method: "Role tags cross-checked against MLBBHub; lane placement checked against MLBB Guides and Propublic's Mythic+ 15-day lane table. Pro tournament usage is tracked separately and does not automatically determine ranked primary lane."
-    },
+    identityStatus: "source_verified", localizationStatus: "source_verified",
+    roleValues: ["Fighter"], roleStatus: "verified", primaryLane: "EXP Lane", laneStatus: "verified",
+    tacticalProfileStatus: "partial",
+    research: { checkedAt: "2026-11-22", roleAndLaneSources: ["https://mlbbhub.com/ru/heroes/cici", "https://mlbb-knowledge.vercel.app/heroes/123", "https://mlbb.io/en/hero/cici"], mechanicsSources: ["https://mlbb-knowledge.vercel.app/heroes/123", "https://www.mlbbanalytics.com/heroes?hero=Cici"], rankedMetaSources: ["https://mlbbhub.com/ru/heroes/cici", "https://mlbb.io/en/hero/cici"], competitiveReviewStatus: "pending", method: "Fighter/EXP Lane cross-checked across MLBBHub and MLBB Knowledge. Performer's Delight stacking, Yo-Yo Blitz target behaviour, double leap and Curtain Call link reviewed. Ranked matchup samples are not treated as universal counters; current-patch professional VOD review pending." }
   }),
   catalogEntry("claude", "Claude", "Клод", {
-    identityStatus: "pending_review",
-    localizationStatus: "pending_review",
-    roleValues: ["Marksman"],
-    roleStatus: "verified",
-    primaryLane: "Gold Lane",
-    flexibleLanes: [],
-    laneStatus: "verified",
-    research: {
-      checkedAt: "2026-11-22",
-      roleAndLaneSources: [
-        "https://www.mlbbguides.com/heroes/",
-        "https://www.propublic.gg/heroes/stats?dir=asc&sort=name",
-        "https://mlbbhub.com/heroes"
-      ],
-      competitiveReviewStatus: "pending",
-      method: "Role tags cross-checked against MLBBHub; lane placement checked against MLBB Guides and Propublic's Mythic+ 15-day lane table. Pro tournament usage is tracked separately and does not automatically determine ranked primary lane."
-    },
+    identityStatus: "source_verified", localizationStatus: "source_verified",
+    roleValues: ["Marksman"], roleStatus: "verified", primaryLane: "Gold Lane", laneStatus: "verified",
+    tacticalProfileStatus: "partial",
+    research: { checkedAt: "2026-11-22", roleAndLaneSources: ["https://mlbbhub.com/ru/heroes/claude", "https://mlbb-knowledge.vercel.app/heroes/65", "https://mlbb.io/en/hero/claude"], mechanicsSources: ["https://liquipedia.net/mobilelegends/Claude", "https://mlbb-knowledge.vercel.app/heroes/65", "https://mlbbanalytics.com/heroes?hero=Claude"], rankedMetaSources: ["https://mlbb.io/en/hero/claude", "https://mlbbhub.com/ru/heroes/claude"], competitiveReviewStatus: "pending", method: "Marksman/Gold Lane cross-checked across MLBBHub, MLBB Knowledge and MLBB.io. Dexter's attack effects, Art of Thievery stacks, mirror-image reposition and Blazing Duet interaction reviewed. Ranked statistics and tournament samples are kept separate; current-patch VOD review pending." }
   }),
   catalogEntry("clint", "Clint", "Клинт", {
-    identityStatus: "pending_review",
-    localizationStatus: "pending_review",
-    roleValues: ["Marksman"],
-    roleStatus: "verified",
-    primaryLane: "Gold Lane",
-    flexibleLanes: [],
-    laneStatus: "verified",
-    research: {
-      checkedAt: "2026-11-22",
-      roleAndLaneSources: [
-        "https://www.mlbbguides.com/heroes/",
-        "https://www.propublic.gg/heroes/stats?dir=asc&sort=name",
-        "https://mlbbhub.com/heroes"
-      ],
-      competitiveReviewStatus: "pending",
-      method: "Role tags cross-checked against MLBBHub; lane placement checked against MLBB Guides and Propublic's Mythic+ 15-day lane table. Pro tournament usage is tracked separately and does not automatically determine ranked primary lane."
-    },
+    identityStatus: "source_verified", localizationStatus: "source_verified",
+    roleValues: ["Marksman"], roleStatus: "verified", primaryLane: "Gold Lane", laneStatus: "verified",
+    tacticalProfileStatus: "partial",
+    research: { checkedAt: "2026-11-22", roleAndLaneSources: ["https://mlbbhub.com/ru/heroes/clint", "https://mlbb.io/en/hero/clint", "https://www.mlbbguides.com/heroes/clint/"], mechanicsSources: ["https://www.mlbbanalytics.com/heroes?hero=Clint", "https://www.mlbbguides.com/heroes/clint/"], rankedMetaSources: ["https://mlbb.io/en/hero/clint", "https://mlbbhub.com/ru/heroes/clint"], competitiveReviewStatus: "pending", method: "Marksman/Gold Lane cross-checked across MLBBHub, MLBB.io and MLBB Guides. Double Shot empowered attacks, Quick Draw, Trapping Recoil and Grenade Bombardment reviewed. Current ranked and MPL samples are separate evidence sets; individual current-patch VOD review pending." }
   }),
   catalogEntry("edith", "Edith", "Эдит", {
     identityStatus: "pending_review",
@@ -457,23 +405,10 @@ export const heroCatalog = [
     },
   }),
   catalogEntry("esmeralda", "Esmeralda", "Эсмеральда", {
-    identityStatus: "pending_review",
-    localizationStatus: "pending_review",
-    roleValues: ["Tank", "Mage"],
-    roleStatus: "verified",
-    primaryLane: "EXP Lane",
-    flexibleLanes: [],
-    laneStatus: "verified",
-    research: {
-      checkedAt: "2026-11-22",
-      roleAndLaneSources: [
-        "https://www.mlbbguides.com/heroes/",
-        "https://www.propublic.gg/heroes/stats?dir=asc&sort=name",
-        "https://mlbbhub.com/heroes"
-      ],
-      competitiveReviewStatus: "pending",
-      method: "Role tags cross-checked against MLBBHub; lane placement checked against MLBB Guides and Propublic's Mythic+ 15-day lane table. Pro tournament usage is tracked separately and does not automatically determine ranked primary lane."
-    },
+    identityStatus: "source_verified", localizationStatus: "source_verified",
+    roleValues: ["Tank", "Mage"], roleStatus: "verified", primaryLane: "EXP Lane", laneStatus: "verified",
+    tacticalProfileStatus: "partial",
+    research: { checkedAt: "2026-11-22", roleAndLaneSources: ["https://mlbbhub.com/ru/heroes/esmeralda", "https://mlbb-knowledge.vercel.app/heroes/81", "https://mlbb.io/en/hero/esmeralda"], mechanicsSources: ["https://liquipedia.net/mobilelegends/Esmeralda", "https://mlbb-knowledge.vercel.app/heroes/81", "https://www.mlbbguides.com/heroes/esmeralda/skills/"], rankedMetaSources: ["https://mlbbhub.com/ru/heroes/esmeralda", "https://mlbb.io/en/hero/esmeralda"], competitiveReviewStatus: "pending", method: "Tank/Mage and EXP Lane cross-checked across MLBBHub, MLBB Knowledge and MLBB.io. Dual physical/magic damage, shield conversion, Frostmoon Shield, Stardust Dance cooldown interaction and Falling Starmoon range/immobilize reviewed. Ranked samples are patch-labelled and separate from tournament/VOD evidence; current-patch VOD review pending." }
   }),
   catalogEntry("fanny", "Fanny", "Фанни", {
     identityStatus: "pending_review",
