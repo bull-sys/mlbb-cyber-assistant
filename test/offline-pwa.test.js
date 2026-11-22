@@ -37,6 +37,7 @@ test("draft state is saved locally and restored only after the catalog is loaded
 test("auth sessions are validated and expired tokens return the UI to guest mode", () => {
   assert.match(app, /if\(r\.status===401&&token&&!path\.startsWith\("\/auth\/"\)\)logout\(\)/);
   assert.match(app, /activeUserId=u\.id;selectDraftStorage\(u\.id\)/);
+  assert.match(app, /if\(!token\|\|activeUserId===null\)return/);
   assert.match(app, /catch\{logout\(\);return false\}/);
 });
 
