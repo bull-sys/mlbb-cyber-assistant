@@ -48,14 +48,14 @@ function applyDraftState(saved){
  enemies=Array.isArray(saved.enemies)?saved.enemies.filter(x=>names.has(x)).slice(0,5):[];
  allies=Array.isArray(saved.allies)?saved.allies.filter(x=>names.has(x)).slice(0,5):[];
  if(data.roles.includes(saved.lane))$("lane").value=saved.lane;
- if(names.has(saved.myHero))$("myHero").value=saved.myHero;
+ if(names.has(saved.myHero)){$("myHero").value=saved.myHero;$("myHeroChoice").textContent=draftHeroLabel(saved.myHero)}else $("myHeroChoice").textContent="Не выбран";
  const allowed=new Set(threatDefs.map(([id])=>id));
  threats=new Set(Array.isArray(saved.threats)?saved.threats.filter(x=>allowed.has(x)):[]);
  document.querySelectorAll("#threats [data-threat]").forEach(b=>b.classList.toggle("active",threats.has(b.dataset.threat)));
  drawTeams();
 }
 function accountDraftKey(userId){return "mlbb_draft_state_v1_user_"+String(userId)}
-function clearDraftUI(){enemies=[];allies=[];threats.clear();$("lane").value="";$("myHero").value="";document.querySelectorAll("#threats [data-threat]").forEach(b=>b.classList.remove("active"));drawTeams()}
+function clearDraftUI(){enemies=[];allies=[];threats.clear();$("lane").value="";$("myHero").value="";$("myHeroChoice").textContent="Не выбран";document.querySelectorAll("#threats [data-threat]").forEach(b=>b.classList.remove("active"));drawTeams()}
 function selectDraftStorage(userId){const nextKey=userId===null?GUEST_DRAFT_STORAGE_KEY:accountDraftKey(userId);if(nextKey===draftStorageKey)return;draftStorageKey=nextKey;clearDraftUI();restoreDraft()}
 function restoreDraft(){
  const saved=readLocalDraft();
@@ -89,10 +89,59 @@ async function syncDraftState(){
 function restoreDraft(){const saved=readLocalDraft();if(!saved)return;try{applyDraftState(saved);setDraftStatus("Черновик восстановлен с этого устройства")}catch{try{localStorage.removeItem(draftStorageKey)}catch{}}}
 function addHero(side){let id=side==="enemies"?"enemyPick":"allyPick",arr=side==="enemies"?enemies:allies,v=$(id).value;if(!v)return;if(arr.length>=5)return toast("Максимум 5 героев");if(arr.includes(v))return toast("Уже добавлен");arr.push(v);drawTeams();saveDraft()}
 $("addEnemy").onclick=()=>addHero("enemies");$("addAlly").onclick=()=>addHero("allies");
+let pickerTarget="enemies",pickerFilter="all";
+function pickerEntries(){
+ const legacy=data.heroes.map(h=>({value:h.name,name:h.name,nameEn:"",supported:true}));
+ const catalog=(data.draftHeroOptions||[]).map(h=>({value:h.id,name:h.name,nameEn:h.nameEn,supported:Boolean(h.analysisSupported)}));
+ return [...legacy,...catalog];
+}
+function pickerRecent(){
+ try{return JSON.parse(localStorage.getItem("mlbb_recent_draft_heroes")||"[]").filter(x=>pickerEntries().some(h=>h.value===x)).slice(0,6)}catch{return []}
+}
+function rememberPickerHero(value){
+ try{localStorage.setItem("mlbb_recent_draft_heroes",JSON.stringify([value,...pickerRecent().filter(x=>x!==value)].slice(0,6)))}catch{}
+}
+function renderHeroPicker(){
+ const q=$("heroPickerSearch").value.trim().toLocaleLowerCase("ru");
+ const entries=pickerEntries();
+ const recent=pickerRecent().map(value=>entries.find(h=>h.value===value)).filter(Boolean);
+ $("recentHeroes").innerHTML=recent.length?'<small>НЕДАВНО ВЫБРАННЫЕ</small><div class="picker-recent-grid">'+recent.map(h=>'<button class="hero-tile recent" data-picker-value="'+esc(h.value)+'"><b>'+esc(h.name)+'</b></button>').join("")+'</div>':"";
+ const filtered=entries.filter(h=>{
+  const match=(h.name+" "+h.nameEn).toLocaleLowerCase("ru").includes(q);
+  return match&&(pickerFilter==="all"||(pickerFilter==="supported"&&h.supported)||(pickerFilter==="catalog"&&!h.supported));
+ });
+ $("heroPickerGrid").innerHTML=filtered.map(h=>'<button class="hero-tile" data-picker-value="'+esc(h.value)+'"><b>'+esc(h.name)+'</b><small>'+(h.supported?"Анализ доступен":"Каталог · проверяется")+'</small></button>').join("")||'<p class="hint">Ничего не найдено. Попробуй другое написание.</p>';
+}
+function openHeroPicker(target){
+ pickerTarget=target;pickerFilter="all";$("heroPickerSearch").value="";
+ document.querySelectorAll("[data-picker-filter]").forEach(b=>b.classList.toggle("active",b.dataset.pickerFilter==="all"));
+ $("pickerTitle").textContent=target==="enemies"?"Выбери героя противника":target==="allies"?"Выбери союзного героя":"Выбери своего героя";
+ $("heroPicker").classList.remove("hidden");renderHeroPicker();$("heroPickerSearch").focus();
+}
+function choosePickerHero(value){
+ const entries=pickerEntries(),hero=entries.find(h=>h.value===value);if(!hero)return;
+ if(pickerTarget==="myHero"){
+  $("myHero").value=value;$("myHeroChoice").textContent=hero.name;saveDraft();
+ }else{
+  const arr=pickerTarget==="enemies"?enemies:allies;
+  if(arr.length>=5)return toast("Команда уже заполнена");
+  if(arr.includes(value))return toast("Этот герой уже выбран");
+  arr.push(value);drawTeams();saveDraft();
+ }
+ rememberPickerHero(value);$("heroPicker").classList.add("hidden");
+}
+$("openEnemyPicker").onclick=()=>openHeroPicker("enemies");
+$("openAllyPicker").onclick=()=>openHeroPicker("allies");
+$("openMyHeroPicker").onclick=()=>openHeroPicker("myHero");
+$("closeHeroPicker").onclick=()=>$("heroPicker").classList.add("hidden");
+$("heroPicker").onclick=e=>{if(e.target===$("heroPicker"))$("heroPicker").classList.add("hidden");const tile=e.target.closest("[data-picker-value]");if(tile)choosePickerHero(tile.dataset.pickerValue)};
+$("heroPickerSearch").addEventListener("input",renderHeroPicker);
+$("heroPicker").querySelector(".picker-tabs").onclick=e=>{const b=e.target.closest("[data-picker-filter]");if(!b)return;pickerFilter=b.dataset.pickerFilter;document.querySelectorAll("[data-picker-filter]").forEach(x=>x.classList.toggle("active",x===b));renderHeroPicker()};
+
 document.addEventListener("click",e=>{let b=e.target.closest("[data-side]");if(b){(b.dataset.side==="enemies"?enemies:allies).splice(+b.dataset.i,1);drawTeams();saveDraft()}});
 $("nav").onclick=e=>{let b=e.target.closest("[data-page]");if(!b)return;document.querySelectorAll("nav button").forEach(x=>x.classList.toggle("active",x===b));document.querySelectorAll(".page").forEach(x=>x.classList.toggle("hidden",x.id!=="page-"+b.dataset.page))};
 $("testDraft").onclick=()=>{enemies=["Тигрил","Эудора","Кэрри","Диррот","Атлас"];allies=["Ангела","Линг","Теризла"];$("lane").value="Лес";$("myHero").value="Хелкарт";drawTeams();saveDraft();runDraft()};
-$("analyze").onclick=runDraft;$("lane").addEventListener("change",saveDraft);$("myHero").addEventListener("change",saveDraft);
+$("analyze").onclick=runDraft;$("lane").addEventListener("change",saveDraft);$("myHero").addEventListener("change",()=>{$("myHeroChoice").textContent=$("myHero").value?draftHeroLabel($("myHero").value):"Не выбран";saveDraft()});
 async function runDraft(){if(!enemies.length)return toast("Добавь врагов");saveDraft();try{let d=await $api("/ai/draft",{method:"POST",body:JSON.stringify({lane:$("lane").value,enemies,allies,myHero:$("myHero").value})});$("draftResult").classList.remove("hidden");if(d.analysisStatus==="limited"){$("draftResult").innerHTML=`<small>ANALYSIS STATUS / LIMITED</small><h2>Тактические рекомендации пока недоступны</h2><p>Для этих героев ещё нет подтверждённой связи с проверенной тактической базой. Я не буду подставлять случайные контрпики или сборки.</p><h3>Герои, требующие исследования</h3>${d.unsupportedHeroes.map(hero=>`<div class="result"><b>${esc(hero.name)}</b><small>${esc(hero.id)}</small></div>`).join("")}<p class="hint">${esc(d.note)}</p>`;return}$("draftResult").innerHTML=`<small>ANALYSIS REPORT</small><h2>Угрозы состава</h2><p>${d.threats.join(" · ")||"Явных угроз по тегам не выявлено"}</p><h3>Топ контрпиков</h3>${d.counters.map((x,i)=>`<div class="result"><b>#${i+1} ${x.name}</b><p>${x.reason}</p></div>`).join("")}<h3>Сборка · 6 слотов</h3>${d.build.map((x,i)=>`<div class="slot"><span>${i+1}. ${x}</span><small>${i===0?"Старт":i>3?"Ситуационный":"Основной"}</small></div>`).join("")}<h3>Эмблема и таланты</h3><div class="result"><b>${d.emblem}</b><p>Тир 1: ${d.talentTiers[0]}<br>Тир 2: ${d.talentTiers[1]}<br>Тир 3: ${d.talentTiers[2]}<br>Заклинание: ${d.spell}</p></div><h3>Тайминг</h3>${Object.entries({Ранняя:d.timing.early,"Первый предмет":d.timing.mid,"Поздняя":d.timing.late}).map(([k,v])=>`<div class="result"><b>${k}</b><p>${v}</p></div>`).join("")}<p>${esc(d.aiExplanation||d.note)}</p>`}catch(e){toast(e.message)}}
 $("threats").onclick=e=>{let b=e.target.closest("[data-threat]");if(!b)return;let k=b.dataset.threat;threats.has(k)?threats.delete(k):threats.add(k);b.classList.toggle("active",threats.has(k));saveDraft()};
 function recommendBuild({items,archetype,threats=[]}){
