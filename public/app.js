@@ -24,7 +24,44 @@ $("testDraft").onclick=()=>{enemies=["Тигрил","Эудора","Кэрри",
 $("analyze").onclick=runDraft;$("lane").addEventListener("change",saveDraft);$("myHero").addEventListener("change",saveDraft);
 async function runDraft(){if(!enemies.length)return toast("Добавь врагов");saveDraft();try{let d=await $api("/ai/draft",{method:"POST",body:JSON.stringify({lane:$("lane").value,enemies,allies,myHero:$("myHero").value})});$("draftResult").classList.remove("hidden");$("draftResult").innerHTML=`<small>ANALYSIS REPORT</small><h2>Угрозы состава</h2><p>${d.threats.join(" · ")||"Явных угроз по тегам не выявлено"}</p><h3>Топ контрпиков</h3>${d.counters.map((x,i)=>`<div class="result"><b>#${i+1} ${x.name}</b><p>${x.reason}</p></div>`).join("")}<h3>Сборка · 6 слотов</h3>${d.build.map((x,i)=>`<div class="slot"><span>${i+1}. ${x}</span><small>${i===0?"Старт":i>3?"Ситуационный":"Основной"}</small></div>`).join("")}<h3>Эмблема и таланты</h3><div class="result"><b>${d.emblem}</b><p>Тир 1: ${d.talentTiers[0]}<br>Тир 2: ${d.talentTiers[1]}<br>Тир 3: ${d.talentTiers[2]}<br>Заклинание: ${d.spell}</p></div><h3>Тайминг</h3>${Object.entries({Ранняя:d.timing.early,"Первый предмет":d.timing.mid,"Поздняя":d.timing.late}).map(([k,v])=>`<div class="result"><b>${k}</b><p>${v}</p></div>`).join("")}<p>${d.aiExplanation||d.note}</p>`}catch(e){toast(e.message)}}
 $("threats").onclick=e=>{let b=e.target.closest("[data-threat]");if(!b)return;let k=b.dataset.threat;threats.has(k)?threats.delete(k):threats.add(k);b.classList.toggle("active",threats.has(k));saveDraft()};
-$("buildBtn").onclick=()=>{let t=[...threats],build=["Основной предмет героя","Ботинки по ситуации"];if(t.includes("heal"))build.push("Господство льда / Ожерелье заточения / Трезубец");if(t.includes("magic"))build.push("Щит Афины");if(t.includes("speed"))build.push("Шипованная броня");if(t.includes("tank"))build.push("Злобный рык / Божественный меч");if(t.includes("physical"))build.push("Древняя кираса");if(t.includes("cc"))build.push("Прочные сапоги");if(t.includes("burst"))build.push("Зимняя корона / Бессмертие");while(build.length<6)build.push("Ситуационный слот");$("buildResult").innerHTML=`<h3>Рекомендованный порядок</h3>${build.slice(0,6).map((x,i)=>`<div class="slot"><span>${i+1}. ${x}</span><small>${i<2?"Основа":"Ситуация"}</small></div>`).join("")}<p class="hint">Архетип: ${$("archetype").value}. Если указано несколько вариантов, выбери один под героя и конкретную угрозу. Это эвристика, не симуляция чисел патча.</p>`};
+function recommendBuild({items,archetype,threats=[]}){
+ const profiles={
+  "Убийца / физический урон":{categories:["Атака","Защита"],preferred:["burst","physical","penetration"]},
+  "Маг / взрывной урон":{categories:["Магия","Магия / защита","Защита"],preferred:["magic","penetration"]},
+  "Стрелок / скорость атаки":{categories:["Атака","Защита"],preferred:["marksman","critical","attack-speed"]},
+  "Боец / длительный бой":{categories:["Атака","Защита"],preferred:["fighter","sustain","physical"]},
+  "Танк / инициатор":{categories:["Защита","Магия / защита"],preferred:["survival","physical","magic-burst","anti-attack-speed"]},
+  "Поддержка / хилер":{categories:["Защита","Магия","Магия / защита"],preferred:["survival","anti-heal","magic"]}
+ };
+ const threatRules={
+  heal:{tags:["anti-heal"],reason:"Ответ на восстановление здоровья"},
+  magic:{tags:["magic-burst","magic-dps"],reason:"Защита от магического урона"},
+  speed:{tags:["anti-attack-speed"],reason:"Снижает эффективность быстрых базовых атак"},
+  tank:{tags:["penetration","tank-shred","armor-break"],reason:"Помогает пробивать плотных противников"},
+  cc:{tags:["survival"],reason:"Дополнительная выживаемость под контроль"},
+  physical:{tags:["physical","survival"],reason:"Ответ на физический урон"},
+  burst:{tags:["survival"],reason:"Помогает пережить взрывной урон"}
+ };
+ const profile=profiles[archetype];
+ if(!profile||!Array.isArray(items))return [];
+ return items.map((item,index)=>{
+  const tags=new Set(item.tags||[]);
+  if(!profile.categories.includes(item.category))return null;
+  let score=0;const reasons=[];
+  for(const tag of profile.preferred)if(tags.has(tag)){score+=2;reasons.push("Подходит выбранному архетипу");}
+  for(const key of threats){
+   const rule=threatRules[key];if(!rule)continue;
+   if(rule.tags.some(tag=>tags.has(tag))){score+=6;reasons.push(rule.reason);}
+  }
+  return score?{name:item.name,category:item.category,description:item.description,score,reasons:[...new Set(reasons)],index}:null;
+ }).filter(Boolean).sort((a,b)=>b.score-a.score||a.index-b.index).slice(0,6);
+}
+$("buildBtn").onclick=()=>{
+ const result=recommendBuild({items:data.items,archetype:$("archetype").value,threats:[...threats]});
+ $("buildResult").innerHTML=result.length
+  ?`<h3>Рекомендованный порядок</h3>${result.map((item,i)=>`<div class="result"><b>${i+1}. ${esc(item.name)}</b><small> · ${esc(item.category)}</small><p>${esc(item.reasons.join(" · "))}</p><p class="hint">${esc(item.description||"Ситуативный предмет")}</p></div>`).join("")}<p class="hint">Учитываются архетип и отмеченные угрозы. Это рекомендация по тегам каталога, а не расчёт винрейта или точных параметров текущего патча.</p>`
+  :'<p class="hint">Для этого сочетания архетипа и угроз в каталоге пока нет подходящих предметов.</p>';
+};
 async function auth(action){let body={email:$("email").value,password:$("password").value,nickname:$("nickname").value};try{let d=await $api("/auth/"+action,{method:"POST",body:JSON.stringify(body)});token=d.token;localStorage.setItem("mlbb_token",token);$("authMessage").textContent="Успешный вход";await refreshMe()}catch(e){$("authMessage").textContent=e.message}}
 $("login").onclick=()=>auth("login");$("register").onclick=()=>auth("register");
 async function refreshMe(){try{let d=await $api("/me"),u=d.user;$("authBadge").textContent="● "+u.nickname;$("authPanel").classList.add("hidden");$("logout").classList.remove("hidden");if(u.hero){$("profileHero").value=u.hero;$("profileRole").value=u.role;$("profileRank").value=u.rank;$("profileStyle").value=u.style;$("gameId").value=u.game_id||"";$("bio").value=u.bio||""}}catch{logout()}}
