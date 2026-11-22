@@ -2407,11 +2407,6 @@ export const heroProfiles = [
     patch:{version:HERO_DB_PATCH,notes:["Electro Airbag, Impact Wrench, Electromagnetic Waves и Full Throttle сверены по MLBB Knowledge, MLBBHub и Liquipedia на 2026-11-22.","Ультимейт раскрывает местоположение Джонсона во время подготовки; это учитывается в рекомендациях по маршруту.","Рейтинговые показатели отделены от профессиональных выборок; индивидуальный VOD-разбор текущего патча pending."],reviewedAt:"2026-11-22"},confidence:"partial"
   },
 
-
-
-
-
-,
   {
     id: "joy",
     names: { ru: "Джой", en: "Joy", aliases: [] },
