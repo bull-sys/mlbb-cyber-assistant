@@ -73,7 +73,21 @@ function esc(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&l
 $("searchPlayers").onclick=()=>searchPlayers(false);$("findDuo").onclick=()=>searchPlayers(true);
 $("players").onclick=async e=>{let b=e.target.closest("[data-like]");if(!b)return;try{let d=await $api("/players/"+b.dataset.like+"/like",{method:"POST",body:"{}"});toast(d.mutual?"Взаимный матч!":"Лайк отправлен");b.disabled=true;b.textContent=d.mutual?"✓ Матч":"✓ Отправлено"}catch(e){toast(e.message)}};
 $("loadMatches").onclick=async()=>{try{let d=await $api("/matches");$("matches").innerHTML=d.matches.map(p=>`<div class="slot"><span>${esc(p.nickname)} · ${esc(p.hero)} · ${p.role}</span><b>${esc(p.game_id||"ID не указан")}</b></div>`).join("")||'<p class="hint">Взаимных совпадений пока нет.</p>'}catch(e){toast(e.message)}};
-function renderEncy(){let q=$("encySearch").value.toLowerCase(),all=[...data.items.map(x=>({...x,type:"item"})),...data.talents.map(x=>({...x,category:"Тир "+x.tier,type:"talent"})),...data.emblems.map(x=>({name:"Эмблема "+x,category:"Эмблема",description:"Система характеристик и трёх тиров талантов для соответствующего архетипа.",type:"emblem"}))];let list=all.filter(x=>(encyFilter==="all"||x.type===encyFilter)&&(x.name+" "+x.category+" "+x.description).toLowerCase().includes(q));$("encyList").innerHTML=list.map(x=>`<article><b>${esc(x.name)}</b><small style="display:block;color:#39e5ff;margin-top:5px">${esc(x.category)}</small><p>${esc(x.description)}</p></article>`).join("")||"<p>Ничего не найдено</p>"}
+function renderEncy(){
+ const q=$("encySearch").value.toLowerCase();
+ const items=data.items.map(x=>({...x,type:"item"}));
+ const talents=data.talents.map(x=>({...x,category:"Тир "+x.tier,type:"talent"}));
+ const emblems=data.emblems.map(x=>({name:"Эмблема "+x,category:"Эмблема",description:"Система характеристик и трёх тиров талантов для соответствующего архетипа.",type:"emblem"}));
+ const heroEntries=(data.heroCatalog||[]).map(hero=>{
+  const roles=Array.isArray(hero.role?.values)?hero.role.values.join(", "):"Не проверено";
+  const lanes=[hero.lanes?.primary,...(hero.lanes?.flexible||[])].filter(Boolean).join(", ")||"Не проверено";
+  const description="Роль: "+roles+" · Линия: "+lanes+" · Тактический профиль: "+(hero.tacticalProfile?.status||"missing");
+  return {name:hero.displayNameRu||hero.nameEn||hero.id,category:hero.nameEn||hero.id,description,type:"hero",status:"Локализация: "+(hero.localization?.status||"pending_review")+" · Роль: "+(hero.role?.status||"pending_review")+" · Линия: "+(hero.lanes?.status||"pending_review")};
+ });
+ const all=[...items,...talents,...emblems,...heroEntries];
+ const list=all.filter(x=>(encyFilter==="all"||x.type===encyFilter)&&(x.name+" "+x.category+" "+x.description+" "+(x.status||"")).toLowerCase().includes(q));
+ $("encyList").innerHTML=list.map(x=>`<article><b>${esc(x.name)}</b><small style="display:block;color:#39e5ff;margin-top:5px">${esc(x.category)}</small>${x.status?`<small class="hint">${esc(x.status)}</small>`:""}<p>${esc(x.description)}</p></article>`).join("")||"<p>Ничего не найдено</p>";
+}
 $("encySearch").oninput=renderEncy;$("encyFilters").onclick=e=>{let b=e.target.closest("[data-filter]");if(!b)return;encyFilter=b.dataset.filter;document.querySelectorAll("#encyFilters .chip").forEach(x=>x.classList.toggle("active",x===b));renderEncy()};
 $("ocr").onclick=async()=>{let f=$("screenshot").files[0];if(!f)return toast("Выбери скриншот");$("ocrStatus").textContent="Загружаю OCR-движок и распознаю текст...";try{if(!window.Tesseract){await new Promise((ok,no)=>{let s=document.createElement("script");s.src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js";s.onload=ok;s.onerror=no;document.head.append(s)})}let result=await Tesseract.recognize(f,"eng+rus");let text=result.data.text.toLowerCase();let found=data.heroes.map(h=>h.name).filter(n=>text.includes(n.toLowerCase()));$("ocrStatus").textContent=found.length?"Кандидаты распознавания: "+found.join(", ")+". Добавь проверенных героев вручную.":"Не удалось уверенно распознать названия. Попробуй более чёткий скриншот или добавь героев вручную.";if(found.length)found.forEach(h=>{if(enemies.length<5&&!enemies.includes(h))enemies.push(h)});drawTeams();saveDraft()}catch(e){$("ocrStatus").textContent="OCR не загрузился. Проверь подключение к интернету и попробуй ещё раз."}};
 init();
