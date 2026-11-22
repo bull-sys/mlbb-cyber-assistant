@@ -18,7 +18,7 @@ Live patch reference: 2.2.23
 ## Tactical profile coverage
 
 Current hero-specific profiles:
-- Hayabusa (Хаябуса)\n- Hylos (Хилос)\n- Irithel (Иритэль)\n- Ixia (Иксия)\n- Johnson (Джонсон)\n- Hayabusa (Хаябуса)\n- Hylos (Хилос)\n- Irithel (Иритэль)\n- Ixia (Иксия)\n- Johnson (Джонсон)\n- Grock (Грок)\n- Guinevere (Гвиневра)\n- Gusion (Госсен)\n- Harith (Харит)\n- Harley (Харли)\n- Faramis (Фарамис)\n- Fredrinn (Фредрин)\n- Gatotkaca (Гатоткача)\n- Gloo (Глу)\n- Gord (Горд)\n- Chip (Чип)\n- Cici (Сиси)\n- Claude (Клод)\n- Clint (Клинт)\n- Esmeralda (Эсмеральда)\n- Benedetta (Бенедетта)
+- Hayabusa (Хаябуса)\n- Hylos (Хилос)\n- Irithel (Иритэль)\n- Ixia (Иксия)\n- Johnson (Джонсон)\n- Grock (Грок)\n- Guinevere (Гвиневра)\n- Gusion (Госсен)\n- Harith (Харит)\n- Harley (Харли)\n- Faramis (Фарамис)\n- Fredrinn (Фредрин)\n- Gatotkaca (Гатоткача)\n- Gloo (Глу)\n- Gord (Горд)\n- Chip (Чип)\n- Cici (Сиси)\n- Claude (Клод)\n- Clint (Клинт)\n- Esmeralda (Эсмеральда)\n- Benedetta (Бенедетта)
 - Brody (Броуди)
 - Carmilla (Кармилла)
 - Cecilion (Сесилион)
@@ -84,7 +84,7 @@ Current hero-specific profiles:
 - Eudora (Эйдора)
 - Pharsa (Фарса)
 - Nana (Нана)
-Saber remains a legacy placeholder without researched mechanics and is not counted among the 66 substantive profiles (67 profile records total, including Saber).
+Saber remains a legacy placeholder without researched mechanics and is not counted among the 86 substantive profiles (87 profile records total, including Saber).
 
 A profile being present does not mean all matchups, synergies, professional VODs or current-patch build variants are fully verified. Empty matchup/synergy arrays are intentional when evidence is insufficient; do not fill them with guesses.
 
