@@ -1,7 +1,7 @@
 /**
- * Partial catalog seed derived only from the 32 legacy hero names in data.js.
- * This is not a complete MLBB roster; identity/name mappings not explicitly
- * confirmed by the user remain pending review. No gameplay data is included.
+ * MLBB hero catalog. Identity and localization remain pending unless explicitly
+ * confirmed. Role/lane data is populated only after cross-source review;
+ * tactical profiles require a separate, deeper gameplay and competitive review.
  */
 const catalogEntry = (id, nameEn, displayNameRu, {
   identityStatus = "pending_review",
@@ -72,7 +72,7 @@ export const heroCatalog = [
   catalogEntry("valir", "Valir", "Валир"),
   catalogEntry("alice", "Alice", "Алиса"),
 
-  // Roster expansion: names are seeded; identity/localization and gameplay data remain pending review.
+  // Roster expansion: identity/localization remain pending; role and lane fields are researched separately.
   catalogEntry("aamon", "Aamon", "Аамон", {
     identityStatus: "pending_review",
     localizationStatus: "pending_review",
@@ -88,8 +88,8 @@ export const heroCatalog = [
         "https://mlbb-stats.com/heroes",
         "https://mlbbdex.com/en/heroes"
       ],
-      competitiveContextSource: "https://www.mlbbanalytics.com/meta",
-      method: "Role and lane tags cross-checked across independent hero databases; pro-scene statistics are contextual evidence, not a substitute for lane classification."
+      competitiveReviewStatus: "pending",
+      method: "Role and lane tags cross-checked across independent hero databases; pro-draft usage and player VODs are reviewed separately before tactical recommendations are marked complete."
     },
   }),
   catalogEntry("akai", "Akai", "Акай", {
@@ -107,8 +107,8 @@ export const heroCatalog = [
         "https://mlbb-stats.com/heroes",
         "https://mlbbdex.com/en/heroes"
       ],
-      competitiveContextSource: "https://www.mlbbanalytics.com/meta",
-      method: "Role and lane tags cross-checked across independent hero databases; pro-scene statistics are contextual evidence, not a substitute for lane classification."
+      competitiveReviewStatus: "pending",
+      method: "Role and lane tags cross-checked across independent hero databases; pro-draft usage and player VODs are reviewed separately before tactical recommendations are marked complete."
     },
   }),
   catalogEntry("aldous", "Aldous", "Олдос", {
@@ -126,8 +126,8 @@ export const heroCatalog = [
         "https://mlbb-stats.com/heroes",
         "https://mlbbdex.com/en/heroes"
       ],
-      competitiveContextSource: "https://www.mlbbanalytics.com/meta",
-      method: "Role and lane tags cross-checked across independent hero databases; pro-scene statistics are contextual evidence, not a substitute for lane classification."
+      competitiveReviewStatus: "pending",
+      method: "Role and lane tags cross-checked across independent hero databases; pro-draft usage and player VODs are reviewed separately before tactical recommendations are marked complete."
     },
   }),
   catalogEntry("alpha", "Alpha", "Альфа", {
@@ -145,8 +145,8 @@ export const heroCatalog = [
         "https://mlbb-stats.com/heroes",
         "https://mlbbdex.com/en/heroes"
       ],
-      competitiveContextSource: "https://www.mlbbanalytics.com/meta",
-      method: "Role and lane tags cross-checked across independent hero databases; pro-scene statistics are contextual evidence, not a substitute for lane classification."
+      competitiveReviewStatus: "pending",
+      method: "Role and lane tags cross-checked across independent hero databases; pro-draft usage and player VODs are reviewed separately before tactical recommendations are marked complete."
     },
   }),
   catalogEntry("alucard", "Alucard", "Алукард", {
@@ -164,8 +164,8 @@ export const heroCatalog = [
         "https://mlbb-stats.com/heroes",
         "https://mlbbdex.com/en/heroes"
       ],
-      competitiveContextSource: "https://www.mlbbanalytics.com/meta",
-      method: "Role and lane tags cross-checked across independent hero databases; pro-scene statistics are contextual evidence, not a substitute for lane classification."
+      competitiveReviewStatus: "pending",
+      method: "Role and lane tags cross-checked across independent hero databases; pro-draft usage and player VODs are reviewed separately before tactical recommendations are marked complete."
     },
   }),
   catalogEntry("argus", "Argus", "Аргус", {
@@ -183,8 +183,8 @@ export const heroCatalog = [
         "https://mlbb-stats.com/heroes",
         "https://mlbbdex.com/en/heroes"
       ],
-      competitiveContextSource: "https://www.mlbbanalytics.com/meta",
-      method: "Role and lane tags cross-checked across independent hero databases; pro-scene statistics are contextual evidence, not a substitute for lane classification."
+      competitiveReviewStatus: "pending",
+      method: "Role and lane tags cross-checked across independent hero databases; pro-draft usage and player VODs are reviewed separately before tactical recommendations are marked complete."
     },
   }),
   catalogEntry("arlott", "Arlott", "Арлотт", {
@@ -202,8 +202,8 @@ export const heroCatalog = [
         "https://mlbb-stats.com/heroes",
         "https://mlbbdex.com/en/heroes"
       ],
-      competitiveContextSource: "https://www.mlbbanalytics.com/meta",
-      method: "Role and lane tags cross-checked across independent hero databases; pro-scene statistics are contextual evidence, not a substitute for lane classification."
+      competitiveReviewStatus: "pending",
+      method: "Role and lane tags cross-checked across independent hero databases; pro-draft usage and player VODs are reviewed separately before tactical recommendations are marked complete."
     },
   }),
   catalogEntry("aulus", "Aulus", "Аулус", {
@@ -221,8 +221,8 @@ export const heroCatalog = [
         "https://mlbb-stats.com/heroes",
         "https://mlbbdex.com/en/heroes"
       ],
-      competitiveContextSource: "https://www.mlbbanalytics.com/meta",
-      method: "Role and lane tags cross-checked across independent hero databases; pro-scene statistics are contextual evidence, not a substitute for lane classification."
+      competitiveReviewStatus: "pending",
+      method: "Role and lane tags cross-checked across independent hero databases; pro-draft usage and player VODs are reviewed separately before tactical recommendations are marked complete."
     },
   }),
   catalogEntry("aurora", "Aurora", "Аврора", {
@@ -240,8 +240,8 @@ export const heroCatalog = [
         "https://mlbb-stats.com/heroes",
         "https://mlbbdex.com/en/heroes"
       ],
-      competitiveContextSource: "https://www.mlbbanalytics.com/meta",
-      method: "Role and lane tags cross-checked across independent hero databases; pro-scene statistics are contextual evidence, not a substitute for lane classification."
+      competitiveReviewStatus: "pending",
+      method: "Role and lane tags cross-checked across independent hero databases; pro-draft usage and player VODs are reviewed separately before tactical recommendations are marked complete."
     },
   }),
   catalogEntry("badang", "Badang", "Баданг", {
@@ -259,8 +259,8 @@ export const heroCatalog = [
         "https://mlbb-stats.com/heroes",
         "https://mlbbdex.com/en/heroes"
       ],
-      competitiveContextSource: "https://www.mlbbanalytics.com/meta",
-      method: "Role and lane tags cross-checked across independent hero databases; pro-scene statistics are contextual evidence, not a substitute for lane classification."
+      competitiveReviewStatus: "pending",
+      method: "Role and lane tags cross-checked across independent hero databases; pro-draft usage and player VODs are reviewed separately before tactical recommendations are marked complete."
     },
   }),
   catalogEntry("balmond", "Balmond", "Балмонд", {
@@ -278,8 +278,8 @@ export const heroCatalog = [
         "https://mlbb-stats.com/heroes",
         "https://mlbbdex.com/en/heroes"
       ],
-      competitiveContextSource: "https://www.mlbbanalytics.com/meta",
-      method: "Role and lane tags cross-checked across independent hero databases; pro-scene statistics are contextual evidence, not a substitute for lane classification."
+      competitiveReviewStatus: "pending",
+      method: "Role and lane tags cross-checked across independent hero databases; pro-draft usage and player VODs are reviewed separately before tactical recommendations are marked complete."
     },
   }),
   catalogEntry("bane", "Bane", "Бэйн", {
@@ -297,8 +297,8 @@ export const heroCatalog = [
         "https://mlbb-stats.com/heroes",
         "https://mlbbdex.com/en/heroes"
       ],
-      competitiveContextSource: "https://www.mlbbanalytics.com/meta",
-      method: "Role and lane tags cross-checked across independent hero databases; pro-scene statistics are contextual evidence, not a substitute for lane classification."
+      competitiveReviewStatus: "pending",
+      method: "Role and lane tags cross-checked across independent hero databases; pro-draft usage and player VODs are reviewed separately before tactical recommendations are marked complete."
     },
   }),
   catalogEntry("barats", "Barats", "Баратс", {
@@ -316,8 +316,8 @@ export const heroCatalog = [
         "https://mlbb-stats.com/heroes",
         "https://mlbbdex.com/en/heroes"
       ],
-      competitiveContextSource: "https://www.mlbbanalytics.com/meta",
-      method: "Role and lane tags cross-checked across independent hero databases; pro-scene statistics are contextual evidence, not a substitute for lane classification."
+      competitiveReviewStatus: "pending",
+      method: "Role and lane tags cross-checked across independent hero databases; pro-draft usage and player VODs are reviewed separately before tactical recommendations are marked complete."
     },
   }),
   catalogEntry("baxia", "Baxia", "Баксия", {
@@ -335,8 +335,8 @@ export const heroCatalog = [
         "https://mlbb-stats.com/heroes",
         "https://mlbbdex.com/en/heroes"
       ],
-      competitiveContextSource: "https://www.mlbbanalytics.com/meta",
-      method: "Role and lane tags cross-checked across independent hero databases; pro-scene statistics are contextual evidence, not a substitute for lane classification."
+      competitiveReviewStatus: "pending",
+      method: "Role and lane tags cross-checked across independent hero databases; pro-draft usage and player VODs are reviewed separately before tactical recommendations are marked complete."
     },
   }),
   catalogEntry("beatrix", "Beatrix", "Беатрис", {
@@ -354,8 +354,8 @@ export const heroCatalog = [
         "https://mlbb-stats.com/heroes",
         "https://mlbbdex.com/en/heroes"
       ],
-      competitiveContextSource: "https://www.mlbbanalytics.com/meta",
-      method: "Role and lane tags cross-checked across independent hero databases; pro-scene statistics are contextual evidence, not a substitute for lane classification."
+      competitiveReviewStatus: "pending",
+      method: "Role and lane tags cross-checked across independent hero databases; pro-draft usage and player VODs are reviewed separately before tactical recommendations are marked complete."
     },
   }),
   catalogEntry("belerick", "Belerick", "Белерик", {
@@ -373,8 +373,8 @@ export const heroCatalog = [
         "https://mlbb-stats.com/heroes",
         "https://mlbbdex.com/en/heroes"
       ],
-      competitiveContextSource: "https://www.mlbbanalytics.com/meta",
-      method: "Role and lane tags cross-checked across independent hero databases; pro-scene statistics are contextual evidence, not a substitute for lane classification."
+      competitiveReviewStatus: "pending",
+      method: "Role and lane tags cross-checked across independent hero databases; pro-draft usage and player VODs are reviewed separately before tactical recommendations are marked complete."
     },
   }),
   catalogEntry("benedetta", "Benedetta", "Бенедетта", {
@@ -392,8 +392,8 @@ export const heroCatalog = [
         "https://mlbb-stats.com/heroes",
         "https://mlbbdex.com/en/heroes"
       ],
-      competitiveContextSource: "https://www.mlbbanalytics.com/meta",
-      method: "Role and lane tags cross-checked across independent hero databases; pro-scene statistics are contextual evidence, not a substitute for lane classification."
+      competitiveReviewStatus: "pending",
+      method: "Role and lane tags cross-checked across independent hero databases; pro-draft usage and player VODs are reviewed separately before tactical recommendations are marked complete."
     },
   }),
   catalogEntry("brody", "Brody", "Броди", {
@@ -411,8 +411,8 @@ export const heroCatalog = [
         "https://mlbb-stats.com/heroes",
         "https://mlbbdex.com/en/heroes"
       ],
-      competitiveContextSource: "https://www.mlbbanalytics.com/meta",
-      method: "Role and lane tags cross-checked across independent hero databases; pro-scene statistics are contextual evidence, not a substitute for lane classification."
+      competitiveReviewStatus: "pending",
+      method: "Role and lane tags cross-checked across independent hero databases; pro-draft usage and player VODs are reviewed separately before tactical recommendations are marked complete."
     },
   }),
   catalogEntry("carmilla", "Carmilla", "Кармилла", {
@@ -430,8 +430,8 @@ export const heroCatalog = [
         "https://mlbb-stats.com/heroes",
         "https://mlbbdex.com/en/heroes"
       ],
-      competitiveContextSource: "https://www.mlbbanalytics.com/meta",
-      method: "Role and lane tags cross-checked across independent hero databases; pro-scene statistics are contextual evidence, not a substitute for lane classification."
+      competitiveReviewStatus: "pending",
+      method: "Role and lane tags cross-checked across independent hero databases; pro-draft usage and player VODs are reviewed separately before tactical recommendations are marked complete."
     },
   }),
   catalogEntry("cecilion", "Cecilion", "Сесилион", {
@@ -449,8 +449,8 @@ export const heroCatalog = [
         "https://mlbb-stats.com/heroes",
         "https://mlbbdex.com/en/heroes"
       ],
-      competitiveContextSource: "https://www.mlbbanalytics.com/meta",
-      method: "Role and lane tags cross-checked across independent hero databases; pro-scene statistics are contextual evidence, not a substitute for lane classification."
+      competitiveReviewStatus: "pending",
+      method: "Role and lane tags cross-checked across independent hero databases; pro-draft usage and player VODs are reviewed separately before tactical recommendations are marked complete."
     },
   }),
   catalogEntry("chang-e", "Chang'e", "Чан’Э", {
