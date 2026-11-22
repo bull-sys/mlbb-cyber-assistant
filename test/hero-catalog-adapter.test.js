@@ -69,7 +69,7 @@ test("first 20 researched heroes include cross-source role and lane evidence", (
 
   assert.equal(
     heroCatalog.find(entry => entry.id === "barats").lanes.status,
-    "pending_review"
+    "verified"
   );
   assert.equal(
     heroCatalog.find(entry => entry.id === "badang").lanes.primary,
