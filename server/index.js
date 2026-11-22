@@ -15,6 +15,7 @@ import { heroes, items, talents, spells, emblems } from "./data.js";
 import { getHeroCatalogApiFields, isLegacyHeroName } from "./hero-catalog-adapter.js";
 import { heroProfiles, validateHeroProfiles } from "./hero-profiles.js";
 import { normalizeRegistration } from "./registration.js";
+import { getOptionalUser } from "./auth.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, "..");
@@ -35,6 +36,7 @@ app.use(cors({origin:process.env.APP_URL||true}));
 app.use(express.json({limit:"1mb"}));
 app.use(rateLimit({windowMs:15*60*1000,limit:300,standardHeaders:true,legacyHeaders:false}));
 const authRateLimit=rateLimit({windowMs:15*60*1000,limit:10,standardHeaders:true,legacyHeaders:false,message:{error:"Слишком много попыток. Попробуй позже."}});
+const guestDraftRateLimit=rateLimit({windowMs:15*60*1000,limit:12,standardHeaders:true,legacyHeaders:false,message:{error:"Слишком много запросов к анализу. Попробуй позже."}});
 const upload=multer({dest:uploadDir,limits:{fileSize:(Number(process.env.MAX_UPLOAD_MB)||8)*1024*1024},fileFilter:(req,file,cb)=>cb(null,/^image\/(png|jpeg|webp)$/.test(file.mimetype))});
 const secret=process.env.JWT_SECRET;
 if(!secret && process.env.NODE_ENV==="production") throw new Error("JWT_SECRET is required in production");
@@ -45,6 +47,7 @@ const ranks=["Эпик","Легенда","Мифик","Мифическая сл
 const styles=["Поднятие рейтинга","По фану","Кастомки"];
 const safeUser=id=>db.prepare("SELECT u.id,u.email,u.nickname,p.hero,p.role,p.rank,p.style,p.game_id,p.bio FROM users u LEFT JOIN profiles p ON p.user_id=u.id WHERE u.id=?").get(id);
 function auth(req,res,next){const h=req.headers.authorization||"";try{if(!h.startsWith("Bearer "))throw 0;req.user=jwt.verify(h.slice(7),tokenSecret);next()}catch{return res.status(401).json({error:"Требуется авторизация"})}}
+function optionalAuth(req,res,next){req.user=getOptionalUser(req.headers.authorization,token=>jwt.verify(token,tokenSecret));next()}
 function issue(id){return jwt.sign({id},tokenSecret,{expiresIn:"14d"})}
 app.get("/api/health",(req,res)=>res.json({ok:true,service:"MLBB Cyber Assistant",version:"1.0.0"}));
 app.get("/api/data",(req,res)=>res.json({
@@ -404,10 +407,10 @@ function analyze({lane, enemies = [], allies = [], myHero = ""}) {
   };
 }
 
-app.post("/api/ai/draft",auth,async(req,res)=>{
+app.post("/api/ai/draft",guestDraftRateLimit,optionalAuth,async(req,res)=>{
  const b=req.body||{};if(!roles.includes(b.lane)||!Array.isArray(b.enemies)||b.enemies.length>5||!b.enemies.every(isLegacyHeroName))return res.status(400).json({error:"Некорректный состав или линия"});
  const result=analyze(b);
- if(openai){try{const response=await openai.chat.completions.create({model:process.env.OPENAI_MODEL||"gpt-4.1-mini",messages:[{role:"system",content:"Ты тактический помощник MLBB. Не выдумывай live статистику и точные параметры патча. Используй только переданные варианты. Кратко объясни тактику на русском."},{role:"user",content:JSON.stringify({lane:b.lane,enemies:b.enemies,allies:b.allies||[],myHero:b.myHero||"",rulesResult:result})}],max_tokens:450,temperature:.3});result.aiExplanation=response.choices[0]?.message?.content||""}catch{result.aiExplanation="AI-сервис временно недоступен; показан базовый анализ."}}
+ if(openai&&req.user){try{const response=await openai.chat.completions.create({model:process.env.OPENAI_MODEL||"gpt-4.1-mini",messages:[{role:"system",content:"Ты тактический помощник MLBB. Не выдумывай live статистику и точные параметры патча. Используй только переданные варианты. Кратко объясни тактику на русском."},{role:"user",content:JSON.stringify({lane:b.lane,enemies:b.enemies,allies:b.allies||[],myHero:b.myHero||"",rulesResult:result})}],max_tokens:450,temperature:.3});result.aiExplanation=response.choices[0]?.message?.content||""}catch{result.aiExplanation="AI-сервис временно недоступен; показан базовый анализ."}}
  res.json(result);
 });
 app.post("/api/draft/ocr-upload",auth,upload.single("image"),(req,res)=>{if(req.file)fs.unlink(req.file.path,()=>{});res.status(410).json({error:"Серверный OCR не используется: распознавание скриншота выполняется локально в браузере."})});
