@@ -181,3 +181,25 @@ test("Suyou, Jawhead, Karrie, Bruno and Terizla have sourced partial tactical pr
     assert.equal(hero.patch.reviewedAt, "2026-11-22");
   }
 });
+
+test("Masha, Marcel, Argus, Khufra and Diggie have sourced partial tactical profiles", () => {
+  const expected = [
+    ["masha", "Маша", "https://www.youtube.com/watch?v=glz0ubRP59g"],
+    ["marcel", "Марсель", "https://www.mobilelegends.com/en/hero/28"],
+    ["argus", "Аргус", "https://liquipedia.net/mobilelegends/Argus"],
+    ["khufra", "Хуфра", "https://liquipedia.net/mobilelegends/Khufra"],
+    ["diggie", "Дигги", "https://mlbb-knowledge.vercel.app/heroes/48"]
+  ];
+  for (const [id, name, source] of expected) {
+    const hero = heroProfiles.find(entry => entry.id === id);
+    assert.ok(hero, id + " profile exists");
+    assert.equal(hero.names.ru, name);
+    assert.ok(hero.mechanics.length >= 4, id + " mechanics");
+    assert.ok(hero.strengths.length >= 2, id + " strengths");
+    assert.ok(hero.weaknesses.length >= 2, id + " weaknesses");
+    assert.ok(hero.sources.includes(source), id + " source");
+    assert.equal(hero.confidence, "partial");
+    assert.equal(hero.patch.version, HERO_DB_PATCH);
+    assert.equal(hero.patch.reviewedAt, "2026-11-22");
+  }
+});
