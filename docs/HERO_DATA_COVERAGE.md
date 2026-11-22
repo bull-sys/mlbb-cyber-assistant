@@ -9,10 +9,10 @@ Live patch reference: 2.2.23
 |---|---:|---|
 | Hero catalog entries | 133 / 133 current catalog entries | Names and IDs are available to the encyclopedia/catalog UI. This is not yet an independently confirmed official-client roster snapshot. |
 | Unique catalog IDs | 133 / 133 | No duplicate IDs after the Fanny catalog-entry correction. |
-| Role verified | 60 / 133 | Role labels have cross-source evidence. |
-| Primary lane verified | 58 / 133 | Primary lane has cross-source evidence. |
-| Tactical profile records | 27 / 133 | Profile records are linked to the catalog; one remains a placeholder without researched mechanics. |
-| Substantive partial tactical profiles | 26 / 133 | Hero-specific mechanics, strengths, weaknesses, item notes and team-fight guidance have been researched. |
+| Role verified | 65 / 133 | Role labels have cross-source evidence. |
+| Primary lane verified | 63 / 133 | Primary lane has cross-source evidence. |
+| Tactical profile records | 32 / 133 | Profile records are linked to the catalog; one remains a placeholder without researched mechanics. |
+| Substantive partial tactical profiles | 31 / 133 | Hero-specific mechanics, strengths, weaknesses, item notes and team-fight guidance have been researched. |
 | Tactical profiles marked complete | 0 / 133 | Profiles remain partial until current-patch and competitive evidence is sufficiently reviewed. |
 
 ## Tactical profile coverage
@@ -44,8 +44,13 @@ Current hero-specific profiles:
 - Estes (Эстес)
 - Minotaur (Минотавр)
 - Lunox (Люнокс)
+- Cyclops (Циклоп)
+- Julian (Джулиан)
+- Tigreal (Тигрил)
+- Chou (Чу)
+- Dyrroth (Диррот)
 
-Saber remains a legacy placeholder without researched mechanics and is not counted among the 26 substantive profiles.
+Saber remains a legacy placeholder without researched mechanics and is not counted among the 31 substantive profiles.
 
 A profile being present does not mean all matchups, synergies, professional VODs or current-patch build variants are fully verified. Empty matchup/synergy arrays are intentional when evidence is insufficient; do not fill them with guesses.
 
@@ -68,6 +73,6 @@ A hero should move from catalog-only to tactical-profile coverage only after:
 
 ## Next work
 
-Expand tactical coverage in small reviewable batches. The latest batch added researched partial profiles for Aldous, Floryn, Estes, Minotaur and Lunox. The previous batch added Sun, Belerick, Hanabi, Xavier and Obsidia. Sun, Xavier and Obsidia also received cross-source role/lane verification; Belerick and Hanabi already had verified role/lane records. The preceding batch added Masha, Marcel, Argus, Khufra and Diggie. Keep each batch isolated in its own commits, run the full test suite, and do not mark a profile complete merely to increase the coverage percentage.
+Expand tactical coverage in small reviewable batches. The latest batch added researched partial profiles for Cyclops, Julian, Tigreal, Chou and Dyrroth. The previous batch added Aldous, Floryn, Estes, Minotaur and Lunox. The previous batch added Sun, Belerick, Hanabi, Xavier and Obsidia. Sun, Xavier and Obsidia also received cross-source role/lane verification; Belerick and Hanabi already had verified role/lane records. The preceding batch added Masha, Marcel, Argus, Khufra and Diggie. Keep each batch isolated in its own commits, run the full test suite, and do not mark a profile complete merely to increase the coverage percentage.
 
 The catalog roster status remains `incomplete` until it has been checked against an official-client roster snapshot. The current 133-entry count is a useful working baseline, not a claim of independent official verification.
