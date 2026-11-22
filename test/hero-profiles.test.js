@@ -515,3 +515,38 @@ test("Hayabusa, Hylos, Irithel, Ixia and Johnson have sourced partial tactical p
   const johnson = heroProfiles.find(item => item.id === "johnson");
   assert.ok(johnson.mechanics.some(note => note.includes("автомобиль")));
 });
+
+
+test("Hayabusa, Hylos, Irithel, Ixia and Johnson have sourced partial tactical profiles", () => {
+  const expected = [
+    ["hayabusa", "Хаябуса", "https://mlbb-knowledge.vercel.app/heroes/21"],
+    ["hylos", "Хилос", "https://mlbb-knowledge.vercel.app/heroes/49"],
+    ["irithel", "Иритэль", "https://mlbb-knowledge.vercel.app/heroes/43"],
+    ["ixia", "Иксия", "https://mlbbhub.com/ru/heroes/ixia"],
+    ["johnson", "Джонсон", "https://mlbb-knowledge.vercel.app/heroes/32"]
+  ];
+  for (const [id, name, source] of expected) {
+    const hero = heroProfiles.find(item => item.id === id);
+    assert.ok(hero, id + " profile exists");
+    assert.equal(hero.names.ru, name);
+    assert.ok(hero.mechanics.length >= 4, id + " mechanics");
+    assert.ok(hero.strengths.length >= 3, id + " strengths");
+    assert.ok(hero.weaknesses.length >= 3, id + " weaknesses");
+    assert.ok(hero.sources.includes(source), id + " source");
+    assert.equal(hero.confidence, "partial");
+    assert.equal(hero.patch.version, HERO_DB_PATCH);
+    assert.equal(hero.patch.reviewedAt, "2026-11-22");
+    assert.deepEqual(hero.matchups.strongAgainst, []);
+    assert.deepEqual(hero.matchups.weakAgainst, []);
+  }
+  const hayabusa = heroProfiles.find(item => item.id === "hayabusa");
+  assert.ok(hayabusa.mechanics.some(note => note.includes("тени")));
+  const hylos = heroProfiles.find(item => item.id === "hylos");
+  assert.ok(hylos.mechanics.some(note => note.includes("маны")));
+  const irithel = heroProfiles.find(item => item.id === "irithel");
+  assert.ok(irithel.mechanics.some(note => note.includes("движ")));
+  const ixia = heroProfiles.find(item => item.id === "ixia");
+  assert.ok(ixia.mechanics.some(note => note.includes("конус")));
+  const johnson = heroProfiles.find(item => item.id === "johnson");
+  assert.ok(johnson.mechanics.some(note => note.includes("пассажир")));
+});
