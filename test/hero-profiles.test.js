@@ -332,3 +332,6 @@ test("Lukas, Thamuz, Eudora, Pharsa and Nana have sourced partial tactical profi
   const nana = heroProfiles.find(item => item.id === "nana");
   assert.ok(nana.mechanics.some(note => note.includes("Молина")));
 });
+
+
+test("Franco, Akai, Alucard, Arlott and Aurora have sourced partial tactical profiles",()=>{const expected=[["franco","Франко","https://liquipedia.net/mobilelegends/Franco"],["akai","Акай","https://liquipedia.net/mobilelegends/Akai"],["alucard","Алукард","https://liquipedia.net/mobilelegends/Alucard"],["arlott","Арлотт","https://liquipedia.net/mobilelegends/Arlott"],["aurora","Аврора","https://liquipedia.net/mobilelegends/Aurora"]];for(const [id,name,source] of expected){const h=heroProfiles.find(x=>x.id===id);assert.ok(h,id);assert.equal(h.names.ru,name);assert.ok(h.mechanics.length>=4);assert.ok(h.strengths.length>=3);assert.ok(h.weaknesses.length>=3);assert.ok(h.sources.includes(source));assert.equal(h.confidence,"partial");assert.equal(h.patch.version,HERO_DB_PATCH);assert.equal(h.patch.reviewedAt,"2026-11-22");assert.deepEqual(h.matchups.strongAgainst,[]);assert.deepEqual(h.matchups.weakAgainst,[]);}});
