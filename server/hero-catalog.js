@@ -934,6 +934,7 @@ export const heroCatalog = [
     primaryLane: "Gold Lane",
     flexibleLanes: [],
     laneStatus: "verified",
+    tacticalProfileStatus: "partial",
     research: {
       checkedAt: "2026-11-22",
       roleAndLaneSources: ["https://mlbb-knowledge.vercel.app/heroes/60","https://www.mlbbguides.com/heroes/hanabi/","https://mlbbhub.com/heroes/hanabi"],
