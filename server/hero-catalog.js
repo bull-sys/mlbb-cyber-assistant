@@ -780,9 +780,31 @@ export const heroCatalog = [
     localizationStatus: "pending_review"
   }),
   catalogEntry("saber", "Saber", "Сабер", {
-    tacticalProfileStatus: "missing",
-    identityStatus: "pending_review",
-    localizationStatus: "pending_review"
+    roleValues: ["Assassin"],
+    roleStatus: "verified",
+    primaryLane: "Jungle",
+    flexibleLanes: ["Roam"],
+    laneStatus: "verified",
+    tacticalProfileStatus: "partial",
+    research: {
+      checkedAt: "2026-11-22",
+      roleAndLaneSources: [
+        "https://mlbb-knowledge.vercel.app/heroes/3",
+        "https://mlbbhub.com/ru/heroes/saber",
+        "https://mlbb.io/en/hero/saber"
+      ],
+      mechanicsSources: [
+        "https://liquipedia.net/mobilelegends/Saber",
+        "https://mlbb-knowledge.vercel.app/heroes/3",
+        "https://mlbb.io/en/hero/saber"
+      ],
+      rankedMetaSources: [
+        "https://mlbbhub.com/ru/heroes/saber",
+        "https://www.mlbbanalytics.com/heroes?search=Saber"
+      ],
+      competitiveReviewStatus: "pending",
+      method: "Assassin identity and Jungle/Roam role cross-checked across MLBB Knowledge, MLBBHub and MLBB.io. Passive defense reduction, Orbiting Swords, Charge and Triple Sweep were compared across three skill references. MLBBHub's patch 2.2.23 Jungle build is recorded as a dated reference, not a universal build. No current-patch professional VOD review is claimed."
+    }
   }),
   catalogEntry("selena", "Selena", "Селена", {
     identityStatus: "pending_review",
