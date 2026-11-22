@@ -70,3 +70,17 @@ test("mobile controls preserve touch target size and iPhone safe-area insets", a
   assert.match(css, /env\(safe-area-inset-bottom\)/);
   assert.match(css, /-webkit-overflow-scrolling:touch/);
 });
+
+test("draft hero selection uses a searchable one-tap grid instead of native long selects", async () => {
+ const html = await readFile(new URL("../public/index.html", import.meta.url), "utf8");
+ const css = await readFile(new URL("../public/style.css", import.meta.url), "utf8");
+ assert.match(html, /id="openEnemyPicker"/);
+ assert.match(html, /id="openAllyPicker"/);
+ assert.match(html, /id="heroPickerSearch"/);
+ assert.match(html, /id="heroPickerGrid"/);
+ assert.match(app, /function openHeroPicker\(target\)/);
+ assert.match(app, /function choosePickerHero\(value\)/);
+ assert.match(app, /mlbb_recent_draft_heroes/);
+ assert.match(css, /\.hero-picker-grid\{display:grid/);
+ assert.match(css, /max-height:min\(88dvh,820px\)/);
+});
