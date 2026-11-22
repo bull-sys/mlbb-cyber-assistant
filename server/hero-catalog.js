@@ -335,99 +335,34 @@ export const heroCatalog = [
     },
   }),
   catalogEntry("benedetta", "Benedetta", "Бенедетта", {
-    identityStatus: "pending_review",
-    localizationStatus: "pending_review",
-    roleValues: ["Assassin", "Fighter"],
-    roleStatus: "verified",
-    primaryLane: "EXP Lane",
-    flexibleLanes: [],
-    laneStatus: "verified",
-    research: {
-      checkedAt: "2026-11-22",
-      roleAndLaneSources: [
-        "https://www.mlbbguides.com/heroes/",
-        "https://mlbb-stats.com/heroes",
-        "https://mlbbdex.com/en/heroes"
-      ],
-      competitiveReviewStatus: "pending",
-      method: "Role and lane tags cross-checked across independent hero databases; pro-draft usage and player VODs are reviewed separately before tactical recommendations are marked complete."
-    },
+    identityStatus: "verified", localizationStatus: "pending_review",
+    roleValues: ["Assassin", "Fighter"], roleStatus: "verified", primaryLane: "EXP Lane", laneStatus: "verified",
+    tacticalProfileStatus: "partial",
+    research: { checkedAt: "2026-11-22", roleAndLaneSources: ["https://liquipedia.net/mobilelegends/Benedetta", "https://www.mlbb.io/en/hero/benedetta", "https://mlbbdex.com/en/heroes/benedetta"], mechanicsSources: ["https://liquipedia.net/mobilelegends/Benedetta", "https://www.mlbbguides.com/heroes/benedetta/"], rankedMetaSources: ["https://mlbbdex.com/en/heroes/benedetta"], competitiveReviewStatus: "pending", method: "Assassin/Fighter and EXP Lane cross-checked across three references. Sword Intent, passive dash, defensive control block and ultimate reviewed independently. Ranked patch 2.2.23 sample kept separate from pro evidence; VOD review pending." }
   }),
   catalogEntry("brody", "Brody", "Броди", {
-    identityStatus: "pending_review",
-    localizationStatus: "pending_review",
-    roleValues: ["Marksman"],
-    roleStatus: "verified",
-    primaryLane: "Gold Lane",
-    flexibleLanes: [],
-    laneStatus: "verified",
-    research: {
-      checkedAt: "2026-11-22",
-      roleAndLaneSources: [
-        "https://www.mlbbguides.com/heroes/",
-        "https://mlbb-stats.com/heroes",
-        "https://mlbbdex.com/en/heroes"
-      ],
-      competitiveReviewStatus: "pending",
-      method: "Role and lane tags cross-checked across independent hero databases; pro-draft usage and player VODs are reviewed separately before tactical recommendations are marked complete."
-    },
+    identityStatus: "verified", localizationStatus: "pending_review",
+    roleValues: ["Marksman"], roleStatus: "verified", primaryLane: "Gold Lane", laneStatus: "verified",
+    tacticalProfileStatus: "partial",
+    research: { checkedAt: "2026-11-22", roleAndLaneSources: ["https://liquipedia.net/mobilelegends/Brody", "https://mlbb-knowledge.vercel.app/heroes/100", "https://mlbbhub.com/ru/heroes/brody"], mechanicsSources: ["https://liquipedia.net/mobilelegends/Brody", "https://mlbb-knowledge.vercel.app/heroes/100", "https://www.mlbbguides.com/heroes/brody/skills/"], rankedMetaSources: ["https://mlbb-knowledge.vercel.app/heroes/100"], competitiveReviewStatus: "pending", method: "Marksman/Gold Lane cross-checked across Liquipedia, MLBB Knowledge and MLBBHub. Abyss Mark stacking and movement/attack trade-off checked independently. MLBBHub build patch-label discrepancy noted; fixed build withheld. VOD review pending." }
   }),
   catalogEntry("carmilla", "Carmilla", "Кармилла", {
-    identityStatus: "pending_review",
-    localizationStatus: "pending_review",
-    roleValues: ["Support", "Tank"],
-    roleStatus: "verified",
-    primaryLane: "Roam",
-    flexibleLanes: [],
-    laneStatus: "verified",
-    research: {
-      checkedAt: "2026-11-22",
-      roleAndLaneSources: [
-        "https://www.mlbbguides.com/heroes/",
-        "https://mlbb-stats.com/heroes",
-        "https://mlbbdex.com/en/heroes"
-      ],
-      competitiveReviewStatus: "pending",
-      method: "Role and lane tags cross-checked across independent hero databases; pro-draft usage and player VODs are reviewed separately before tactical recommendations are marked complete."
-    },
+    identityStatus: "verified", localizationStatus: "pending_review",
+    roleValues: ["Support", "Tank"], roleStatus: "verified", primaryLane: "Roam", laneStatus: "verified",
+    tacticalProfileStatus: "partial",
+    research: { checkedAt: "2026-11-22", roleAndLaneSources: ["https://mlbb-knowledge.vercel.app/heroes/92", "https://liquipedia.net/mobilelegends/Carmilla", "https://mlbbhub.com/ru/heroes/carmilla"], mechanicsSources: ["https://mlbb-knowledge.vercel.app/heroes/92", "https://liquipedia.net/mobilelegends/Carmilla", "https://mlbb.io/en/hero/carmilla"], rankedMetaSources: ["https://mlbbhub.com/ru/heroes/carmilla"], competitiveReviewStatus: "pending", method: "Support/Tank and Roam cross-checked across three references. Vampire Pact, Crimson Flower, Bloodbath and Curse of Blood compared across independent skill references; conflicting numeric values omitted. Ranked and historical tournament samples kept separate. VOD review pending." }
   }),
-  catalogEntry("cecilion", "Cecilion", "Сесилион", {
-    identityStatus: "pending_review",
-    localizationStatus: "pending_review",
-    roleValues: ["Mage"],
-    roleStatus: "verified",
-    primaryLane: "Mid Lane",
-    flexibleLanes: [],
-    laneStatus: "verified",
-    research: {
-      checkedAt: "2026-11-22",
-      roleAndLaneSources: [
-        "https://www.mlbbguides.com/heroes/",
-        "https://mlbb-stats.com/heroes",
-        "https://mlbbdex.com/en/heroes"
-      ],
-      competitiveReviewStatus: "pending",
-      method: "Role and lane tags cross-checked across independent hero databases; pro-draft usage and player VODs are reviewed separately before tactical recommendations are marked complete."
-    },
+  catalogEntry("cecilion", "Cecilion", "Цицилион", {
+    identityStatus: "verified", localizationStatus: "pending_review",
+    roleValues: ["Mage"], roleStatus: "verified", primaryLane: "Mid Lane", laneStatus: "verified",
+    tacticalProfileStatus: "partial",
+    research: { checkedAt: "2026-11-22", roleAndLaneSources: ["https://liquipedia.net/mobilelegends/Cecilion", "https://mlbbdex.com/en/heroes/cecilion", "https://mlbbhub.com/ru/heroes/cecilion"], mechanicsSources: ["https://liquipedia.net/mobilelegends/Cecilion", "https://mlbb.tools/heroes/cecilion", "https://www.mlbbguides.com/heroes/cecilion/overview/"], rankedMetaSources: ["https://mlbbdex.com/en/heroes/cecilion", "https://mlbbhub.com/ru/heroes/cecilion"], competitiveReviewStatus: "pending", method: "Mage/Mid Lane cross-checked across three references. Overflowing mana stacking, Bat Impact repeated-cast cost, Sanguine Claws pull and Bats Feast sustain checked independently. Patch 2.2.23 ranked snapshot separated from professional evidence; VOD review pending." }
   }),
   catalogEntry("chang-e", "Chang'e", "Чан’Э", {
-    identityStatus: "pending_review",
-    localizationStatus: "pending_review",
-    roleValues: ["Mage"],
-    roleStatus: "verified",
-    primaryLane: "Mid Lane",
-    flexibleLanes: [],
-    laneStatus: "verified",
-    research: {
-      checkedAt: "2026-11-22",
-      roleAndLaneSources: [
-        "https://www.mlbbguides.com/heroes/",
-        "https://www.propublic.gg/heroes/stats?dir=asc&sort=name",
-        "https://mlbbhub.com/heroes"
-      ],
-      competitiveReviewStatus: "pending",
-      method: "Role tags cross-checked against MLBBHub; lane placement checked against MLBB Guides and Propublic's Mythic+ 15-day lane table. Pro tournament usage is tracked separately and does not automatically determine ranked primary lane."
-    },
+    identityStatus: "verified", localizationStatus: "verified",
+    roleValues: ["Mage"], roleStatus: "verified", primaryLane: "Mid Lane", laneStatus: "verified",
+    tacticalProfileStatus: "partial",
+    research: { checkedAt: "2026-11-22", roleAndLaneSources: ["https://liquipedia.net/mobilelegends/Chang%27e", "https://mlbb.io/en/hero/chang%27e", "https://www.mlbbanalytics.com/heroes?hero=Chang%27e"], mechanicsSources: ["https://liquipedia.net/mobilelegends/Chang%27e", "https://mlbb.io/en/hero/chang%27e", "https://www.mlbbanalytics.com/heroes?hero=Chang%27e"], rankedMetaSources: ["https://mlbbdex.com/en/meta"], competitiveReviewStatus: "pending", method: "Mage/Mid Lane cross-checked across independent references. Trouble Maker, Starmoon Shockwave, Crescent Moon and Meteor Shower checked against skill data. Patch 2.2.23 did not list Chang'e among adjusted heroes; stale build-page patch labels prevent a fixed build recommendation. Historical pro samples are not treated as current VOD review." }
   }),
   catalogEntry("chip", "Chip", "Чип", {
     identityStatus: "pending_review",
@@ -1089,31 +1024,5 @@ export const heroCatalog = [
   catalogEntry("minotaur", "Minotaur", "Минотавр", { roleValues:["Tank","Support"], roleStatus:"verified", primaryLane:"Roam", flexibleLanes:["EXP Lane"], laneStatus:"verified", tacticalProfileStatus:"partial", research:{ checkedAt:"2026-11-22", roleAndLaneSources:["https://mlbbhub.com/heroes/minotaur","https://mlbb.io/en/hero/minotaur","https://mlbbdex.com/en/heroes/minotaur"], mechanicsSources:["https://mlbbhub.com/heroes/minotaur","https://liquipedia.net/mobilelegends/Minotaur","https://mlbb.io/en/hero/minotaur"], rankedMetaSources:["https://mlbbhub.com/heroes/minotaur","https://mlbbdex.com/en/heroes/minotaur"], competitiveReviewStatus:"pending", method:"Tank/Support and Roam primary role cross-checked across three databases; EXP retained as flexible lane. Rage-state control and healing reviewed separately from ranked aggregates." } }),
   catalogEntry("lunox", "Lunox", "Люнокс", { roleValues:["Mage"], roleStatus:"verified", primaryLane:"Mid Lane", flexibleLanes:[], laneStatus:"verified", tacticalProfileStatus:"partial", research:{ checkedAt:"2026-11-22", roleAndLaneSources:["https://mlbbhub.com/ru/heroes/lunox","https://mlbb.io/en/hero/lunox","https://mlbb-knowledge.vercel.app/heroes/"], mechanicsSources:["https://liquipedia.net/mobilelegends/Lunox","https://kazukiofficial.com/heroes/lunox","https://mlbb.tools/patch-notes/2.2.23"], rankedMetaSources:["https://mlbbhub.com/ru/heroes/lunox","https://mlbbdex.com/en/heroes/lunox"], competitiveReviewStatus:"pending", method:"Mage/Mid identity cross-checked across three databases; Order/Chaos forms and patch 2.2.23 adjustments checked against independent skill and patch references. Current-patch pro VOD review remains pending." } }),
 
-
-  catalogEntry("benedetta", "Benedetta", "Бенедетта", {
-    roleValues: ["Assassin", "Fighter"], roleStatus: "verified", primaryLane: "EXP Lane",
-    laneStatus: "verified", tacticalProfileStatus: "partial",
-    research: { checkedAt: "2026-11-22", roleAndLaneSources: ["https://liquipedia.net/mobilelegends/Benedetta", "https://www.mlbb.io/en/hero/benedetta", "https://mlbbdex.com/en/heroes/benedetta"], mechanicsSources: ["https://liquipedia.net/mobilelegends/Benedetta", "https://www.mlbbguides.com/heroes/benedetta/"], rankedMetaSources: ["https://mlbbdex.com/en/heroes/benedetta"], competitiveReviewStatus: "pending", method: "Assassin/Fighter and EXP Lane cross-checked across three references. Sword Intent, passive dash, defensive control block and ultimate reviewed independently. Ranked patch 2.2.23 sample kept separate from pro evidence; VOD review pending." }
-  }),
-  catalogEntry("brody", "Brody", "Броуди", {
-    roleValues: ["Marksman"], roleStatus: "verified", primaryLane: "Gold Lane",
-    laneStatus: "verified", tacticalProfileStatus: "partial",
-    research: { checkedAt: "2026-11-22", roleAndLaneSources: ["https://liquipedia.net/mobilelegends/Brody", "https://mlbb-knowledge.vercel.app/heroes/100", "https://mlbbhub.com/ru/heroes/brody"], mechanicsSources: ["https://liquipedia.net/mobilelegends/Brody", "https://mlbb-knowledge.vercel.app/heroes/100", "https://www.mlbbguides.com/heroes/brody/skills/"], rankedMetaSources: ["https://mlbb-knowledge.vercel.app/heroes/100"], competitiveReviewStatus: "pending", method: "Marksman/Gold Lane cross-checked across Liquipedia, MLBB Knowledge and MLBBHub. Abyss Mark stacking and the movement/attack trade-off checked across independent skill references. MLBBHub build patch-label discrepancy noted; fixed build withheld. VOD review pending." }
-  }),
-  catalogEntry("carmilla", "Carmilla", "Кармилла", {
-    roleValues: ["Support", "Tank"], roleStatus: "verified", primaryLane: "Roam",
-    laneStatus: "verified", tacticalProfileStatus: "partial",
-    research: { checkedAt: "2026-11-22", roleAndLaneSources: ["https://mlbb-knowledge.vercel.app/heroes/92", "https://liquipedia.net/mobilelegends/Carmilla", "https://mlbbhub.com/ru/heroes/carmilla"], mechanicsSources: ["https://mlbb-knowledge.vercel.app/heroes/92", "https://liquipedia.net/mobilelegends/Carmilla", "https://mlbb.io/en/hero/carmilla"], rankedMetaSources: ["https://mlbbhub.com/ru/heroes/carmilla"], competitiveReviewStatus: "pending", method: "Support/Tank and Roam cross-checked across three references. Vampire Pact, Crimson Flower, Bloodbath and Curse of Blood compared across independent skill references; conflicting numeric values omitted. Ranked and historical tournament samples kept separate. VOD review pending." }
-  }),
-  catalogEntry("cecilion", "Cecilion", "Цицилион", {
-    roleValues: ["Mage"], roleStatus: "verified", primaryLane: "Mid Lane",
-    laneStatus: "verified", tacticalProfileStatus: "partial",
-    research: { checkedAt: "2026-11-22", roleAndLaneSources: ["https://liquipedia.net/mobilelegends/Cecilion", "https://mlbbdex.com/en/heroes/cecilion", "https://mlbbhub.com/ru/heroes/cecilion"], mechanicsSources: ["https://liquipedia.net/mobilelegends/Cecilion", "https://mlbb.tools/heroes/cecilion", "https://www.mlbbguides.com/heroes/cecilion/overview/"], rankedMetaSources: ["https://mlbbdex.com/en/heroes/cecilion", "https://mlbbhub.com/ru/heroes/cecilion"], competitiveReviewStatus: "pending", method: "Mage/Mid Lane cross-checked across three references. Overflowing mana stacking, Bat Impact's repeated-cast cost, Sanguine Claws pull and Bats Feast sustain cross-checked independently. Patch 2.2.23 ranked snapshot separated from professional evidence; VOD review pending." }
-  }),
-  catalogEntry("change", "Chang'e", "Чан’Э", {
-    roleValues: ["Mage"], roleStatus: "verified", primaryLane: "Mid Lane",
-    laneStatus: "verified", tacticalProfileStatus: "partial",
-    research: { checkedAt: "2026-11-22", roleAndLaneSources: ["https://liquipedia.net/mobilelegends/Chang%27e", "https://mlbb.io/en/hero/chang%27e", "https://www.mlbbanalytics.com/heroes?hero=Chang%27e"], mechanicsSources: ["https://liquipedia.net/mobilelegends/Chang%27e", "https://mlbb.io/en/hero/chang%27e", "https://www.mlbbanalytics.com/heroes?hero=Chang%27e"], rankedMetaSources: ["https://mlbbdex.com/en/meta"], competitiveReviewStatus: "pending", method: "Mage/Mid Lane cross-checked across independent references. Trouble Maker, Starmoon Shockwave, Crescent Moon and Meteor Shower checked against skill data. Patch 2.2.23 did not list Chang'e among adjusted heroes; stale build-page patch labels prevent a fixed build recommendation. Historical pro samples are not treated as current VOD review." }
-  }),
 
 ];
