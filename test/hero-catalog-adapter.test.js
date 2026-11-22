@@ -62,7 +62,7 @@ test("first 20 researched heroes include cross-source role and lane evidence", (
     assert.equal(hero.research.roleAndLaneSources.length, 3, id);
     assert.equal(
       hero.research.competitiveReviewStatus,
-      id === "fanny" ? "partial" : "pending",
+      id === "fanny" || id === "bane" ? "partial" : "pending",
       id
     );
   }
@@ -73,7 +73,7 @@ test("first 20 researched heroes include cross-source role and lane evidence", (
   );
   assert.equal(
     heroCatalog.find(entry => entry.id === "badang").lanes.primary,
-    "EXP Lane"
+    null
   );
 });
 
@@ -121,7 +121,7 @@ test("next ten researched heroes include cross-source role and lane evidence", (
 test("Badang's EXP/Roam split remains flagged instead of claiming a single settled primary lane", () => {
   const badang = heroCatalog.find(entry => entry.id === "badang");
   assert.equal(badang.lanes.primary, "EXP Lane");
-  assert.deepEqual(badang.lanes.flexible, ["Roam"]);
+  assert.deepEqual(badang.lanes.flexible, ["EXP Lane", "Roam"]);
   assert.equal(badang.lanes.status, "pending_review");
 });
 
