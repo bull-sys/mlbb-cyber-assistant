@@ -194,9 +194,18 @@ export const heroCatalog = [
     laneStatus: "verified", tacticalProfileStatus: "partial",
     research: { checkedAt: "2026-11-22", roleAndLaneSources: ["https://mlbbhub.com/heroes/bruno", "https://www.mlbbanalytics.com/heroes?hero=Bruno"], mechanicsSources: ["https://www.mlbbanalytics.com/heroes?hero=Bruno", "https://mlbb.tools/patch-notes/2.2.16"], rankedMetaSources: ["https://mlbbhub.com/heroes/bruno", "https://mlbbdex.com/en/heroes/bruno"], professionalMetaSources: ["https://www.mlbbanalytics.com/heroes?hero=Bruno"], competitiveReviewStatus: "partial", method: "Marksman/Gold Lane classification, patch 2.2.16 rework and ranked/pro evidence cross-checked. Tournament samples are reported separately; current-patch VOD review remains pending." }
   }),
-  catalogEntry("layla", "Layla", "Лейла"),
-  catalogEntry("miya", "Miya", "Мия"),
-  catalogEntry("granger", "Granger", "Грейнджер"),
+  catalogEntry("layla", "Layla", "Лейла", {
+    roleValues:["Marksman"], roleStatus:"verified", primaryLane:"Gold Lane", flexibleLanes:[], laneStatus:"verified", tacticalProfileStatus:"partial",
+    research:{checkedAt:"2026-11-22",roleAndLaneSources:["https://mlbb-knowledge.vercel.app/heroes/18","https://mlbbhub.com/heroes/layla","https://www.mlbbguides.com/heroes/layla/"],mechanicsSources:["https://mlbb-knowledge.vercel.app/heroes/18","https://www.mlbbguides.com/heroes/layla/","https://mlbb.tools/heroes/layla"],rankedMetaSources:["https://mlbbhub.com/heroes/layla"],competitiveReviewStatus:"pending",method:"Marksman/Gold Lane identity cross-checked across MLBB Knowledge, MLBBHub and MLBBGuides. Range scaling and skill effects compared across three skill references. Ranked build reviewed for patch 2.2.23; available tournament samples are sparse or from separate events, so no current pro conclusion is made."}
+  }),
+  catalogEntry("miya", "Miya", "Мия", {
+    roleValues:["Marksman"], roleStatus:"verified", primaryLane:"Gold Lane", flexibleLanes:[], laneStatus:"verified", tacticalProfileStatus:"partial",
+    research:{checkedAt:"2026-11-22",roleAndLaneSources:["https://mlbb-knowledge.vercel.app/heroes/1","https://mlbbhub.com/ru/heroes/miya","https://mlbb.io/en/hero/miya"],mechanicsSources:["https://mlbb-knowledge.vercel.app/heroes/1","https://mlbb.io/en/hero/miya","https://mlbbhub.com/ru/heroes/miya"],rankedMetaSources:["https://mlbbhub.com/ru/heroes/miya","https://mlbb.io/en/hero/miya"],professionalMetaSources:["https://mldb.gg/hero/miya"],competitiveReviewStatus:"partial",method:"Marksman/Gold Lane identity and skill mechanics cross-checked across MLBB Knowledge, MLBBHub and MLBB.io. MPL ID/PH S18 samples recorded separately by event; these do not establish universal tournament strength and no specific VOD has yet been reviewed."}
+  }),
+  catalogEntry("granger", "Granger", "Грейнджер", {
+    roleValues:["Marksman"], roleStatus:"verified", primaryLane:"Gold Lane", flexibleLanes:[], laneStatus:"verified", tacticalProfileStatus:"partial",
+    research:{checkedAt:"2026-11-22",roleAndLaneSources:["https://mlbb-knowledge.vercel.app/heroes/79","https://mlbbhub.com/heroes/granger","https://mlbbdex.com/en/heroes/granger"],mechanicsSources:["https://liquipedia.net/mobilelegends/Granger","https://mlbb-knowledge.vercel.app/heroes/79","https://mlbbcore.com/heroes/granger/"],rankedMetaSources:["https://mlbbhub.com/heroes/granger","https://mlbbdex.com/en/heroes/granger"],competitiveReviewStatus:"pending",method:"Marksman/Gold Lane identity cross-checked across MLBB Knowledge, MLBBHub and MLBBDex. Current dual-energy mechanics compared across Liquipedia, MLBB Knowledge and MLBBcore. Ranked results recorded separately; no reliable current pro sample or VOD review claimed."}
+  }),
 
   catalogEntry("terizla", "Terizla", "Теризла", {
     roleValues: ["Fighter", "Tank"], roleStatus: "verified", primaryLane: "EXP Lane",
@@ -209,14 +218,20 @@ export const heroCatalog = [
   catalogEntry("thamuz", "Thamuz", "Тамуз"),
 
   catalogEntry("eudora", "Eudora", "Эйдора"),
-  catalogEntry("kagura", "Kagura", "Кагура"),
+  catalogEntry("kagura", "Kagura", "Кагура", {
+    roleValues:["Mage"], roleStatus:"verified", primaryLane:"Mid Lane", flexibleLanes:[], laneStatus:"verified", tacticalProfileStatus:"partial",
+    research:{checkedAt:"2026-11-22",roleAndLaneSources:["https://mlbb-knowledge.vercel.app/heroes/25","https://mlbbhub.com/heroes/kagura","https://mlbbdex.com/en/heroes/kagura"],mechanicsSources:["https://liquipedia.net/mobilelegends/Kagura","https://mlbb-knowledge.vercel.app/heroes/25","https://mlbb.io/en/hero/kagura"],rankedMetaSources:["https://mlbbhub.com/heroes/kagura","https://mlbbdex.com/en/heroes/kagura"],competitiveReviewStatus:"pending",method:"Mage/Mid Lane identity cross-checked across MLBB Knowledge, MLBBHub and MLBBDex. Umbrella-state mechanics compared across Liquipedia, MLBB Knowledge and MLBB.io. Ranked aggregates kept separate; current professional VOD review pending."}
+  }),
   catalogEntry("pharsa", "Pharsa", "Фарса"),
   catalogEntry("cyclops", "Cyclops", "Циклоп", { roleValues:["Mage"], roleStatus:"verified", primaryLane:"Mid Lane", flexibleLanes:[], laneStatus:"verified", tacticalProfileStatus:"partial", research:{ checkedAt:"2026-11-22", roleAndLaneSources:["https://mlbbhub.com/heroes/cyclops","https://mlbb.io/en/hero/cyclops","https://mlbbdex.com/en/heroes/cyclops"], mechanicsSources:["https://liquipedia.net/mobilelegends/Cyclops","https://mlbbhub.com/heroes/cyclops","https://www.oneesports.gg/mobile-legends/cyclops-guide-best-build-emblem/"], rankedMetaSources:["https://mlbbhub.com/heroes/cyclops","https://mlbbdex.com/en/heroes/cyclops"], competitiveReviewStatus:"pending", method:"Mage/Mid classification cross-checked across three current hero databases; cooldown loop, orbiting spheres and target-lock ultimate checked against Liquipedia, MLBBHub and ONE Esports." } }),
   catalogEntry("nana", "Nana", "Нана"),
   catalogEntry("julian", "Julian", "Джулиан", { roleValues:["Assassin","Fighter"], roleStatus:"verified", primaryLane:"Jungle", flexibleLanes:["Mid Lane"], laneStatus:"verified", tacticalProfileStatus:"partial", research:{ checkedAt:"2026-11-22", roleAndLaneSources:["https://mlbbhub.com/heroes/julian","https://mlbb.io/en/hero/julian","https://mlbbdex.com/en/heroes/julian"], mechanicsSources:["https://www.mlbbguides.com/heroes/julian/passive-skill/","https://mlbbhub.com/heroes/julian","https://www.oneesports.gg/mobile-legends/julian-best-build-guide/"], rankedMetaSources:["https://mlbbhub.com/heroes/julian","https://mlbbdex.com/en/heroes/julian"], competitiveReviewStatus:"pending", method:"Assassin/Fighter and Jungle primary role cross-checked across three databases; enhanced third-skill sequence, post-combo reset and three enhanced outcomes cross-checked against independent skill references." } }),
 
   catalogEntry("tigreal", "Tigreal", "Тигрил", { roleValues:["Tank"], roleStatus:"verified", primaryLane:"Roam", flexibleLanes:[], laneStatus:"verified", tacticalProfileStatus:"partial", research:{ checkedAt:"2026-11-22", roleAndLaneSources:["https://liquipedia.net/mobilelegends/Tigreal","https://mlbbhub.com/heroes/tigreal","https://mlbb.io/en/hero/tigreal"], mechanicsSources:["https://liquipedia.net/mobilelegends/Tigreal","https://mlbbhub.com/heroes/tigreal","https://www.oneesports.gg/mobile-legends/tigreal-best-build-guide-combos/"], rankedMetaSources:["https://mlbbhub.com/heroes/tigreal","https://mlbbdex.com/en/heroes/tigreal"], competitiveReviewStatus:"pending", method:"Tank/Roam role verified across three sources; Fearless stacks, two-stage charge and interruptible opening of ultimate checked across Liquipedia, MLBBHub and ONE Esports." } }),
-  catalogEntry("atlas", "Atlas", "Атлас"),
+  catalogEntry("atlas", "Atlas", "Атлас", {
+    roleValues:["Tank"], roleStatus:"verified", primaryLane:"Roam", flexibleLanes:["EXP Lane"], laneStatus:"verified", tacticalProfileStatus:"partial",
+    research:{checkedAt:"2026-11-22",roleAndLaneSources:["https://mlbb-knowledge.vercel.app/heroes/93","https://mlbbhub.com/ru/heroes/atlas","https://liquipedia.net/mobilelegends/Atlas"],mechanicsSources:["https://mlbb-knowledge.vercel.app/heroes/93","https://liquipedia.net/mobilelegends/Atlas","https://liquipedia.net/mobilelegends/Patch_2.2.23"],rankedMetaSources:["https://mlbbhub.com/ru/heroes/atlas"],professionalMetaSources:["https://meta.mlbblab.com/tournaments/mpl-id-season-18/heroes/atlas"],competitiveReviewStatus:"partial",method:"Tank/Roam identity cross-checked across MLBB Knowledge, MLBBHub and Liquipedia; EXP Lane retained as a flexible role from MLBBHub. Current passive nerf checked against patch 2.2.23. MPL ID S18 pick/ban data recorded separately from ranked data; professional VOD review remains pending."}
+  }),
   catalogEntry("franco", "Franco", "Франко", {
     identityStatus: "pending_review",
     localizationStatus: "pending_review",
