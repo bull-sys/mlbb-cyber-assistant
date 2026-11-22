@@ -17,7 +17,7 @@ test("catalog API fields are additive and leave legacy heroes as the legacy list
   assert.equal(fields.heroCatalogRosterStatus, "incomplete");
   assert.deepEqual(fields.heroCatalogValidation, {
     ok: true,
-    count: 32,
+    count: 133,
     errors: []
   });
   assert.deepEqual(
@@ -35,6 +35,16 @@ test("catalog API fields are additive and leave legacy heroes as the legacy list
   ]);
   assert.deepEqual(heroes, heroLegacyBaseline);
   assert.equal(Object.hasOwn(fields, "heroes"), false);
+});
+
+
+test("hero catalog contains the 133-name roster without duplicate IDs", () => {
+  assert.equal(heroCatalog.length, 133);
+  assert.equal(new Set(heroCatalog.map(hero => hero.id)).size, 133);
+  assert.equal(heroCatalog.find(hero => hero.id === "hirara")?.nameEn, "Hirara");
+  assert.equal(heroCatalog.find(hero => hero.id === "marcel")?.nameEn, "Marcel");
+  assert.equal(heroCatalog.find(hero => hero.id === "popol-and-kupa")?.nameEn, "Popol and Kupa");
+  assert.equal(heroCatalog.find(hero => hero.id === "hirara")?.tacticalProfile.status, "missing");
 });
 
 test("API and validation routes are wired to additive catalog fields and legacy names", async () => {
