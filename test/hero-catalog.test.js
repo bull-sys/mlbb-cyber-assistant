@@ -5,7 +5,7 @@ import { heroCatalog } from "../server/hero-catalog.js";
 import { validateHeroCatalog } from "../server/hero-catalog-validation.js";
 import { heroLegacyBaseline } from "./fixtures/hero-legacy-baseline.js";
 
-const legacyToCatalogName = name => name === "Диррот" ? "Дариус" : name;
+const legacyToCatalogName = name => name;
 
 test("legacy baseline exactly matches the current 32 heroes and their order", () => {
   assert.equal(heroes.length, 32);
@@ -67,7 +67,7 @@ test("Jawhead and Dyrroth have the approved catalog identities", () => {
   assert.equal(jawhead.displayNameRu, "Кусака");
   assert.ok(dyrroth);
   assert.equal(dyrroth.nameEn, "Dyrroth");
-  assert.equal(dyrroth.displayNameRu, "Дариус");
+  assert.equal(dyrroth.displayNameRu, "Диррот");
   assert.equal(dyrroth.localization.status, "user_confirmed");
 });
 
