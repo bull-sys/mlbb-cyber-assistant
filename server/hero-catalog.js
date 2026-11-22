@@ -75,7 +75,7 @@ export const heroCatalog = [
   // Roster expansion: names are seeded; identity/localization and gameplay data remain pending review.
   catalogEntry("aamon", "Aamon", "Аамон", {
     identityStatus: "pending_review",
-    localizationStatus: "pending_review"
+    localizationStatus: "pending_review",
     roleValues: ["Assassin"],
     roleStatus: "verified",
     primaryLane: "Jungle",
@@ -94,7 +94,7 @@ export const heroCatalog = [
   }),
   catalogEntry("akai", "Akai", "Акай", {
     identityStatus: "pending_review",
-    localizationStatus: "pending_review"
+    localizationStatus: "pending_review",
     roleValues: ["Tank"],
     roleStatus: "verified",
     primaryLane: "Roam",
@@ -113,7 +113,7 @@ export const heroCatalog = [
   }),
   catalogEntry("aldous", "Aldous", "Олдос", {
     identityStatus: "pending_review",
-    localizationStatus: "pending_review"
+    localizationStatus: "pending_review",
     roleValues: ["Fighter"],
     roleStatus: "verified",
     primaryLane: "EXP Lane",
@@ -132,7 +132,7 @@ export const heroCatalog = [
   }),
   catalogEntry("alpha", "Alpha", "Альфа", {
     identityStatus: "pending_review",
-    localizationStatus: "pending_review"
+    localizationStatus: "pending_review",
     roleValues: ["Fighter"],
     roleStatus: "verified",
     primaryLane: "Jungle",
@@ -151,7 +151,7 @@ export const heroCatalog = [
   }),
   catalogEntry("alucard", "Alucard", "Алукард", {
     identityStatus: "pending_review",
-    localizationStatus: "pending_review"
+    localizationStatus: "pending_review",
     roleValues: ["Fighter", "Assassin"],
     roleStatus: "verified",
     primaryLane: "Jungle",
@@ -170,7 +170,7 @@ export const heroCatalog = [
   }),
   catalogEntry("argus", "Argus", "Аргус", {
     identityStatus: "pending_review",
-    localizationStatus: "pending_review"
+    localizationStatus: "pending_review",
     roleValues: ["Fighter"],
     roleStatus: "verified",
     primaryLane: "EXP Lane",
@@ -189,7 +189,7 @@ export const heroCatalog = [
   }),
   catalogEntry("arlott", "Arlott", "Арлотт", {
     identityStatus: "pending_review",
-    localizationStatus: "pending_review"
+    localizationStatus: "pending_review",
     roleValues: ["Fighter", "Assassin"],
     roleStatus: "verified",
     primaryLane: "EXP Lane",
@@ -208,7 +208,7 @@ export const heroCatalog = [
   }),
   catalogEntry("aulus", "Aulus", "Аулус", {
     identityStatus: "pending_review",
-    localizationStatus: "pending_review"
+    localizationStatus: "pending_review",
     roleValues: ["Fighter"],
     roleStatus: "verified",
     primaryLane: "Jungle",
@@ -227,7 +227,7 @@ export const heroCatalog = [
   }),
   catalogEntry("aurora", "Aurora", "Аврора", {
     identityStatus: "pending_review",
-    localizationStatus: "pending_review"
+    localizationStatus: "pending_review",
     roleValues: ["Mage"],
     roleStatus: "verified",
     primaryLane: "Mid Lane",
@@ -246,7 +246,7 @@ export const heroCatalog = [
   }),
   catalogEntry("badang", "Badang", "Баданг", {
     identityStatus: "pending_review",
-    localizationStatus: "pending_review"
+    localizationStatus: "pending_review",
     roleValues: ["Fighter"],
     roleStatus: "verified",
     primaryLane: "Roam",
@@ -265,7 +265,7 @@ export const heroCatalog = [
   }),
   catalogEntry("balmond", "Balmond", "Балмонд", {
     identityStatus: "pending_review",
-    localizationStatus: "pending_review"
+    localizationStatus: "pending_review",
     roleValues: ["Fighter"],
     roleStatus: "verified",
     primaryLane: "Jungle",
@@ -284,7 +284,7 @@ export const heroCatalog = [
   }),
   catalogEntry("bane", "Bane", "Бэйн", {
     identityStatus: "pending_review",
-    localizationStatus: "pending_review"
+    localizationStatus: "pending_review",
     roleValues: ["Fighter", "Mage"],
     roleStatus: "verified",
     primaryLane: "Jungle",
@@ -303,7 +303,7 @@ export const heroCatalog = [
   }),
   catalogEntry("barats", "Barats", "Баратс", {
     identityStatus: "pending_review",
-    localizationStatus: "pending_review"
+    localizationStatus: "pending_review",
     roleValues: ["Tank", "Fighter"],
     roleStatus: "verified",
     primaryLane: "Jungle",
@@ -322,7 +322,7 @@ export const heroCatalog = [
   }),
   catalogEntry("baxia", "Baxia", "Баксия", {
     identityStatus: "pending_review",
-    localizationStatus: "pending_review"
+    localizationStatus: "pending_review",
     roleValues: ["Tank"],
     roleStatus: "verified",
     primaryLane: "Jungle",
@@ -341,7 +341,7 @@ export const heroCatalog = [
   }),
   catalogEntry("beatrix", "Beatrix", "Беатрис", {
     identityStatus: "pending_review",
-    localizationStatus: "pending_review"
+    localizationStatus: "pending_review",
     roleValues: ["Marksman"],
     roleStatus: "verified",
     primaryLane: "Gold Lane",
@@ -360,7 +360,7 @@ export const heroCatalog = [
   }),
   catalogEntry("belerick", "Belerick", "Белерик", {
     identityStatus: "pending_review",
-    localizationStatus: "pending_review"
+    localizationStatus: "pending_review",
     roleValues: ["Tank"],
     roleStatus: "verified",
     primaryLane: "Roam",
@@ -379,7 +379,7 @@ export const heroCatalog = [
   }),
   catalogEntry("benedetta", "Benedetta", "Бенедетта", {
     identityStatus: "pending_review",
-    localizationStatus: "pending_review"
+    localizationStatus: "pending_review",
     roleValues: ["Assassin", "Fighter"],
     roleStatus: "verified",
     primaryLane: "EXP Lane",
@@ -398,7 +398,7 @@ export const heroCatalog = [
   }),
   catalogEntry("brody", "Brody", "Броди", {
     identityStatus: "pending_review",
-    localizationStatus: "pending_review"
+    localizationStatus: "pending_review",
     roleValues: ["Marksman"],
     roleStatus: "verified",
     primaryLane: "Gold Lane",
@@ -417,7 +417,7 @@ export const heroCatalog = [
   }),
   catalogEntry("carmilla", "Carmilla", "Кармилла", {
     identityStatus: "pending_review",
-    localizationStatus: "pending_review"
+    localizationStatus: "pending_review",
     roleValues: ["Support", "Tank"],
     roleStatus: "verified",
     primaryLane: "Roam",
@@ -436,7 +436,7 @@ export const heroCatalog = [
   }),
   catalogEntry("cecilion", "Cecilion", "Сесилион", {
     identityStatus: "pending_review",
-    localizationStatus: "pending_review"
+    localizationStatus: "pending_review",
     roleValues: ["Mage"],
     roleStatus: "verified",
     primaryLane: "Mid Lane",
