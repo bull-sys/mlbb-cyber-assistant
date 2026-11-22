@@ -47,7 +47,7 @@ export const heroCatalog = [
   catalogEntry("granger", "Granger", "Грейнджер"),
 
   catalogEntry("terizla", "Terizla", "Теризла"),
-  catalogEntry("dyrroth", "Dyrroth", "Дариус", {
+  catalogEntry("dyrroth", "Dyrroth", "Диррот", {
     identityStatus: "user_confirmed",
     localizationStatus: "user_confirmed"
   }),
