@@ -44,7 +44,7 @@ test("hero catalog contains the 133-name roster without duplicate IDs", () => {
   assert.equal(heroCatalog.find(hero => hero.id === "hirara")?.nameEn, "Hirara");
   assert.equal(heroCatalog.find(hero => hero.id === "marcel")?.nameEn, "Marcel");
   assert.equal(heroCatalog.find(hero => hero.id === "popol-and-kupa")?.nameEn, "Popol and Kupa");
-  assert.equal(heroCatalog.find(hero => hero.id === "hirara")?.tacticalProfile.status, "missing");
+  assert.equal(heroCatalog.find(hero => hero.id === "hirara")?.tacticalProfile.status, "partial");
 });
 
 test("first 20 researched heroes include cross-source role and lane evidence", () => {
