@@ -1,4 +1,5 @@
 export function normalizeRegistration(body = {}) {
+  if (!body || typeof body !== "object" || Array.isArray(body)) body = {};
   const email = String(body.email ?? "").trim().toLowerCase();
   const password = String(body.password ?? "");
   const nickname = String(body.nickname ?? "").trim();
