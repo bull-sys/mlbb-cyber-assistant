@@ -61,7 +61,7 @@ function restoreDraft(){
  const saved=readLocalDraft();
  if(!saved)return;
  try{applyDraftState(saved);setDraftStatus("Черновик восстановлен с этого устройства")}
- catch{try{localStorage.removeItem(DRAFT_STORAGE_KEY)}catch{}}
+ catch{try{localStorage.removeItem(draftStorageKey)}catch{}}
 }
 async function syncDraftState(){
  if(!token)return;
@@ -73,7 +73,7 @@ async function syncDraftState(){
   const local=readLocalDraft();
   if(remote.state&&(!local||Number(remote.state.savedAt)>Number(local.savedAt))){
    applyDraftState(remote.state);
-   localStorage.setItem(DRAFT_STORAGE_KEY,JSON.stringify(remote.state));
+   localStorage.setItem(draftStorageKey,JSON.stringify(remote.state));
    setDraftStatus("✓ Более свежий черновик восстановлен с сервера");
   }else if(local&&(!remote.state||Number(local.savedAt)>Number(remote.state.savedAt))){
    await $api("/draft-state",{method:"PUT",body:JSON.stringify({state:local})});
@@ -86,7 +86,7 @@ async function syncDraftState(){
  }catch(error){setDraftStatus("Серверная синхронизация отложена; локальная копия сохранена")}
  finally{draftSyncInFlight=false;if(draftSyncAgain){draftSyncAgain=false;clearTimeout(draftSyncTimer);draftSyncTimer=setTimeout(syncDraftState,250)}}
 }
-function restoreDraft(){const saved=readLocalDraft();if(!saved)return;try{applyDraftState(saved);setDraftStatus("Черновик восстановлен с этого устройства")}catch{try{localStorage.removeItem(DRAFT_STORAGE_KEY)}catch{}}}
+function restoreDraft(){const saved=readLocalDraft();if(!saved)return;try{applyDraftState(saved);setDraftStatus("Черновик восстановлен с этого устройства")}catch{try{localStorage.removeItem(draftStorageKey)}catch{}}}
 function addHero(side){let id=side==="enemies"?"enemyPick":"allyPick",arr=side==="enemies"?enemies:allies,v=$(id).value;if(!v)return;if(arr.length>=5)return toast("Максимум 5 героев");if(arr.includes(v))return toast("Уже добавлен");arr.push(v);drawTeams();saveDraft()}
 $("addEnemy").onclick=()=>addHero("enemies");$("addAlly").onclick=()=>addHero("allies");
 document.addEventListener("click",e=>{let b=e.target.closest("[data-side]");if(b){(b.dataset.side==="enemies"?enemies:allies).splice(+b.dataset.i,1);drawTeams();saveDraft()}});
