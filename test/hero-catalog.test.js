@@ -289,3 +289,20 @@ test("Faramis, Fredrinn, Gatotkaca, Gloo and Gord have verified catalog identity
     assert.ok(hero.research.rankedMetaSources.length >= 2);
   }
 });
+
+
+test("Grock, Guinevere, Gusion, Harith and Harley have verified catalog identity and sourced roles", () => {
+  for (const id of ["grock", "guinevere", "gusion", "harith", "harley"]) {
+    const hero = heroCatalog.find(item => item.id === id);
+    assert.ok(hero, id);
+    assert.equal(hero.identity.status, "source_verified");
+    assert.equal(hero.localization.status, "pending_review");
+    assert.equal(hero.role.status, "verified");
+    assert.equal(hero.lanes.status, "verified");
+    assert.equal(hero.tacticalProfile.status, "partial");
+    assert.equal(hero.research.checkedAt, "2026-11-22");
+    assert.ok(hero.research.roleAndLaneSources.length >= 3);
+    assert.ok(hero.research.mechanicsSources.length >= 2);
+    assert.ok(hero.research.rankedMetaSources.length >= 2);
+  }
+});
