@@ -9,10 +9,10 @@ Live patch reference: 2.2.23
 |---|---:|---|
 | Hero catalog entries | 133 / 133 current catalog entries | Names and IDs are available to the encyclopedia/catalog UI. This is not yet an independently confirmed official-client roster snapshot. |
 | Unique catalog IDs | 133 / 133 | No duplicate IDs after the Fanny catalog-entry correction. |
-| Role verified | 50 / 133 | Role labels have cross-source evidence. |
-| Primary lane verified | 48 / 133 | Primary lane has cross-source evidence. |
-| Tactical profile records | 12 / 133 | Profile records are linked to the catalog; one remains a placeholder without researched mechanics. |
-| Substantive partial tactical profiles | 11 / 133 | Hero-specific mechanics, strengths, weaknesses, item notes and team-fight guidance have been researched. |
+| Role verified | 54 / 133 | Role labels have cross-source evidence. |
+| Primary lane verified | 52 / 133 | Primary lane has cross-source evidence. |
+| Tactical profile records | 17 / 133 | Profile records are linked to the catalog; one remains a placeholder without researched mechanics. |
+| Substantive partial tactical profiles | 16 / 133 | Hero-specific mechanics, strengths, weaknesses, item notes and team-fight guidance have been researched. |
 | Tactical profiles marked complete | 0 / 133 | Profiles remain partial until current-patch and competitive evidence is sufficiently reviewed. |
 
 ## Tactical profile coverage
@@ -29,8 +29,13 @@ Current hero-specific profiles:
 - Karrie (Кэрри)
 - Bruno (Бруно)
 - Terizla (Теризла)
+- Masha (Маша)
+- Marcel (Марсель)
+- Argus (Аргус)
+- Khufra (Хуфра)
+- Diggie (Дигги)
 
-Saber remains a legacy placeholder without researched mechanics and is not counted among the 11 substantive profiles.
+Saber remains a legacy placeholder without researched mechanics and is not counted among the 16 substantive profiles.
 
 A profile being present does not mean all matchups, synergies, professional VODs or current-patch build variants are fully verified. Empty matchup/synergy arrays are intentional when evidence is insufficient; do not fill them with guesses.
 
@@ -53,6 +58,6 @@ A hero should move from catalog-only to tactical-profile coverage only after:
 
 ## Next work
 
-Expand tactical coverage in small reviewable batches. The latest batch added researched partial profiles for Suyou, Jawhead (Кусака), Karrie, Bruno and Terizla, and cross-source role/lane evidence for those five entries. Keep each batch isolated in its own commits, run the full test suite, and do not mark a profile complete merely to increase the coverage percentage.
+Expand tactical coverage in small reviewable batches. The latest batch added researched partial profiles for Masha, Marcel, Argus, Khufra and Diggie, and cross-source role/lane evidence for the four entries whose role/lane fields were not already verified. The preceding batch added Suyou, Jawhead (Кусака), Karrie, Bruno and Terizla. Keep each batch isolated in its own commits, run the full test suite, and do not mark a profile complete merely to increase the coverage percentage.
 
 The catalog roster status remains `incomplete` until it has been checked against an official-client roster snapshot. The current 133-entry count is a useful working baseline, not a claim of independent official verification.
