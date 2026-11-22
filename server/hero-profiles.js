@@ -568,7 +568,7 @@ export const heroProfiles = [
       reviewedAt: null
     },
     confidence: "partial"
-  }
+  },
   {
     id: "suyou",
     names: { ru: "Су Ё", en: "Suyou", aliases: [] },
