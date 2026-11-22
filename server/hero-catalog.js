@@ -935,7 +935,7 @@ export const heroCatalog = [
     localizationStatus: "pending_review"
   }),
   catalogEntry("saber", "Saber", "Сабер", {
-    tacticalProfileStatus: "partial",
+    tacticalProfileStatus: "missing",
     identityStatus: "pending_review",
     localizationStatus: "pending_review"
   }),
