@@ -315,23 +315,9 @@ export const heroCatalog = [
     },
   }),
   catalogEntry("argus", "Argus", "Аргус", {
-    identityStatus: "pending_review",
-    localizationStatus: "pending_review",
-    roleValues: ["Fighter"],
-    roleStatus: "verified",
-    primaryLane: "EXP Lane",
-    flexibleLanes: [],
-    laneStatus: "verified",
-    research: {
-      checkedAt: "2026-11-22",
-      roleAndLaneSources: [
-        "https://www.mlbbguides.com/heroes/",
-        "https://mlbb-stats.com/heroes",
-        "https://mlbbdex.com/en/heroes"
-      ],
-      competitiveReviewStatus: "pending",
-      method: "Role and lane tags cross-checked across independent hero databases; pro-draft usage and player VODs are reviewed separately before tactical recommendations are marked complete."
-    },
+    roleValues: ["Fighter"], roleStatus: "verified",
+    primaryLane: "EXP Lane", laneStatus: "verified", tacticalProfileStatus: "partial",
+    research: { checkedAt: "2026-11-22", roleAndLaneSources: ["https://mlbbhub.com/ru/heroes/argus", "https://mlbb-knowledge.vercel.app/heroes/45"], mechanicsSources: ["https://liquipedia.net/mobilelegends/Argus", "https://mlbb-knowledge.vercel.app/heroes/45"], rankedMetaSources: ["https://mlbbhub.com/ru/heroes/argus", "https://mlbbdex.com/en/statistics"], competitiveReviewStatus: "pending", method: "Fighter/EXP role and current passive/skill mechanics cross-checked across independent databases; pro VOD and draft review remain pending." }
   }),
   catalogEntry("arlott", "Arlott", "Арлотт", {
     identityStatus: "pending_review",
@@ -1022,8 +1008,9 @@ export const heroCatalog = [
     localizationStatus: "pending_review"
   }),
   catalogEntry("khufra", "Khufra", "Хуфра", {
-    identityStatus: "pending_review",
-    localizationStatus: "pending_review"
+    roleValues: ["Tank"], roleStatus: "verified",
+    primaryLane: "Roam", laneStatus: "verified", tacticalProfileStatus: "partial",
+    research: { checkedAt: "2026-11-22", roleAndLaneSources: ["https://mlbbhub.com/ru/heroes/khufra", "https://mlbb.io/en/hero/khufra"], mechanicsSources: ["https://liquipedia.net/mobilelegends/Khufra", "https://metammo.com/mobile-legends-guide/heroes/khufra"], rankedMetaSources: ["https://mlbbhub.com/ru/heroes/khufra", "https://mlbbdex.com/en/statistics"], competitiveReviewStatus: "pending", method: "Tank/Roam role, anti-dash function and skill mechanics cross-checked across independent references; pro VOD review remains pending." }
   }),
   catalogEntry("kimmy", "Kimmy", "Кимми", {
     identityStatus: "pending_review",
@@ -1062,16 +1049,18 @@ export const heroCatalog = [
     localizationStatus: "pending_review"
   }),
   catalogEntry("marcel", "Marcel", "Марсель", {
-    identityStatus: "pending_review",
-    localizationStatus: "pending_review"
+    roleValues: ["Support"], roleStatus: "verified",
+    primaryLane: "Roam", laneStatus: "verified", tacticalProfileStatus: "partial",
+    research: { checkedAt: "2026-11-22", roleAndLaneSources: ["https://www.mobilelegends.com/en/hero/28", "https://mlbbhub.com/ru/heroes/marcel"], mechanicsSources: ["https://www.mobilelegends.com/en/hero/28", "https://liquipedia.net/mobilelegends/Marcel", "https://mlbb.io/en/hero/marcel"], rankedMetaSources: ["https://mlbbhub.com/ru/heroes/marcel", "https://mlbbdex.com/en/statistics"], competitiveReviewStatus: "pending", method: "Official Moonton hero description and two independent databases used for mechanics; support/roam classification cross-checked. Pro VOD review remains pending." }
   }),
   catalogEntry("martis", "Martis", "Мартис", {
     identityStatus: "pending_review",
     localizationStatus: "pending_review"
   }),
   catalogEntry("masha", "Masha", "Маша", {
-    identityStatus: "pending_review",
-    localizationStatus: "pending_review"
+    roleValues: ["Fighter", "Tank"], roleStatus: "verified",
+    primaryLane: "EXP Lane", laneStatus: "verified", tacticalProfileStatus: "partial",
+    research: { checkedAt: "2026-11-22", roleAndLaneSources: ["https://mlbbhub.com/ru/heroes/masha", "https://mlbb.io/en/hero/masha"], mechanicsSources: ["https://liquipedia.net/mobilelegends/Patch_2.2.16", "https://www.youtube.com/watch?v=glz0ubRP59g"], rankedMetaSources: ["https://mlbbhub.com/ru/heroes/masha", "https://mlbbdex.com/en/statistics"], competitiveReviewStatus: "pending", method: "Post-2.2.16 Masha rework and EXP Fighter/Tank role cross-checked against patch notes, official spotlight and independent hero references. Ranked stats kept separate from pro evidence." }
   }),
   catalogEntry("mathilda", "Mathilda", "Матильда", {
     identityStatus: "pending_review",
@@ -1115,7 +1104,11 @@ export const heroCatalog = [
   }),
   catalogEntry("alice", "Alice", "Алиса"),
   catalogEntry("angela", "Angela", "Ангела"),
-  catalogEntry("diggie", "Diggie", "Дигги"),
+  catalogEntry("diggie", "Diggie", "Дигги", {
+    roleValues: ["Support"], roleStatus: "verified",
+    primaryLane: "Roam", laneStatus: "verified", tacticalProfileStatus: "partial",
+    research: { checkedAt: "2026-11-22", roleAndLaneSources: ["https://mlbbhub.com/ru/heroes/diggie", "https://mlbb-knowledge.vercel.app/heroes/48"], mechanicsSources: ["https://mlbb-knowledge.vercel.app/heroes/48", "https://www.mlbbguides.com/heroes/diggie/skills/"], rankedMetaSources: ["https://mlbbhub.com/ru/heroes/diggie", "https://mlbb.io/en/hero/diggie"], competitiveReviewStatus: "pending", method: "Support/Roam classification and anti-CC skill kit cross-checked across independent references; professional draft/VOD review remains pending." }
+  }),
   catalogEntry("estes", "Estes", "Эстес"),
   catalogEntry("minotaur", "Minotaur", "Минотавр"),
   catalogEntry("valir", "Valir", "Валир"),
