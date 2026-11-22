@@ -144,7 +144,34 @@ export const heroCatalog = [
       method: "Assassin/Jungle identity cross-checked across MLBBHub, MLBB.io and MLBBdex. Skill mechanics compared across MLBB Guides and MLBB Analytics. Ranked aggregates are kept separate from tournament samples; current patch-specific professional VOD review remains pending."
     }
   }),
-  catalogEntry("nolan", "Nolan", "Нолан"),
+  catalogEntry("nolan", "Nolan", "Нолан", {
+    roleValues: ["Assassin"],
+    roleStatus: "verified",
+    primaryLane: "Jungle",
+    flexibleLanes: [],
+    laneStatus: "verified",
+    tacticalProfileStatus: "partial",
+    research: {
+      checkedAt: "2026-11-22",
+      roleAndLaneSources: [
+        "https://mlbb.io/en/hero/nolan",
+        "https://mlbbhub.com/heroes/nolan",
+        "https://mlbbdex.com/en/heroes/nolan"
+      ],
+      mechanicsSources: [
+        "https://mlbb.io/en/hero/nolan",
+        "https://metammo.com/mobile-legends-guide/heroes/nolan",
+        "https://mlbbdex.com/en/heroes/nolan"
+      ],
+      rankedMetaSources: [
+        "https://mlbb.io/en/hero/nolan",
+        "https://mlbbhub.com/heroes/nolan",
+        "https://mlbbdex.com/en/heroes/nolan"
+      ],
+      competitiveReviewStatus: "partial",
+      method: "Assassin/Jungle identity and ranked aggregates cross-checked across MLBB.io, MLBBHub and MLBBDex. Rift mechanics compared with METAMMO. Tournament samples are reported separately by competition and region; current patch-specific professional VOD review remains pending."
+    }
+  }),
   catalogEntry("suyou", "Suyou", "Су Ё"),
   catalogEntry("jawhead", "Jawhead", "Кусака", {
     identityStatus: "user_confirmed",
