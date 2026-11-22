@@ -174,6 +174,7 @@ export const heroCatalog = [
   }),
   catalogEntry("suyou", "Suyou", "Су Ё"),
   catalogEntry("jawhead", "Jawhead", "Кусака", {
+    tacticalProfileStatus: "partial",
     identityStatus: "user_confirmed",
     localizationStatus: "user_confirmed"
   }),
@@ -1130,6 +1131,7 @@ export const heroCatalog = [
     localizationStatus: "pending_review"
   }),
   catalogEntry("saber", "Saber", "Сабер", {
+    tacticalProfileStatus: "partial",
     identityStatus: "pending_review",
     localizationStatus: "pending_review"
   }),
