@@ -4,6 +4,7 @@ import { isValidDraftRequest } from "../server/draft-validation.js";
 
 const roles = ["Лес", "Золото", "Опыт", "Мид", "Роум"];
 const isHeroName = name => ["Эудора", "Тигрил", "Линг", "Ангела", "Хелкарт"].includes(name);
+const isCatalogHeroId = id => ["helcurt", "jawhead"].includes(id);
 const valid = {
   lane: "Лес",
   enemies: ["Эудора", "Тигрил"],
@@ -17,6 +18,22 @@ test("validates a complete draft payload", () => {
 
 test("allows omitted allies and selected hero for a minimal guest draft", () => {
   assert.equal(isValidDraftRequest({ lane: "Мид", enemies: ["Эудора"] }, roles, isHeroName), true);
+});
+
+test("accepts known catalog IDs alongside legacy hero names", () => {
+  assert.equal(isValidDraftRequest({
+    lane: "Лес",
+    enemies: ["helcurt", "Эудора"],
+    allies: ["jawhead"],
+    myHero: "Хелкарт"
+  }, roles, isHeroName, isCatalogHeroId), true);
+});
+
+test("rejects unknown catalog IDs", () => {
+  assert.equal(isValidDraftRequest({
+    ...valid,
+    enemies: ["not-a-hero"]
+  }, roles, isHeroName, isCatalogHeroId), false);
 });
 
 test("rejects malformed payloads, lanes, and unknown hero names", () => {
@@ -38,5 +55,5 @@ test("rejects non-array allies", () => {
 test("draft route uses shared validation before analysis", async () => {
   const { readFile } = await import("node:fs/promises");
   const source = await readFile(new URL("../server/index.js", import.meta.url), "utf8");
-  assert.match(source, /if\(!isValidDraftRequest\(b,roles,isLegacyHeroName\)\)/);
+  assert.match(source, /if\(!isValidDraftRequest\(b,roles,isLegacyHeroName\)/);
 });
