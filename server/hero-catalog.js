@@ -498,6 +498,7 @@ export const heroCatalog = [
     primaryLane: "Roam",
     flexibleLanes: [],
     laneStatus: "verified",
+    tacticalProfileStatus: "partial",
     research: {
       checkedAt: "2026-11-22",
       roleAndLaneSources: ["https://mlbb-knowledge.vercel.app/heroes/70","https://mlbb.io/en/hero/belerick","https://mlbbdex.com/en/heroes/belerick"],
