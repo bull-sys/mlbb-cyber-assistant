@@ -503,59 +503,20 @@ export const heroCatalog = [
     tacticalProfileStatus: "partial",
     research: { checkedAt: "2026-11-22", roleAndLaneSources: ["https://mlbbhub.com/ru/heroes/gord", "https://mlbb.io/en/hero/gord", "https://www.mlbbguides.com/heroes/gord/"], mechanicsSources: ["https://mlbbanalytics.com/heroes?hero=Gord", "https://liquipedia.net/mobilelegends/Gord", "https://mlbb.io/en/hero/gord"], rankedMetaSources: ["https://mlbbhub.com/ru/heroes/gord", "https://mlbb.io/en/hero/gord"], competitiveReviewStatus: "pending", method: "Mage/Mid Lane cross-checked across MLBBHub, MLBB.io and MLBB Guides. Mystic Favor trigger, Mystic Projectile stun, Mystic Injunction area damage and steerable Mystic Gush beam reviewed. Current ranked aggregates are kept separate from MSC/MPL tournament samples; individual VOD review pending." }
   }),  catalogEntry("grock", "Grock", "Грок", {
-    identityStatus: "pending_review",
-    localizationStatus: "pending_review",
-    roleValues: ["Tank"],
-    roleStatus: "verified",
-    primaryLane: "Roam",
-    flexibleLanes: [],
-    laneStatus: "verified",
-    research: {
-      checkedAt: "2026-11-22",
-      roleAndLaneSources: [
-        "https://www.mlbbguides.com/heroes/",
-        "https://mlbb-stats.com/heroes",
-        "https://mlbb.io/en/heroes"
-      ],
-      competitiveReviewStatus: "pending",
-      method: "Role tags cross-checked against MLBB Guides and MLBB Stats; lane placement cross-checked against MLBB Stats and MLBB.io. Professional tournament usage is reviewed separately from ranked lane prevalence."
-    },
+    identityStatus: "source_verified", localizationStatus: "pending_review",
+    roleValues: ["Tank", "Fighter"], roleStatus: "verified", primaryLane: "Roam", laneStatus: "verified",
+    tacticalProfileStatus: "partial",
+    research: { checkedAt: "2026-11-22", roleAndLaneSources: ["https://mlbb-knowledge.vercel.app/heroes/44", "https://mlbbhub.com/ru/heroes/grock", "https://mlbb.io/en/hero/grock"], mechanicsSources: ["https://mlbb-knowledge.vercel.app/heroes/44", "https://liquipedia.net/mobilelegends/Grock"], rankedMetaSources: ["https://mlbbhub.com/ru/heroes/grock", "https://mlbb.io/en/hero/grock"], competitiveReviewStatus: "pending", method: "Tank/Fighter and Roam role cross-checked across MLBB Knowledge, MLBBHub and MLBB.io. Bastion of Stone, wall interaction, Mighty Swing, Earthen Rampart and Tectonic Charge reviewed. Ranked data kept separate from professional tournament samples; current-patch VOD review pending." }
   }),  catalogEntry("guinevere", "Guinevere", "Гвиневра", {
-    identityStatus: "pending_review",
-    localizationStatus: "pending_review",
-    roleValues: ["Fighter"],
-    roleStatus: "verified",
-    primaryLane: "EXP Lane",
-    flexibleLanes: [],
-    laneStatus: "verified",
-    research: {
-      checkedAt: "2026-11-22",
-      roleAndLaneSources: [
-        "https://www.mlbbguides.com/heroes/",
-        "https://mlbb-stats.com/heroes",
-        "https://mlbb.io/en/heroes"
-      ],
-      competitiveReviewStatus: "pending",
-      method: "Role tags cross-checked against MLBB Guides and MLBB Stats; lane placement cross-checked against MLBB Stats and MLBB.io. Professional tournament usage is reviewed separately from ranked lane prevalence."
-    },
+    identityStatus: "source_verified", localizationStatus: "pending_review",
+    roleValues: ["Fighter"], roleStatus: "verified", primaryLane: "EXP Lane", flexibleLanes: ["Jungle", "Roam"], laneStatus: "verified",
+    tacticalProfileStatus: "partial",
+    research: { checkedAt: "2026-11-22", roleAndLaneSources: ["https://mlbb-knowledge.vercel.app/heroes/80", "https://mlbbhub.com/heroes/guinevere", "https://mlbb.io/en/hero/guinevere"], mechanicsSources: ["https://mlbb-knowledge.vercel.app/heroes/80", "https://liquipedia.net/mobilelegends/Guinevere"], rankedMetaSources: ["https://mlbbhub.com/heroes/guinevere", "https://mlbb.io/en/hero/guinevere"], competitiveReviewStatus: "pending", method: "Fighter/EXP Lane with Jungle and Roam flexibility cross-checked across MLBB Knowledge and MLBBHub. Super Magic marks, Energy Wave cooldown interaction, Spatial Migration second cast and Violet Requiem airborne chain reviewed. Ranked and pro evidence kept separate; current-patch VOD review pending." }
   }),  catalogEntry("gusion", "Gusion", "Госсен", {
-    identityStatus: "pending_review",
-    localizationStatus: "pending_review",
-    roleValues: ["Assassin"],
-    roleStatus: "verified",
-    primaryLane: "Jungle",
-    flexibleLanes: ["Mid Lane"],
-    laneStatus: "verified",
-    research: {
-      checkedAt: "2026-11-22",
-      roleAndLaneSources: [
-        "https://www.mlbbguides.com/heroes/",
-        "https://mlbb-stats.com/heroes",
-        "https://mlbb.io/en/heroes"
-      ],
-      competitiveReviewStatus: "pending",
-      method: "Role tags cross-checked against MLBB Guides and MLBB Stats; lane placement cross-checked against MLBB Stats and MLBB.io. Professional tournament usage is reviewed separately from ranked lane prevalence."
-    },
+    identityStatus: "source_verified", localizationStatus: "pending_review",
+    roleValues: ["Assassin"], roleStatus: "verified", primaryLane: "Jungle", flexibleLanes: ["Mid Lane"], laneStatus: "verified",
+    tacticalProfileStatus: "partial",
+    research: { checkedAt: "2026-11-22", roleAndLaneSources: ["https://mlbb-knowledge.vercel.app/heroes/56", "https://mlbbdex.com/en/heroes/gusion", "https://mobilelegends.com/hero/detail?channelid=2678792&heroid=56"], mechanicsSources: ["https://mlbb-knowledge.vercel.app/heroes/56", "https://mlbbdex.com/en/heroes/gusion"], rankedMetaSources: ["https://mlbbdex.com/en/heroes/gusion", "https://mobilelegends.com/hero/detail?channelid=2678792&heroid=56"], competitiveReviewStatus: "pending", method: "Assassin/Jungle with Mid flexibility cross-checked across MLBB Knowledge, MLBBDex and the official hero page. Dagger Specialist runes, Sword Spike mark/recast, Shadowblade Slaughter recall and Incandescence reset reviewed. Mana and combo execution are recorded as constraints; current-patch pro VOD review pending." }
   }),  catalogEntry("hanabi", "Hanabi", "Ханаби", {
     identityStatus: "pending_review",
     localizationStatus: "pending_review",
@@ -572,12 +533,16 @@ export const heroCatalog = [
       method: "Role tags cross-checked against MLBB Guides and MLBB Stats; lane placement cross-checked against MLBB Stats and MLBB.io. Professional tournament usage is reviewed separately from ranked lane prevalence."
     },
   }),  catalogEntry("harith", "Harith", "Харит", {
-    identityStatus: "pending_review",
-    localizationStatus: "pending_review"
+    identityStatus: "source_verified", localizationStatus: "pending_review",
+    roleValues: ["Mage"], roleStatus: "verified", primaryLane: "Gold Lane", flexibleLanes: ["Jungle"], laneStatus: "verified",
+    tacticalProfileStatus: "partial",
+    research: { checkedAt: "2026-11-22", roleAndLaneSources: ["https://mlbb-knowledge.vercel.app/heroes/73", "https://mlbbhub.com/ru/heroes/harith", "https://mlbbdex.com/en/heroes/harith"], mechanicsSources: ["https://mlbb-knowledge.vercel.app/heroes/73", "https://liquipedia.net/mobilelegends/Harith"], rankedMetaSources: ["https://mlbbhub.com/ru/heroes/harith", "https://mlbbdex.com/en/heroes/harith"], competitiveReviewStatus: "pending", method: "Mage/Gold Lane with Jungle flexibility cross-checked across MLBB Knowledge, MLBBHub and MLBBDex. Key Insight lifesteal, Synchro Fission collision, Chrono Dash shield/empowered attack and Zaman Force cooldown loop reviewed. Current patch build variants separated by lane; professional VOD review pending." }
   }),
   catalogEntry("harley", "Harley", "Харли", {
-    identityStatus: "pending_review",
-    localizationStatus: "pending_review"
+    identityStatus: "source_verified", localizationStatus: "pending_review",
+    roleValues: ["Assassin", "Mage"], roleStatus: "verified", primaryLane: "Jungle", flexibleLanes: ["Mid Lane"], laneStatus: "verified",
+    tacticalProfileStatus: "partial",
+    research: { checkedAt: "2026-11-22", roleAndLaneSources: ["https://mlbb-knowledge.vercel.app/heroes/42", "https://mlbbhub.com/ru/heroes/harley", "https://mlbb.io/en/hero/harley"], mechanicsSources: ["https://mlbb-knowledge.vercel.app/heroes/42", "https://www.mlbbguides.com/heroes/harley/skills/"], rankedMetaSources: ["https://mlbbhub.com/ru/heroes/harley", "https://mlbb.io/en/hero/harley"], competitiveReviewStatus: "pending", method: "Assassin/Mage and Jungle/Mid usage cross-checked across MLBB Knowledge, MLBBHub and MLBB.io. Magic Master stacks, Poker Trick repeated hits, Space Escape hat return and Deadly Magic delayed detonation reviewed. Ranked sample is separate from professional/VOD review; current-patch VOD review pending." }
   }),
   catalogEntry("hayabusa", "Hayabusa", "Хаябуса", {
     identityStatus: "pending_review",
