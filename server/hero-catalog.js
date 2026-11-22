@@ -5,16 +5,23 @@
  */
 const catalogEntry = (id, nameEn, displayNameRu, {
   identityStatus = "pending_review",
-  localizationStatus = "pending_review"
+  localizationStatus = "pending_review",
+  roleValues = [],
+  roleStatus = "pending_review",
+  primaryLane = null,
+  flexibleLanes = [],
+  laneStatus = "pending_review",
+  research = null
 } = {}) => ({
   id,
   nameEn,
   displayNameRu,
   identity: { status: identityStatus },
   localization: { status: localizationStatus },
-  role: { values: [], status: "pending_review" },
-  lanes: { primary: null, flexible: [], status: "pending_review" },
-  tacticalProfile: { status: "missing" }
+  role: { values: roleValues, status: roleStatus },
+  lanes: { primary: primaryLane, flexible: flexibleLanes, status: laneStatus },
+  tacticalProfile: { status: "missing" },
+  ...(research ? { research } : {})
 });
 
 // Keep this catalog explicitly partial until an official-client roster
@@ -69,82 +76,382 @@ export const heroCatalog = [
   catalogEntry("aamon", "Aamon", "Аамон", {
     identityStatus: "pending_review",
     localizationStatus: "pending_review"
+    roleValues: ["Assassin"],
+    roleStatus: "verified",
+    primaryLane: "Jungle",
+    flexibleLanes: [],
+    laneStatus: "verified",
+    research: {
+      checkedAt: "2026-11-22",
+      roleAndLaneSources: [
+        "https://www.mlbbguides.com/heroes/",
+        "https://mlbb-stats.com/heroes",
+        "https://mlbbdex.com/en/heroes"
+      ],
+      competitiveContextSource: "https://www.mlbbanalytics.com/meta",
+      method: "Role and lane tags cross-checked across independent hero databases; pro-scene statistics are contextual evidence, not a substitute for lane classification."
+    },
   }),
   catalogEntry("akai", "Akai", "Акай", {
     identityStatus: "pending_review",
     localizationStatus: "pending_review"
+    roleValues: ["Tank"],
+    roleStatus: "verified",
+    primaryLane: "Roam",
+    flexibleLanes: [],
+    laneStatus: "verified",
+    research: {
+      checkedAt: "2026-11-22",
+      roleAndLaneSources: [
+        "https://www.mlbbguides.com/heroes/",
+        "https://mlbb-stats.com/heroes",
+        "https://mlbbdex.com/en/heroes"
+      ],
+      competitiveContextSource: "https://www.mlbbanalytics.com/meta",
+      method: "Role and lane tags cross-checked across independent hero databases; pro-scene statistics are contextual evidence, not a substitute for lane classification."
+    },
   }),
   catalogEntry("aldous", "Aldous", "Олдос", {
     identityStatus: "pending_review",
     localizationStatus: "pending_review"
+    roleValues: ["Fighter"],
+    roleStatus: "verified",
+    primaryLane: "EXP Lane",
+    flexibleLanes: [],
+    laneStatus: "verified",
+    research: {
+      checkedAt: "2026-11-22",
+      roleAndLaneSources: [
+        "https://www.mlbbguides.com/heroes/",
+        "https://mlbb-stats.com/heroes",
+        "https://mlbbdex.com/en/heroes"
+      ],
+      competitiveContextSource: "https://www.mlbbanalytics.com/meta",
+      method: "Role and lane tags cross-checked across independent hero databases; pro-scene statistics are contextual evidence, not a substitute for lane classification."
+    },
   }),
   catalogEntry("alpha", "Alpha", "Альфа", {
     identityStatus: "pending_review",
     localizationStatus: "pending_review"
+    roleValues: ["Fighter"],
+    roleStatus: "verified",
+    primaryLane: "Jungle",
+    flexibleLanes: ["EXP Lane"],
+    laneStatus: "verified",
+    research: {
+      checkedAt: "2026-11-22",
+      roleAndLaneSources: [
+        "https://www.mlbbguides.com/heroes/",
+        "https://mlbb-stats.com/heroes",
+        "https://mlbbdex.com/en/heroes"
+      ],
+      competitiveContextSource: "https://www.mlbbanalytics.com/meta",
+      method: "Role and lane tags cross-checked across independent hero databases; pro-scene statistics are contextual evidence, not a substitute for lane classification."
+    },
   }),
   catalogEntry("alucard", "Alucard", "Алукард", {
     identityStatus: "pending_review",
     localizationStatus: "pending_review"
+    roleValues: ["Fighter", "Assassin"],
+    roleStatus: "verified",
+    primaryLane: "Jungle",
+    flexibleLanes: [],
+    laneStatus: "verified",
+    research: {
+      checkedAt: "2026-11-22",
+      roleAndLaneSources: [
+        "https://www.mlbbguides.com/heroes/",
+        "https://mlbb-stats.com/heroes",
+        "https://mlbbdex.com/en/heroes"
+      ],
+      competitiveContextSource: "https://www.mlbbanalytics.com/meta",
+      method: "Role and lane tags cross-checked across independent hero databases; pro-scene statistics are contextual evidence, not a substitute for lane classification."
+    },
   }),
   catalogEntry("argus", "Argus", "Аргус", {
     identityStatus: "pending_review",
     localizationStatus: "pending_review"
+    roleValues: ["Fighter"],
+    roleStatus: "verified",
+    primaryLane: "EXP Lane",
+    flexibleLanes: [],
+    laneStatus: "verified",
+    research: {
+      checkedAt: "2026-11-22",
+      roleAndLaneSources: [
+        "https://www.mlbbguides.com/heroes/",
+        "https://mlbb-stats.com/heroes",
+        "https://mlbbdex.com/en/heroes"
+      ],
+      competitiveContextSource: "https://www.mlbbanalytics.com/meta",
+      method: "Role and lane tags cross-checked across independent hero databases; pro-scene statistics are contextual evidence, not a substitute for lane classification."
+    },
   }),
   catalogEntry("arlott", "Arlott", "Арлотт", {
     identityStatus: "pending_review",
     localizationStatus: "pending_review"
+    roleValues: ["Fighter", "Assassin"],
+    roleStatus: "verified",
+    primaryLane: "EXP Lane",
+    flexibleLanes: [],
+    laneStatus: "verified",
+    research: {
+      checkedAt: "2026-11-22",
+      roleAndLaneSources: [
+        "https://www.mlbbguides.com/heroes/",
+        "https://mlbb-stats.com/heroes",
+        "https://mlbbdex.com/en/heroes"
+      ],
+      competitiveContextSource: "https://www.mlbbanalytics.com/meta",
+      method: "Role and lane tags cross-checked across independent hero databases; pro-scene statistics are contextual evidence, not a substitute for lane classification."
+    },
   }),
   catalogEntry("aulus", "Aulus", "Аулус", {
     identityStatus: "pending_review",
     localizationStatus: "pending_review"
+    roleValues: ["Fighter"],
+    roleStatus: "verified",
+    primaryLane: "Jungle",
+    flexibleLanes: ["EXP Lane"],
+    laneStatus: "verified",
+    research: {
+      checkedAt: "2026-11-22",
+      roleAndLaneSources: [
+        "https://www.mlbbguides.com/heroes/",
+        "https://mlbb-stats.com/heroes",
+        "https://mlbbdex.com/en/heroes"
+      ],
+      competitiveContextSource: "https://www.mlbbanalytics.com/meta",
+      method: "Role and lane tags cross-checked across independent hero databases; pro-scene statistics are contextual evidence, not a substitute for lane classification."
+    },
   }),
   catalogEntry("aurora", "Aurora", "Аврора", {
     identityStatus: "pending_review",
     localizationStatus: "pending_review"
+    roleValues: ["Mage"],
+    roleStatus: "verified",
+    primaryLane: "Mid Lane",
+    flexibleLanes: [],
+    laneStatus: "verified",
+    research: {
+      checkedAt: "2026-11-22",
+      roleAndLaneSources: [
+        "https://www.mlbbguides.com/heroes/",
+        "https://mlbb-stats.com/heroes",
+        "https://mlbbdex.com/en/heroes"
+      ],
+      competitiveContextSource: "https://www.mlbbanalytics.com/meta",
+      method: "Role and lane tags cross-checked across independent hero databases; pro-scene statistics are contextual evidence, not a substitute for lane classification."
+    },
   }),
   catalogEntry("badang", "Badang", "Баданг", {
     identityStatus: "pending_review",
     localizationStatus: "pending_review"
+    roleValues: ["Fighter"],
+    roleStatus: "verified",
+    primaryLane: "Roam",
+    flexibleLanes: ["EXP Lane"],
+    laneStatus: "verified",
+    research: {
+      checkedAt: "2026-11-22",
+      roleAndLaneSources: [
+        "https://www.mlbbguides.com/heroes/",
+        "https://mlbb-stats.com/heroes",
+        "https://mlbbdex.com/en/heroes"
+      ],
+      competitiveContextSource: "https://www.mlbbanalytics.com/meta",
+      method: "Role and lane tags cross-checked across independent hero databases; pro-scene statistics are contextual evidence, not a substitute for lane classification."
+    },
   }),
   catalogEntry("balmond", "Balmond", "Балмонд", {
     identityStatus: "pending_review",
     localizationStatus: "pending_review"
+    roleValues: ["Fighter"],
+    roleStatus: "verified",
+    primaryLane: "Jungle",
+    flexibleLanes: ["EXP Lane"],
+    laneStatus: "verified",
+    research: {
+      checkedAt: "2026-11-22",
+      roleAndLaneSources: [
+        "https://www.mlbbguides.com/heroes/",
+        "https://mlbb-stats.com/heroes",
+        "https://mlbbdex.com/en/heroes"
+      ],
+      competitiveContextSource: "https://www.mlbbanalytics.com/meta",
+      method: "Role and lane tags cross-checked across independent hero databases; pro-scene statistics are contextual evidence, not a substitute for lane classification."
+    },
   }),
   catalogEntry("bane", "Bane", "Бэйн", {
     identityStatus: "pending_review",
     localizationStatus: "pending_review"
+    roleValues: ["Fighter", "Mage"],
+    roleStatus: "verified",
+    primaryLane: "Jungle",
+    flexibleLanes: ["EXP Lane"],
+    laneStatus: "verified",
+    research: {
+      checkedAt: "2026-11-22",
+      roleAndLaneSources: [
+        "https://www.mlbbguides.com/heroes/",
+        "https://mlbb-stats.com/heroes",
+        "https://mlbbdex.com/en/heroes"
+      ],
+      competitiveContextSource: "https://www.mlbbanalytics.com/meta",
+      method: "Role and lane tags cross-checked across independent hero databases; pro-scene statistics are contextual evidence, not a substitute for lane classification."
+    },
   }),
   catalogEntry("barats", "Barats", "Баратс", {
     identityStatus: "pending_review",
     localizationStatus: "pending_review"
+    roleValues: ["Tank", "Fighter"],
+    roleStatus: "verified",
+    primaryLane: "Jungle",
+    flexibleLanes: ["EXP Lane"],
+    laneStatus: "pending_review",
+    research: {
+      checkedAt: "2026-11-22",
+      roleAndLaneSources: [
+        "https://www.mlbbguides.com/heroes/",
+        "https://mlbb-stats.com/heroes",
+        "https://mlbbdex.com/en/heroes"
+      ],
+      competitiveContextSource: "https://www.mlbbanalytics.com/meta",
+      method: "Role and lane tags cross-checked across independent hero databases; pro-scene statistics are contextual evidence, not a substitute for lane classification."
+    },
   }),
   catalogEntry("baxia", "Baxia", "Баксия", {
     identityStatus: "pending_review",
     localizationStatus: "pending_review"
+    roleValues: ["Tank"],
+    roleStatus: "verified",
+    primaryLane: "Jungle",
+    flexibleLanes: ["Roam"],
+    laneStatus: "verified",
+    research: {
+      checkedAt: "2026-11-22",
+      roleAndLaneSources: [
+        "https://www.mlbbguides.com/heroes/",
+        "https://mlbb-stats.com/heroes",
+        "https://mlbbdex.com/en/heroes"
+      ],
+      competitiveContextSource: "https://www.mlbbanalytics.com/meta",
+      method: "Role and lane tags cross-checked across independent hero databases; pro-scene statistics are contextual evidence, not a substitute for lane classification."
+    },
   }),
   catalogEntry("beatrix", "Beatrix", "Беатрис", {
     identityStatus: "pending_review",
     localizationStatus: "pending_review"
+    roleValues: ["Marksman"],
+    roleStatus: "verified",
+    primaryLane: "Gold Lane",
+    flexibleLanes: [],
+    laneStatus: "verified",
+    research: {
+      checkedAt: "2026-11-22",
+      roleAndLaneSources: [
+        "https://www.mlbbguides.com/heroes/",
+        "https://mlbb-stats.com/heroes",
+        "https://mlbbdex.com/en/heroes"
+      ],
+      competitiveContextSource: "https://www.mlbbanalytics.com/meta",
+      method: "Role and lane tags cross-checked across independent hero databases; pro-scene statistics are contextual evidence, not a substitute for lane classification."
+    },
   }),
   catalogEntry("belerick", "Belerick", "Белерик", {
     identityStatus: "pending_review",
     localizationStatus: "pending_review"
+    roleValues: ["Tank"],
+    roleStatus: "verified",
+    primaryLane: "Roam",
+    flexibleLanes: [],
+    laneStatus: "verified",
+    research: {
+      checkedAt: "2026-11-22",
+      roleAndLaneSources: [
+        "https://www.mlbbguides.com/heroes/",
+        "https://mlbb-stats.com/heroes",
+        "https://mlbbdex.com/en/heroes"
+      ],
+      competitiveContextSource: "https://www.mlbbanalytics.com/meta",
+      method: "Role and lane tags cross-checked across independent hero databases; pro-scene statistics are contextual evidence, not a substitute for lane classification."
+    },
   }),
   catalogEntry("benedetta", "Benedetta", "Бенедетта", {
     identityStatus: "pending_review",
     localizationStatus: "pending_review"
+    roleValues: ["Assassin", "Fighter"],
+    roleStatus: "verified",
+    primaryLane: "EXP Lane",
+    flexibleLanes: [],
+    laneStatus: "verified",
+    research: {
+      checkedAt: "2026-11-22",
+      roleAndLaneSources: [
+        "https://www.mlbbguides.com/heroes/",
+        "https://mlbb-stats.com/heroes",
+        "https://mlbbdex.com/en/heroes"
+      ],
+      competitiveContextSource: "https://www.mlbbanalytics.com/meta",
+      method: "Role and lane tags cross-checked across independent hero databases; pro-scene statistics are contextual evidence, not a substitute for lane classification."
+    },
   }),
   catalogEntry("brody", "Brody", "Броди", {
     identityStatus: "pending_review",
     localizationStatus: "pending_review"
+    roleValues: ["Marksman"],
+    roleStatus: "verified",
+    primaryLane: "Gold Lane",
+    flexibleLanes: [],
+    laneStatus: "verified",
+    research: {
+      checkedAt: "2026-11-22",
+      roleAndLaneSources: [
+        "https://www.mlbbguides.com/heroes/",
+        "https://mlbb-stats.com/heroes",
+        "https://mlbbdex.com/en/heroes"
+      ],
+      competitiveContextSource: "https://www.mlbbanalytics.com/meta",
+      method: "Role and lane tags cross-checked across independent hero databases; pro-scene statistics are contextual evidence, not a substitute for lane classification."
+    },
   }),
   catalogEntry("carmilla", "Carmilla", "Кармилла", {
     identityStatus: "pending_review",
     localizationStatus: "pending_review"
+    roleValues: ["Support", "Tank"],
+    roleStatus: "verified",
+    primaryLane: "Roam",
+    flexibleLanes: [],
+    laneStatus: "verified",
+    research: {
+      checkedAt: "2026-11-22",
+      roleAndLaneSources: [
+        "https://www.mlbbguides.com/heroes/",
+        "https://mlbb-stats.com/heroes",
+        "https://mlbbdex.com/en/heroes"
+      ],
+      competitiveContextSource: "https://www.mlbbanalytics.com/meta",
+      method: "Role and lane tags cross-checked across independent hero databases; pro-scene statistics are contextual evidence, not a substitute for lane classification."
+    },
   }),
   catalogEntry("cecilion", "Cecilion", "Сесилион", {
     identityStatus: "pending_review",
     localizationStatus: "pending_review"
+    roleValues: ["Mage"],
+    roleStatus: "verified",
+    primaryLane: "Mid Lane",
+    flexibleLanes: [],
+    laneStatus: "verified",
+    research: {
+      checkedAt: "2026-11-22",
+      roleAndLaneSources: [
+        "https://www.mlbbguides.com/heroes/",
+        "https://mlbb-stats.com/heroes",
+        "https://mlbbdex.com/en/heroes"
+      ],
+      competitiveContextSource: "https://www.mlbbanalytics.com/meta",
+      method: "Role and lane tags cross-checked across independent hero databases; pro-scene statistics are contextual evidence, not a substitute for lane classification."
+    },
   }),
   catalogEntry("chang-e", "Chang'e", "Чан’Э", {
     identityStatus: "pending_review",
