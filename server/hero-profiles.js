@@ -1056,7 +1056,7 @@ export const heroProfiles = [
       reviewedAt: "2026-11-22"
     },
     confidence: "partial"
-  },,
+  },
 
   {
     id: "sun",
