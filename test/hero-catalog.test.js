@@ -135,3 +135,17 @@ test("Hanzo has cross-checked Assassin/Jungle data and a partial tactical profil
   assert.equal(hanzo.research.competitiveReviewStatus, "partial");
   assert.ok(hanzo.research.mechanicsSources.length >= 3);
 });
+
+test("Roger has verified Fighter/Marksman identity and Jungle lane with partial tactics", () => {
+  const roger = heroCatalog.find(hero => hero.id === "roger");
+  assert.ok(roger);
+  assert.deepEqual(roger.role.values, ["Fighter", "Marksman"]);
+  assert.equal(roger.role.status, "verified");
+  assert.equal(roger.lanes.primary, "Jungle");
+  assert.deepEqual(roger.lanes.flexible, []);
+  assert.equal(roger.lanes.status, "verified");
+  assert.equal(roger.tacticalProfile.status, "partial");
+  assert.equal(roger.research.competitiveReviewStatus, "partial");
+  assert.ok(roger.research.mechanicsSources.length >= 3);
+  assert.ok(roger.research.rankedMetaSources.length >= 3);
+});
