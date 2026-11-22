@@ -78,6 +78,8 @@ test("draft hero selection uses a searchable one-tap grid instead of native long
  assert.match(html, /id="openAllyPicker"/);
  assert.match(html, /id="heroPickerSearch"/);
  assert.match(html, /id="heroPickerGrid"/);
+ assert.match(html, /id="pickerRoles"/);
+ assert.match(html, /id="pickerSelectionStatus"/);
  assert.match(app, /function openHeroPicker\(target\)/);
  assert.match(app, /function choosePickerHero\(value\)/);
  assert.match(app, /mlbb_recent_draft_heroes/);
@@ -114,4 +116,12 @@ test("draft picker supports role and lane filters and concise tactical card fact
  assert.match(app, /heroProfiles/);
  assert.match(app, /strengths/);
  assert.match(app, /weaknesses/);
+});
+
+
+test("multi-select picker stays open while filling a team and closes at five", () => {
+ assert.match(app, /if\(arr\.length>=5\)\{\$\("heroPicker"\)\.classList\.add\("hidden"\)/);
+ assert.match(app, /renderHeroPicker\(\);/);
+ assert.match(app, /Выбрано \+current\.length\+" из 5/);
+ assert.match(css, /\.hero-tile\.selected/);
 });
