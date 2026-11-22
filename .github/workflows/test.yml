@@ -25,3 +25,5 @@ jobs:
         run: npm install --no-audit --no-fund
       - name: Run test suite
         run: npm test
+      - name: Build production Docker image
+        run: docker build -t mlbb-cyber-assistant:test .
