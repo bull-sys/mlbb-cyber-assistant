@@ -226,3 +226,9 @@ test("Sun, Belerick, Hanabi, Xavier and Obsidia have sourced partial tactical pr
     assert.equal(hero.patch.reviewedAt, "2026-11-22");
   }
 });
+
+
+test("Aldous, Floryn, Estes, Minotaur and Lunox have sourced partial tactical profiles", () => {
+ const expected=[["aldous","Олдос","https://mlbb-knowledge.vercel.app/heroes/64"],["floryn","Флорин","https://mlbb-knowledge.vercel.app/heroes/112"],["estes","Эстес","https://mlbb.io/en/hero/estes"],["minotaur","Минотавр","https://mlbbhub.com/heroes/minotaur"],["lunox","Люнокс","https://liquipedia.net/mobilelegends/Lunox"]];
+ for(const [id,name,source] of expected){const h=heroProfiles.find(x=>x.id===id);assert.ok(h,id);assert.equal(h.names.ru,name);assert.ok(h.mechanics.length>=4);assert.ok(h.strengths.length>=2);assert.ok(h.weaknesses.length>=2);assert.ok(h.sources.includes(source));assert.equal(h.confidence,"partial");assert.equal(h.patch.version,HERO_DB_PATCH);assert.equal(h.patch.reviewedAt,"2026-11-22");}
+});
