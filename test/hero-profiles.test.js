@@ -507,7 +507,7 @@ test("Hayabusa, Hylos, Irithel, Ixia and Johnson have sourced partial tactical p
   const hayabusa = heroProfiles.find(item => item.id === "hayabusa");
   assert.ok(hayabusa.mechanics.some(note => note.includes("фантом")));
   const hylos = heroProfiles.find(item => item.id === "hylos");
-  assert.ok(hylos.mechanics.some(note => note.includes("здоровье вместо маны")));
+  assert.ok(hylos.mechanics.some(note => note.includes("расходуя здоровье")));
   const irithel = heroProfiles.find(item => item.id === "irithel");
   assert.ok(irithel.mechanics.some(note => note.includes("движения")));
   const ixia = heroProfiles.find(item => item.id === "ixia");
