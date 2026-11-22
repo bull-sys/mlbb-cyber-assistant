@@ -1906,7 +1906,7 @@ export const heroProfiles = [
     patch:{version:HERO_DB_PATCH,notes:["Пассивная Sword Intent, Phantom Slash, An Eye for An Eye и Alecto: Final Blow сверены по Liquipedia, MLBB.io и MLBBGuides.","MLBBDex показывает актуальный рейтинговый срез патча 2.2.23 от 21 ноября 2026; его сборка отмечена как небольшой выборочный вариант, не как гарантированно лучшая сборка.","Профессиональные пики/баны и индивидуальный VOD-разбор текущего патча не подтверждены; competitive/VOD review pending."],reviewedAt:"2026-11-22"},confidence:"partial"
   },
   {
-    id:"brody",names:{ru:"Броуди",en:"Brody",aliases:[]},roles:["Стрелок"],lanes:["Золотая линия"],
+    id:"brody",names:{ru:"Броди",en:"Brody",aliases:[]},roles:["Стрелок"],lanes:["Золотая линия"],
     combat:{damage:"physical",range:"ranged",mobility:"medium",burst:"high",dps:"medium",durability:"low",sustain:"low",control:"stun_and_slow",engage:"medium",disengage:"medium",waveClear:"high",objectiveDamage:"medium"},
     mechanics:[
       "Пассивная способность «Коррозия Бездны» позволяет двигаться во время подготовки обычной атаки. Атаки наносят повышенный урон, дают краткое ускорение и накладывают на цель метки Бездны; до четырёх меток усиливают последующий урон Броуди.",
@@ -1957,7 +1957,7 @@ export const heroProfiles = [
     patch:{version:HERO_DB_PATCH,notes:["Overflowing, Bat Impact, Sanguine Claws и Bats Feast сверены по Liquipedia, mlbb.tools и MLBBGuides.","MLBBDex обновлён 21 ноября 2026 и отмечает патч 2.2.23; MLBBHub также показывает для Цицилиона патч 2.2.23 и отдельный ranked-срез. Эти показатели не смешиваются с профессиональными турнирами.","Профессиональная выборка и индивидуальный VOD-разбор текущего патча остаются pending."],reviewedAt:"2026-11-22"},confidence:"partial"
   },
   {
-    id:"change",names:{ru:"Чан’Э",en:"Chang'e",aliases:["Chang'e"]},roles:["Маг"],lanes:["Средняя линия"],
+    id:"chang-e",names:{ru:"Чан’Э",en:"Chang'e",aliases:["Chang'e"]},roles:["Маг"],lanes:["Средняя линия"],
     combat:{damage:"magic",range:"ranged",mobility:"medium",burst:"high",dps:"high",durability:"low",sustain:"low",control:"slow",engage:"medium",disengage:"medium",waveClear:"very_high",objectiveDamage:"high"},
     mechanics:[
       "Пассивная способность «Озорница» оставляет на противниках метки при нанесении урона. Каждая метка уменьшает скорость передвижения цели; эффект накапливается до установленного предела.",
