@@ -191,3 +191,25 @@ test("Fanny has verified Assassin/Jungle identity and partial tactical review", 
   assert.ok(fanny.research.mechanicsSources.length >= 3);
   assert.ok(fanny.research.rankedMetaSources.length >= 2);
 });
+
+
+test("Kaja, Valir, Paquito, Aulus and Rafaela have verified catalog roles and lanes", () => {
+  const expected = [
+    ["kaja", ["Support"], "Roam", []],
+    ["valir", ["Mage"], "Mid Lane", ["EXP Lane"]],
+    ["paquito", ["Fighter", "Assassin"], "EXP Lane", ["Jungle"]],
+    ["aulus", ["Fighter"], "Jungle", ["EXP Lane"]],
+    ["rafaela", ["Support"], "Roam", ["Mid Lane"]]
+  ];
+  for (const [id, roles, primary, flexible] of expected) {
+    const hero = heroCatalog.find(item => item.id === id);
+    assert.ok(hero, id);
+    assert.deepEqual(hero.role.values, roles);
+    assert.equal(hero.role.status, "verified");
+    assert.equal(hero.lanes.primary, primary);
+    assert.deepEqual(hero.lanes.flexible, flexible);
+    assert.equal(hero.lanes.status, "verified");
+    assert.equal(hero.tacticalProfile.status, "partial");
+    assert.equal(hero.research.competitiveReviewStatus, "pending");
+  }
+});
