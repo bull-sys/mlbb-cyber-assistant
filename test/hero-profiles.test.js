@@ -552,10 +552,34 @@ test("Hayabusa, Hylos, Irithel, Ixia and Johnson have sourced partial tactical p
 });
 
 test("hero profile coverage count and unique IDs stay aligned with the audited baseline", () => {
-  assert.equal(heroProfiles.length, 87);
-  assert.equal(new Set(heroProfiles.map(hero => hero.id)).size, 87);
+  assert.equal(heroProfiles.length, 92);
+  assert.equal(new Set(heroProfiles.map(hero => hero.id)).size, 92);
   const saber = heroProfiles.find(hero => hero.id === "saber");
   assert.ok(saber);
   assert.deepEqual(saber.mechanics, []);
-  assert.equal(heroProfiles.filter(hero => hero.mechanics.length > 0).length, 86);
+  assert.equal(heroProfiles.filter(hero => hero.mechanics.length > 0).length, 91);
+});
+
+test("Joy, Kadita, Karina, Lancelot and Leomord have sourced partial tactical profiles", () => {
+  const expected = [
+    ["joy", "Джой", "https://liquipedia.net/mobilelegends/Joy"],
+    ["kadita", "Кадита", "https://mlbb-knowledge.vercel.app/heroes/75"],
+    ["karina", "Карина", "https://mlbb-knowledge.vercel.app/heroes/8"],
+    ["lancelot", "Ланселот", "https://mlbb-knowledge.vercel.app/heroes/47"],
+    ["leomord", "Леоморд", "https://mlbb-knowledge.vercel.app/heroes/67"]
+  ];
+  for (const [id, name, source] of expected) {
+    const hero = heroProfiles.find(item => item.id === id);
+    assert.ok(hero, id + " profile exists");
+    assert.equal(hero.names.ru, name);
+    assert.ok(hero.mechanics.length >= 4, id + " mechanics");
+    assert.ok(hero.strengths.length >= 3, id + " strengths");
+    assert.ok(hero.weaknesses.length >= 3, id + " weaknesses");
+    assert.ok(hero.sources.includes(source), id + " source");
+    assert.equal(hero.confidence, "partial");
+    assert.equal(hero.patch.version, HERO_DB_PATCH);
+    assert.equal(hero.patch.reviewedAt, "2026-11-22");
+    assert.deepEqual(hero.matchups.strongAgainst, []);
+    assert.deepEqual(hero.matchups.weakAgainst, []);
+  }
 });
