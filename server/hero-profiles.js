@@ -1338,7 +1338,6 @@ export const heroProfiles = [
     patch:{version:HERO_DB_PATCH,notes:["Пассивный эффект и две формы сверены по Liquipedia и KazukiOfficial; изменения 2.2.23 сверены с MLBB.tools и patch notes.","MLBBHub показывает около 52.1% побед и 0.6% выбора в своём рейтинговом срезе; цифры зависят от периода и ранга.","Профессиональные пики/баны и VOD текущего патча отдельно не подтверждены; матчапы и синергии оставлены пустыми без сопоставимой выборки."],reviewedAt:"2026-11-22"},confidence:"partial"
   },
 
-,
   {
     id: "cyclops",
     names: { ru: "Циклоп", en: "Cyclops", aliases: [] },
