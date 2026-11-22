@@ -101,7 +101,11 @@ test("next ten researched heroes include cross-source role and lane evidence", (
     assert.equal(hero.lanes.status, "verified", id);
     assert.equal(hero.research.checkedAt, "2026-11-22", id);
     assert.equal(hero.research.roleAndLaneSources.length, 3, id);
-    assert.equal(hero.research.competitiveReviewStatus, "pending", id);
+    assert.equal(
+      hero.research.competitiveReviewStatus,
+      id === "fanny" ? "partial" : "pending",
+      id
+    );
   }
 
   assert.deepEqual(
