@@ -638,3 +638,32 @@ test("Lesley, Lolita, Luo Yi, Lylia and Martis have sourced partial tactical pro
   assert.ok(heroProfiles.find(item => item.id === "lylia").mechanics.some(note => note.includes("Чёрные ботинки")));
   assert.ok(heroProfiles.find(item => item.id === "martis").mechanics.some(note => note.includes("иммунитет к контролю")));
 });
+
+
+test("Saber has a complete researched tactical profile instead of a placeholder", () => {
+  const saber = heroProfiles.find(hero => hero.id === "saber");
+  assert.ok(saber, "Saber profile exists");
+  assert.equal(saber.names.ru, "Сабер");
+  assert.equal(saber.names.en, "Saber");
+  assert.deepEqual(saber.roles, ["Убийца"]);
+  assert.deepEqual(saber.lanes, ["Лес", "Роум"]);
+  assert.equal(saber.mechanics.length, 4);
+  assert.ok(saber.mechanics.some(note => note.includes("Погибель врагам")));
+  assert.ok(saber.mechanics.some(note => note.includes("Летающие мечи")));
+  assert.ok(saber.mechanics.some(note => note.includes("Рывок")));
+  assert.ok(saber.mechanics.some(note => note.includes("Тройной удар")));
+  assert.ok(saber.strengths.length >= 4);
+  assert.ok(saber.weaknesses.length >= 4);
+  assert.ok(saber.itemNotes.length >= 3);
+  assert.ok(saber.teamfight.preferredPlan);
+  assert.ok(saber.teamfight.targetPriority.length >= 2);
+  assert.ok(saber.teamfight.avoid.length >= 3);
+  assert.ok(saber.sources.includes("https://liquipedia.net/mobilelegends/Saber"));
+  assert.ok(saber.sources.includes("https://mlbb-knowledge.vercel.app/heroes/3"));
+  assert.ok(saber.sources.includes("https://mlbbhub.com/ru/heroes/saber"));
+  assert.equal(saber.confidence, "partial");
+  assert.equal(saber.patch.version, HERO_DB_PATCH);
+  assert.equal(saber.patch.reviewedAt, "2026-11-22");
+  assert.deepEqual(saber.matchups.strongAgainst, []);
+  assert.deepEqual(saber.matchups.weakAgainst, []);
+});
