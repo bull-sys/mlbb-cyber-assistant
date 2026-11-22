@@ -292,3 +292,10 @@ test("Cyclops, Julian, Tigreal, Chou and Dyrroth have verified catalog roles and
 
 
 test("Alpha, Freya, Edith, Barats and Hilda have verified catalog roles and lanes",()=>{const expected={alpha:["Fighter","Jungle",["EXP Lane"]],freya:["Fighter","EXP Lane",["Jungle"]],edith:["Tank","EXP Lane",["Roam"]],barats:["Tank","Jungle",["EXP Lane"]],hilda:["Fighter","Roam",["EXP Lane"]]};for(const [id,[role,lane,flex]] of Object.entries(expected)){const h=heroCatalog.find(x=>x.id===id);assert.ok(h,id);assert.ok(h.role.values.includes(role));assert.equal(h.role.status,"verified");assert.equal(h.lanes.primary,lane);assert.equal(h.lanes.status,"verified");assert.equal(h.tacticalProfile.status,"partial");assert.equal(h.research.checkedAt,"2026-11-22");assert.equal(h.research.roleAndLaneSources.length,3);assert.equal(h.lanes.flexible.length,flex.length);for(const f of flex)assert.ok(h.lanes.flexible.includes(f));}});
+
+
+test("Saber placeholder is not advertised as a researched tactical profile", () => {
+  const saber = heroCatalog.find(hero => hero.id === "saber");
+  assert.ok(saber);
+  assert.equal(saber.tacticalProfile.status, "missing");
+});
