@@ -60,7 +60,7 @@ test("first 20 researched heroes include cross-source role and lane evidence", (
     assert.equal(hero.role.status, "verified", id);
     assert.equal(hero.research.checkedAt, "2026-11-22", id);
     assert.equal(hero.research.roleAndLaneSources.length, 3, id);
-    assert.ok(hero.research.competitiveContextSource.includes("mlbbanalytics"), id);
+    assert.equal(hero.research.competitiveReviewStatus, "pending", id);
   }
 
   assert.equal(
