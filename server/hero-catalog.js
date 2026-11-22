@@ -440,23 +440,10 @@ export const heroCatalog = [
     },
   }),
   catalogEntry("faramis", "Faramis", "Фарамис", {
-    identityStatus: "pending_review",
-    localizationStatus: "pending_review",
-    roleValues: ["Support", "Mage"],
-    roleStatus: "verified",
-    primaryLane: "Mid Lane",
-    flexibleLanes: ["Roam"],
-    laneStatus: "verified",
-    research: {
-      checkedAt: "2026-11-22",
-      roleAndLaneSources: [
-        "https://www.mlbbguides.com/heroes/",
-        "https://www.propublic.gg/heroes/stats?dir=asc&sort=name",
-        "https://mlbbhub.com/heroes"
-      ],
-      competitiveReviewStatus: "pending",
-      method: "Role tags cross-checked against MLBBHub; lane placement checked against MLBB Guides and Propublic's Mythic+ 15-day lane table. Pro tournament usage is tracked separately and does not automatically determine ranked primary lane."
-    },
+    identityStatus: "source_verified", localizationStatus: "pending_review",
+    roleValues: ["Support", "Mage"], roleStatus: "verified", primaryLane: "Mid Lane", flexibleLanes: ["Roam"], laneStatus: "verified",
+    tacticalProfileStatus: "partial",
+    research: { checkedAt: "2026-11-22", roleAndLaneSources: ["https://mlbb-knowledge.vercel.app/heroes/76", "https://mlbbhub.com/ru/heroes/faramis", "https://mlbb.io/en/hero/faramis"], mechanicsSources: ["https://mlbb-knowledge.vercel.app/heroes/76", "https://liquipedia.net/mobilelegends/Faramis"], rankedMetaSources: ["https://mlbbhub.com/ru/heroes/faramis", "https://mlbb.io/en/hero/faramis"], competitiveReviewStatus: "pending", method: "Support/Mage and Mid/Roam use cross-checked across MLBB Knowledge, MLBBHub and MLBB.io. Soul Fragment economy, Shadow Stampede, Ghost Bursters and Nether Realm timing checked against current skill descriptions. Ranked aggregates kept separate from professional picks and individual VOD review; current-patch VOD review pending." }
   }),
   catalogEntry("floryn", "Floryn", "Флорин", {
     identityStatus: "pending_review",
@@ -481,23 +468,10 @@ export const heroCatalog = [
     },
   }),
   catalogEntry("fredrinn", "Fredrinn", "Фредрин", {
-    identityStatus: "pending_review",
-    localizationStatus: "pending_review",
-    roleValues: ["Fighter","Tank"],
-    roleStatus: "verified",
-    primaryLane: "Jungle",
-    flexibleLanes: [],
-    laneStatus: "verified",
-    research: {
-      checkedAt: "2026-11-22",
-      roleAndLaneSources: [
-        "https://www.mlbbguides.com/heroes/",
-        "https://mlbb-stats.com/heroes",
-        "https://mlbb.io/en/heroes"
-      ],
-      competitiveReviewStatus: "pending",
-      method: "Role tags cross-checked against MLBB Guides and MLBB Stats; lane placement cross-checked against MLBB Stats and MLBB.io. Professional tournament usage is reviewed separately from ranked lane prevalence."
-    },
+    identityStatus: "source_verified", localizationStatus: "pending_review",
+    roleValues: ["Fighter", "Tank"], roleStatus: "verified", primaryLane: "Jungle", laneStatus: "verified",
+    tacticalProfileStatus: "partial",
+    research: { checkedAt: "2026-11-22", roleAndLaneSources: ["https://mlbbhub.com/ru/heroes/fredrinn", "https://mlbb-knowledge.vercel.app/heroes/117", "https://mlbb.io/en/hero/fredrinn"], mechanicsSources: ["https://mlbb-knowledge.vercel.app/heroes/117", "https://metammo.com/mobile-legends-guide/heroes/fredrinn", "https://mlbb.tools/heroes/fredrinn"], rankedMetaSources: ["https://mlbbhub.com/ru/heroes/fredrinn", "https://mlbb.io/en/hero/fredrinn"], competitiveReviewStatus: "pending", method: "Fighter/Tank and Jungle role cross-checked across three current hero databases. Combo Point generation, Crystal Energy storage, Energy Eruption and Appraiser's Wrath reviewed. Ranked statistics kept separate from professional tournament samples; current-patch VOD review pending." }
   }),  catalogEntry("freya", "Freya", "Фрея", {
     identityStatus: "pending_review",
     localizationStatus: "pending_review",
@@ -514,59 +488,20 @@ export const heroCatalog = [
       method: "Fighter role and EXP primary lane with Jungle flexibility cross-checked across three hero databases; 2.2.23 changes separately checked against patch notes."
     },
   }),  catalogEntry("gatotkaca", "Gatotkaca", "Гатоткача", {
-    identityStatus: "pending_review",
-    localizationStatus: "pending_review",
-    roleValues: ["Tank","Fighter"],
-    roleStatus: "verified",
-    primaryLane: "Roam",
-    flexibleLanes: ["EXP Lane"],
-    laneStatus: "verified",
-    research: {
-      checkedAt: "2026-11-22",
-      roleAndLaneSources: [
-        "https://www.mlbbguides.com/heroes/",
-        "https://mlbb-stats.com/heroes",
-        "https://mlbb.io/en/heroes"
-      ],
-      competitiveReviewStatus: "pending",
-      method: "Role tags cross-checked against MLBB Guides and MLBB Stats; lane placement cross-checked against MLBB Stats and MLBB.io. Professional tournament usage is reviewed separately from ranked lane prevalence."
-    },
+    identityStatus: "source_verified", localizationStatus: "pending_review",
+    roleValues: ["Tank", "Fighter"], roleStatus: "verified", primaryLane: "Roam", flexibleLanes: ["EXP Lane"], laneStatus: "verified",
+    tacticalProfileStatus: "partial",
+    research: { checkedAt: "2026-11-22", roleAndLaneSources: ["https://mlbb-knowledge.vercel.app/heroes/41", "https://mlbb.io/en/hero/gatotkaca", "https://liquipedia.net/mobilelegends/Gatotkaca"], mechanicsSources: ["https://mlbb-knowledge.vercel.app/heroes/41", "https://liquipedia.net/mobilelegends/Gatotkaca"], rankedMetaSources: ["https://mlbbhub.com/ru/heroes/gatotkaca", "https://mlbb.io/en/hero/gatotkaca"], competitiveReviewStatus: "pending", method: "Tank/Fighter and Roam/EXP use cross-checked across MLBB Knowledge, MLBB.io and Liquipedia. Steel Bones Rage conversion, Blast Iron Fist slow zone, Unbreakable taunt and Avatar of the Guardian landing effects reviewed. Ranked and pro evidence are not combined; individual current-patch VOD review pending." }
   }),  catalogEntry("gloo", "Gloo", "Глу", {
-    identityStatus: "pending_review",
-    localizationStatus: "pending_review",
-    roleValues: ["Tank"],
-    roleStatus: "verified",
-    primaryLane: "Roam",
-    flexibleLanes: ["EXP Lane"],
-    laneStatus: "verified",
-    research: {
-      checkedAt: "2026-11-22",
-      roleAndLaneSources: [
-        "https://www.mlbbguides.com/heroes/",
-        "https://mlbb-stats.com/heroes",
-        "https://mlbb.io/en/heroes"
-      ],
-      competitiveReviewStatus: "pending",
-      method: "Role tags cross-checked against MLBB Guides and MLBB Stats; lane placement cross-checked against MLBB Stats and MLBB.io. Professional tournament usage is reviewed separately from ranked lane prevalence."
-    },
+    identityStatus: "source_verified", localizationStatus: "pending_review",
+    roleValues: ["Tank"], roleStatus: "verified", primaryLane: "Roam", flexibleLanes: ["EXP Lane"], laneStatus: "verified",
+    tacticalProfileStatus: "partial",
+    research: { checkedAt: "2026-11-22", roleAndLaneSources: ["https://mlbb-knowledge.vercel.app/heroes/104", "https://mlbbhub.com/ru/heroes/gloo", "https://mlbb.io/en/hero/gloo"], mechanicsSources: ["https://mlbb-knowledge.vercel.app/heroes/104", "https://liquipedia.net/mobilelegends/Gloo", "https://kazukiofficial.com/heroes/gloo"], rankedMetaSources: ["https://mlbbhub.com/ru/heroes/gloo", "https://mlbb.io/en/hero/gloo"], competitiveReviewStatus: "pending", method: "Tank and Roam/EXP flexibility cross-checked across MLBB Knowledge, MLBBHub and MLBB.io. Sticky stacks, Goo reset interaction, Spread drag and Grab attachment reviewed. Patch 2.2.23 nerfs to Slam immobilize/damage and Grab damage transfer are explicitly noted; current-patch professional VOD review pending." }
   }),  catalogEntry("gord", "Gord", "Горд", {
-    identityStatus: "pending_review",
-    localizationStatus: "pending_review",
-    roleValues: ["Mage"],
-    roleStatus: "verified",
-    primaryLane: "Mid Lane",
-    flexibleLanes: [],
-    laneStatus: "verified",
-    research: {
-      checkedAt: "2026-11-22",
-      roleAndLaneSources: [
-        "https://www.mlbbguides.com/heroes/",
-        "https://mlbb-stats.com/heroes",
-        "https://mlbb.io/en/heroes"
-      ],
-      competitiveReviewStatus: "pending",
-      method: "Role tags cross-checked against MLBB Guides and MLBB Stats; lane placement cross-checked against MLBB Stats and MLBB.io. Professional tournament usage is reviewed separately from ranked lane prevalence."
-    },
+    identityStatus: "source_verified", localizationStatus: "pending_review",
+    roleValues: ["Mage"], roleStatus: "verified", primaryLane: "Mid Lane", laneStatus: "verified",
+    tacticalProfileStatus: "partial",
+    research: { checkedAt: "2026-11-22", roleAndLaneSources: ["https://mlbbhub.com/ru/heroes/gord", "https://mlbb.io/en/hero/gord", "https://www.mlbbguides.com/heroes/gord/"], mechanicsSources: ["https://mlbbanalytics.com/heroes?hero=Gord", "https://liquipedia.net/mobilelegends/Gord", "https://mlbb.io/en/hero/gord"], rankedMetaSources: ["https://mlbbhub.com/ru/heroes/gord", "https://mlbb.io/en/hero/gord"], competitiveReviewStatus: "pending", method: "Mage/Mid Lane cross-checked across MLBBHub, MLBB.io and MLBB Guides. Mystic Favor trigger, Mystic Projectile stun, Mystic Injunction area damage and steerable Mystic Gush beam reviewed. Current ranked aggregates are kept separate from MSC/MPL tournament samples; individual VOD review pending." }
   }),  catalogEntry("grock", "Grock", "Грок", {
     identityStatus: "pending_review",
     localizationStatus: "pending_review",
