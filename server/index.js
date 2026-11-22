@@ -16,6 +16,7 @@ import { getHeroCatalogApiFields, isLegacyHeroName } from "./hero-catalog-adapte
 import { heroProfiles, validateHeroProfiles } from "./hero-profiles.js";
 import { normalizeRegistration } from "./registration.js";
 import { getOptionalUser } from "./auth.js";
+import { isValidDraftRequest } from "./draft-validation.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, "..");
@@ -408,7 +409,7 @@ function analyze({lane, enemies = [], allies = [], myHero = ""}) {
 }
 
 app.post("/api/ai/draft",guestDraftRateLimit,optionalAuth,async(req,res)=>{
- const b=req.body||{};if(!roles.includes(b.lane)||!Array.isArray(b.enemies)||b.enemies.length>5||!b.enemies.every(isLegacyHeroName))return res.status(400).json({error:"Некорректный состав или линия"});
+ const b=req.body||{};if(!isValidDraftRequest(b,roles,isLegacyHeroName))return res.status(400).json({error:"Некорректный состав или линия"});
  const result=analyze(b);
  if(openai&&req.user){try{const response=await openai.chat.completions.create({model:process.env.OPENAI_MODEL||"gpt-4.1-mini",messages:[{role:"system",content:"Ты тактический помощник MLBB. Не выдумывай live статистику и точные параметры патча. Используй только переданные варианты. Кратко объясни тактику на русском."},{role:"user",content:JSON.stringify({lane:b.lane,enemies:b.enemies,allies:b.allies||[],myHero:b.myHero||"",rulesResult:result})}],max_tokens:450,temperature:.3});result.aiExplanation=response.choices[0]?.message?.content||""}catch{result.aiExplanation="AI-сервис временно недоступен; показан базовый анализ."}}
  res.json(result);
