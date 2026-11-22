@@ -47,6 +47,32 @@ test("hero catalog contains the 133-name roster without duplicate IDs", () => {
   assert.equal(heroCatalog.find(hero => hero.id === "hirara")?.tacticalProfile.status, "missing");
 });
 
+test("first 20 researched heroes include cross-source role and lane evidence", () => {
+  const researchedIds = [
+    "aamon", "akai", "aldous", "alpha", "alucard", "argus", "arlott",
+    "aulus", "aurora", "badang", "balmond", "bane", "barats", "baxia",
+    "beatrix", "belerick", "benedetta", "brody", "carmilla", "cecilion"
+  ];
+
+  for (const id of researchedIds) {
+    const hero = heroCatalog.find(entry => entry.id === id);
+    assert.ok(hero, id);
+    assert.equal(hero.role.status, "verified", id);
+    assert.equal(hero.research.checkedAt, "2026-11-22", id);
+    assert.equal(hero.research.roleAndLaneSources.length, 3, id);
+    assert.ok(hero.research.competitiveContextSource.includes("mlbbanalytics"), id);
+  }
+
+  assert.equal(
+    heroCatalog.find(entry => entry.id === "barats").lanes.status,
+    "pending_review"
+  );
+  assert.equal(
+    heroCatalog.find(entry => entry.id === "badang").lanes.primary,
+    "Roam"
+  );
+});
+
 test("API and validation routes are wired to additive catalog fields and legacy names", async () => {
   const serverSource = await readFile(new URL("../server/index.js", import.meta.url), "utf8");
 
