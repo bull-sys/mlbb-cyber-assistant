@@ -1,6 +1,6 @@
 const $=id=>document.getElementById(id);
 const DRAFT_STORAGE_KEY="mlbb_draft_state_v1";
-let token=localStorage.getItem("mlbb_token")||"",data={heroes:[],draftHeroOptions:[],items:[],talents:[],emblems:[],roles:[],ranks:[],styles:[]},enemies=[],allies=[],threats=new Set(),encyFilter="all",ocrWorker=null;
+let token=localStorage.getItem("mlbb_token")||"",data={heroes:[],draftHeroOptions:[],heroCatalog:[],heroProfiles:[],items:[],talents:[],emblems:[],roles:[],ranks:[],styles:[]},enemies=[],allies=[],threats=new Set(),encyFilter="all",ocrWorker=null;
 const threatDefs=[["heal","💚 Отхил / вампиризм"],["magic","🔮 2+ мага / прокаст"],["speed","⚡ Скорость атаки"],["tank","🛡 Жирные танки"],["cc","⛓ Тяжёлый контроль"],["physical","⚔ Много физического урона"],["burst","💥 Взрывной урон"]];
 const $api=async(path,opts={})=>{let r=await fetch("/api"+path,{...opts,headers:{"Content-Type":"application/json",...(token?{Authorization:"Bearer "+token}:{}),...(opts.headers||{})}});let d=await r.json().catch(()=>({error:"Ошибка сервера"}));if(!r.ok)throw Error(d.error||"Ошибка");return d};
 function toast(s){let el=document.createElement("div");el.textContent=s;el.style="position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#18384a;border:1px solid #39e5ff;padding:12px 17px;border-radius:10px;z-index:99;font-size:12px";document.body.append(el);setTimeout(()=>el.remove(),2500)}
@@ -96,8 +96,15 @@ function renderEncy(){
  const heroEntries=(data.heroCatalog||[]).map(hero=>{
   const roles=Array.isArray(hero.role?.values)?hero.role.values.join(", "):"Не проверено";
   const lanes=[hero.lanes?.primary,...(hero.lanes?.flexible||[])].filter(Boolean).join(", ")||"Не проверено";
-  const description="Роль: "+roles+" · Линия: "+lanes+" · Тактический профиль: "+(hero.tacticalProfile?.status||"missing");
-  return {name:hero.displayNameRu||hero.nameEn||hero.id,category:hero.nameEn||hero.id,description,type:"hero",status:"Локализация: "+(hero.localization?.status||"pending_review")+" · Роль: "+(hero.role?.status||"pending_review")+" · Линия: "+(hero.lanes?.status||"pending_review")};
+  const profile=(data.heroProfiles||[]).find(entry=>entry.id===hero.id);
+  const tactical=profile?[
+   profile.mechanics?.length?"Механики: "+profile.mechanics.join(" "):"",
+   profile.strengths?.length?"Сильные стороны: "+profile.strengths.join(" "):"",
+   profile.weaknesses?.length?"Ограничения: "+profile.weaknesses.join(" "):"",
+   profile.teamfight?.preferredPlan?"План боя: "+profile.teamfight.preferredPlan:""
+  ].filter(Boolean).join(" "):"";
+  const description="Роль: "+roles+" · Линия: "+lanes+" · Тактический профиль: "+(hero.tacticalProfile?.status||"missing")+(tactical?" · "+tactical:"");
+  return {name:hero.displayNameRu||hero.nameEn||hero.id,category:hero.nameEn||hero.id,description,type:"hero",status:"Локализация: "+(hero.localization?.status||"pending_review")+" · Роль: "+(hero.role?.status||"pending_review")+" · Линия: "+(hero.lanes?.status||"pending_review")+(profile?" · Уровень профиля: "+profile.confidence:"")};
  });
  const all=[...items,...talents,...emblems,...heroEntries];
  const list=all.filter(x=>(encyFilter==="all"||x.type===encyFilter)&&(x.name+" "+x.category+" "+x.description+" "+(x.status||"")).toLowerCase().includes(q));
