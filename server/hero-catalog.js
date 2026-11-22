@@ -455,43 +455,193 @@ export const heroCatalog = [
   }),
   catalogEntry("chang-e", "Chang'e", "Чан’Э", {
     identityStatus: "pending_review",
-    localizationStatus: "pending_review"
+    localizationStatus: "pending_review",
+    roleValues: ["Mage"],
+    roleStatus: "verified",
+    primaryLane: "Mid Lane",
+    flexibleLanes: [],
+    laneStatus: "verified",
+    research: {
+      checkedAt: "2026-11-22",
+      roleAndLaneSources: [
+        "https://www.mlbbguides.com/heroes/",
+        "https://www.propublic.gg/heroes/stats?dir=asc&sort=name",
+        "https://mlbbhub.com/heroes"
+      ],
+      competitiveReviewStatus: "pending",
+      method: "Role tags cross-checked against MLBBHub; lane placement checked against MLBB Guides and Propublic's Mythic+ 15-day lane table. Pro tournament usage is tracked separately and does not automatically determine ranked primary lane."
+    },
   }),
   catalogEntry("chip", "Chip", "Чип", {
     identityStatus: "pending_review",
-    localizationStatus: "pending_review"
+    localizationStatus: "pending_review",
+    roleValues: ["Support", "Tank"],
+    roleStatus: "verified",
+    primaryLane: "Roam",
+    flexibleLanes: [],
+    laneStatus: "verified",
+    research: {
+      checkedAt: "2026-11-22",
+      roleAndLaneSources: [
+        "https://www.mlbbguides.com/heroes/",
+        "https://www.propublic.gg/heroes/stats?dir=asc&sort=name",
+        "https://mlbbhub.com/heroes"
+      ],
+      competitiveReviewStatus: "pending",
+      method: "Role tags cross-checked against MLBBHub; lane placement checked against MLBB Guides and Propublic's Mythic+ 15-day lane table. Pro tournament usage is tracked separately and does not automatically determine ranked primary lane."
+    },
   }),
   catalogEntry("cici", "Cici", "Сиси", {
     identityStatus: "pending_review",
-    localizationStatus: "pending_review"
+    localizationStatus: "pending_review",
+    roleValues: ["Fighter"],
+    roleStatus: "verified",
+    primaryLane: "EXP Lane",
+    flexibleLanes: [],
+    laneStatus: "verified",
+    research: {
+      checkedAt: "2026-11-22",
+      roleAndLaneSources: [
+        "https://www.mlbbguides.com/heroes/",
+        "https://www.propublic.gg/heroes/stats?dir=asc&sort=name",
+        "https://mlbbhub.com/heroes"
+      ],
+      competitiveReviewStatus: "pending",
+      method: "Role tags cross-checked against MLBBHub; lane placement checked against MLBB Guides and Propublic's Mythic+ 15-day lane table. Pro tournament usage is tracked separately and does not automatically determine ranked primary lane."
+    },
   }),
   catalogEntry("claude", "Claude", "Клод", {
     identityStatus: "pending_review",
-    localizationStatus: "pending_review"
+    localizationStatus: "pending_review",
+    roleValues: ["Marksman"],
+    roleStatus: "verified",
+    primaryLane: "Gold Lane",
+    flexibleLanes: [],
+    laneStatus: "verified",
+    research: {
+      checkedAt: "2026-11-22",
+      roleAndLaneSources: [
+        "https://www.mlbbguides.com/heroes/",
+        "https://www.propublic.gg/heroes/stats?dir=asc&sort=name",
+        "https://mlbbhub.com/heroes"
+      ],
+      competitiveReviewStatus: "pending",
+      method: "Role tags cross-checked against MLBBHub; lane placement checked against MLBB Guides and Propublic's Mythic+ 15-day lane table. Pro tournament usage is tracked separately and does not automatically determine ranked primary lane."
+    },
   }),
   catalogEntry("clint", "Clint", "Клинт", {
     identityStatus: "pending_review",
-    localizationStatus: "pending_review"
+    localizationStatus: "pending_review",
+    roleValues: ["Marksman"],
+    roleStatus: "verified",
+    primaryLane: "Gold Lane",
+    flexibleLanes: [],
+    laneStatus: "verified",
+    research: {
+      checkedAt: "2026-11-22",
+      roleAndLaneSources: [
+        "https://www.mlbbguides.com/heroes/",
+        "https://www.propublic.gg/heroes/stats?dir=asc&sort=name",
+        "https://mlbbhub.com/heroes"
+      ],
+      competitiveReviewStatus: "pending",
+      method: "Role tags cross-checked against MLBBHub; lane placement checked against MLBB Guides and Propublic's Mythic+ 15-day lane table. Pro tournament usage is tracked separately and does not automatically determine ranked primary lane."
+    },
   }),
   catalogEntry("edith", "Edith", "Эдит", {
     identityStatus: "pending_review",
-    localizationStatus: "pending_review"
+    localizationStatus: "pending_review",
+    roleValues: ["Tank", "Marksman"],
+    roleStatus: "verified",
+    primaryLane: "EXP Lane",
+    flexibleLanes: ["Roam"],
+    laneStatus: "verified",
+    research: {
+      checkedAt: "2026-11-22",
+      roleAndLaneSources: [
+        "https://www.mlbbguides.com/heroes/",
+        "https://www.propublic.gg/heroes/stats?dir=asc&sort=name",
+        "https://mlbbhub.com/heroes"
+      ],
+      competitiveReviewStatus: "pending",
+      method: "Role tags cross-checked against MLBBHub; lane placement checked against MLBB Guides and Propublic's Mythic+ 15-day lane table. Pro tournament usage is tracked separately and does not automatically determine ranked primary lane."
+    },
   }),
   catalogEntry("esmeralda", "Esmeralda", "Эсмеральда", {
     identityStatus: "pending_review",
-    localizationStatus: "pending_review"
+    localizationStatus: "pending_review",
+    roleValues: ["Tank", "Mage"],
+    roleStatus: "verified",
+    primaryLane: "EXP Lane",
+    flexibleLanes: [],
+    laneStatus: "verified",
+    research: {
+      checkedAt: "2026-11-22",
+      roleAndLaneSources: [
+        "https://www.mlbbguides.com/heroes/",
+        "https://www.propublic.gg/heroes/stats?dir=asc&sort=name",
+        "https://mlbbhub.com/heroes"
+      ],
+      competitiveReviewStatus: "pending",
+      method: "Role tags cross-checked against MLBBHub; lane placement checked against MLBB Guides and Propublic's Mythic+ 15-day lane table. Pro tournament usage is tracked separately and does not automatically determine ranked primary lane."
+    },
   }),
   catalogEntry("fanny", "Fanny", "Фанни", {
     identityStatus: "pending_review",
-    localizationStatus: "pending_review"
+    localizationStatus: "pending_review",
+    roleValues: ["Assassin"],
+    roleStatus: "verified",
+    primaryLane: "Jungle",
+    flexibleLanes: [],
+    laneStatus: "verified",
+    research: {
+      checkedAt: "2026-11-22",
+      roleAndLaneSources: [
+        "https://www.mlbbguides.com/heroes/",
+        "https://www.propublic.gg/heroes/stats?dir=asc&sort=name",
+        "https://mlbbhub.com/heroes"
+      ],
+      competitiveReviewStatus: "pending",
+      method: "Role tags cross-checked against MLBBHub; lane placement checked against MLBB Guides and Propublic's Mythic+ 15-day lane table. Pro tournament usage is tracked separately and does not automatically determine ranked primary lane."
+    },
   }),
   catalogEntry("faramis", "Faramis", "Фарамис", {
     identityStatus: "pending_review",
-    localizationStatus: "pending_review"
+    localizationStatus: "pending_review",
+    roleValues: ["Support", "Mage"],
+    roleStatus: "verified",
+    primaryLane: "Mid Lane",
+    flexibleLanes: ["Roam"],
+    laneStatus: "verified",
+    research: {
+      checkedAt: "2026-11-22",
+      roleAndLaneSources: [
+        "https://www.mlbbguides.com/heroes/",
+        "https://www.propublic.gg/heroes/stats?dir=asc&sort=name",
+        "https://mlbbhub.com/heroes"
+      ],
+      competitiveReviewStatus: "pending",
+      method: "Role tags cross-checked against MLBBHub; lane placement checked against MLBB Guides and Propublic's Mythic+ 15-day lane table. Pro tournament usage is tracked separately and does not automatically determine ranked primary lane."
+    },
   }),
   catalogEntry("floryn", "Floryn", "Флорин", {
     identityStatus: "pending_review",
-    localizationStatus: "pending_review"
+    localizationStatus: "pending_review",
+    roleValues: ["Support"],
+    roleStatus: "verified",
+    primaryLane: "Roam",
+    flexibleLanes: [],
+    laneStatus: "verified",
+    research: {
+      checkedAt: "2026-11-22",
+      roleAndLaneSources: [
+        "https://www.mlbbguides.com/heroes/",
+        "https://www.propublic.gg/heroes/stats?dir=asc&sort=name",
+        "https://mlbbhub.com/heroes"
+      ],
+      competitiveReviewStatus: "pending",
+      method: "Role tags cross-checked against MLBBHub; lane placement checked against MLBB Guides and Propublic's Mythic+ 15-day lane table. Pro tournament usage is tracked separately and does not automatically determine ranked primary lane."
+    },
   }),
   catalogEntry("fredrinn", "Fredrinn", "Фредрин", {
     identityStatus: "pending_review",
