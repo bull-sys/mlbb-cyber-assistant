@@ -1036,10 +1036,7 @@ export const heroCatalog = [
     identityStatus: "pending_review",
     localizationStatus: "pending_review"
   }),
-  catalogEntry("lunox", "Lunox", "Люнокс", {
-    identityStatus: "pending_review",
-    localizationStatus: "pending_review"
-  }),
+
   catalogEntry("luo-yi", "Luo Yi", "Ло И", {
     identityStatus: "pending_review",
     localizationStatus: "pending_review"
@@ -1109,8 +1106,8 @@ export const heroCatalog = [
     primaryLane: "Roam", laneStatus: "verified", tacticalProfileStatus: "partial",
     research: { checkedAt: "2026-11-22", roleAndLaneSources: ["https://mlbbhub.com/ru/heroes/diggie", "https://mlbb-knowledge.vercel.app/heroes/48"], mechanicsSources: ["https://mlbb-knowledge.vercel.app/heroes/48", "https://www.mlbbguides.com/heroes/diggie/skills/"], rankedMetaSources: ["https://mlbbhub.com/ru/heroes/diggie", "https://mlbb.io/en/hero/diggie"], competitiveReviewStatus: "pending", method: "Support/Roam classification and anti-CC skill kit cross-checked across independent references; professional draft/VOD review remains pending." }
   }),
-  catalogEntry("estes", "Estes", "Эстес"),
-  catalogEntry("minotaur", "Minotaur", "Минотавр"),
+
+
   catalogEntry("valir", "Valir", "Валир"),
   catalogEntry("obsidia", "Obsidia", "Обсидия", {
     roleValues: ["Marksman"], roleStatus: "verified", primaryLane: "Gold Lane",
