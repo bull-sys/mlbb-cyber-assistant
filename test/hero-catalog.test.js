@@ -177,3 +177,17 @@ test("Nolan has verified Assassin/Jungle identity and partial tactical review", 
   assert.ok(nolan.research.mechanicsSources.length >= 3);
   assert.ok(nolan.research.rankedMetaSources.length >= 3);
 });
+
+test("Fanny has verified Assassin/Jungle identity and partial tactical review", () => {
+  const fanny = heroCatalog.find(hero => hero.id === "fanny");
+  assert.ok(fanny);
+  assert.deepEqual(fanny.role.values, ["Assassin"]);
+  assert.equal(fanny.role.status, "verified");
+  assert.equal(fanny.lanes.primary, "Jungle");
+  assert.deepEqual(fanny.lanes.flexible, []);
+  assert.equal(fanny.lanes.status, "verified");
+  assert.equal(fanny.tacticalProfile.status, "partial");
+  assert.equal(fanny.research.competitiveReviewStatus, "partial");
+  assert.ok(fanny.research.mechanicsSources.length >= 3);
+  assert.ok(fanny.research.rankedMetaSources.length >= 2);
+});
