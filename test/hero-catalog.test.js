@@ -71,6 +71,18 @@ test("Jawhead and Dyrroth have the approved catalog identities", () => {
   assert.equal(dyrroth.localization.status, "user_confirmed");
 });
 
+test("Helcurt has cross-checked role/lane data and a deliberately partial tactical profile", () => {
+  const helcurt = heroCatalog.find(hero => hero.id === "helcurt");
+  assert.ok(helcurt);
+  assert.deepEqual(helcurt.role.values, ["Assassin"]);
+  assert.equal(helcurt.role.status, "verified");
+  assert.equal(helcurt.lanes.primary, "Jungle");
+  assert.deepEqual(helcurt.lanes.flexible, ["Roam"]);
+  assert.equal(helcurt.lanes.status, "verified");
+  assert.equal(helcurt.tacticalProfile.status, "partial");
+  assert.equal(helcurt.research.competitiveReviewStatus, "pending");
+});
+
 test("Suyou keeps the pending-review localization status", () => {
   const suyou = heroCatalog.find(hero => hero.id === "suyou");
   assert.ok(suyou);
