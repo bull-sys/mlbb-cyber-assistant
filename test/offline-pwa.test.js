@@ -21,12 +21,22 @@ test("service worker keeps the game catalog available offline after a successful
 });
 
 test("draft state is saved locally and restored only after the catalog is loaded", () => {
-  assert.match(app, /const DRAFT_STORAGE_KEY="mlbb_draft_state_v1"/);
-  assert.match(app, /localStorage\.setItem\(DRAFT_STORAGE_KEY/);
-  assert.match(app, /localStorage\.getItem\(DRAFT_STORAGE_KEY/);
+  assert.match(app, /const LEGACY_DRAFT_STORAGE_KEY="mlbb_draft_state_v1"/);
+  assert.match(app, /const GUEST_DRAFT_STORAGE_KEY="mlbb_draft_state_v1_guest"/);
+  assert.match(app, /function accountDraftKey\(userId\)/);
+  assert.match(app, /mlbb_draft_state_v1_user_/);
+  assert.match(app, /selectDraftStorage\(u\.id\)/);
+  assert.match(app, /localStorage\.setItem\(draftStorageKey/);
+  assert.match(app, /localStorage\.getItem\(draftStorageKey/);
   assert.match(app, /restoreDraft\(\);drawTeams\(\);renderEncy\(\)/);
   assert.match(app, /enemies:\[\.\.\.enemies\],allies:\[\.\.\.allies\],lane:/);
   assert.match(app, /threats:\[\.\.\.threats\]/);
+});
+
+test("auth sessions are validated and expired tokens return the UI to guest mode", () => {
+  assert.match(app, /if\(r\.status===401&&token&&!path\.startsWith\("\/auth\/"\)\)logout\(\)/);
+  assert.match(app, /activeUserId=u\.id;selectDraftStorage\(u\.id\)/);
+  assert.match(app, /catch\{logout\(\);return false\}/);
 });
 
 test("AI-generated draft explanation is escaped before HTML rendering", () => {
