@@ -133,3 +133,29 @@ test("Nolan has a cross-checked Assassin/Jungle profile with explicit uncertaint
   assert.match(notes, /Профессиональная выборка/);
   assert.match(notes, /VOD/);
 });
+ 
+test("Fanny has a cross-checked Assassin/Jungle profile with explicit ranked and pro caveats", () => {
+  const fanny = heroProfiles.find(hero => hero.id === "fanny");
+  assert.ok(fanny);
+  assert.equal(fanny.names.en, "Fanny");
+  assert.equal(fanny.names.ru, "Фанни");
+  assert.deepEqual(fanny.roles, ["Убийца"]);
+  assert.deepEqual(fanny.lanes, ["Лес"]);
+  assert.ok(fanny.mechanics.length >= 6);
+  assert.ok(fanny.mechanics.some(note => note.includes("трос")));
+  assert.ok(fanny.mechanics.some(note => note.includes("энерги")));
+  assert.ok(fanny.strengths.length >= 3);
+  assert.ok(fanny.weaknesses.length >= 3);
+  assert.ok(fanny.sources.some(source => source.includes("metammo.com")));
+  assert.ok(fanny.sources.some(source => source.includes("mlbbdex.com")));
+  assert.ok(fanny.sources.some(source => source.includes("mlbb.io")));
+  assert.equal(fanny.confidence, "partial");
+  assert.equal(fanny.patch.version, HERO_DB_PATCH);
+  assert.equal(fanny.patch.reviewedAt, "2026-11-22");
+  assert.deepEqual(fanny.matchups.strongAgainst, []);
+  assert.deepEqual(fanny.matchups.weakAgainst, []);
+  const notes = fanny.patch.notes.join(" ");
+  assert.match(notes, /Рейтинговая статистика/);
+  assert.match(notes, /Профессиональные турниры/);
+  assert.match(notes, /VOD/);
+});
