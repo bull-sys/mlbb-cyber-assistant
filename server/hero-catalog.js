@@ -232,43 +232,7 @@ export const heroCatalog = [
     roleValues:["Tank"], roleStatus:"verified", primaryLane:"Roam", flexibleLanes:["EXP Lane"], laneStatus:"verified", tacticalProfileStatus:"partial",
     research:{checkedAt:"2026-11-22",roleAndLaneSources:["https://mlbb-knowledge.vercel.app/heroes/93","https://mlbbhub.com/ru/heroes/atlas","https://liquipedia.net/mobilelegends/Atlas"],mechanicsSources:["https://mlbb-knowledge.vercel.app/heroes/93","https://liquipedia.net/mobilelegends/Atlas","https://liquipedia.net/mobilelegends/Patch_2.2.23"],rankedMetaSources:["https://mlbbhub.com/ru/heroes/atlas"],professionalMetaSources:["https://meta.mlbblab.com/tournaments/mpl-id-season-18/heroes/atlas"],competitiveReviewStatus:"partial",method:"Tank/Roam identity cross-checked across MLBB Knowledge, MLBBHub and Liquipedia; EXP Lane retained as a flexible role from MLBBHub. Current passive nerf checked against patch 2.2.23. MPL ID S18 pick/ban data recorded separately from ranked data; professional VOD review remains pending."}
   }),
-  catalogEntry("franco", "Franco", "Франко", {
-    identityStatus: "pending_review",
-    localizationStatus: "pending_review",
-    roleValues: ["Tank"],
-    roleStatus: "verified",
-    primaryLane: "Roam",
-    flexibleLanes: [],
-    laneStatus: "verified",
-    research: {
-      checkedAt: "2026-11-22",
-      roleAndLaneSources: [
-        "https://www.mlbbguides.com/heroes/",
-        "https://mlbb-stats.com/heroes",
-        "https://mlbb.io/en/heroes"
-      ],
-      competitiveReviewStatus: "pending",
-      method: "Role tags cross-checked against MLBB Guides and MLBB Stats; lane placement cross-checked against MLBB Stats and MLBB.io. Professional tournament usage is reviewed separately from ranked lane prevalence."
-    },
-  }),  catalogEntry("akai", "Akai", "Акай", {
-    identityStatus: "pending_review",
-    localizationStatus: "pending_review",
-    roleValues: ["Tank"],
-    roleStatus: "verified",
-    primaryLane: "Roam",
-    flexibleLanes: [],
-    laneStatus: "verified",
-    research: {
-      checkedAt: "2026-11-22",
-      roleAndLaneSources: [
-        "https://www.mlbbguides.com/heroes/",
-        "https://mlbb-stats.com/heroes",
-        "https://mlbbdex.com/en/heroes"
-      ],
-      competitiveReviewStatus: "pending",
-      method: "Role and lane tags cross-checked across independent hero databases; pro-draft usage and player VODs are reviewed separately before tactical recommendations are marked complete."
-    },
-  }),
+  catalogEntry("franco", "Franco", "Франко", { roleValues:["Tank"], roleStatus:"verified", primaryLane:"Roam", laneStatus:"verified", tacticalProfileStatus:"partial", research:{checkedAt:"2026-11-22",roleAndLaneSources:["https://mlbbhub.com/ru/heroes/franco","https://mlbbdex.com/en/heroes/franco","https://mlbb-knowledge.vercel.app/heroes/10"],mechanicsSources:["https://liquipedia.net/mobilelegends/Franco","https://mlbb-knowledge.vercel.app/heroes/10","https://mlbb.io/en/hero/franco"],rankedMetaSources:["https://mlbbhub.com/ru/heroes/franco","https://mlbbdex.com/en/heroes/franco","https://mlbb.io/en/hero/franco"],competitiveReviewStatus:"pending",method:"Tank/Roam identity, hook, suppression and passive regeneration cross-checked across independent references. Ranked snapshots are separate from professional evidence; current-patch VOD review remains pending."} }),  catalogEntry("akai", "Akai", "Акай", { roleValues:["Tank"], roleStatus:"verified", primaryLane:"Roam", flexibleLanes:["Jungle"], laneStatus:"verified", tacticalProfileStatus:"partial", research:{checkedAt:"2026-11-22",roleAndLaneSources:["https://mlbbhub.com/heroes/akai","https://mlbbdex.com/en/heroes/akai","https://mlbb-knowledge.vercel.app/heroes/17"],mechanicsSources:["https://liquipedia.net/mobilelegends/Akai","https://mlbb-knowledge.vercel.app/heroes/17","https://mlbb.io/en/hero/akai"],rankedMetaSources:["https://mlbbhub.com/heroes/akai","https://mlbbdex.com/en/heroes/akai","https://mlbb.io/en/hero/akai"],competitiveReviewStatus:"pending",method:"Tank/Roam primary role with Jungle flexibility; shield, mark, charge and Heavy Spin cross-checked across independent references. Ranked and professional evidence remain separate; VOD review pending."} }),
   catalogEntry("aldous", "Aldous", "Олдос", {
     identityStatus: "pending_review",
     localizationStatus: "pending_review",
@@ -307,49 +271,13 @@ export const heroCatalog = [
       method: "Fighter role and Jungle primary lane with EXP flexibility cross-checked across MLBBHub, MLBB.io and MLBBDex."
     },
   }),
-  catalogEntry("alucard", "Alucard", "Алукард", {
-    identityStatus: "pending_review",
-    localizationStatus: "pending_review",
-    roleValues: ["Fighter", "Assassin"],
-    roleStatus: "verified",
-    primaryLane: "Jungle",
-    flexibleLanes: [],
-    laneStatus: "verified",
-    research: {
-      checkedAt: "2026-11-22",
-      roleAndLaneSources: [
-        "https://www.mlbbguides.com/heroes/",
-        "https://mlbb-stats.com/heroes",
-        "https://mlbbdex.com/en/heroes"
-      ],
-      competitiveReviewStatus: "pending",
-      method: "Role and lane tags cross-checked across independent hero databases; pro-draft usage and player VODs are reviewed separately before tactical recommendations are marked complete."
-    },
-  }),
+  catalogEntry("alucard", "Alucard", "Алукард", { roleValues:["Fighter","Assassin"], roleStatus:"verified", primaryLane:"Jungle", flexibleLanes:["EXP Lane"], laneStatus:"verified", tacticalProfileStatus:"partial", research:{checkedAt:"2026-11-22",roleAndLaneSources:["https://mlbbhub.com/ru/heroes/alucard","https://mlbbdex.com/en/heroes/alucard","https://mlbb.io/en/hero/alucard"],mechanicsSources:["https://liquipedia.net/mobilelegends/Alucard","https://mlbbhub.com/ru/heroes/alucard","https://mlbb.io/en/hero/alucard"],rankedMetaSources:["https://mlbbhub.com/ru/heroes/alucard","https://mlbbdex.com/en/heroes/alucard","https://mlbb.io/en/hero/alucard"],competitiveReviewStatus:"pending",method:"Fighter/Assassin and Jungle primary classification cross-checked across three databases; passive chase, skill-enhanced attacks, hybrid lifesteal and ultimate recast checked independently. VOD review pending."} }),
   catalogEntry("argus", "Argus", "Аргус", {
     roleValues: ["Fighter"], roleStatus: "verified",
     primaryLane: "EXP Lane", laneStatus: "verified", tacticalProfileStatus: "partial",
     research: { checkedAt: "2026-11-22", roleAndLaneSources: ["https://mlbbhub.com/ru/heroes/argus", "https://mlbb-knowledge.vercel.app/heroes/45", "https://www.mlbbguides.com/heroes/"], mechanicsSources: ["https://liquipedia.net/mobilelegends/Argus", "https://mlbb-knowledge.vercel.app/heroes/45"], rankedMetaSources: ["https://mlbbhub.com/ru/heroes/argus", "https://mlbbdex.com/en/statistics"], competitiveReviewStatus: "pending", method: "Fighter/EXP role and current passive/skill mechanics cross-checked across independent databases; pro VOD and draft review remain pending." }
   }),
-  catalogEntry("arlott", "Arlott", "Арлотт", {
-    identityStatus: "pending_review",
-    localizationStatus: "pending_review",
-    roleValues: ["Fighter", "Assassin"],
-    roleStatus: "verified",
-    primaryLane: "EXP Lane",
-    flexibleLanes: [],
-    laneStatus: "verified",
-    research: {
-      checkedAt: "2026-11-22",
-      roleAndLaneSources: [
-        "https://www.mlbbguides.com/heroes/",
-        "https://mlbb-stats.com/heroes",
-        "https://mlbbdex.com/en/heroes"
-      ],
-      competitiveReviewStatus: "pending",
-      method: "Role and lane tags cross-checked across independent hero databases; pro-draft usage and player VODs are reviewed separately before tactical recommendations are marked complete."
-    },
-  }),
+  catalogEntry("arlott", "Arlott", "Арлотт", { roleValues:["Fighter","Assassin"], roleStatus:"verified", primaryLane:"EXP Lane", flexibleLanes:["Roam"], laneStatus:"verified", tacticalProfileStatus:"partial", research:{checkedAt:"2026-11-22",roleAndLaneSources:["https://mlbbhub.com/ru/heroes/arlott","https://mlbbdex.com/en/heroes/arlott","https://mlbb.io/en/hero/arlott"],mechanicsSources:["https://liquipedia.net/mobilelegends/Arlott","https://mlbbdex.com/en/heroes/arlott","https://mlbb.io/en/hero/arlott"],rankedMetaSources:["https://mlbbhub.com/ru/heroes/arlott","https://mlbbdex.com/en/heroes/arlott","https://mlbb.io/en/hero/arlott"],competitiveReviewStatus:"pending",method:"Fighter/Assassin identity and EXP primary lane cross-checked across three databases; Demon Gaze marks, Vengeance resets and Final Slash displacement verified independently. Roam is flexible, not default. VOD review pending."} }),
   catalogEntry("aulus", "Aulus", "Аулус", {
     identityStatus: "pending_review",
     localizationStatus: "pending_review",
@@ -368,25 +296,7 @@ export const heroCatalog = [
       method: "Fighter/Jungle role and EXP flexibility retained from prior cross-source verification. The post-rework skill kit is checked against current and rework references; pro VOD review remains pending."
     }
   }),
-  catalogEntry("aurora", "Aurora", "Аврора", {
-    identityStatus: "pending_review",
-    localizationStatus: "pending_review",
-    roleValues: ["Mage"],
-    roleStatus: "verified",
-    primaryLane: "Mid Lane",
-    flexibleLanes: [],
-    laneStatus: "verified",
-    research: {
-      checkedAt: "2026-11-22",
-      roleAndLaneSources: [
-        "https://www.mlbbguides.com/heroes/",
-        "https://mlbb-stats.com/heroes",
-        "https://mlbbdex.com/en/heroes"
-      ],
-      competitiveReviewStatus: "pending",
-      method: "Role and lane tags cross-checked across independent hero databases; pro-draft usage and player VODs are reviewed separately before tactical recommendations are marked complete."
-    },
-  }),
+  catalogEntry("aurora", "Aurora", "Аврора", { roleValues:["Mage"], roleStatus:"verified", primaryLane:"Mid Lane", laneStatus:"verified", tacticalProfileStatus:"partial", research:{checkedAt:"2026-11-22",roleAndLaneSources:["https://mlbbhub.com/ru/heroes/aurora","https://mlbbdex.com/en/heroes/aurora","https://mlbb-knowledge.vercel.app/heroes/36"],mechanicsSources:["https://liquipedia.net/mobilelegends/Aurora","https://mlbb-knowledge.vercel.app/heroes/36","https://mlbb.io/en/hero/aurora"],rankedMetaSources:["https://mlbbhub.com/ru/heroes/aurora","https://mlbbdex.com/en/heroes/aurora","https://mlbb.io/en/hero/aurora"],competitiveReviewStatus:"pending",method:"Mage/Mid identity and freeze, glacier and death-prevention mechanics cross-checked across Liquipedia, MLBB Knowledge, MLBB.io and current guides. Ranked snapshot is separate; VOD review pending."} }),
   catalogEntry("badang", "Badang", "Баданг", {
     identityStatus: "pending_review",
     localizationStatus: "pending_review",
