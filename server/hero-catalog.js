@@ -144,6 +144,33 @@ export const heroCatalog = [
       method: "Assassin/Jungle identity cross-checked across MLBBHub, MLBB.io and MLBBdex. Skill mechanics compared across MLBB Guides and MLBB Analytics. Ranked aggregates are kept separate from tournament samples; current patch-specific professional VOD review remains pending."
     }
   }),
+  catalogEntry("fanny", "Fanny", "Фанни", {
+    roleValues: ["Assassin"],
+    roleStatus: "verified",
+    primaryLane: "Jungle",
+    flexibleLanes: [],
+    laneStatus: "verified",
+    tacticalProfileStatus: "partial",
+    research: {
+      checkedAt: "2026-11-22",
+      roleAndLaneSources: [
+        "https://metammo.com/mobile-legends-guide/heroes/fanny",
+        "https://mlbbdex.com/en/heroes/fanny",
+        "https://mlbb-knowledge.vercel.app/heroes/17"
+      ],
+      mechanicsSources: [
+        "https://metammo.com/mobile-legends-guide/heroes/fanny",
+        "https://mlbb-knowledge.vercel.app/heroes/17",
+        "https://www.mlbbanalytics.com/heroes?hero=Fanny"
+      ],
+      rankedMetaSources: [
+        "https://metammo.com/mobile-legends-guide/heroes/fanny",
+        "https://mlbbdex.com/en/heroes/fanny"
+      ],
+      competitiveReviewStatus: "partial",
+      method: "Assassin/Jungle identity, skill mechanics and official ranked aggregates cross-checked across METAMMO, MLBBDex and MLBB Knowledge. Community build frequency kept separate from measured win rates. Tournament samples are separated by competition and provider; patch-specific professional VOD review remains pending."
+    }
+  }),
   catalogEntry("nolan", "Nolan", "Нолан", {
     roleValues: ["Assassin"],
     roleStatus: "verified",
