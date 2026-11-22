@@ -37,7 +37,7 @@ app.use(cors({origin:process.env.APP_URL||true}));
 app.use(express.json({limit:"1mb"}));
 app.use(rateLimit({windowMs:15*60*1000,limit:300,standardHeaders:true,legacyHeaders:false}));
 const authRateLimit=rateLimit({windowMs:15*60*1000,limit:10,standardHeaders:true,legacyHeaders:false,message:{error:"Слишком много попыток. Попробуй позже."}});
-const guestDraftRateLimit=rateLimit({windowMs:15*60*1000,limit:60,standardHeaders:true,legacyHeaders:false,message:{error:"Слишком много запросов к анализу. Попробуй позже."}});
+const guestDraftRateLimit=rateLimit({windowMs:15*60*1000,limit:process.env.NODE_ENV==="test"?300:60,standardHeaders:true,legacyHeaders:false,message:{error:"Слишком много запросов к анализу. Попробуй позже."}});
 const upload=multer({dest:uploadDir,limits:{fileSize:(Number(process.env.MAX_UPLOAD_MB)||8)*1024*1024},fileFilter:(req,file,cb)=>cb(null,/^image\/(png|jpeg|webp)$/.test(file.mimetype))});
 const secret=process.env.JWT_SECRET;
 if(!secret && process.env.NODE_ENV==="production") throw new Error("JWT_SECRET is required in production");
