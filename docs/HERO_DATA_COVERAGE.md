@@ -18,7 +18,7 @@ Live patch reference: 2.2.23
 ## Tactical profile coverage
 
 Current hero-specific profiles:
-- Hayabusa (Хаябуса)\n- Hylos (Хилос)\n- Irithel (Иритэль)\n- Ixia (Иксия)\n- Johnson (Джонсон)\n- Grock (Грок)\n- Guinevere (Гвиневра)\n- Gusion (Госсен)\n- Harith (Харит)\n- Harley (Харли)\n- Faramis (Фарамис)\n- Fredrinn (Фредрин)\n- Gatotkaca (Гатоткача)\n- Gloo (Глу)\n- Gord (Горд)\n- Chip (Чип)\n- Cici (Сиси)\n- Claude (Клод)\n- Clint (Клинт)\n- Esmeralda (Эсмеральда)\n- Benedetta (Бенедетта)
+- Hayabusa (Хаябуса)\n- Hylos (Хилос)\n- Irithel (Иритэль)\n- Ixia (Иксия)\n- Johnson (Джонсон)\n- Hayabusa (Хаябуса)\n- Hylos (Хилос)\n- Irithel (Иритэль)\n- Ixia (Иксия)\n- Johnson (Джонсон)\n- Grock (Грок)\n- Guinevere (Гвиневра)\n- Gusion (Госсен)\n- Harith (Харит)\n- Harley (Харли)\n- Faramis (Фарамис)\n- Fredrinn (Фредрин)\n- Gatotkaca (Гатоткача)\n- Gloo (Глу)\n- Gord (Горд)\n- Chip (Чип)\n- Cici (Сиси)\n- Claude (Клод)\n- Clint (Клинт)\n- Esmeralda (Эсмеральда)\n- Benedetta (Бенедетта)
 - Brody (Броуди)
 - Carmilla (Кармилла)
 - Cecilion (Сесилион)
