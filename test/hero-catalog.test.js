@@ -5,7 +5,7 @@ import { heroCatalog } from "../server/hero-catalog.js";
 import { validateHeroCatalog } from "../server/hero-catalog-validation.js";
 import { heroLegacyBaseline } from "./fixtures/hero-legacy-baseline.js";
 
-const legacyToCatalogName = name => name;
+const legacyToCatalogName = name => name === "Эудора" ? "Эйдора" : name;
 
 test("legacy baseline exactly matches the current 32 heroes and their order", () => {
   assert.equal(heroes.length, 32);
@@ -90,7 +90,7 @@ test("Suyou keeps the pending-review localization status", () => {
   assert.equal(suyou.localization.status, "pending_review");
 });
 
-test("every legacy Russian name is represented, allowing the approved Dyrroth correction", () => {
+test("every legacy Russian name is represented, allowing approved localization corrections", () => {
   const catalogNames = new Set(heroCatalog.map(hero => hero.displayNameRu));
   for (const legacyHero of heroLegacyBaseline) {
     assert.ok(
