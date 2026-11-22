@@ -10,7 +10,7 @@ Live patch reference: 2.2.23
 | Hero catalog entries | 133 / 133 current catalog entries | Names and IDs are available to the encyclopedia/catalog UI. This is not yet an independently confirmed official-client roster snapshot. |
 | Unique catalog IDs | 133 / 133 | No duplicate IDs after the Fanny catalog-entry correction. |
 | Role verified | 90 / 133 | Role labels have cross-source evidence. |
-| Primary lane verified | 89 / 133 | Primary lane has cross-source evidence. |
+| Primary lane verified | 88 / 133 | Primary lane has cross-source evidence. |
 | Tactical profile records | 62 / 133 | Profile records are linked to the catalog; one remains a placeholder without researched mechanics. |
 | Substantive partial tactical profiles | 61 / 133 | Hero-specific mechanics, strengths, weaknesses, item notes and team-fight guidance have been researched. |
 | Tactical profiles marked complete | 0 / 133 | Profiles remain partial until current-patch and competitive evidence is sufficiently reviewed. |
