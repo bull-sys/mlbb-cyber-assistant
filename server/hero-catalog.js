@@ -286,13 +286,9 @@ export const heroCatalog = [
     laneStatus: "verified",
     research: {
       checkedAt: "2026-11-22",
-      roleAndLaneSources: [
-        "https://www.mlbbguides.com/heroes/",
-        "https://mlbb-stats.com/heroes",
-        "https://mlbbdex.com/en/heroes"
-      ],
+      roleAndLaneSources: ["https://mlbbhub.com/heroes/alpha","https://mlbb.io/en/hero/alpha","https://mlbbdex.com/en/heroes/alpha"],
       competitiveReviewStatus: "pending",
-      method: "Role and lane tags cross-checked across independent hero databases; pro-draft usage and player VODs are reviewed separately before tactical recommendations are marked complete."
+      method: "Fighter role and Jungle primary lane with EXP flexibility cross-checked across MLBBHub, MLBB.io and MLBBDex."
     },
   }),
   catalogEntry("alucard", "Alucard", "Алукард", {
@@ -436,20 +432,16 @@ export const heroCatalog = [
   catalogEntry("barats", "Barats", "Баратс", {
     identityStatus: "pending_review",
     localizationStatus: "pending_review",
-    roleValues: ["Tank", "Fighter"],
+    roleValues: ["Tank","Fighter"],
     roleStatus: "verified",
     primaryLane: "Jungle",
     flexibleLanes: ["EXP Lane"],
-    laneStatus: "pending_review",
+    laneStatus: "verified",
     research: {
       checkedAt: "2026-11-22",
-      roleAndLaneSources: [
-        "https://www.mlbbguides.com/heroes/",
-        "https://mlbb-stats.com/heroes",
-        "https://mlbbdex.com/en/heroes"
-      ],
+      roleAndLaneSources: ["https://mlbbhub.com/ru/heroes/barats","https://mlbb.io/en/hero/barats/build","https://mlbbdex.com/en/heroes/barats"],
       competitiveReviewStatus: "pending",
-      method: "Role and lane tags cross-checked across independent hero databases; pro-draft usage and player VODs are reviewed separately before tactical recommendations are marked complete."
+      method: "Tank/Fighter role and Jungle primary lane with EXP flexibility cross-checked across three current hero databases."
     },
   }),
   catalogEntry("baxia", "Baxia", "Баксия", {
@@ -680,20 +672,16 @@ export const heroCatalog = [
   catalogEntry("edith", "Edith", "Эдит", {
     identityStatus: "pending_review",
     localizationStatus: "pending_review",
-    roleValues: ["Tank", "Marksman"],
+    roleValues: ["Tank","Marksman"],
     roleStatus: "verified",
     primaryLane: "EXP Lane",
     flexibleLanes: ["Roam"],
     laneStatus: "verified",
     research: {
       checkedAt: "2026-11-22",
-      roleAndLaneSources: [
-        "https://www.mlbbguides.com/heroes/",
-        "https://www.propublic.gg/heroes/stats?dir=asc&sort=name",
-        "https://mlbbhub.com/heroes"
-      ],
+      roleAndLaneSources: ["https://mlbbhub.com/heroes/edith","https://mlbbdex.com/en/heroes/edith","https://metammo.com/mobile-legends-guide/heroes/edith"],
       competitiveReviewStatus: "pending",
-      method: "Role tags cross-checked against MLBBHub; lane placement checked against MLBB Guides and Propublic's Mythic+ 15-day lane table. Pro tournament usage is tracked separately and does not automatically determine ranked primary lane."
+      method: "Tank/Marksman role and EXP primary lane with Roam flexibility cross-checked across MLBBHub, MLBBDex and METAMMO."
     },
   }),
   catalogEntry("esmeralda", "Esmeralda", "Эсмеральда", {
@@ -813,13 +801,9 @@ export const heroCatalog = [
     laneStatus: "verified",
     research: {
       checkedAt: "2026-11-22",
-      roleAndLaneSources: [
-        "https://www.mlbbguides.com/heroes/",
-        "https://mlbb-stats.com/heroes",
-        "https://mlbb.io/en/heroes"
-      ],
+      roleAndLaneSources: ["https://mlbbhub.com/heroes/freya","https://mlbb.io/en/hero/freya","https://mlbb-knowledge.vercel.app/heroes/22"],
       competitiveReviewStatus: "pending",
-      method: "Role tags cross-checked against MLBB Guides and MLBB Stats; lane placement cross-checked against MLBB Stats and MLBB.io. Professional tournament usage is reviewed separately from ranked lane prevalence."
+      method: "Fighter role and EXP primary lane with Jungle flexibility cross-checked across three hero databases; 2.2.23 changes separately checked against patch notes."
     },
   }),  catalogEntry("gatotkaca", "Gatotkaca", "Гатоткача", {
     identityStatus: "pending_review",
@@ -958,9 +942,14 @@ export const heroCatalog = [
   }),
   catalogEntry("hilda", "Hilda", "Хильда", {
     identityStatus: "pending_review",
-    localizationStatus: "pending_review"
-  }),
-  catalogEntry("hirara", "Hirara", "Хирара", {
+    localizationStatus: "pending_review",
+    roleValues: ["Fighter", "Tank"],
+    roleStatus: "verified",
+    primaryLane: "Roam",
+    flexibleLanes: ["EXP Lane"],
+    laneStatus: "verified",
+    research: { checkedAt:"2026-11-22", roleAndLaneSources:["https://mlbbhub.com/ru/heroes/hilda","https://mlbb.io/en/hero/hilda","https://mlbbdex.com/en/heroes/hilda"], competitiveReviewStatus:"pending", method:"Fighter/Tank role and Roam primary lane with EXP flexibility cross-checked across three hero databases." },
+  }),  catalogEntry("hirara", "Hirara", "Хирара", {
     identityStatus: "pending_review",
     localizationStatus: "pending_review"
   }),
