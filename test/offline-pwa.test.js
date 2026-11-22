@@ -27,3 +27,8 @@ test("draft state is saved locally and restored only after the catalog is loaded
   assert.match(app, /enemies,allies,lane:/);
   assert.match(app, /threats:\[\.\.\.threats\]/);
 });
+
+test("AI-generated draft explanation is escaped before HTML rendering", () => {
+  assert.match(app, /esc\(d\.aiExplanation\|\|d\.note\)/);
+  assert.doesNotMatch(app, /\$\{d\.aiExplanation\|\|d\.note\}/);
+});
