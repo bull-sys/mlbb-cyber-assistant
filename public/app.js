@@ -137,10 +137,13 @@ function heroTileMarkup(h,extra=""){
   ?'<span class="hero-card-fact positive"><i>＋</i>'+esc(strength)+'</span><span class="hero-card-fact negative"><i>−</i>'+esc(weakness)+'</span>'
   :'<span class="hero-card-fact muted">Тактический профиль уточняется</span>';
  const status=h.supported?'<span class="hero-status ready">АНАЛИЗ</span>':'<span class="hero-status pending">КАТАЛОГ</span>';
- return '<button class="hero-tile '+extra+'" data-picker-value="'+esc(h.value)+'"><span class="hero-portrait-wrap"><img class="hero-portrait" src="'+url+'" alt="" loading="lazy" decoding="async" onerror="this.hidden=true;this.parentElement.classList.add(\'portrait-missing\')"><span class="portrait-fallback">✦</span></span><span class="hero-card-copy"><span class="hero-card-title"><b>'+esc(h.name)+'</b>'+status+'</span><small class="hero-role">'+esc(role)+'</small>'+facts+'</span></button>';
+ const selected=pickerTarget==="enemies"?enemies.includes(h.value):pickerTarget==="allies"?allies.includes(h.value):$("myHero").value===h.value;
+ return '<button class="hero-tile '+extra+(selected?" selected":"")+'" aria-pressed="'+selected+'" data-picker-value="'+esc(h.value)+'"><span class="hero-portrait-wrap"><img class="hero-portrait" src="'+url+'" alt="" loading="lazy" decoding="async" onerror="this.hidden=true;this.parentElement.classList.add(\'portrait-missing\')"><span class="portrait-fallback">✦</span></span><span class="hero-card-copy"><span class="hero-card-title"><b>'+esc(h.name)+'</b>'+status+'</span><small class="hero-role">'+esc(role)+'</small>'+facts+'</span></button>';
 }
 function renderHeroPicker(){
  const q=$("heroPickerSearch").value.trim().toLocaleLowerCase("ru"),entries=pickerEntries();
+ const current=pickerTarget==="enemies"?enemies:pickerTarget==="allies"?allies:[];
+ $("pickerSelectionStatus").textContent=pickerTarget==="myHero"?"Выбери своего героя":("Выбрано "+current.length+" из 5 · можно добавить несколько подряд");
  const recent=pickerRecent().map(value=>entries.find(h=>h.value===value)).filter(Boolean);
  $("recentHeroes").innerHTML=recent.length?'<small>НЕДАВНО ВЫБРАННЫЕ</small><div class="picker-recent-grid">'+recent.map(h=>heroTileMarkup(h,"recent")).join("")+'</div>':"";
  const roleOptions=["Убийца","Маг","Стрелок","Боец","Танк","Поддержка","Лес","Золото","Опыт","Мид","Роум"];
@@ -162,14 +165,13 @@ function openHeroPicker(target){
 function choosePickerHero(value){
  const entries=pickerEntries(),hero=entries.find(h=>h.value===value);if(!hero)return;
  if(pickerTarget==="myHero"){
-  $("myHero").value=value;$("myHeroChoice").textContent=hero.name;saveDraft();
- }else{
-  const arr=pickerTarget==="enemies"?enemies:allies;
-  if(arr.length>=5)return toast("Команда уже заполнена");
-  if(arr.includes(value))return toast("Этот герой уже выбран");
-  arr.push(value);drawTeams();saveDraft();
+  $("myHero").value=value;$("myHeroChoice").textContent=hero.name;saveDraft();rememberPickerHero(value);$("heroPicker").classList.add("hidden");return;
  }
- rememberPickerHero(value);$("heroPicker").classList.add("hidden");
+ const arr=pickerTarget==="enemies"?enemies:allies;
+ if(arr.length>=5)return toast("Команда уже заполнена");
+ if(arr.includes(value))return toast("Этот герой уже выбран");
+ arr.push(value);drawTeams();saveDraft();rememberPickerHero(value);renderHeroPicker();
+ if(arr.length>=5){$("heroPicker").classList.add("hidden");toast("Команда заполнена");}
 }
 $("openEnemyPicker").onclick=()=>openHeroPicker("enemies");
 $("openAllyPicker").onclick=()=>openHeroPicker("allies");
