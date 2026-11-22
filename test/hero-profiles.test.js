@@ -550,3 +550,12 @@ test("Hayabusa, Hylos, Irithel, Ixia and Johnson have sourced partial tactical p
   const johnson = heroProfiles.find(item => item.id === "johnson");
   assert.ok(johnson.mechanics.some(note => note.includes("союзник")));
 });
+
+test("hero profile coverage count and unique IDs stay aligned with the audited baseline", () => {
+  assert.equal(heroProfiles.length, 87);
+  assert.equal(new Set(heroProfiles.map(hero => hero.id)).size, 87);
+  const saber = heroProfiles.find(hero => hero.id === "saber");
+  assert.ok(saber);
+  assert.deepEqual(saber.mechanics, []);
+  assert.equal(heroProfiles.filter(hero => hero.mechanics.length > 0).length, 86);
+});
