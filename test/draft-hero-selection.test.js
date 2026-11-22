@@ -34,7 +34,7 @@ test("only explicitly verified catalog mappings resolve to legacy analysis names
   });
   assert.deepEqual(resolveDraftHeroSelection("dyrroth"), {
     id: "dyrroth",
-    name: "Дариус",
+    name: "Диррот",
     legacyName: "Диррот",
     analysisSupported: true
   });
