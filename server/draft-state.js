@@ -14,7 +14,7 @@ export function normalizeDraftState(input, { heroes, lanes } = {}) {
   const enemies = normalizeTeam(input.enemies);
   const allies = normalizeTeam(input.allies);
   if (!enemies || !allies) return null;
-  if (typeof input.lane !== "string" || !allowedLanes.has(input.lane)) return null;
+  if (typeof input.lane !== "string" || (input.lane && !allowedLanes.has(input.lane))) return null;
   if (typeof input.myHero !== "string" || (input.myHero && !allowedHeroes.has(input.myHero))) return null;
   if (!Array.isArray(input.threats) || input.threats.length > ALLOWED_THREATS.size) return null;
   if (input.threats.some(item => typeof item !== "string" || !ALLOWED_THREATS.has(item))) return null;
