@@ -64,7 +64,7 @@ function restoreDraft(){
  catch{try{localStorage.removeItem(draftStorageKey)}catch{}}
 }
 async function syncDraftState(){
- if(!token)return;
+ if(!token||activeUserId===null)return;
  if(draftSyncInFlight){draftSyncAgain=true;return}
  if(!navigator.onLine){setDraftStatus("Офлайн: черновик сохранён на устройстве, синхронизация будет позже");return}
  draftSyncInFlight=true;
