@@ -343,16 +343,15 @@ export const heroCatalog = [
     primaryLane: "Jungle",
     flexibleLanes: ["EXP Lane"],
     laneStatus: "verified",
+    tacticalProfileStatus: "partial",
     research: {
       checkedAt: "2026-11-22",
-      roleAndLaneSources: [
-        "https://www.mlbbguides.com/heroes/",
-        "https://mlbb-stats.com/heroes",
-        "https://mlbbdex.com/en/heroes"
-      ],
+      roleAndLaneSources: ["https://liquipedia.net/mobilelegends/Aulus", "https://mlbb-knowledge.vercel.app/heroes/108", "https://mlbb.io/en/hero/aulus"],
+      mechanicsSources: ["https://mlbb-knowledge.vercel.app/heroes/108", "https://liquipedia.net/mobilelegends/Aulus", "https://liquipedia.net/mobilelegends/Patch_2.1.67"],
+      rankedMetaSources: ["https://mlbb.io/en/hero/aulus", "https://mlbbhub.com/heroes/aulus"],
       competitiveReviewStatus: "pending",
-      method: "Role and lane tags cross-checked across independent hero databases; pro-draft usage and player VODs are reviewed separately before tactical recommendations are marked complete."
-    },
+      method: "Fighter/Jungle role and EXP flexibility retained from prior cross-source verification. The post-rework skill kit is checked against current and rework references; pro VOD review remains pending."
+    }
   }),
   catalogEntry("aurora", "Aurora", "Аврора", {
     identityStatus: "pending_review",
@@ -983,8 +982,16 @@ export const heroCatalog = [
     localizationStatus: "pending_review"
   }),
   catalogEntry("kaja", "Kaja", "Каджа", {
-    identityStatus: "pending_review",
-    localizationStatus: "pending_review"
+    roleValues: ["Support"], roleStatus: "verified", primaryLane: "Roam",
+    flexibleLanes: [], laneStatus: "verified", tacticalProfileStatus: "partial",
+    research: {
+      checkedAt: "2026-11-22",
+      roleAndLaneSources: ["https://liquipedia.net/mobilelegends/Kaja", "https://mlbb-knowledge.vercel.app/heroes/62", "https://mlbbhub.com/heroes/kaja"],
+      mechanicsSources: ["https://liquipedia.net/mobilelegends/Kaja", "https://mlbb-knowledge.vercel.app/heroes/62", "https://liquipedia.net/mobilelegends/Patch_2.1.95"],
+      rankedMetaSources: ["https://mlbbhub.com/heroes/kaja", "https://mlbb-knowledge.vercel.app/heroes/62"],
+      competitiveReviewStatus: "pending",
+      method: "Support/Roam identity and current post-rework area-control kit cross-checked across independent references. Ranked data is kept separate from professional draft evidence; pro VOD review remains pending."
+    }
   }),
   catalogEntry("kalea", "Kalea", "Калеа", {
     identityStatus: "pending_review",
@@ -1099,7 +1106,18 @@ export const heroCatalog = [
   }),
 
 
-  catalogEntry("valir", "Valir", "Валир"),
+  catalogEntry("valir", "Valir", "Валир", {
+    roleValues: ["Mage"], roleStatus: "verified", primaryLane: "Mid Lane",
+    flexibleLanes: ["EXP Lane"], laneStatus: "verified", tacticalProfileStatus: "partial",
+    research: {
+      checkedAt: "2026-11-22",
+      roleAndLaneSources: ["https://mlbb.io/en/hero/valir", "https://mlbbhub.com/heroes/valir", "https://liquipedia.net/mobilelegends/Valir"],
+      mechanicsSources: ["https://liquipedia.net/mobilelegends/Valir", "https://mlbb.io/en/hero/valir", "https://kazukiofficial.com/heroes/valir"],
+      rankedMetaSources: ["https://mlbb.io/en/hero/valir", "https://mlbbhub.com/heroes/valir"],
+      competitiveReviewStatus: "pending",
+      method: "Mage/Mid identity and current skill mechanics cross-checked across independent hero references. Brawl-only patch modifiers are not treated as ranked balance changes; pro VOD review remains pending."
+    }
+  }),
   catalogEntry("obsidia", "Obsidia", "Обсидия", {
     roleValues: ["Marksman"], roleStatus: "verified", primaryLane: "Gold Lane",
     flexibleLanes: [], laneStatus: "verified", tacticalProfileStatus: "partial",
@@ -1111,8 +1129,16 @@ export const heroCatalog = [
     localizationStatus: "pending_review"
   }),
   catalogEntry("paquito", "Paquito", "Пакито", {
-    identityStatus: "pending_review",
-    localizationStatus: "pending_review"
+    roleValues: ["Fighter", "Assassin"], roleStatus: "verified", primaryLane: "EXP Lane",
+    flexibleLanes: ["Jungle"], laneStatus: "verified", tacticalProfileStatus: "partial",
+    research: {
+      checkedAt: "2026-11-22",
+      roleAndLaneSources: ["https://liquipedia.net/mobilelegends/Paquito", "https://mlbbhub.com/heroes/paquito", "https://mlbb-knowledge.vercel.app/heroes/103"],
+      mechanicsSources: ["https://liquipedia.net/mobilelegends/Paquito", "https://mlbb-knowledge.vercel.app/heroes/103", "https://mlbbhub.com/heroes/paquito"],
+      rankedMetaSources: ["https://mlbbhub.com/heroes/paquito", "https://mlbb-knowledge.vercel.app/heroes/103"],
+      competitiveReviewStatus: "pending",
+      method: "Fighter/Assassin role, EXP primary lane and Jungle flexibility cross-checked. Skill-cycle mechanics and ranked build evidence are separated from professional pick evidence; pro VOD review remains pending."
+    }
   }),
   catalogEntry("phoveus", "Phoveus", "Фовеус", {
     identityStatus: "pending_review",
@@ -1123,8 +1149,16 @@ export const heroCatalog = [
     localizationStatus: "pending_review"
   }),
   catalogEntry("rafaela", "Rafaela", "Рафаэль", {
-    identityStatus: "pending_review",
-    localizationStatus: "pending_review"
+    roleValues: ["Support"], roleStatus: "verified", primaryLane: "Roam",
+    flexibleLanes: ["Mid Lane"], laneStatus: "verified", tacticalProfileStatus: "partial",
+    research: {
+      checkedAt: "2026-11-22",
+      roleAndLaneSources: ["https://liquipedia.net/mobilelegends/Rafaela", "https://mobilelegends.com/hero/detail?heroid=14", "https://mlbbhub.com/heroes/rafaela"],
+      mechanicsSources: ["https://mobilelegends.com/hero/detail?heroid=14", "https://liquipedia.net/mobilelegends/Rafaela", "https://mlbb.io/en/hero/rafaela/build"],
+      rankedMetaSources: ["https://mobilelegends.com/hero/detail?heroid=14", "https://mlbbhub.com/heroes/rafaela"],
+      competitiveReviewStatus: "pending",
+      method: "Support/Roam identity cross-checked against the official hero page and independent databases. The current official passive resurrection mechanic takes precedence over older third-party passive descriptions; pro VOD review remains pending."
+    }
   }),
   catalogEntry("ruby", "Ruby", "Руби", {
     identityStatus: "pending_review",
