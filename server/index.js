@@ -13,6 +13,7 @@ import fs from "node:fs";
 import { fileURLToPath } from "node:url";
 import { heroes, items, talents, spells, emblems } from "./data.js";
 import { getHeroCatalogApiFields, isLegacyHeroName } from "./hero-catalog-adapter.js";
+import { getDraftHeroOptions, isCatalogHeroId, resolveDraftHeroSelection } from "./draft-hero-selection.js";
 import { heroProfiles, validateHeroProfiles } from "./hero-profiles.js";
 import { normalizeRegistration } from "./registration.js";
 import { getOptionalUser } from "./auth.js";
@@ -54,6 +55,7 @@ app.get("/api/health",(req,res)=>res.json({ok:true,service:"MLBB Cyber Assistant
 app.get("/api/data",(req,res)=>res.json({
   heroes,
   ...getHeroCatalogApiFields(),
+  draftHeroOptions: getDraftHeroOptions(),
   heroProfiles,
   heroProfilesValidation: validateHeroProfiles(),
   items,
@@ -409,8 +411,41 @@ function analyze({lane, enemies = [], allies = [], myHero = ""}) {
 }
 
 app.post("/api/ai/draft",guestDraftRateLimit,optionalAuth,async(req,res)=>{
- const b=req.body||{};if(!isValidDraftRequest(b,roles,isLegacyHeroName))return res.status(400).json({error:"Некорректный состав или линия"});
- const result=analyze(b);
+ const b=req.body||{};
+ if(!isValidDraftRequest(b,roles,isLegacyHeroName,isCatalogHeroId))return res.status(400).json({error:"Некорректный состав или линия"});
+
+ const selectedValues=[...b.enemies,...(b.allies||[]),...(b.myHero?[b.myHero]:[])];
+ const selections=selectedValues.map(resolveDraftHeroSelection);
+ const unsupported=[...new Map(selections
+  .filter(selection=>!selection?.analysisSupported)
+  .map(selection=>[selection.id,selection.name])).entries()]
+  .map(([id,name])=>({id,name}));
+
+ if(unsupported.length){
+  return res.json({
+   analysisStatus:"limited",
+   unsupportedHeroes:unsupported,
+   threats:[],
+   counters:[],
+   build:[],
+   buildDetails:[],
+   emblem:null,
+   talentTiers:[],
+   spell:null,
+   timing:null,
+   note:"Полный анализ не рассчитан: для выбранных героев ещё нет подтверждённой связи с проверенной тактической базой. Чтобы не выдавать выдуманные контрпики, рекомендации временно скрыты."
+  });
+ }
+
+ const legacyName=value=>resolveDraftHeroSelection(value).legacyName;
+ const resolvedDraft={
+  ...b,
+  enemies:b.enemies.map(legacyName),
+  allies:(b.allies||[]).map(legacyName),
+  myHero:b.myHero?legacyName(b.myHero):""
+ };
+ const result=analyze(resolvedDraft);
+ result.analysisStatus="complete";
  if(openai&&req.user){try{const response=await openai.chat.completions.create({model:process.env.OPENAI_MODEL||"gpt-4.1-mini",messages:[{role:"system",content:"Ты тактический помощник MLBB. Не выдумывай live статистику и точные параметры патча. Используй только переданные варианты. Кратко объясни тактику на русском."},{role:"user",content:JSON.stringify({lane:b.lane,enemies:b.enemies,allies:b.allies||[],myHero:b.myHero||"",rulesResult:result})}],max_tokens:450,temperature:.3});result.aiExplanation=response.choices[0]?.message?.content||""}catch{result.aiExplanation="AI-сервис временно недоступен; показан базовый анализ."}}
  res.json(result);
 });
