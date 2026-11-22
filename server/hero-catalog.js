@@ -11,6 +11,7 @@ const catalogEntry = (id, nameEn, displayNameRu, {
   primaryLane = null,
   flexibleLanes = [],
   laneStatus = "pending_review",
+  tacticalProfileStatus = "missing",
   research = null
 } = {}) => ({
   id,
@@ -20,7 +21,7 @@ const catalogEntry = (id, nameEn, displayNameRu, {
   localization: { status: localizationStatus },
   role: { values: roleValues, status: roleStatus },
   lanes: { primary: primaryLane, flexible: flexibleLanes, status: laneStatus },
-  tacticalProfile: { status: "missing" },
+  tacticalProfile: { status: tacticalProfileStatus },
   ...(research ? { research } : {})
 });
 
@@ -29,7 +30,33 @@ const catalogEntry = (id, nameEn, displayNameRu, {
 export const HERO_CATALOG_ROSTER_STATUS = "incomplete";
 
 export const heroCatalog = [
-  catalogEntry("helcurt", "Helcurt", "Хелкарт"),
+  catalogEntry("helcurt", "Helcurt", "Хелкарт", {
+    roleValues: ["Assassin"],
+    roleStatus: "verified",
+    primaryLane: "Jungle",
+    flexibleLanes: ["Roam"],
+    laneStatus: "verified",
+    tacticalProfileStatus: "partial",
+    research: {
+      checkedAt: "2026-11-22",
+      roleAndLaneSources: [
+        "https://mlbb.io/en/hero/helcurt",
+        "https://mlbb-stats.com/counter/helcurt",
+        "https://mlbbhub.com/ru/heroes/helcurt"
+      ],
+      mechanicsSources: [
+        "https://liquipedia.net/mobilelegends/Helcurt",
+        "https://mlbb.io/en/hero/helcurt"
+      ],
+      rankedMetaSources: [
+        "https://mlbb.io/en/hero/helcurt",
+        "https://mlbb-stats.com/counter/helcurt",
+        "https://mlbbhub.com/ru/heroes/helcurt"
+      ],
+      competitiveReviewStatus: "pending",
+      method: "Assassin role and Jungle/Roam usage cross-checked across independent hero references. Skill mechanics cross-checked against Liquipedia and MLBB.io. Ranked statistics are recorded separately from professional draft evidence; pro VOD review remains pending."
+    }
+  }),
   catalogEntry("hanzo", "Hanzo", "Ханзо"),
   catalogEntry("roger", "Roger", "Роджер"),
   catalogEntry("ling", "Ling", "Линг"),
