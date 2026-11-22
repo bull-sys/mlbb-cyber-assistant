@@ -283,3 +283,9 @@ test("Aldous, Floryn, Estes, Minotaur and Lunox have verified catalog roles and 
  for(const [id,[role,lane]] of Object.entries(expected)){const h=heroCatalog.find(x=>x.id===id);assert.ok(h,id);assert.ok(h.role.values.includes(role));assert.equal(h.role.status,"verified");assert.equal(h.lanes.primary,lane);assert.equal(h.lanes.status,"verified");assert.equal(h.tacticalProfile.status,"partial");assert.equal(h.research.checkedAt,"2026-11-22");assert.equal(h.research.roleAndLaneSources.length,3);}
  assert.deepEqual(heroCatalog.find(x=>x.id==="minotaur").lanes.flexible,["EXP Lane"]);
 });
+
+
+test("Cyclops, Julian, Tigreal, Chou and Dyrroth have verified catalog roles and lanes",()=>{
+ const expected={cyclops:["Mage","Mid Lane",[]],julian:["Assassin","Jungle",["Mid Lane"]],tigreal:["Tank","Roam",[]],chou:["Fighter","EXP Lane",["Roam"]],dyrroth:["Fighter","EXP Lane",["Jungle"]]};
+ for(const [id,[role,lane,flex]] of Object.entries(expected)){const h=heroCatalog.find(x=>x.id===id);assert.ok(h,id);assert.ok(h.role.values.includes(role));assert.equal(h.role.status,"verified");assert.equal(h.lanes.primary,lane);assert.equal(h.lanes.status,"verified");assert.equal(h.tacticalProfile.status,"partial");assert.equal(h.research.checkedAt,"2026-11-22");assert.equal(h.research.roleAndLaneSources.length,3);assert.equal(h.lanes.flexible.length,flex.length);for(const f of flex)assert.ok(h.lanes.flexible.includes(f));}
+});
