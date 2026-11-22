@@ -101,16 +101,26 @@ function pickerRecent(){
 function rememberPickerHero(value){
  try{localStorage.setItem("mlbb_recent_draft_heroes",JSON.stringify([value,...pickerRecent().filter(x=>x!==value)].slice(0,6)))}catch{}
 }
+function heroPortraitUrl(hero){
+ const catalog=(data.draftHeroOptions||[]).find(h=>h.id===hero.value||h.name===hero.name||h.nameEn===hero.nameEn);
+ const id=(catalog&&catalog.id)||hero.id||(hero.nameEn||"").toLocaleLowerCase("en").replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");
+ const filename=id==="chang-e"?"chang27e":id;
+ return "https://raw.githubusercontent.com/Ceplin03/database-mlbb.Mobile-Legends-Bang-Bang/master/images-hero/"+encodeURIComponent(filename)+".png";
+}
+function heroTileMarkup(h,extra=""){
+ const url=heroPortraitUrl(h);
+ return '<button class="hero-tile '+extra+'" data-picker-value="'+esc(h.value)+'"><span class="hero-portrait-wrap"><img class="hero-portrait" src="'+url+'" alt="" loading="lazy" decoding="async" onerror="this.hidden=true;this.parentElement.classList.add(\'portrait-missing\')"><span class="portrait-fallback">✦</span></span><b>'+esc(h.name)+'</b></button>';
+}
 function renderHeroPicker(){
  const q=$("heroPickerSearch").value.trim().toLocaleLowerCase("ru");
  const entries=pickerEntries();
  const recent=pickerRecent().map(value=>entries.find(h=>h.value===value)).filter(Boolean);
- $("recentHeroes").innerHTML=recent.length?'<small>НЕДАВНО ВЫБРАННЫЕ</small><div class="picker-recent-grid">'+recent.map(h=>'<button class="hero-tile recent" data-picker-value="'+esc(h.value)+'"><b>'+esc(h.name)+'</b></button>').join("")+'</div>':"";
+ $("recentHeroes").innerHTML=recent.length?'<small>НЕДАВНО ВЫБРАННЫЕ</small><div class="picker-recent-grid">'+recent.map(h=>heroTileMarkup(h,"recent")).join("")+'</div>':"";
  const filtered=entries.filter(h=>{
   const match=(h.name+" "+h.nameEn).toLocaleLowerCase("ru").includes(q);
   return match&&(pickerFilter==="all"||(pickerFilter==="supported"&&h.supported)||(pickerFilter==="catalog"&&h.catalog));
  });
- $("heroPickerGrid").innerHTML=filtered.map(h=>'<button class="hero-tile" data-picker-value="'+esc(h.value)+'"><b>'+esc(h.name)+'</b><small>'+(h.supported?"Анализ доступен":"Каталог · проверяется")+'</small></button>').join("")||'<p class="hint">Ничего не найдено. Попробуй другое написание.</p>';
+ $("heroPickerGrid").innerHTML=filtered.map(h=>heroTileMarkup(h)).join("")||'<p class="hint">Ничего не найдено. Попробуй другое написание.</p>';
 }
 function openHeroPicker(target){
  pickerTarget=target;pickerFilter="all";$("heroPickerSearch").value="";
