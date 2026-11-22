@@ -414,3 +414,34 @@ test("Chip, Cici, Claude, Clint and Esmeralda have sourced partial tactical prof
   const esmeralda = heroProfiles.find(item => item.id === "esmeralda");
   assert.ok(esmeralda.mechanics.some(note => note.includes("игнорирует щиты")));
 });
+
+
+test("Faramis, Fredrinn, Gatotkaca, Gloo and Gord have sourced partial tactical profiles", () => {
+  const expected = [
+    ["faramis", "Фарамис", "https://mlbb-knowledge.vercel.app/heroes/76"],
+    ["fredrinn", "Фредрин", "https://mlbb-knowledge.vercel.app/heroes/117"],
+    ["gatotkaca", "Гатоткача", "https://mlbb-knowledge.vercel.app/heroes/41"],
+    ["gloo", "Глу", "https://mlbb-knowledge.vercel.app/heroes/104"],
+    ["gord", "Горд", "https://mlbb.io/en/hero/gord"]
+  ];
+  for (const [id, name, source] of expected) {
+    const hero = heroProfiles.find(item => item.id === id);
+    assert.ok(hero, id + " profile exists");
+    assert.equal(hero.names.ru, name);
+    assert.ok(hero.mechanics.length >= 4, id + " mechanics");
+    assert.ok(hero.strengths.length >= 3, id + " strengths");
+    assert.ok(hero.weaknesses.length >= 3, id + " weaknesses");
+    assert.ok(hero.sources.includes(source), id + " source");
+    assert.equal(hero.confidence, "partial");
+    assert.equal(hero.patch.version, HERO_DB_PATCH);
+    assert.equal(hero.patch.reviewedAt, "2026-11-22");
+    assert.deepEqual(hero.matchups.strongAgainst, []);
+    assert.deepEqual(hero.matchups.weakAgainst, []);
+  }
+  const gloo = heroProfiles.find(item => item.id === "gloo");
+  assert.ok(gloo.patch.notes.some(note => note.includes("2.2.23")));
+  const fredrinn = heroProfiles.find(item => item.id === "fredrinn");
+  assert.ok(fredrinn.mechanics.some(note => note.includes("Кристальной энергии")));
+  const faramis = heroProfiles.find(item => item.id === "faramis");
+  assert.ok(faramis.mechanics.some(note => note.includes("Царство Бездны")));
+});
