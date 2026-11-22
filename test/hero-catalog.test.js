@@ -272,3 +272,20 @@ test("Franco, Akai, Alucard, Arlott and Aurora have verified roles, lanes and so
 
 
 test("Badang, Balmond, Bane, Baxia and Beatrix have verified roles, lanes and sources",()=>{const expected=[["badang",["Fighter"],null,["EXP Lane","Roam"]],["balmond",["Fighter"],"Jungle",["EXP Lane"]],["bane",["Fighter","Mage"],"Jungle",["EXP Lane"]],["baxia",["Tank"],"Jungle",["Roam"]],["beatrix",["Marksman"],"Gold Lane",[]]];for(const [id,roles,primary,flexible] of expected){const h=heroCatalog.find(x=>x.id===id);assert.ok(h,id);assert.deepEqual(h.role.values,roles);assert.equal(h.role.status,"verified");assert.equal(h.lanes.primary,primary);assert.deepEqual(h.lanes.flexible,flexible);assert.equal(h.lanes.status,id==="badang"?"pending_review":"verified");assert.equal(h.tacticalProfile.status,"partial");assert.ok(h.research.roleAndLaneSources.length>=3);assert.ok(h.research.mechanicsSources.length>=3);assert.ok(h.research.rankedMetaSources.length>=3);}});
+
+
+test("Faramis, Fredrinn, Gatotkaca, Gloo and Gord have verified catalog identity and sourced roles", () => {
+  for (const id of ["faramis", "fredrinn", "gatotkaca", "gloo", "gord"]) {
+    const hero = heroCatalog.find(item => item.id === id);
+    assert.ok(hero, id);
+    assert.equal(hero.identity.status, "source_verified");
+    assert.equal(hero.localization.status, "pending_review");
+    assert.equal(hero.role.status, "verified");
+    assert.equal(hero.lanes.status, "verified");
+    assert.equal(hero.tacticalProfile.status, "partial");
+    assert.equal(hero.research.checkedAt, "2026-11-22");
+    assert.ok(hero.research.roleAndLaneSources.length >= 3);
+    assert.ok(hero.research.mechanicsSources.length >= 2);
+    assert.ok(hero.research.rankedMetaSources.length >= 2);
+  }
+});
