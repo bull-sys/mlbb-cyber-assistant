@@ -12,7 +12,7 @@ const app = await readFile(
 );
 
 test("service worker keeps the game catalog available offline after a successful load", () => {
-  assert.match(serviceWorker, /const CACHE="mlbb-cyber-v9"/);
+  assert.match(serviceWorker, /const CACHE="mlbb-cyber-v10"/);
   assert.match(serviceWorker, /const DATA_CACHE="mlbb-cyber-data-v1"/);
   assert.match(serviceWorker, /url\.pathname==="\/api\/data"/);
   assert.match(serviceWorker, /cache\.put\(request,copy\)/);
@@ -124,4 +124,14 @@ test("multi-select picker stays open while filling a team and closes at five", (
  assert.match(app, /renderHeroPicker\(\);/);
  assert.match(app, /Выбрано \+current\.length\+" из 5/);
  assert.match(css, /\.hero-tile\.selected/);
+});
+
+
+test("draft analysis renders a scan-friendly tactical report with escaped dynamic fields", () => {
+ assert.match(app, /report-eyebrow/);
+ assert.match(app, /counter-card/);
+ assert.match(app, /build-card/);
+ assert.match(app, /phase-card/);
+ assert.match(app, /esc\(item\.reason\)/);
+ assert.match(app, /Повторить анализ/);
 });
