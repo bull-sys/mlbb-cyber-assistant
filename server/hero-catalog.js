@@ -340,7 +340,7 @@ export const heroCatalog = [
     tacticalProfileStatus: "partial",
     research: { checkedAt: "2026-11-22", roleAndLaneSources: ["https://liquipedia.net/mobilelegends/Benedetta", "https://www.mlbb.io/en/hero/benedetta", "https://mlbbdex.com/en/heroes/benedetta"], mechanicsSources: ["https://liquipedia.net/mobilelegends/Benedetta", "https://www.mlbbguides.com/heroes/benedetta/"], rankedMetaSources: ["https://mlbbdex.com/en/heroes/benedetta"], competitiveReviewStatus: "pending", method: "Assassin/Fighter and EXP Lane cross-checked across three references. Sword Intent, passive dash, defensive control block and ultimate reviewed independently. Ranked patch 2.2.23 sample kept separate from pro evidence; VOD review pending." }
   }),
-  catalogEntry("brody", "Brody", "Броди", {
+  catalogEntry("brody", "Brody", "Броуди", {
     identityStatus: "verified", localizationStatus: "pending_review",
     roleValues: ["Marksman"], roleStatus: "verified", primaryLane: "Gold Lane", laneStatus: "verified",
     tacticalProfileStatus: "partial",
@@ -352,7 +352,7 @@ export const heroCatalog = [
     tacticalProfileStatus: "partial",
     research: { checkedAt: "2026-11-22", roleAndLaneSources: ["https://mlbb-knowledge.vercel.app/heroes/92", "https://liquipedia.net/mobilelegends/Carmilla", "https://mlbbhub.com/ru/heroes/carmilla"], mechanicsSources: ["https://mlbb-knowledge.vercel.app/heroes/92", "https://liquipedia.net/mobilelegends/Carmilla", "https://mlbb.io/en/hero/carmilla"], rankedMetaSources: ["https://mlbbhub.com/ru/heroes/carmilla"], competitiveReviewStatus: "pending", method: "Support/Tank and Roam cross-checked across three references. Vampire Pact, Crimson Flower, Bloodbath and Curse of Blood compared across independent skill references; conflicting numeric values omitted. Ranked and historical tournament samples kept separate. VOD review pending." }
   }),
-  catalogEntry("cecilion", "Cecilion", "Цицилион", {
+  catalogEntry("cecilion", "Cecilion", "Сесилион", {
     identityStatus: "verified", localizationStatus: "pending_review",
     roleValues: ["Mage"], roleStatus: "verified", primaryLane: "Mid Lane", laneStatus: "verified",
     tacticalProfileStatus: "partial",
