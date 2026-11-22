@@ -253,3 +253,26 @@ test("browser OCR continues to read the legacy name field", async () => {
     heroLegacyBaseline.map(hero => hero.name)
   );
 });
+
+
+test("latest researched batch has verified roles, lanes and sourced tactical status", () => {
+  const expected = {
+    sun: ["Fighter", "EXP Lane"],
+    belerick: ["Tank", "Roam"],
+    hanabi: ["Marksman", "Gold Lane"],
+    xavier: ["Mage", "Mid Lane"],
+    obsidia: ["Marksman", "Gold Lane"]
+  };
+  for (const [id, [role, lane]] of Object.entries(expected)) {
+    const hero = heroCatalog.find(entry => entry.id === id);
+    assert.ok(hero, id);
+    assert.ok(hero.role.values.includes(role), id);
+    assert.equal(hero.role.status, "verified", id);
+    assert.equal(hero.lanes.primary, lane, id);
+    assert.equal(hero.lanes.status, "verified", id);
+    assert.equal(hero.tacticalProfile.status, "partial", id);
+    assert.equal(hero.research.checkedAt, "2026-11-22", id);
+    assert.equal(hero.research.roleAndLaneSources.length, 3, id);
+  }
+  assert.deepEqual(heroCatalog.find(entry => entry.id === "sun").lanes.flexible, ["Jungle"]);
+});
