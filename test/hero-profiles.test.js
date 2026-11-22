@@ -552,12 +552,12 @@ test("Hayabusa, Hylos, Irithel, Ixia and Johnson have sourced partial tactical p
 });
 
 test("hero profile coverage count and unique IDs stay aligned with the audited baseline", () => {
-  assert.equal(heroProfiles.length, 97);
-  assert.equal(new Set(heroProfiles.map(hero => hero.id)).size, 97);
+  assert.equal(heroProfiles.length, 102);
+  assert.equal(new Set(heroProfiles.map(hero => hero.id)).size, 102);
   const saber = heroProfiles.find(hero => hero.id === "saber");
   assert.ok(saber);
   assert.deepEqual(saber.mechanics, []);
-  assert.equal(heroProfiles.filter(hero => hero.mechanics.length > 0).length, 96);
+  assert.equal(heroProfiles.filter(hero => hero.mechanics.length > 0).length, 101);
 });
 
 test("Joy, Kadita, Karina, Lancelot and Leomord have sourced partial tactical profiles", () => {
@@ -607,4 +607,34 @@ test("Hirara, Kalea, Khaleed, Kimmy and Lapu-Lapu have sourced partial tactical 
     assert.deepEqual(hero.matchups.strongAgainst, []);
     assert.deepEqual(hero.matchups.weakAgainst, []);
   }
+});
+
+
+test("Lesley, Lolita, Luo Yi, Lylia and Martis have sourced partial tactical profiles", () => {
+  const expected = [
+    ["lesley", "Лесли", "https://mlbb.io/en/hero/lesley"],
+    ["lolita", "Лолита", "https://mlbb.io/en/hero/lolita"],
+    ["luo-yi", "Ло И", "https://mlbb.io/en/hero/luo-yi"],
+    ["lylia", "Лилия", "https://mlbb.io/en/hero/lylia"],
+    ["martis", "Мартис", "https://www.mlbb.io/en/hero/martis"]
+  ];
+  for (const [id, name, source] of expected) {
+    const hero = heroProfiles.find(item => item.id === id);
+    assert.ok(hero, id + " profile exists");
+    assert.equal(hero.names.ru, name);
+    assert.ok(hero.mechanics.length >= 4, id + " mechanics");
+    assert.ok(hero.strengths.length >= 3, id + " strengths");
+    assert.ok(hero.weaknesses.length >= 3, id + " weaknesses");
+    assert.ok(hero.sources.includes(source), id + " source");
+    assert.equal(hero.confidence, "partial");
+    assert.equal(hero.patch.version, HERO_DB_PATCH);
+    assert.equal(hero.patch.reviewedAt, "2026-11-22");
+    assert.deepEqual(hero.matchups.strongAgainst, []);
+    assert.deepEqual(hero.matchups.weakAgainst, []);
+  }
+  assert.ok(heroProfiles.find(item => item.id === "lesley").mechanics.some(note => note.includes("перехвачены")));
+  assert.ok(heroProfiles.find(item => item.id === "lolita").mechanics.some(note => note.includes("отражает")));
+  assert.ok(heroProfiles.find(item => item.id === "luo-yi").mechanics.some(note => note.includes("Инь-Ян")));
+  assert.ok(heroProfiles.find(item => item.id === "lylia").mechanics.some(note => note.includes("Чёрные ботинки")));
+  assert.ok(heroProfiles.find(item => item.id === "martis").mechanics.some(note => note.includes("иммунитет к контролю")));
 });
