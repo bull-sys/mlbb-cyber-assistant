@@ -85,6 +85,10 @@ test("draft hero selection uses a searchable one-tap grid instead of native long
  assert.match(css, /max-height:min\(88dvh,820px\)/);
 });
 
+test("app script has no escaped newline token that breaks JavaScript parsing", () => {
+ assert.doesNotMatch(app, /;\\\\ndocument\\.addEventListener/);
+});
+
 test("app does not bind handlers to removed legacy draft controls", () => {
  assert.doesNotMatch(app, /\\$\\("addEnemy"\\)|\\$\\("addAlly"\\)/);
 });
