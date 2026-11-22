@@ -149,3 +149,17 @@ test("Roger has verified Fighter/Marksman identity and Jungle lane with partial 
   assert.ok(roger.research.mechanicsSources.length >= 3);
   assert.ok(roger.research.rankedMetaSources.length >= 3);
 });
+
+test("Ling has verified Assassin/Jungle identity and partial tactical review", () => {
+  const ling = heroCatalog.find(hero => hero.id === "ling");
+  assert.ok(ling);
+  assert.deepEqual(ling.role.values, ["Assassin"]);
+  assert.equal(ling.role.status, "verified");
+  assert.equal(ling.lanes.primary, "Jungle");
+  assert.deepEqual(ling.lanes.flexible, []);
+  assert.equal(ling.lanes.status, "verified");
+  assert.equal(ling.tacticalProfile.status, "partial");
+  assert.equal(ling.research.competitiveReviewStatus, "partial");
+  assert.ok(ling.research.mechanicsSources.length >= 3);
+  assert.ok(ling.research.rankedMetaSources.length >= 3);
+});
