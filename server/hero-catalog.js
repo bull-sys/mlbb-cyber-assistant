@@ -500,11 +500,7 @@ export const heroCatalog = [
     laneStatus: "verified",
     research: {
       checkedAt: "2026-11-22",
-      roleAndLaneSources: [
-        "https://www.mlbbguides.com/heroes/",
-        "https://mlbb-stats.com/heroes",
-        "https://mlbbdex.com/en/heroes"
-      ],
+      roleAndLaneSources: ["https://mlbb-knowledge.vercel.app/heroes/70","https://mlbb.io/en/hero/belerick","https://mlbbdex.com/en/heroes/belerick"],
       competitiveReviewStatus: "pending",
       method: "Role and lane tags cross-checked across independent hero databases; pro-draft usage and player VODs are reviewed separately before tactical recommendations are marked complete."
     },
@@ -939,11 +935,7 @@ export const heroCatalog = [
     laneStatus: "verified",
     research: {
       checkedAt: "2026-11-22",
-      roleAndLaneSources: [
-        "https://www.mlbbguides.com/heroes/",
-        "https://mlbb-stats.com/heroes",
-        "https://mlbb.io/en/heroes"
-      ],
+      roleAndLaneSources: ["https://mlbb-knowledge.vercel.app/heroes/60","https://www.mlbbguides.com/heroes/hanabi/","https://mlbbhub.com/heroes/hanabi"],
       competitiveReviewStatus: "pending",
       method: "Role tags cross-checked against MLBB Guides and MLBB Stats; lane placement cross-checked against MLBB Stats and MLBB.io. Professional tournament usage is reviewed separately from ranked lane prevalence."
     },
@@ -1113,9 +1105,10 @@ export const heroCatalog = [
   catalogEntry("minotaur", "Minotaur", "Минотавр"),
   catalogEntry("valir", "Valir", "Валир"),
   catalogEntry("obsidia", "Obsidia", "Обсидия", {
-    identityStatus: "pending_review",
-    localizationStatus: "pending_review"
-  }),
+    roleValues: ["Marksman"], roleStatus: "verified", primaryLane: "Gold Lane",
+    flexibleLanes: [], laneStatus: "verified", tacticalProfileStatus: "partial",
+    research: { checkedAt: "2026-11-22", roleAndLaneSources: ["https://www.mobilelegends.com/en/hero/15", "https://mlbbhub.com/heroes/obsidia", "https://mlbbdex.com/ru/heroes/obsidia"], mechanicsSources: ["https://www.mobilelegends.com/en/hero/15", "https://www.mlbb.io/en/hero/obsidia", "https://www.mlbbguides.com/heroes/obsidia/"], rankedMetaSources: ["https://mlbbdex.com/ru/heroes/obsidia", "https://mlbbhub.com/heroes/obsidia"], competitiveReviewStatus: "pending", method: "Marksman/Gold Lane identity cross-checked against the official Moonton hero page and two independent databases. Bone Shard and tether mechanics are cross-checked against official skill text and two hero guides; ranked and professional evidence are not conflated." }
+  })
   catalogEntry("odette", "Odette", "Одетта", {
     identityStatus: "pending_review",
     localizationStatus: "pending_review"
@@ -1158,9 +1151,10 @@ export const heroCatalog = [
     localizationStatus: "pending_review"
   }),
   catalogEntry("sun", "Sun", "Сан", {
-    identityStatus: "pending_review",
-    localizationStatus: "pending_review"
-  }),
+    roleValues: ["Fighter"], roleStatus: "verified", primaryLane: "EXP Lane",
+    flexibleLanes: ["Jungle"], laneStatus: "verified", tacticalProfileStatus: "partial",
+    research: { checkedAt: "2026-11-22", roleAndLaneSources: ["https://mlbb-knowledge.vercel.app/heroes/27", "https://mlbbhub.com/ru/heroes/sun", "https://mlbb.io/en/hero/sun"], mechanicsSources: ["https://liquipedia.net/mobilelegends/Sun", "https://mlbb-knowledge.vercel.app/heroes/27", "https://mlbb.io/en/hero/sun"], rankedMetaSources: ["https://mlbbdex.com/en/statistics", "https://mlbbhub.com/ru/heroes/sun"], competitiveReviewStatus: "pending", method: "Fighter/EXP identity and Jungle flexibility cross-checked across three hero databases. Clone mechanics are compared across Liquipedia, MLBB Knowledge and MLBB.io; ranked aggregates are kept separate from professional evidence and patch-specific pro VOD review remains pending." }
+  })
   catalogEntry("uranus", "Uranus", "Уранус", {
     identityStatus: "pending_review",
     localizationStatus: "pending_review"
@@ -1186,9 +1180,10 @@ export const heroCatalog = [
     localizationStatus: "pending_review"
   }),
   catalogEntry("xavier", "Xavier", "Ксавьер", {
-    identityStatus: "pending_review",
-    localizationStatus: "pending_review"
-  }),
+    roleValues: ["Mage"], roleStatus: "verified", primaryLane: "Mid Lane",
+    flexibleLanes: [], laneStatus: "verified", tacticalProfileStatus: "partial",
+    research: { checkedAt: "2026-11-22", roleAndLaneSources: ["https://mlbb-knowledge.vercel.app/heroes/115", "https://mlbbhub.com/ru/heroes/xavier", "https://mlbb.io/en/hero/xavier"], mechanicsSources: ["https://liquipedia.net/mobilelegends/Xavier", "https://mlbb.tools/heroes/xavier", "https://mlbbhub.com/patch-notes/original/2.2.23"], rankedMetaSources: ["https://mlbbhub.com/ru/heroes/xavier", "https://mlbbdex.com/en/heroes/xavier"], competitiveReviewStatus: "pending", method: "Mage/Mid identity and current skill mechanics cross-checked across independent hero databases. Patch 2.2.23 Xavier changes are explicitly included; ranked aggregates remain separate from professional samples and current-patch VOD review remains pending." }
+  })
   catalogEntry("yi-sun-shin", "Yi Sun-shin", "Ли Сун-Син", {
     identityStatus: "pending_review",
     localizationStatus: "pending_review"
