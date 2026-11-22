@@ -1688,7 +1688,7 @@ export const heroProfiles = [
   },
   {
     id:"thamuz", names:{ru:"Тамуз",en:"Thamuz",aliases:[]}, roles:["Боец"], lanes:["Линия опыта","Лес"],
-    combat:{damage:"physical_true",range:"melee",mobility:"medium",burst:"medium",dps:"high",durability:"high",sustain:"very_high",control:"slow",engage:"medium",disengage:"low",waveClear:"high",objectiveDamage:"high"},
+    combat:{damage:"physical_and_true",range:"melee",mobility:"medium",burst:"medium",dps:"high",durability:"high",sustain:"very_high",control:"slow",engage:"medium",disengage:"low",waveClear:"high",objectiveDamage:"high"},
     mechanics:[
       "Пассивный эффект «Великий владыка лавы» накапливает ярость от обычных атак. При срабатывании под целью появляется лавовая энергия, которая взрывается и наносит чистый урон. Без серпов Тамуз получает дополнительную скорость передвижения; после возвращения серпов следующая атака гарантированно вызывает лавовый эффект и замедляет цель.",
       "Первый навык «Огненные серпы» бросает серпы по направлению. Они замедляют врагов и наносят периодический урон; после возвращения серпы могут подтянуть противников по траектории. Тамуз может приблизиться к ним или повторно активировать навык, чтобы вернуть их раньше.",
