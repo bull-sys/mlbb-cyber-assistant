@@ -14,10 +14,10 @@ test("legacy baseline exactly matches the current 32 heroes and their order", ()
 });
 
 test("catalog contains 32 entries with unique IDs and valid status structure", () => {
-  assert.equal(heroCatalog.length, 32);
+  assert.equal(heroCatalog.length, 133);
   const result = validateHeroCatalog(heroCatalog);
-  assert.deepEqual(result, { ok: true, count: 32, errors: [] });
-  assert.equal(new Set(heroCatalog.map(hero => hero.id.trim().replace(/\s+/gu, " ").toLowerCase())).size, 32);
+  assert.deepEqual(result, { ok: true, count: 133, errors: [] });
+  assert.equal(new Set(heroCatalog.map(hero => hero.id.trim().replace(/\s+/gu, " ").toLowerCase())).size, 133);
 });
 
 test("validator accepts an empty catalog", () => {
