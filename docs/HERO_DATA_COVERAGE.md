@@ -9,15 +9,20 @@ Live patch reference: 2.2.23
 |---|---:|---|
 | Hero catalog entries | 133 / 133 current catalog entries | Names and IDs are available to the encyclopedia/catalog UI. This is not yet an independently confirmed official-client roster snapshot. |
 | Unique catalog IDs | 133 / 133 | No duplicate IDs after the Fanny catalog-entry correction. |
-| Role verified | 80 / 133 | Role labels have cross-source evidence. |
-| Primary lane verified | 79 / 133 | Primary lane has cross-source evidence. |
-| Tactical profile records | 52 / 133 | Profile records are linked to the catalog; one remains a placeholder without researched mechanics. |
-| Substantive partial tactical profiles | 51 / 133 | Hero-specific mechanics, strengths, weaknesses, item notes and team-fight guidance have been researched. |
+| Role verified | 85 / 133 | Role labels have cross-source evidence. |
+| Primary lane verified | 84 / 133 | Primary lane has cross-source evidence. |
+| Tactical profile records | 57 / 133 | Profile records are linked to the catalog; one remains a placeholder without researched mechanics. |
+| Substantive partial tactical profiles | 56 / 133 | Hero-specific mechanics, strengths, weaknesses, item notes and team-fight guidance have been researched. |
 | Tactical profiles marked complete | 0 / 133 | Profiles remain partial until current-patch and competitive evidence is sufficiently reviewed. |
 
 ## Tactical profile coverage
 
 Current hero-specific profiles:
+- Franco (Франко)
+- Akai (Акай)
+- Alucard (Алукард)
+- Arlott (Арлотт)
+- Aurora (Аврора)
 - Helcurt (Хелкарт)
 - Hanzo (Ханзо)
 - Roger (Роджер)
@@ -92,6 +97,6 @@ A hero should move from catalog-only to tactical-profile coverage only after:
 
 ## Next work
 
-Expand tactical coverage in small reviewable batches. The latest batch added researched partial profiles for Lukas, Thamuz, Eudora, Pharsa and Nana, with cross-source role/lane verification. The preceding batch added Atlas, Kagura, Layla, Miya and Granger. The preceding batch added Kaja, Valir, Paquito, Aulus and Rafaela. The preceding batch added researched partial profiles for Cyclops, Julian, Tigreal, Chou and Dyrroth. The previous batch added Aldous, Floryn, Estes, Minotaur and Lunox. The previous batch added Sun, Belerick, Hanabi, Xavier and Obsidia. Sun, Xavier and Obsidia also received cross-source role/lane verification; Belerick and Hanabi already had verified role/lane records. Earlier batches added Masha, Marcel, Argus, Khufra and Diggie. Keep each batch isolated in its own commits, run the full test suite, and do not mark a profile complete merely to increase the coverage percentage. Atlas has a separate MPL ID S18 professional pick/ban snapshot; Miya has event-level MPL ID/PH S18 samples. These do not replace individual VOD review, which remains pending.
+Expand tactical coverage in small reviewable batches. The latest batch added researched partial profiles for Franco, Akai, Alucard, Arlott and Aurora, with cross-source role/lane verification. The preceding batch added Lukas, Thamuz, Eudora, Pharsa and Nana, with cross-source role/lane verification. The preceding batch added Atlas, Kagura, Layla, Miya and Granger. The preceding batch added Kaja, Valir, Paquito, Aulus and Rafaela. The preceding batch added researched partial profiles for Cyclops, Julian, Tigreal, Chou and Dyrroth. The previous batch added Aldous, Floryn, Estes, Minotaur and Lunox. The previous batch added Sun, Belerick, Hanabi, Xavier and Obsidia. Sun, Xavier and Obsidia also received cross-source role/lane verification; Belerick and Hanabi already had verified role/lane records. Earlier batches added Masha, Marcel, Argus, Khufra and Diggie. Keep each batch isolated in its own commits, run the full test suite, and do not mark a profile complete merely to increase the coverage percentage. Atlas has a separate MPL ID S18 professional pick/ban snapshot; Miya has event-level MPL ID/PH S18 samples. These do not replace individual VOD review, which remains pending.
 
 The catalog roster status remains `incomplete` until it has been checked against an official-client roster snapshot. The current 133-entry count is a useful working baseline, not a claim of independent official verification.
