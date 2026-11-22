@@ -323,3 +323,20 @@ test("Hayabusa, Hylos, Irithel, Ixia and Johnson have verified catalog identity 
     assert.ok(hero.research.rankedMetaSources.length >= 2);
   }
 });
+
+
+test("Hayabusa, Hylos, Irithel, Ixia and Johnson catalog research is verified", () => {
+  for (const id of ["hayabusa", "hylos", "irithel", "ixia", "johnson"]) {
+    const hero = heroCatalog.find(item => item.id === id);
+    assert.ok(hero, id);
+    assert.equal(hero.identity.status, "source_verified");
+    assert.equal(hero.localization.status, "pending_review");
+    assert.equal(hero.role.status, "verified");
+    assert.equal(hero.lanes.status, "verified");
+    assert.equal(hero.tacticalProfile.status, "partial");
+    assert.equal(hero.research.checkedAt, "2026-11-22");
+    assert.ok(hero.research.roleAndLaneSources.length >= 3);
+    assert.ok(hero.research.mechanicsSources.length >= 2);
+    assert.ok(hero.research.rankedMetaSources.length >= 2);
+  }
+});
