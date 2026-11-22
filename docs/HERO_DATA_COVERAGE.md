@@ -9,10 +9,10 @@ Live patch reference: 2.2.23
 |---|---:|---|
 | Hero catalog entries | 133 / 133 current catalog entries | Names and IDs are available to the encyclopedia/catalog UI. This is not yet an independently confirmed official-client roster snapshot. |
 | Unique catalog IDs | 133 / 133 | No duplicate IDs after the Fanny catalog-entry correction. |
-| Role verified | 66 / 133 | Role labels have cross-source evidence. |
-| Primary lane verified | 65 / 133 | Primary lane has cross-source evidence. |
-| Tactical profile records | 37 / 133 | Profile records are linked to the catalog; one remains a placeholder without researched mechanics. |
-| Substantive partial tactical profiles | 36 / 133 | Hero-specific mechanics, strengths, weaknesses, item notes and team-fight guidance have been researched. |
+| Role verified | 70 / 133 | Role labels have cross-source evidence. |
+| Primary lane verified | 69 / 133 | Primary lane has cross-source evidence. |
+| Tactical profile records | 42 / 133 | Profile records are linked to the catalog; one remains a placeholder without researched mechanics. |
+| Substantive partial tactical profiles | 41 / 133 | Hero-specific mechanics, strengths, weaknesses, item notes and team-fight guidance have been researched. |
 | Tactical profiles marked complete | 0 / 133 | Profiles remain partial until current-patch and competitive evidence is sufficiently reviewed. |
 
 ## Tactical profile coverage
@@ -78,6 +78,6 @@ A hero should move from catalog-only to tactical-profile coverage only after:
 
 ## Next work
 
-Expand tactical coverage in small reviewable batches. The latest batch added researched partial profiles for Cyclops, Julian, Tigreal, Chou and Dyrroth. The previous batch added Aldous, Floryn, Estes, Minotaur and Lunox. The previous batch added Sun, Belerick, Hanabi, Xavier and Obsidia. Sun, Xavier and Obsidia also received cross-source role/lane verification; Belerick and Hanabi already had verified role/lane records. The preceding batch added Masha, Marcel, Argus, Khufra and Diggie. Keep each batch isolated in its own commits, run the full test suite, and do not mark a profile complete merely to increase the coverage percentage.
+Expand tactical coverage in small reviewable batches. The latest batch added researched partial profiles for Kaja, Valir, Paquito, Aulus and Rafaela. The preceding batch added researched partial profiles for Cyclops, Julian, Tigreal, Chou and Dyrroth. The previous batch added Aldous, Floryn, Estes, Minotaur and Lunox. The previous batch added Sun, Belerick, Hanabi, Xavier and Obsidia. Sun, Xavier and Obsidia also received cross-source role/lane verification; Belerick and Hanabi already had verified role/lane records. Earlier batches added Masha, Marcel, Argus, Khufra and Diggie. Keep each batch isolated in its own commits, run the full test suite, and do not mark a profile complete merely to increase the coverage percentage.
 
 The catalog roster status remains `incomplete` until it has been checked against an official-client roster snapshot. The current 133-entry count is a useful working baseline, not a claim of independent official verification.
