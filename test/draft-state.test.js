@@ -20,6 +20,10 @@ test("draft state accepts known legacy names and catalog IDs", () => {
   assert.deepEqual(normalizeDraftState(valid, options), valid);
 });
 
+test("draft state accepts a partially completed draft without a selected lane", () => {
+  assert.equal(normalizeDraftState({ ...valid, lane: "" }, options).lane, "");
+});
+
 test("draft state rejects unknown hero identifiers and invalid lanes", () => {
   assert.equal(normalizeDraftState({ ...valid, enemies: ["unknown"] }, options), null);
   assert.equal(normalizeDraftState({ ...valid, lane: "unknown" }, options), null);
