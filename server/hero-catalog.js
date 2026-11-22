@@ -545,8 +545,10 @@ export const heroCatalog = [
     research: { checkedAt: "2026-11-22", roleAndLaneSources: ["https://mlbb-knowledge.vercel.app/heroes/42", "https://mlbbhub.com/ru/heroes/harley", "https://mlbb.io/en/hero/harley"], mechanicsSources: ["https://mlbb-knowledge.vercel.app/heroes/42", "https://www.mlbbguides.com/heroes/harley/skills/"], rankedMetaSources: ["https://mlbbhub.com/ru/heroes/harley", "https://mlbb.io/en/hero/harley"], competitiveReviewStatus: "pending", method: "Assassin/Mage and Jungle/Mid usage cross-checked across MLBB Knowledge, MLBBHub and MLBB.io. Magic Master stacks, Poker Trick repeated hits, Space Escape hat return and Deadly Magic delayed detonation reviewed. Ranked sample is separate from professional/VOD review; current-patch VOD review pending." }
   }),
   catalogEntry("hayabusa", "Hayabusa", "Хаябуса", {
-    identityStatus: "pending_review",
-    localizationStatus: "pending_review"
+    identityStatus: "source_verified", localizationStatus: "pending_review",
+    roleValues: ["Assassin"], roleStatus: "verified", primaryLane: "Jungle", laneStatus: "verified",
+    tacticalProfileStatus: "partial",
+    research: { checkedAt: "2026-11-22", roleAndLaneSources: ["https://mlbb-knowledge.vercel.app/heroes/21", "https://mlbbhub.com/ru/heroes/hayabusa", "https://mlbb.io/en/hero/hayabusa"], mechanicsSources: ["https://mlbb-knowledge.vercel.app/heroes/21", "https://liquipedia.net/mobilelegends/Hayabusa"], rankedMetaSources: ["https://mlbbhub.com/ru/heroes/hayabusa", "https://mlbb.io/en/hero/hayabusa"], competitiveReviewStatus: "pending", method: "Assassin/Jungle cross-checked across MLBB Knowledge, MLBBHub and MLBB.io. Shadow Mark stacks, returning Phantom Shuriken, Quad Shadow recast and Shadow Kill target priority reviewed. Ranked matchup data is not treated as universal counters; professional VOD review pending." }
   }),
   catalogEntry("hilda", "Hilda", "Хильда", {
     identityStatus: "pending_review",
@@ -563,20 +565,28 @@ export const heroCatalog = [
     localizationStatus: "pending_review"
   }),
   catalogEntry("hylos", "Hylos", "Хилос", {
-    identityStatus: "pending_review",
-    localizationStatus: "pending_review"
+    identityStatus: "source_verified", localizationStatus: "pending_review",
+    roleValues: ["Tank"], roleStatus: "verified", primaryLane: "Roam", flexibleLanes: ["EXP Lane"], laneStatus: "verified",
+    tacticalProfileStatus: "partial",
+    research: { checkedAt: "2026-11-22", roleAndLaneSources: ["https://mlbb-knowledge.vercel.app/heroes/49", "https://mlbbhub.com/heroes/hylos", "https://mlbb.io/en/hero/hylos"], mechanicsSources: ["https://mlbb-knowledge.vercel.app/heroes/49", "https://liquipedia.net/mobilelegends/Hylos"], rankedMetaSources: ["https://mlbbhub.com/heroes/hylos", "https://mlbb.io/en/hero/hylos"], competitiveReviewStatus: "pending", method: "Tank/Roam with EXP flexibility cross-checked across MLBB Knowledge, MLBBHub and MLBB.io. Thickened Blood HP-for-mana rule, Law and Order stun, Ring of Punishment stacking and Glorious Pathway team movement reviewed. Ranked and pro evidence kept separate; current-patch VOD review pending." }
   }),
   catalogEntry("irithel", "Irithel", "Иритэль", {
-    identityStatus: "pending_review",
-    localizationStatus: "pending_review"
+    identityStatus: "source_verified", localizationStatus: "pending_review",
+    roleValues: ["Marksman"], roleStatus: "verified", primaryLane: "Gold Lane", laneStatus: "verified",
+    tacticalProfileStatus: "partial",
+    research: { checkedAt: "2026-11-22", roleAndLaneSources: ["https://mlbb-knowledge.vercel.app/heroes/43", "https://mlbbhub.com/ru/heroes/irithel", "https://mlbb.io/en/hero/irithel"], mechanicsSources: ["https://mlbb-knowledge.vercel.app/heroes/43", "https://liquipedia.net/mobilelegends/Irithel", "https://www.mlbbguides.com/heroes/irithel/laning-guide/"], rankedMetaSources: ["https://mlbbhub.com/ru/heroes/irithel", "https://mlbb.io/en/hero/irithel"], competitiveReviewStatus: "pending", method: "Marksman/Gold Lane cross-checked across MLBB Knowledge, MLBBHub and MLBB.io. Moving basic attacks, Jungle Heart stacks, Strafe defense reduction, Force of the Queen slow and Heavy Crossbow empowered attacks reviewed. Ranked data kept separate from pro/VOD evidence." }
   }),
   catalogEntry("ixia", "Ixia", "Иксия", {
-    identityStatus: "pending_review",
-    localizationStatus: "pending_review"
+    identityStatus: "source_verified", localizationStatus: "pending_review",
+    roleValues: ["Marksman"], roleStatus: "verified", primaryLane: "Gold Lane", laneStatus: "verified",
+    tacticalProfileStatus: "partial",
+    research: { checkedAt: "2026-11-22", roleAndLaneSources: ["https://mlbbhub.com/ru/heroes/ixia", "https://mlbb.io/en/hero/ixia", "https://mlbbdex.com/en/heroes/ixia"], mechanicsSources: ["https://www.mlbbguides.com/heroes/ixia/skills/", "https://mlbb.io/en/hero/ixia"], rankedMetaSources: ["https://mlbbhub.com/ru/heroes/ixia", "https://mlbb.io/en/hero/ixia"], competitiveReviewStatus: "pending", method: "Marksman/Gold Lane cross-checked across MLBBHub, MLBB.io and MLBBDex. Siphon Starlium charge conversion, Dual Beam, Star Helix control and Arclight Barrage cone positioning reviewed. Current ranked build variants kept separate from professional draft/VOD review." }
   }),
   catalogEntry("johnson", "Johnson", "Джонсон", {
-    identityStatus: "pending_review",
-    localizationStatus: "pending_review"
+    identityStatus: "source_verified", localizationStatus: "pending_review",
+    roleValues: ["Tank", "Support"], roleStatus: "verified", primaryLane: "Roam", laneStatus: "verified",
+    tacticalProfileStatus: "partial",
+    research: { checkedAt: "2026-11-22", roleAndLaneSources: ["https://mlbb-knowledge.vercel.app/heroes/32", "https://mlbbhub.com/ru/heroes/johnson", "https://mlbb.io/en/hero/johnson"], mechanicsSources: ["https://mlbb-knowledge.vercel.app/heroes/32", "https://liquipedia.net/mobilelegends/Johnson"], rankedMetaSources: ["https://mlbbhub.com/ru/heroes/johnson", "https://mlbb.io/en/hero/johnson"], competitiveReviewStatus: "pending", method: "Tank/Support and Roam cross-checked across MLBB Knowledge, MLBBHub and MLBB.io. Electro Airbag shield, Impact Wrench stun, Electromagnetic Waves and Full Throttle passenger/impact rules reviewed. Ranked build data is kept separate from professional/VOD evidence." }
   }),
   catalogEntry("joy", "Joy", "Джой", {
     identityStatus: "pending_review",
