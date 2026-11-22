@@ -239,9 +239,9 @@ export const heroCatalog = [
     localizationStatus: "pending_review",
     roleValues: ["Fighter"],
     roleStatus: "verified",
-    primaryLane: "Roam",
-    flexibleLanes: ["EXP Lane"],
-    laneStatus: "verified",
+    primaryLane: "EXP Lane",
+    flexibleLanes: ["Roam"],
+    laneStatus: "pending_review",
     research: {
       checkedAt: "2026-11-22",
       roleAndLaneSources: [
