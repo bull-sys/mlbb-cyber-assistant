@@ -474,7 +474,7 @@ test("Grock, Guinevere, Gusion, Harith and Harley have sourced partial tactical 
   const guinevere = heroProfiles.find(item => item.id === "guinevere");
   assert.ok(guinevere.mechanics.some(note => note.includes("три метки")));
   const gusion = heroProfiles.find(item => item.id === "gusion");
-  assert.ok(gusion.mechanics.some(note => note.includes("маны")));
+  assert.ok(gusion.weaknesses.some(note => note.includes("маны")));
   const harith = heroProfiles.find(item => item.id === "harith");
   assert.ok(harith.mechanics.some(note => note.includes("разлом")));
   const harley = heroProfiles.find(item => item.id === "harley");
