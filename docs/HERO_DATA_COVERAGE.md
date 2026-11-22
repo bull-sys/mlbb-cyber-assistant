@@ -21,7 +21,7 @@ Current hero-specific profiles:
 - Benedetta (Бенедетта)
 - Brody (Броуди)
 - Carmilla (Кармилла)
-- Cecilion (Цицилион)
+- Cecilion (Сесилион)
 - Chang'e (Чан’Э)
 - Badang (Баданг)
 - Balmond (Бальмонд)
