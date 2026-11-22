@@ -172,20 +172,37 @@ export const heroCatalog = [
       method: "Assassin/Jungle identity and ranked aggregates cross-checked across MLBB.io, MLBBHub and MLBBDex. Rift mechanics compared with METAMMO. Tournament samples are reported separately by competition and region; current patch-specific professional VOD review remains pending."
     }
   }),
-  catalogEntry("suyou", "Suyou", "Су Ё"),
+  catalogEntry("suyou", "Suyou", "Су Ё", {
+    roleValues: ["Assassin", "Fighter"], roleStatus: "verified",
+    primaryLane: "Jungle", laneStatus: "verified", tacticalProfileStatus: "partial",
+    research: { checkedAt: "2026-11-22", roleAndLaneSources: ["https://mlbbhub.com/ru/heroes/suyou", "https://mlbbdex.com/en/heroes/suyou", "https://mlbb.io/en/hero/suyou/build"], mechanicsSources: ["https://liquipedia.net/mobilelegends/Suyou", "https://mlbbhub.com/ru/heroes/suyou"], rankedMetaSources: ["https://mlbbhub.com/ru/heroes/suyou", "https://mlbbdex.com/en/heroes/suyou"], competitiveReviewStatus: "pending", method: "Assassin/Fighter jungle classification and skill-form mechanics cross-checked across independent hero references. Ranked aggregates are kept separate; current-patch professional VOD review remains pending." }
+  }),
   catalogEntry("jawhead", "Jawhead", "Кусака", {
-    tacticalProfileStatus: "partial",
-    identityStatus: "user_confirmed",
-    localizationStatus: "user_confirmed"
+    identityStatus: "user_confirmed", localizationStatus: "user_confirmed",
+    roleValues: ["Fighter"], roleStatus: "verified", primaryLane: "Roam",
+    flexibleLanes: ["EXP Lane"], laneStatus: "verified", tacticalProfileStatus: "partial",
+    research: { checkedAt: "2026-11-22", roleAndLaneSources: ["https://mlbbhub.com/ru/heroes/jawhead", "https://mlbb-knowledge.vercel.app/heroes/54"], mechanicsSources: ["https://liquipedia.net/mobilelegends/Jawhead", "https://mlbb-knowledge.vercel.app/heroes/54"], rankedMetaSources: ["https://mlbbhub.com/ru/heroes/jawhead"], competitiveReviewStatus: "pending", method: "Jawhead identity and Russian name «Кусака» are user-confirmed; Fighter role, Roam/EXP usage and mechanics cross-checked across independent references. Pro VOD review remains pending." }
   }),
 
-  catalogEntry("karrie", "Karrie", "Кэрри"),
-  catalogEntry("bruno", "Bruno", "Бруно"),
+  catalogEntry("karrie", "Karrie", "Кэрри", {
+    roleValues: ["Marksman"], roleStatus: "verified", primaryLane: "Gold Lane",
+    laneStatus: "verified", tacticalProfileStatus: "partial",
+    research: { checkedAt: "2026-11-22", roleAndLaneSources: ["https://mlbbhub.com/ru/heroes/karrie", "https://www.mlbb.io/en/hero/karrie"], mechanicsSources: ["https://liquipedia.net/mobilelegends/Karrie", "https://www.mlbb.io/en/hero/karrie"], rankedMetaSources: ["https://mlbbhub.com/ru/heroes/karrie"], competitiveReviewStatus: "pending", method: "Marksman/Gold Lane classification and Lightwheel Mark mechanics cross-checked across independent hero references. Ranked data is separate from professional tournament evidence." }
+  }),
+  catalogEntry("bruno", "Bruno", "Бруно", {
+    roleValues: ["Marksman"], roleStatus: "verified", primaryLane: "Gold Lane",
+    laneStatus: "verified", tacticalProfileStatus: "partial",
+    research: { checkedAt: "2026-11-22", roleAndLaneSources: ["https://mlbbhub.com/heroes/bruno", "https://www.mlbbanalytics.com/heroes?hero=Bruno"], mechanicsSources: ["https://www.mlbbanalytics.com/heroes?hero=Bruno", "https://mlbb.tools/patch-notes/2.2.16"], rankedMetaSources: ["https://mlbbhub.com/heroes/bruno", "https://mlbbdex.com/en/heroes/bruno"], professionalMetaSources: ["https://www.mlbbanalytics.com/heroes?hero=Bruno"], competitiveReviewStatus: "partial", method: "Marksman/Gold Lane classification, patch 2.2.16 rework and ranked/pro evidence cross-checked. Tournament samples are reported separately; current-patch VOD review remains pending." }
+  }),
   catalogEntry("layla", "Layla", "Лейла"),
   catalogEntry("miya", "Miya", "Мия"),
   catalogEntry("granger", "Granger", "Грейнджер"),
 
-  catalogEntry("terizla", "Terizla", "Теризла"),
+  catalogEntry("terizla", "Terizla", "Теризла", {
+    roleValues: ["Fighter", "Tank"], roleStatus: "verified", primaryLane: "EXP Lane",
+    laneStatus: "verified", tacticalProfileStatus: "partial",
+    research: { checkedAt: "2026-11-22", roleAndLaneSources: ["https://mlbbhub.com/ru/heroes/terizla", "https://mlbb.io/en/hero/terizla/build"], mechanicsSources: ["https://liquipedia.net/mobilelegends/Terizla", "https://mlbbhub.com/ru/heroes/terizla"], rankedMetaSources: ["https://mlbbhub.com/ru/heroes/terizla", "https://mlbb.io/en/hero/terizla/build"], competitiveReviewStatus: "pending", method: "Fighter/Tank and EXP Lane classification cross-checked across independent hero references. Ranked aggregates are separated from professional evidence; VOD review remains pending." }
+  }),
   catalogEntry("dyrroth", "Dyrroth", "Диррот", {
     identityStatus: "user_confirmed",
     localizationStatus: "user_confirmed"
@@ -194,7 +211,7 @@ export const heroCatalog = [
   catalogEntry("lukas", "Lukas", "Лукас"),
   catalogEntry("thamuz", "Thamuz", "Тамуз"),
 
-  catalogEntry("eudora", "Eudora", "Эудора"),
+  catalogEntry("eudora", "Eudora", "Эйдора"),
   catalogEntry("kagura", "Kagura", "Кагура"),
   catalogEntry("pharsa", "Pharsa", "Фарса"),
   catalogEntry("cyclops", "Cyclops", "Циклоп"),
