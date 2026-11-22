@@ -117,6 +117,38 @@ test("Badang's EXP/Roam split remains flagged instead of claiming a single settl
   assert.equal(badang.lanes.status, "pending_review");
 });
 
+
+test("third researched batch includes cross-source role and lane evidence", () => {
+  const expected = {
+    franco: ["Tank", "Roam"],
+    fredrinn: ["Fighter", "Jungle"],
+    freya: ["Fighter", "EXP Lane"],
+    gatotkaca: ["Tank", "Roam"],
+    gloo: ["Tank", "Roam"],
+    gord: ["Mage", "Mid Lane"],
+    grock: ["Tank", "Roam"],
+    guinevere: ["Fighter", "EXP Lane"],
+    gusion: ["Assassin", "Jungle"],
+    hanabi: ["Marksman", "Gold Lane"]
+  };
+
+  for (const [id, [role, lane]] of Object.entries(expected)) {
+    const hero = heroCatalog.find(entry => entry.id === id);
+    assert.ok(hero, id);
+    assert.ok(hero.role.values.includes(role), id);
+    assert.equal(hero.role.status, "verified", id);
+    assert.equal(hero.lanes.primary, lane, id);
+    assert.equal(hero.lanes.status, "verified", id);
+    assert.equal(hero.research.checkedAt, "2026-11-22", id);
+    assert.equal(hero.research.roleAndLaneSources.length, 3, id);
+    assert.equal(hero.research.competitiveReviewStatus, "pending", id);
+  }
+
+  assert.deepEqual(heroCatalog.find(entry => entry.id === "freya").lanes.flexible, ["Jungle"]);
+  assert.deepEqual(heroCatalog.find(entry => entry.id === "gatotkaca").lanes.flexible, ["EXP Lane"]);
+  assert.deepEqual(heroCatalog.find(entry => entry.id === "gusion").lanes.flexible, ["Mid Lane"]);
+});
+
 test("API and validation routes are wired to additive catalog fields and legacy names", async () => {
   const serverSource = await readFile(new URL("../server/index.js", import.meta.url), "utf8");
 
