@@ -13,7 +13,12 @@ import fs from "node:fs";
 import { fileURLToPath } from "node:url";
 import { heroes, items, talents, spells, emblems } from "./data.js";
 import { getHeroCatalogApiFields, isLegacyHeroName } from "./hero-catalog-adapter.js";
+import { getDraftHeroOptions, isCatalogHeroId, resolveDraftHeroSelection } from "./draft-hero-selection.js";
 import { heroProfiles, validateHeroProfiles } from "./hero-profiles.js";
+import { normalizeRegistration } from "./registration.js";
+import { getOptionalUser } from "./auth.js";
+import { isValidDraftRequest } from "./draft-validation.js";
+import { normalizeDraftState } from "./draft-state.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, "..");
@@ -26,13 +31,16 @@ db.exec(`
 CREATE TABLE IF NOT EXISTS users(id INTEGER PRIMARY KEY AUTOINCREMENT,email TEXT UNIQUE NOT NULL,password_hash TEXT NOT NULL,nickname TEXT NOT NULL,created_at TEXT DEFAULT CURRENT_TIMESTAMP);
 CREATE TABLE IF NOT EXISTS profiles(user_id INTEGER PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE,hero TEXT NOT NULL DEFAULT '',role TEXT NOT NULL DEFAULT 'Лес',rank TEXT NOT NULL DEFAULT 'Легенда',style TEXT NOT NULL DEFAULT 'Поднятие рейтинга',game_id TEXT DEFAULT '',bio TEXT DEFAULT '');
 CREATE TABLE IF NOT EXISTS likes(from_user INTEGER NOT NULL,to_user INTEGER NOT NULL,created_at TEXT DEFAULT CURRENT_TIMESTAMP,PRIMARY KEY(from_user,to_user));
+CREATE TABLE IF NOT EXISTS draft_states(user_id INTEGER PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE,state_json TEXT NOT NULL,updated_at INTEGER NOT NULL);
 `);
 const app=express();
 app.set("trust proxy", 1);
 app.use(helmet({contentSecurityPolicy:false,crossOriginEmbedderPolicy:false}));
 app.use(cors({origin:process.env.APP_URL||true}));
 app.use(express.json({limit:"1mb"}));
-app.use(rateLimit({windowMs:15*60*1000,limit:300,standardHeaders:true,legacyHeaders:false}));
+app.use(rateLimit({windowMs:15*60*1000,limit:process.env.NODE_ENV==="test"?1000:300,standardHeaders:true,legacyHeaders:false}));
+const authRateLimit=rateLimit({windowMs:15*60*1000,limit:10,standardHeaders:true,legacyHeaders:false,message:{error:"Слишком много попыток. Попробуй позже."}});
+const guestDraftRateLimit=rateLimit({windowMs:15*60*1000,limit:process.env.NODE_ENV==="test"?300:60,standardHeaders:true,legacyHeaders:false,message:{error:"Слишком много запросов к анализу. Попробуй позже."}});
 const upload=multer({dest:uploadDir,limits:{fileSize:(Number(process.env.MAX_UPLOAD_MB)||8)*1024*1024},fileFilter:(req,file,cb)=>cb(null,/^image\/(png|jpeg|webp)$/.test(file.mimetype))});
 const secret=process.env.JWT_SECRET;
 if(!secret && process.env.NODE_ENV==="production") throw new Error("JWT_SECRET is required in production");
@@ -43,11 +51,13 @@ const ranks=["Эпик","Легенда","Мифик","Мифическая сл
 const styles=["Поднятие рейтинга","По фану","Кастомки"];
 const safeUser=id=>db.prepare("SELECT u.id,u.email,u.nickname,p.hero,p.role,p.rank,p.style,p.game_id,p.bio FROM users u LEFT JOIN profiles p ON p.user_id=u.id WHERE u.id=?").get(id);
 function auth(req,res,next){const h=req.headers.authorization||"";try{if(!h.startsWith("Bearer "))throw 0;req.user=jwt.verify(h.slice(7),tokenSecret);next()}catch{return res.status(401).json({error:"Требуется авторизация"})}}
+function optionalAuth(req,res,next){req.user=getOptionalUser(req.headers.authorization,token=>jwt.verify(token,tokenSecret));next()}
 function issue(id){return jwt.sign({id},tokenSecret,{expiresIn:"14d"})}
 app.get("/api/health",(req,res)=>res.json({ok:true,service:"MLBB Cyber Assistant",version:"1.0.0"}));
 app.get("/api/data",(req,res)=>res.json({
   heroes,
   ...getHeroCatalogApiFields(),
+  draftHeroOptions: getDraftHeroOptions(),
   heroProfiles,
   heroProfilesValidation: validateHeroProfiles(),
   items,
@@ -59,8 +69,39 @@ app.get("/api/data",(req,res)=>res.json({
   styles,
   disclaimer:"Справочник — стартовый фанатский набор. Сверяйте данные с текущим клиентом MLBB."
 }));
-app.post("/api/auth/login",async(req,res)=>{const {email,password}=req.body||{};const u=db.prepare("SELECT * FROM users WHERE email=?").get(String(email||"").toLowerCase().trim());if(!u||!await bcrypt.compare(String(password||""),u.password_hash))return res.status(401).json({error:"Неверный email или пароль"});res.json({token:issue(u.id),user:safeUser(u.id)})});
+app.post("/api/auth/register",authRateLimit,async(req,res)=>{
+ const input=normalizeRegistration(req.body||{});
+ if(!input.ok)return res.status(400).json({error:input.error});
+ try{
+  const passwordHash=await bcrypt.hash(input.password,12);
+  const createUser=db.transaction(()=>{
+   const result=db.prepare("INSERT INTO users(email,password_hash,nickname) VALUES(?,?,?)").run(input.email,passwordHash,input.nickname);
+   const id=Number(result.lastInsertRowid);
+   db.prepare("INSERT INTO profiles(user_id) VALUES(?)").run(id);
+   return id;
+  });
+  const id=createUser();
+  res.status(201).json({token:issue(id),user:safeUser(id)});
+ }catch(error){
+  if(String(error.code||"").includes("CONSTRAINT_UNIQUE"))return res.status(409).json({error:"Аккаунт с таким email уже существует"});
+  res.status(500).json({error:"Не удалось создать аккаунт"});
+ }
+});
+app.post("/api/auth/login",authRateLimit,async(req,res)=>{const {email,password}=req.body||{};const u=db.prepare("SELECT * FROM users WHERE email=?").get(String(email||"").toLowerCase().trim());if(!u||!await bcrypt.compare(String(password||""),u.password_hash))return res.status(401).json({error:"Неверный email или пароль"});res.json({token:issue(u.id),user:safeUser(u.id)})});
 app.get("/api/me",auth,(req,res)=>{const u=safeUser(req.user.id);if(!u)return res.status(404).json({error:"Пользователь не найден"});res.json({user:u})});
+app.get("/api/draft-state",auth,(req,res)=>{
+ const row=db.prepare("SELECT state_json,updated_at FROM draft_states WHERE user_id=?").get(req.user.id);
+ if(!row)return res.json({state:null,updatedAt:null});
+ try{return res.json({state:JSON.parse(row.state_json),updatedAt:row.updated_at})}
+ catch{return res.status(500).json({error:"Не удалось прочитать сохранённый драфт"})}
+});
+app.put("/api/draft-state",auth,(req,res)=>{
+ const allowedHeroes=new Set([...heroes.map(hero=>hero.name),...getDraftHeroOptions().map(hero=>hero.id)]);
+ const state=normalizeDraftState(req.body?.state,{heroes:allowedHeroes,lanes:roles});
+ if(!state)return res.status(400).json({error:"Некорректный черновик драфта"});
+ db.prepare("INSERT INTO draft_states(user_id,state_json,updated_at) VALUES(?,?,?) ON CONFLICT(user_id) DO UPDATE SET state_json=excluded.state_json,updated_at=excluded.updated_at").run(req.user.id,JSON.stringify(state),state.savedAt);
+ res.json({state,updatedAt:state.savedAt});
+});
 app.put("/api/profile",auth,(req,res)=>{
  const b=req.body||{};const hero=String(b.hero||"");const role=String(b.role||"");const rank=String(b.rank||"");const style=String(b.style||"");
  if(!isLegacyHeroName(hero)||!roles.includes(role)||!ranks.includes(rank)||!styles.includes(style))return res.status(400).json({error:"Проверь героя, роль, ранг и стиль"});
@@ -384,10 +425,43 @@ function analyze({lane, enemies = [], allies = [], myHero = ""}) {
   };
 }
 
-app.post("/api/ai/draft",auth,async(req,res)=>{
- const b=req.body||{};if(!roles.includes(b.lane)||!Array.isArray(b.enemies)||b.enemies.length>5||!b.enemies.every(isLegacyHeroName))return res.status(400).json({error:"Некорректный состав или линия"});
- const result=analyze(b);
- if(openai){try{const response=await openai.chat.completions.create({model:process.env.OPENAI_MODEL||"gpt-4.1-mini",messages:[{role:"system",content:"Ты тактический помощник MLBB. Не выдумывай live статистику и точные параметры патча. Используй только переданные варианты. Кратко объясни тактику на русском."},{role:"user",content:JSON.stringify({lane:b.lane,enemies:b.enemies,allies:b.allies||[],myHero:b.myHero||"",rulesResult:result})}],max_tokens:450,temperature:.3});result.aiExplanation=response.choices[0]?.message?.content||""}catch{result.aiExplanation="AI-сервис временно недоступен; показан базовый анализ."}}
+app.post("/api/ai/draft",guestDraftRateLimit,optionalAuth,async(req,res)=>{
+ const b=req.body||{};
+ if(!isValidDraftRequest(b,roles,isLegacyHeroName,isCatalogHeroId))return res.status(400).json({error:"Некорректный состав или линия"});
+
+ const selectedValues=[...b.enemies,...(b.allies||[]),...(b.myHero?[b.myHero]:[])];
+ const selections=selectedValues.map(resolveDraftHeroSelection);
+ const unsupported=[...new Map(selections
+  .filter(selection=>!selection?.analysisSupported)
+  .map(selection=>[selection.id,selection.name])).entries()]
+  .map(([id,name])=>({id,name}));
+
+ if(unsupported.length){
+  return res.json({
+   analysisStatus:"limited",
+   unsupportedHeroes:unsupported,
+   threats:[],
+   counters:[],
+   build:[],
+   buildDetails:[],
+   emblem:null,
+   talentTiers:[],
+   spell:null,
+   timing:null,
+   note:"Полный анализ не рассчитан: для выбранных героев ещё нет подтверждённой связи с проверенной тактической базой. Чтобы не выдавать выдуманные контрпики, рекомендации временно скрыты."
+  });
+ }
+
+ const legacyName=value=>resolveDraftHeroSelection(value).legacyName;
+ const resolvedDraft={
+  ...b,
+  enemies:b.enemies.map(legacyName),
+  allies:(b.allies||[]).map(legacyName),
+  myHero:b.myHero?legacyName(b.myHero):""
+ };
+ const result=analyze(resolvedDraft);
+ result.analysisStatus="complete";
+ if(openai&&req.user){try{const response=await openai.chat.completions.create({model:process.env.OPENAI_MODEL||"gpt-4.1-mini",messages:[{role:"system",content:"Ты тактический помощник MLBB. Не выдумывай live статистику и точные параметры патча. Используй только переданные варианты. Кратко объясни тактику на русском."},{role:"user",content:JSON.stringify({lane:b.lane,enemies:b.enemies,allies:b.allies||[],myHero:b.myHero||"",rulesResult:result})}],max_tokens:450,temperature:.3});result.aiExplanation=response.choices[0]?.message?.content||""}catch{result.aiExplanation="AI-сервис временно недоступен; показан базовый анализ."}}
  res.json(result);
 });
 app.post("/api/draft/ocr-upload",auth,upload.single("image"),(req,res)=>{if(req.file)fs.unlink(req.file.path,()=>{});res.status(410).json({error:"Серверный OCR не используется: распознавание скриншота выполняется локально в браузере."})});
