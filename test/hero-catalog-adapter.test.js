@@ -73,6 +73,50 @@ test("first 20 researched heroes include cross-source role and lane evidence", (
   );
 });
 
+
+test("next ten researched heroes include cross-source role and lane evidence", () => {
+  const expected = {
+    "chang-e": ["Mage", "Mid Lane"],
+    chip: ["Support", "Roam"],
+    cici: ["Fighter", "EXP Lane"],
+    claude: ["Marksman", "Gold Lane"],
+    clint: ["Marksman", "Gold Lane"],
+    edith: ["Tank", "EXP Lane"],
+    esmeralda: ["Tank", "EXP Lane"],
+    fanny: ["Assassin", "Jungle"],
+    faramis: ["Support", "Mid Lane"],
+    floryn: ["Support", "Roam"]
+  };
+
+  for (const [id, [role, lane]] of Object.entries(expected)) {
+    const hero = heroCatalog.find(entry => entry.id === id);
+    assert.ok(hero, id);
+    assert.ok(hero.role.values.includes(role), id);
+    assert.equal(hero.role.status, "verified", id);
+    assert.equal(hero.lanes.primary, lane, id);
+    assert.equal(hero.lanes.status, "verified", id);
+    assert.equal(hero.research.checkedAt, "2026-11-22", id);
+    assert.equal(hero.research.roleAndLaneSources.length, 3, id);
+    assert.equal(hero.research.competitiveReviewStatus, "pending", id);
+  }
+
+  assert.deepEqual(
+    heroCatalog.find(entry => entry.id === "edith").lanes.flexible,
+    ["Roam"]
+  );
+  assert.deepEqual(
+    heroCatalog.find(entry => entry.id === "faramis").lanes.flexible,
+    ["Roam"]
+  );
+});
+
+test("Badang's EXP/Roam split remains flagged instead of claiming a single settled primary lane", () => {
+  const badang = heroCatalog.find(entry => entry.id === "badang");
+  assert.equal(badang.lanes.primary, "EXP Lane");
+  assert.deepEqual(badang.lanes.flexible, ["Roam"]);
+  assert.equal(badang.lanes.status, "pending_review");
+});
+
 test("API and validation routes are wired to additive catalog fields and legacy names", async () => {
   const serverSource = await readFile(new URL("../server/index.js", import.meta.url), "utf8");
 
