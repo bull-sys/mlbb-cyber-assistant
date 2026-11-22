@@ -1,589 +1,425 @@
 
 const $ = id => document.getElementById(id);
-
-const STORAGE = {
-  profile: "mlbb_preview_profile",
-  history: "mlbb_preview_history",
-  draft: "mlbb_preview_draft"
-};
+const STORAGE = "mlbb_cyber_preview_v01";
 
 let data = {
   heroes: [],
   items: [],
-  roles: [],
   talents: [],
-  emblems: []
+  emblems: [],
+  roles: [],
+  ranks: [],
+  styles: []
 };
 
 let enemies = [];
 let allies = [];
-let selectedHero = null;
-let currentResult = null;
 let history = [];
 let profile = {};
 
-const read = (key, fallback) => {
+const readLocal = () => {
   try {
-    const value = localStorage.getItem(key);
-    return value ? JSON.parse(value) : fallback;
+    return JSON.parse(localStorage.getItem(STORAGE) || "{}");
   } catch {
-    return fallback;
+    return {};
   }
 };
 
-const write = (key, value) => {
-  try {
-    localStorage.setItem(key, JSON.stringify(value));
-    return true;
-  } catch {
-    toast("Не удалось сохранить данные на устройстве");
-    return false;
-  }
+const saveLocal = () => {
+  localStorage.setItem(STORAGE, JSON.stringify({
+    enemies,
+    allies,
+    history,
+    profile
+  }));
 };
 
-function esc(value) {
-  return String(value ?? "").replace(/[&<>"']/g, char => ({
-    "&": "&amp;",
-    "<": "&lt;",
-    ">": "&gt;",
-    '"': "&quot;",
-    "'": "&#39;"
-  })[char]);
+const esc = value => String(value ?? "").replace(/[&<>"']/g, c => ({
+  "&": "&amp;",
+  "<": "&lt;",
+  ">": "&gt;",
+  '"': "&quot;",
+  "'": "&#39;"
+}[c]));
+
+function notify(message) {
+  const pill = $("statusPill");
+  if (pill) pill.textContent = message;
 }
 
-function toast(message) {
-  const element = document.createElement("div");
-  element.textContent = message;
-  element.style.cssText =
-    "position:fixed;bottom:85px;left:50%;transform:translateX(-50%);" +
-    "background:#18384a;border:1px solid #39e5ff;color:white;" +
-    "padding:12px 17px;border-radius:10px;z-index:999;" +
-    "font-size:12px;max-width:90%;text-align:center";
-
-  document.body.append(element);
-  setTimeout(() => element.remove(), 2500);
-}
-
-async function api(path, options = {}) {
-  const response = await fetch("/api" + path, {
-    ...options,
-    headers: {
-      "Content-Type": "application/json",
-      ...(options.headers || {})
-    }
+function showPage(name) {
+  document.querySelectorAll(".page").forEach(page => {
+    page.classList.toggle("hidden", page.id !== `page-${name}`);
   });
 
-  const result = await response.json().catch(() => ({}));
-
-  if (!response.ok) {
-    throw new Error(result.error || "Ошибка сервера");
-  }
-
-  return result;
-}
-
-function setOptions(element, values, placeholder = "Выбери...") {
-  if (!element) return;
-
-  const previous = element.value;
-
-  element.innerHTML =
-    (placeholder ? `<option value="">${esc(placeholder)}</option>` : "") +
-    values.map(value => {
-      const name = typeof value === "string" ? value : value.name;
-      return `<option value="${esc(name)}">${esc(name)}</option>`;
-    }).join("");
-
-  if ([...element.options].some(option => option.value === previous)) {
-    element.value = previous;
-  }
-}
-
-function navigate(page) {
-  document.querySelectorAll(".page").forEach(section => {
-    section.classList.toggle("hidden", section.id !== "page-" + page);
-  });
-
-  document.querySelectorAll("#nav [data-page]").forEach(button => {
-    button.classList.toggle("active", button.dataset.page === page);
+  document.querySelectorAll("[data-page]").forEach(button => {
+    button.classList.toggle("active", button.dataset.page === name);
   });
 
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
-function saveDraftState() {
-  write(STORAGE.draft, {
-    enemies,
-    allies,
-    lane: $("lane")?.value || "",
-    myHero: $("myHero")?.value || ""
+function fillSelect(id, values, placeholder) {
+  const el = $(id);
+  if (!el) return;
+
+  el.innerHTML =
+    `<option value="">${esc(placeholder)}</option>` +
+    values.map(value =>
+      `<option value="${esc(value)}">${esc(value)}</option>`
+    ).join("");
+}
+
+function populateSelectors() {
+  const names = data.heroes.map(hero => hero.name);
+
+  ["myHero", "enemyPick", "allyPick", "profileHero"].forEach(id => {
+    fillSelect(id, names, "Выбери героя");
   });
+
+  fillSelect("lane", data.roles, "Выбери линию");
+  fillSelect("profileRole", data.roles, "Основная линия");
+  fillSelect("profileRank", data.ranks, "Текущий ранг");
+  fillSelect("profileStyle", data.styles, "Стиль игры");
+
+  const filter = $("heroRoleFilter");
+  if (filter) {
+    filter.innerHTML =
+      '<option value="">Все линии</option>' +
+      data.roles.map(role =>
+        `<option value="${esc(role)}">${esc(role)}</option>`
+      ).join("");
+  }
 }
 
 function drawTeams() {
-  for (const [side, heroes] of [
-    ["enemies", enemies],
-    ["allies", allies]
-  ]) {
-    const container = $(side);
-    if (!container) continue;
+  const draw = (id, list, type) => {
+    const container = $(id);
+    if (!container) return;
 
-    container.innerHTML = heroes.length
-      ? heroes.map((hero, index) => `
-          <button class="chip active"
-            data-side="${side}"
-            data-index="${index}">
-            ${esc(hero)} ×
-          </button>
-        `).join("")
-      : '<span class="hint">Пока пусто</span>';
-  }
-
-  saveDraftState();
-}
-
-function addHero(side) {
-  const isEnemy = side === "enemies";
-  const select = $(isEnemy ? "enemyPick" : "allyPick");
-  const list = isEnemy ? enemies : allies;
-  const hero = select?.value;
-
-  if (!hero) return toast("Сначала выбери героя");
-  if (list.length >= 5) return toast("Максимум 5 героев");
-  if (list.includes(hero)) return toast("Этот герой уже добавлен");
-
-  list.push(hero);
-  drawTeams();
-
-  if (select) select.value = "";
-}
-
-function renderDraftResult(result) {
-  const container = $("draftResult");
-  if (!container) return;
-
-  container.classList.remove("hidden");
-
-  const counters = (result.counters || []).map((item, index) => `
-    <div class="result">
-      <b>#${index + 1} ${esc(item.name)}</b>
-      <p>${esc(item.reason)}</p>
-      <small>Роль: ${esc(item.role)} · Баллы: ${esc(item.score)}</small>
-    </div>
-  `).join("");
-
-  const build = (result.build || []).map((item, index) => `
-    <div class="slot">
-      <span>${index + 1}. ${esc(item)}</span>
-      <small>${index < 2 ? "Основа" : "Ситуация"}</small>
-    </div>
-  `).join("");
-
-  const timing = result.timing || {};
-
-  container.innerHTML = `
-    <small>DEMO ANALYSIS REPORT</small>
-    <h2>Анализ состава</h2>
-
-    <p class="hint">
-      Это демонстрационный анализ на основе локальной базы.
-      Точные показатели текущего патча не используются.
-    </p>
-
-    <h3>Угрозы противника</h3>
-    <p>${(result.threats || []).map(esc).join(" · ") || "Явных угроз не выявлено"}</p>
-
-    <h3>Рекомендуемые контрпики</h3>
-    ${counters || '<p class="hint">Подходящих контрпиков не найдено</p>'}
-
-    <h3>Рекомендуемая сборка</h3>
-    ${build || '<p class="hint">Нет данных о сборке</p>'}
-
-    <h3>Эмблема и таланты</h3>
-    <div class="result">
-      <b>${esc(result.emblem || "Не определена")}</b>
-      <p>
-        ${(result.talentTiers || []).map((x, i) =>
-          `Тир ${i + 1}: ${esc(x)}`
-        ).join("<br>")}
-      </p>
-      <p>Заклинание: ${esc(result.spell || "Не определено")}</p>
-    </div>
-
-    <h3>Тактика по времени игры</h3>
-    <div class="result"><b>Ранняя игра</b><p>${esc(timing.early || "Нет данных")}</p></div>
-    <div class="result"><b>Средняя игра</b><p>${esc(timing.mid || "Нет данных")}</p></div>
-    <div class="result"><b>Поздняя игра</b><p>${esc(timing.late || "Нет данных")}</p></div>
-
-    <p class="hint">${esc(result.aiExplanation || result.note || "")}</p>
-
-    <button class="btn" id="saveDraftHistory">Сохранить анализ</button>
-  `;
-
-  $("saveDraftHistory")?.addEventListener("click", saveHistory);
-}
-
-async function runDraft() {
-  if (!enemies.length) {
-    return toast("Добавь хотя бы одного противника");
-  }
-
-  const lane = $("lane")?.value;
-
-  if (!lane) return toast("Выбери свою линию");
-
-  const button = $("analyze");
-  if (button) {
-    button.disabled = true;
-    button.textContent = "Анализирую...";
-  }
-
-  try {
-    const result = await api("/draft/demo", {
-      method: "POST",
-      body: JSON.stringify({
-        lane,
-        enemies,
-        allies,
-        myHero: $("myHero")?.value || ""
-      })
-    });
-
-    currentResult = result;
-    renderDraftResult(result);
-    toast("Анализ готов");
-  } catch (error) {
-    toast(error.message);
-  } finally {
-    if (button) {
-      button.disabled = false;
-      button.textContent = "Анализировать состав";
-    }
-  }
-}
-
-function saveHistory() {
-  if (!currentResult) return;
-
-  const entry = {
-    id: Date.now(),
-    date: new Date().toLocaleString("ru-RU"),
-    lane: $("lane")?.value || "",
-    myHero: $("myHero")?.value || "",
-    enemies: [...enemies],
-    allies: [...allies],
-    result: currentResult
+    container.innerHTML = list.map((name, index) => `
+      <div class="slot">
+        <span>${esc(name)}</span>
+        <button class="btn secondary"
+          data-remove="${type}"
+          data-index="${index}">Убрать</button>
+      </div>
+    `).join("") || '<p class="hint">Пока никого нет.</p>';
   };
 
-  history.unshift(entry);
-  history = history.slice(0, 50);
-
-  write(STORAGE.history, history);
-  renderHistory();
-  toast("Драфт сохранён в историю");
+  draw("enemies", enemies, "enemy");
+  draw("allies", allies, "ally");
 }
 
-function renderHistory() {
-  const count = $("historyCount");
-  const list = $("historyList");
+function addHero(type) {
+  const isEnemy = type === "enemy";
+  const select = $(isEnemy ? "enemyPick" : "allyPick");
+  const list = isEnemy ? enemies : allies;
+  const name = select.value;
 
-  if (count) count.textContent = history.length;
+  if (!name) return notify("Сначала выбери героя");
+  if (list.includes(name)) return notify("Этот герой уже добавлен");
+  if (list.length >= 5) return notify("Максимум пять героев");
 
-  if (!list) return;
-
-  list.innerHTML = history.length
-    ? history.map(entry => `
-        <article class="card">
-          <small>${esc(entry.date)}</small>
-          <h3>${esc(entry.myHero || "Герой не выбран")}</h3>
-          <p>Линия: ${esc(entry.lane)}</p>
-          <p>Противники: ${entry.enemies.map(esc).join(", ")}</p>
-          <button class="btn secondary" data-history="${entry.id}">
-            Открыть анализ
-          </button>
-        </article>
-      `).join("")
-    : '<p class="hint">Здесь появятся сохранённые анализы драфтов.</p>';
-}
-
-function openHistory(id) {
-  const entry = history.find(item => item.id === Number(id));
-  if (!entry) return;
-
-  enemies = [...entry.enemies];
-  allies = [...entry.allies];
-  currentResult = entry.result;
-
-  if ($("lane")) $("lane").value = entry.lane;
-  if ($("myHero")) $("myHero").value = entry.myHero;
-
+  list.push(name);
+  select.value = "";
   drawTeams();
-  renderDraftResult(currentResult);
-  navigate("draft");
+  saveLocal();
+  notify("Состав обновлён");
 }
 
 function renderHeroes() {
-  const list = $("heroList");
-  const count = $("heroCount");
-
-  if (!list) return;
-
   const query = ($("heroSearch")?.value || "").toLowerCase();
   const role = $("heroRoleFilter")?.value || "";
 
   const filtered = data.heroes.filter(hero => {
-    const matchesName = hero.name.toLowerCase().includes(query);
-    const matchesRole = !role || hero.role === role;
-    return matchesName && matchesRole;
+    const text = [
+      hero.name,
+      hero.role,
+      hero.type,
+      ...(hero.tags || [])
+    ].join(" ").toLowerCase();
+
+    return text.includes(query) && (!role || hero.role === role);
   });
 
-  if (count) count.textContent = filtered.length;
+  $("heroCount").textContent = `${filtered.length} героев`;
 
-  list.innerHTML = filtered.map(hero => `
-    <button class="card" data-hero="${esc(hero.name)}"
-      style="text-align:left;width:100%;color:inherit;cursor:pointer">
-      <b>${esc(hero.name)}</b>
-      <p>${esc(hero.role || "Роль уточняется")} · ${esc(hero.type || "Тип уточняется")}</p>
-    </button>
-  `).join("") || '<p class="hint">Герои не найдены</p>';
+  $("heroList").innerHTML = filtered.map(hero => `
+    <article class="player">
+      <h3>${esc(hero.name)}</h3>
+      <small>${esc(hero.role)} · ${esc(hero.type)}</small>
+      <p>${esc((hero.tags || []).join(" · "))}</p>
+      <button class="btn secondary" data-hero="${esc(hero.name)}">
+        Подробнее
+      </button>
+    </article>
+  `).join("") || '<p class="hint">Ничего не найдено.</p>';
 }
 
 function showHero(name) {
   const hero = data.heroes.find(item => item.name === name);
   if (!hero) return;
 
-  selectedHero = hero;
+  $("heroDetails").classList.remove("hidden");
+  $("heroDetails").innerHTML = `
+    <h2>${esc(hero.name)}</h2>
+    <p><b>Линия:</b> ${esc(hero.role)}</p>
+    <p><b>Тип:</b> ${esc(hero.type)}</p>
+    <p><b>Особенности:</b> ${esc((hero.tags || []).join(", ") || "Пока не заполнены")}</p>
+    <p><b>Стиль:</b> ${esc((hero.style || []).join(", ") || "Пока не заполнен")}</p>
+    <p><b>Сильные стороны:</b> ${esc((hero.strengths || []).join(", ") || "Пока не заполнены")}</p>
+  `;
+}
 
-  const details = $("heroDetails");
-  if (!details) return;
-
-  details.classList.remove("hidden");
-  details.innerHTML = `
-    <div class="card">
-      <small>HERO PROFILE</small>
-      <h2>${esc(hero.name)}</h2>
-      <p>Роль: ${esc(hero.role || "Уточняется")}</p>
-      <p>Тип: ${esc(hero.type || "Уточняется")}</p>
-      <h3>Особенности</h3>
-      <p>${(hero.tags || []).map(esc).join(" · ") || "Данные уточняются"}</p>
-      <h3>Стиль игры</h3>
-      <p>${(hero.style || []).map(esc).join(" · ") || "Данные уточняются"}</p>
-      <h3>Сильные стороны</h3>
-      <p>${(hero.strengths || []).map(esc).join(" · ") || "Данные уточняются"}</p>
-      <button class="btn" id="useHero">Выбрать для драфта</button>
+function renderAnalysis(result) {
+  const counters = (result.counters || []).map((item, index) => `
+    <div class="result">
+      <b>#${index + 1} ${esc(item.name)}</b>
+      <p>${esc(item.reason)}</p>
     </div>
+  `).join("") || '<p class="hint">Пока недостаточно данных для контрпиков.</p>';
+
+  const build = (result.build || []).map((item, index) => `
+    <div class="slot">
+      <span>${index + 1}. ${esc(item)}</span>
+    </div>
+  `).join("");
+
+  const timing = result.timing || {};
+
+  $("draftResult").innerHTML = `
+    <small>DEMO ANALYSIS · PREVIEW 0.1</small>
+    <h2>Анализ состава</h2>
+    <p>${esc((result.threats || []).join(" · ") || "Явных угроз по тегам не выявлено")}</p>
+
+    <h3>Контрпики</h3>
+    ${counters}
+
+    <h3>Рекомендуемая сборка</h3>
+    ${build || '<p class="hint">Нет данных о сборке.</p>'}
+
+    <h3>Эмблема и таланты</h3>
+    <div class="result">
+      <b>${esc(result.emblem || "Не определена")}</b>
+      <p>
+        Тир 1: ${esc(result.talentTiers?.[0] || "—")}<br>
+        Тир 2: ${esc(result.talentTiers?.[1] || "—")}<br>
+        Тир 3: ${esc(result.talentTiers?.[2] || "—")}<br>
+        Заклинание: ${esc(result.spell || "—")}
+      </p>
+    </div>
+
+    <h3>План на игру</h3>
+    <div class="result"><b>Ранняя стадия</b><p>${esc(timing.early || "—")}</p></div>
+    <div class="result"><b>Средняя стадия</b><p>${esc(timing.mid || "—")}</p></div>
+    <div class="result"><b>Поздняя стадия</b><p>${esc(timing.late || "—")}</p></div>
+
+    <p>${esc(result.note || "Результат основан на локальной базе проекта.")}</p>
+    <p class="hint">Это демонстрационный анализ, а не гарантированный прогноз матча.</p>
   `;
 
-  $("useHero")?.addEventListener("click", () => {
-    if ($("myHero")) $("myHero").value = hero.name;
-    navigate("draft");
-    saveDraftState();
-  });
+  $("draftResult").classList.remove("hidden");
+}
+
+async function runDraft() {
+  const lane = $("lane").value;
+  const myHero = $("myHero").value;
+
+  if (!lane) return notify("Выбери линию");
+  if (!enemies.length) return notify("Добавь хотя бы одного врага");
+
+  $("draftStatus").textContent = "Анализируем состав…";
+  $("analyze").disabled = true;
+
+  try {
+    const response = await fetch("/api/draft/demo", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ lane, myHero, enemies, allies })
+    });
+
+    const result = await response.json();
+    if (!response.ok) throw new Error(result.error || "Ошибка анализа");
+
+    renderAnalysis(result);
+
+    history.unshift({
+      date: new Date().toLocaleString("ru-RU"),
+      lane,
+      hero: myHero || "Не выбран",
+      enemies: [...enemies],
+      allies: [...allies],
+      result
+    });
+
+    history = history.slice(0, 30);
+    saveLocal();
+    renderHistory();
+    $("draftStatus").textContent = "Анализ готов";
+    notify("Анализ завершён");
+  } catch (error) {
+    $("draftStatus").textContent = error.message;
+    notify("Не удалось выполнить анализ");
+  } finally {
+    $("analyze").disabled = false;
+  }
+}
+
+function renderHistory() {
+  $("historyCount").textContent = `${history.length} записей`;
+
+  $("historyList").innerHTML = history.map((entry, index) => `
+    <article class="player">
+      <small>${esc(entry.date)}</small>
+      <h3>${esc(entry.hero)}</h3>
+      <p>Линия: ${esc(entry.lane)}</p>
+      <p>Противники: ${esc(entry.enemies.join(", "))}</p>
+      <button class="btn secondary" data-history="${index}">
+        Открыть анализ
+      </button>
+    </article>
+  `).join("") || '<p class="hint">Здесь появятся твои первые анализы.</p>';
+
+  $("dashboardRecent").innerHTML = history.slice(0, 3).map(entry => `
+    <div class="slot">
+      <span>${esc(entry.hero)} · ${esc(entry.lane)}</span>
+      <small>${esc(entry.date)}</small>
+    </div>
+  `).join("") || '<p class="hint">Пока нет сохранённых анализов.</p>';
 }
 
 function loadProfile() {
-  profile = read(STORAGE.profile, {});
-
-  const fields = {
-    profileNickname: "nickname",
-    profileHero: "hero",
-    profileRole: "role",
-    profileRank: "rank",
-    profileStyle: "style"
-  };
-
-  for (const [id, key] of Object.entries(fields)) {
-    if ($(id) && profile[key]) $(id).value = profile[key];
-  }
+  $("profileNickname").value = profile.nickname || "";
+  $("profileHero").value = profile.hero || "";
+  $("profileRole").value = profile.role || "";
+  $("profileRank").value = profile.rank || "";
+  $("profileStyle").value = profile.style || "";
 }
 
 function saveProfile() {
   profile = {
-    nickname: $("profileNickname")?.value || "",
-    hero: $("profileHero")?.value || "",
-    role: $("profileRole")?.value || "",
-    rank: $("profileRank")?.value || "",
-    style: $("profileStyle")?.value || ""
+    nickname: $("profileNickname").value.trim(),
+    hero: $("profileHero").value,
+    role: $("profileRole").value,
+    rank: $("profileRank").value,
+    style: $("profileStyle").value
   };
 
-  write(STORAGE.profile, profile);
-
-  if ($("profileStatus")) {
-    $("profileStatus").textContent = "Профиль сохранён на устройстве";
-  }
-
-  toast("Профиль сохранён");
+  saveLocal();
+  $("profileStatus").textContent = "Профиль сохранён на этом устройстве";
+  notify("Профиль сохранён");
 }
 
-function restoreDraft() {
-  const saved = read(STORAGE.draft, null);
-  if (!saved) return;
+function bindEvents() {
+  document.addEventListener("click", event => {
+    const pageButton = event.target.closest("[data-page]");
+    if (pageButton) showPage(pageButton.dataset.page);
 
-  enemies = Array.isArray(saved.enemies) ? saved.enemies : [];
-  allies = Array.isArray(saved.allies) ? saved.allies : [];
+    const removeButton = event.target.closest("[data-remove]");
+    if (removeButton) {
+      const list = removeButton.dataset.remove === "enemy" ? enemies : allies;
+      list.splice(Number(removeButton.dataset.index), 1);
+      drawTeams();
+      saveLocal();
+    }
 
-  if ($("lane") && saved.lane) $("lane").value = saved.lane;
-  if ($("myHero") && saved.myHero) $("myHero").value = saved.myHero;
+    const heroButton = event.target.closest("[data-hero]");
+    if (heroButton) showHero(heroButton.dataset.hero);
 
-  drawTeams();
+    const historyButton = event.target.closest("[data-history]");
+    if (historyButton) {
+      const entry = history[Number(historyButton.dataset.history)];
+      if (!entry) return;
+
+      $("lane").value = entry.lane;
+      $("myHero").value = data.heroes.some(h => h.name === entry.hero) ? entry.hero : "";
+      enemies = [...entry.enemies];
+      allies = [...entry.allies];
+      drawTeams();
+      renderAnalysis(entry.result);
+      showPage("draft");
+    }
+  });
+
+  $("addEnemy").onclick = () => addHero("enemy");
+  $("addAlly").onclick = () => addHero("ally");
+  $("analyze").onclick = runDraft;
+
+  $("newDraft").onclick = () => {
+    enemies = [];
+    allies = [];
+    $("myHero").value = "";
+    $("draftResult").classList.add("hidden");
+    $("draftStatus").textContent = "";
+    drawTeams();
+    saveLocal();
+    showPage("draft");
+  };
+
+  $("testDraft").onclick = () => {
+    const sampleEnemies = ["Тигрил", "Эудора", "Кэрри", "Диррот", "Атлас"];
+    const sampleAllies = ["Ангела", "Линг", "Теризла"];
+
+    enemies = sampleEnemies.filter(name => data.heroes.some(h => h.name === name));
+    allies = sampleAllies.filter(name => data.heroes.some(h => h.name === name));
+
+    $("lane").value = data.roles.includes("Лес") ? "Лес" : data.roles[0] || "";
+    $("myHero").value = data.heroes.some(h => h.name === "Хелкарт") ? "Хелкарт" : "";
+
+    drawTeams();
+    saveLocal();
+    notify("Тестовый состав загружен");
+  };
+
+  $("heroSearch").oninput = renderHeroes;
+  $("heroRoleFilter").onchange = renderHeroes;
+  $("saveProfile").onclick = saveProfile;
+
+  $("clearLocalData").onclick = () => {
+    if (!confirm("Удалить локальный профиль, историю и сохранённый состав?")) return;
+
+    localStorage.removeItem(STORAGE);
+    enemies = [];
+    allies = [];
+    history = [];
+    profile = {};
+
+    drawTeams();
+    renderHistory();
+    loadProfile();
+    $("profileStatus").textContent = "Локальные данные очищены";
+    notify("Данные очищены");
+  };
 }
 
 async function init() {
+  const saved = readLocal();
+
+  enemies = saved.enemies || [];
+  allies = saved.allies || [];
+  history = saved.history || [];
+  profile = saved.profile || {};
+
+  bindEvents();
+
   try {
-    data = await api("/data");
+    const response = await fetch("/api/data");
+    if (!response.ok) throw new Error("Не удалось загрузить базу героев");
 
-    setOptions($("enemyPick"), data.heroes);
-    setOptions($("allyPick"), data.heroes);
-    setOptions($("myHero"), data.heroes);
-    setOptions($("profileHero"), data.heroes);
+    data = await response.json();
 
-    setOptions($("lane"), data.roles);
-    setOptions($("profileRole"), data.roles);
-    setOptions($("profileRank"), data.ranks || []);
-    setOptions($("profileStyle"), data.styles || []);
-
-    const roleFilter = $("heroRoleFilter");
-    if (roleFilter) {
-      setOptions(roleFilter, data.roles, "Все линии");
-    }
-
-    history = read(STORAGE.history, []);
-
-    restoreDraft();
+    populateSelectors();
     loadProfile();
+    drawTeams();
     renderHeroes();
     renderHistory();
 
-    if ($("dashboardRecent")) {
-      $("dashboardRecent").innerHTML = history.length
-        ? `<p>Последний анализ: ${esc(history[0].date)}</p>
-           <p>Герой: ${esc(history[0].myHero || "Не выбран")}</p>`
-        : '<p class="hint">Пока нет сохранённых анализов. Создай свой первый драфт!</p>';
-    }
-
-    toast("MLBB Cyber Assistant готов");
+    notify("PREVIEW 0.1 · DEMO MODE");
   } catch (error) {
-    toast("Не удалось загрузить базу: " + error.message);
+    notify("Ошибка загрузки данных");
+    console.error(error);
   }
 }
-
-// Навигация
-$("nav")?.addEventListener("click", event => {
-  const button = event.target.closest("[data-page]");
-  if (button) navigate(button.dataset.page);
-});
-
-document.querySelectorAll("[data-page]").forEach(button => {
-  button.addEventListener("click", () => {
-    if (button.closest("#nav")) return;
-    navigate(button.dataset.page);
-  });
-});
-
-// Драфт
-$("addEnemy")?.addEventListener("click", () => addHero("enemies"));
-$("addAlly")?.addEventListener("click", () => addHero("allies"));
-$("analyze")?.addEventListener("click", runDraft);
-
-$("newDraft")?.addEventListener("click", () => {
-  enemies = [];
-  allies = [];
-  currentResult = null;
-
-  if ($("lane")) $("lane").value = "";
-  if ($("myHero")) $("myHero").value = "";
-
-  if ($("draftResult")) {
-    $("draftResult").innerHTML = "";
-    $("draftResult").classList.add("hidden");
-  }
-
-  drawTeams();
-  navigate("draft");
-});
-
-$("testDraft")?.addEventListener("click", () => {
-  const names = ["Тигрил", "Эудора", "Кэрри", "Диррот", "Атлас"];
-
-  enemies = names.filter(name =>
-    data.heroes.some(hero => hero.name === name)
-  );
-
-  allies = ["Ангела", "Линг", "Теризла"].filter(name =>
-    data.heroes.some(hero => hero.name === name)
-  );
-
-  if ($("lane")) $("lane").value = "Лес";
-  if ($("myHero")) {
-    $("myHero").value = data.heroes.some(hero => hero.name === "Хелкарт")
-      ? "Хелкарт"
-      : "";
-  }
-
-  drawTeams();
-  runDraft();
-});
-
-document.addEventListener("click", event => {
-  const button = event.target.closest("[data-side]");
-  if (!button) return;
-
-  const list = button.dataset.side === "enemies" ? enemies : allies;
-  list.splice(Number(button.dataset.index), 1);
-  drawTeams();
-});
-
-// Герои
-$("heroSearch")?.addEventListener("input", renderHeroes);
-$("heroRoleFilter")?.addEventListener("change", renderHeroes);
-
-$("heroList")?.addEventListener("click", event => {
-  const button = event.target.closest("[data-hero]");
-  if (button) showHero(button.dataset.hero);
-});
-
-// История
-$("historyList")?.addEventListener("click", event => {
-  const button = event.target.closest("[data-history]");
-  if (button) openHistory(button.dataset.history);
-});
-
-// Профиль
-$("saveProfile")?.addEventListener("click", saveProfile);
-
-$("clearLocalData")?.addEventListener("click", () => {
-  if (!confirm("Удалить сохранённые драфты, историю и профиль на этом устройстве?")) {
-    return;
-  }
-
-  Object.values(STORAGE).forEach(key => localStorage.removeItem(key));
-
-  enemies = [];
-  allies = [];
-  history = [];
-  profile = {};
-  currentResult = null;
-
-  if ($("profileNickname")) $("profileNickname").value = "";
-  if ($("profileHero")) $("profileHero").value = "";
-  if ($("profileRole")) $("profileRole").value = "";
-  if ($("profileRank")) $("profileRank").value = "";
-  if ($("profileStyle")) $("profileStyle").value = "";
-
-  if ($("draftResult")) {
-    $("draftResult").innerHTML = "";
-    $("draftResult").classList.add("hidden");
-  }
-
-  drawTeams();
-  renderHistory();
-  renderHeroes();
-
-  if ($("profileStatus")) {
-    $("profileStatus").textContent = "Локальные данные очищены";
-  }
-
-  toast("Локальные данные очищены");
-});
 
 init();
