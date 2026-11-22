@@ -378,3 +378,39 @@ test("Russian hero labels use the confirmed in-game spellings", () => {
     if (legacyAlias) assert.ok(hero.names.aliases.includes(legacyAlias));
   }
 });
+
+
+test("Chip, Cici, Claude, Clint and Esmeralda have sourced partial tactical profiles", () => {
+  const expected = [
+    ["chip", "Чип", "https://mlbb-knowledge.vercel.app/heroes/124"],
+    ["cici", "Сиси", "https://mlbb-knowledge.vercel.app/heroes/123"],
+    ["claude", "Клод", "https://mlbb-knowledge.vercel.app/heroes/65"],
+    ["clint", "Клинт", "https://www.mlbbanalytics.com/heroes?hero=Clint"],
+    ["esmeralda", "Эсмеральда", "https://mlbb-knowledge.vercel.app/heroes/81"]
+  ];
+  for (const [id, name, source] of expected) {
+    const hero = heroProfiles.find(item => item.id === id);
+    assert.ok(hero, id + " profile exists");
+    assert.equal(hero.names.ru, name);
+    assert.ok(hero.mechanics.length >= 4, id + " mechanics");
+    assert.ok(hero.strengths.length >= 3, id + " strengths");
+    assert.ok(hero.weaknesses.length >= 3, id + " weaknesses");
+    assert.ok(hero.sources.includes(source), id + " source");
+    assert.equal(hero.confidence, "partial");
+    assert.equal(hero.patch.version, HERO_DB_PATCH);
+    assert.equal(hero.patch.reviewedAt, "2026-11-22");
+    assert.deepEqual(hero.matchups.strongAgainst, []);
+    assert.deepEqual(hero.matchups.weakAgainst, []);
+  }
+  const chip = heroProfiles.find(item => item.id === "chip");
+  assert.ok(chip.mechanics.some(note => note.includes("портал")));
+  assert.ok(chip.mechanics.some(note => note.includes("маяк")));
+  const cici = heroProfiles.find(item => item.id === "cici");
+  assert.ok(cici.mechanics.some(note => note.includes("Йо-йо")));
+  const claude = heroProfiles.find(item => item.id === "claude");
+  assert.ok(claude.mechanics.some(note => note.includes("Декстера")));
+  const clint = heroProfiles.find(item => item.id === "clint");
+  assert.ok(clint.mechanics.some(note => note.includes("Двойной выстрел")));
+  const esmeralda = heroProfiles.find(item => item.id === "esmeralda");
+  assert.ok(esmeralda.mechanics.some(note => note.includes("игнорирует щиты")));
+});
