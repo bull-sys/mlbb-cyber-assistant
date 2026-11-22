@@ -213,3 +213,28 @@ test("Kaja, Valir, Paquito, Aulus and Rafaela have verified catalog roles and la
     assert.equal(hero.research.competitiveReviewStatus, "pending");
   }
 });
+
+
+test("Atlas, Kagura, Layla, Miya and Granger have verified catalog roles and lanes", () => {
+  const expected = [
+    ["atlas", ["Tank"], "Roam", ["EXP Lane"]],
+    ["kagura", ["Mage"], "Mid Lane", []],
+    ["layla", ["Marksman"], "Gold Lane", []],
+    ["miya", ["Marksman"], "Gold Lane", []],
+    ["granger", ["Marksman"], "Gold Lane", []]
+  ];
+  for (const [id, roles, primary, flexible] of expected) {
+    const hero = heroCatalog.find(item => item.id === id);
+    assert.ok(hero, id);
+    assert.deepEqual(hero.role.values, roles);
+    assert.equal(hero.role.status, "verified");
+    assert.equal(hero.lanes.primary, primary);
+    assert.deepEqual(hero.lanes.flexible, flexible);
+    assert.equal(hero.lanes.status, "verified");
+    assert.equal(hero.tacticalProfile.status, "partial");
+    assert.ok(hero.research.roleAndLaneSources.length >= 3);
+    assert.ok(hero.research.mechanicsSources.length >= 3);
+  }
+  assert.equal(heroCatalog.find(item => item.id === "atlas").research.competitiveReviewStatus, "partial");
+  assert.equal(heroCatalog.find(item => item.id === "kagura").research.competitiveReviewStatus, "pending");
+});
