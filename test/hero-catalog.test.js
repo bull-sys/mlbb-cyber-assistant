@@ -92,11 +92,7 @@ test("Popol and Kupa is not conflated with Jawhead", () => {
   const jawhead = heroCatalog.find(hero => hero.id === "jawhead");
   assert.equal(jawhead.nameEn, "Jawhead");
   const popolAndKupa = heroCatalog.find(hero => hero.nameEn === "Popol and Kupa");
-  assert.equal(
-    popolAndKupa,
-    undefined,
-    "Popol and Kupa is absent from the current partial catalog of 32 entries"
-  );
+  assert.ok(popolAndKupa, "Popol and Kupa has its own catalog entry");
 });
 
 test("validator rejects normalized duplicate IDs and invalid or inherited statuses", () => {
