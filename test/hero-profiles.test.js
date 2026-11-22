@@ -58,3 +58,27 @@ test("Hanzo profile records the current reworked mechanics and separates evidenc
   assert.match(notes, /Профессиональные данные/);
   assert.match(notes, /VOD/);
 });
+
+test("Roger has a cross-checked Fighter/Marksman Jungle profile with explicit uncertainty", () => {
+  const roger = heroProfiles.find(hero => hero.id === "roger");
+  assert.ok(roger);
+  assert.equal(roger.names.en, "Roger");
+  assert.equal(roger.names.ru, "Роджер");
+  assert.deepEqual(roger.roles, ["Боец", "Стрелок"]);
+  assert.deepEqual(roger.lanes, ["Лес"]);
+  assert.ok(roger.mechanics.length >= 5);
+  assert.ok(roger.strengths.length >= 3);
+  assert.ok(roger.weaknesses.length >= 3);
+  assert.ok(roger.sources.some(source => source.includes("liquipedia.net")));
+  assert.ok(roger.sources.some(source => source.includes("mlbb.io")));
+  assert.ok(roger.sources.some(source => source.includes("mlbbhub.com")));
+  assert.equal(roger.confidence, "partial");
+  assert.equal(roger.patch.version, HERO_DB_PATCH);
+  assert.equal(roger.patch.reviewedAt, "2026-11-22");
+  assert.deepEqual(roger.matchups.strongAgainst, []);
+  assert.deepEqual(roger.matchups.weakAgainst, []);
+  const notes = roger.patch.notes.join(" ");
+  assert.match(notes, /Рейтинговая статистика/);
+  assert.match(notes, /Профессиональные данные/);
+  assert.match(notes, /VOD/);
+});
