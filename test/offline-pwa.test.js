@@ -28,6 +28,7 @@ test("draft state is saved locally and restored only after the catalog is loaded
   assert.match(app, /selectDraftStorage\(u\.id\)/);
   assert.match(app, /localStorage\.setItem\(draftStorageKey/);
   assert.match(app, /localStorage\.getItem\(draftStorageKey/);
+  assert.doesNotMatch(app, /localStorage\.(?:setItem|removeItem)\(DRAFT_STORAGE_KEY/);
   assert.match(app, /restoreDraft\(\);drawTeams\(\);renderEncy\(\)/);
   assert.match(app, /enemies:\[\.\.\.enemies\],allies:\[\.\.\.allies\],lane:/);
   assert.match(app, /threats:\[\.\.\.threats\]/);
