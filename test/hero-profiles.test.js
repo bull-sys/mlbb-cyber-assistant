@@ -33,3 +33,28 @@ test("Helcurt patch notes keep ranked and professional evidence separate", () =>
   assert.match(notes, /профессиональных игр/);
   assert.match(notes, /VOD/);
 });
+
+test("Hanzo profile records the current reworked mechanics and separates evidence types", () => {
+  const hanzo = heroProfiles.find(hero => hero.id === "hanzo");
+  assert.ok(hanzo);
+  assert.equal(hanzo.names.en, "Hanzo");
+  assert.deepEqual(hanzo.roles, ["Убийца"]);
+  assert.deepEqual(hanzo.lanes, ["Лес"]);
+  assert.ok(hanzo.mechanics.length >= 5);
+  assert.ok(hanzo.mechanics.some(note => note.includes("Ханэкагэ")));
+  assert.ok(hanzo.mechanics.some(note => note.includes("энерг")));
+  assert.ok(hanzo.strengths.length >= 3);
+  assert.ok(hanzo.weaknesses.length >= 3);
+  assert.ok(hanzo.sources.some(source => source.includes("metammo.com")));
+  assert.ok(hanzo.sources.some(source => source.includes("mlbb.io")));
+  assert.ok(hanzo.sources.some(source => source.includes("mlbbhub.com")));
+  assert.equal(hanzo.confidence, "partial");
+  assert.equal(hanzo.patch.version, HERO_DB_PATCH);
+  assert.equal(hanzo.patch.reviewedAt, "2026-11-22");
+  assert.deepEqual(hanzo.matchups.strongAgainst, []);
+  assert.deepEqual(hanzo.matchups.weakAgainst, []);
+  const notes = hanzo.patch.notes.join(" ");
+  assert.match(notes, /рейтинговая статистика/);
+  assert.match(notes, /Профессиональные данные/);
+  assert.match(notes, /VOD/);
+});
