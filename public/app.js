@@ -7,7 +7,7 @@ function toast(s){let el=document.createElement("div");el.textContent=s;el.style
 function options(el,arr,placeholder="Выбери..."){el.innerHTML=(placeholder?`<option value="">${placeholder}</option>`:"")+arr.map(x=>`<option>${typeof x==="string"?x:x.name}</option>`).join("")}
 function draftOptions(el){
  const legacy=data.heroes.map(hero=>({value:hero.name,label:hero.name+" · проверенная старая база"}));
- const catalog=(data.draftHeroOptions||[]).filter(hero=>!hero.analysisSupported).map(hero=>({
+ const catalog=(data.draftHeroOptions||[]).filter(hero=>!hero.analysisSupported&&!data.heroes.some(legacy=>legacy.name===hero.name)).map(hero=>({
   value:hero.id,
   label:(hero.localizationStatus==="user_confirmed"||hero.localizationStatus==="source_verified"?"":"⚠ ")+hero.name+" ("+hero.nameEn+") · анализ пока недоступен"
  }));
