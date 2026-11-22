@@ -85,6 +85,10 @@ test("draft hero selection uses a searchable one-tap grid instead of native long
  assert.match(css, /max-height:min\(88dvh,820px\)/);
 });
 
+test("app does not bind handlers to removed legacy draft controls", () => {
+ assert.doesNotMatch(app, /\\$\\("addEnemy"\\)|\\$\\("addAlly"\\)/);
+});
+
 test("draft picker renders hero portraits with readable names and fallback", async () => {
  const css = await readFile(new URL("../public/style.css", import.meta.url), "utf8");
  assert.match(app, /function heroPortraitUrl/);
