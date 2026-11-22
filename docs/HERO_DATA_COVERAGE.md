@@ -18,12 +18,12 @@ Live patch reference: 2.2.23
 ## Tactical profile coverage
 
 Current hero-specific profiles:
-- Helcurt
-- Hanzo
-- Roger
-- Ling
-- Fanny
-- Nolan
+- Helcurt (Хелкарт)
+- Hanzo (Ханзо)
+- Roger (Роджер)
+- Ling (Линг)
+- Fanny (Фанни)
+- Nolan (Нолан)
 - Jawhead (Кусака)
 - Suyou (Су Ё)
 - Karrie (Кэрри)
@@ -54,7 +54,21 @@ Current hero-specific profiles:
 - Edith (Эдит)
 - Barats (Баратс)
 - Hilda (Хильда)
-
+- Kaja (Каджа)
+- Valir (Валир)
+- Paquito (Пакито)
+- Aulus (Аулус)
+- Rafaela (Рафаэль)
+- Atlas (Атлас)
+- Kagura (Кагура)
+- Layla (Лейла)
+- Miya (Мия)
+- Granger (Грейнджер)
+- Lukas (Лукас)
+- Thamuz (Тамуз)
+- Eudora (Эйдора)
+- Pharsa (Фарса)
+- Nana (Нана)
 Saber remains a legacy placeholder without researched mechanics and is not counted among the 51 substantive profiles.
 
 A profile being present does not mean all matchups, synergies, professional VODs or current-patch build variants are fully verified. Empty matchup/synergy arrays are intentional when evidence is insufficient; do not fill them with guesses.
