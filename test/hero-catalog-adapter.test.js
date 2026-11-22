@@ -162,7 +162,7 @@ test("API and validation routes are wired to additive catalog fields and legacy 
   );
   assert.match(
     serverSource,
-    /app\.post\("\/api\/ai\/draft"[\s\S]*?isValidDraftRequest\(b,roles,isLegacyHeroName\)/
+    /app\.post\("\/api\/ai\/draft"[\s\S]*?isValidDraftRequest\(b,roles,isLegacyHeroName,isCatalogHeroId\)/
   );
 });
 
