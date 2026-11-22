@@ -91,8 +91,8 @@ function addHero(side){let id=side==="enemies"?"enemyPick":"allyPick",arr=side==
 $("addEnemy").onclick=()=>addHero("enemies");$("addAlly").onclick=()=>addHero("allies");
 let pickerTarget="enemies",pickerFilter="all";
 function pickerEntries(){
- const legacy=data.heroes.map(h=>({value:h.name,name:h.name,nameEn:"",supported:true}));
- const catalog=(data.draftHeroOptions||[]).map(h=>({value:h.id,name:h.name,nameEn:h.nameEn,supported:Boolean(h.analysisSupported)}));
+ const legacy=data.heroes.map(h=>({value:h.name,name:h.name,nameEn:"",supported:true,catalog:false}));
+ const catalog=(data.draftHeroOptions||[]).map(h=>({value:h.id,name:h.name,nameEn:h.nameEn,supported:Boolean(h.analysisSupported),catalog:true}));
  return [...legacy,...catalog];
 }
 function pickerRecent(){
@@ -108,7 +108,7 @@ function renderHeroPicker(){
  $("recentHeroes").innerHTML=recent.length?'<small>НЕДАВНО ВЫБРАННЫЕ</small><div class="picker-recent-grid">'+recent.map(h=>'<button class="hero-tile recent" data-picker-value="'+esc(h.value)+'"><b>'+esc(h.name)+'</b></button>').join("")+'</div>':"";
  const filtered=entries.filter(h=>{
   const match=(h.name+" "+h.nameEn).toLocaleLowerCase("ru").includes(q);
-  return match&&(pickerFilter==="all"||(pickerFilter==="supported"&&h.supported)||(pickerFilter==="catalog"&&!h.supported));
+  return match&&(pickerFilter==="all"||(pickerFilter==="supported"&&h.supported)||(pickerFilter==="catalog"&&h.catalog));
  });
  $("heroPickerGrid").innerHTML=filtered.map(h=>'<button class="hero-tile" data-picker-value="'+esc(h.value)+'"><b>'+esc(h.name)+'</b><small>'+(h.supported?"Анализ доступен":"Каталог · проверяется")+'</small></button>').join("")||'<p class="hint">Ничего не найдено. Попробуй другое написание.</p>';
 }
@@ -133,7 +133,7 @@ function choosePickerHero(value){
 $("openEnemyPicker").onclick=()=>openHeroPicker("enemies");
 $("openAllyPicker").onclick=()=>openHeroPicker("allies");
 $("openMyHeroPicker").onclick=()=>openHeroPicker("myHero");
-$("closeHeroPicker").onclick=()=>$("heroPicker").classList.add("hidden");
+$("closeHeroPicker").onclick=()=>$("heroPicker").classList.add("hidden");\ndocument.addEventListener("keydown",e=>{if(e.key==="Escape")$("heroPicker").classList.add("hidden")});
 $("heroPicker").onclick=e=>{if(e.target===$("heroPicker"))$("heroPicker").classList.add("hidden");const tile=e.target.closest("[data-picker-value]");if(tile)choosePickerHero(tile.dataset.pickerValue)};
 $("heroPickerSearch").addEventListener("input",renderHeroPicker);
 $("heroPicker").querySelector(".picker-tabs").onclick=e=>{const b=e.target.closest("[data-picker-filter]");if(!b)return;pickerFilter=b.dataset.pickerFilter;document.querySelectorAll("[data-picker-filter]").forEach(x=>x.classList.toggle("active",x===b));renderHeroPicker()};
