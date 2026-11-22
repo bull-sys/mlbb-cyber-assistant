@@ -2521,8 +2521,7 @@ export const heroProfiles = [
     sources: ["https://mlbb-knowledge.vercel.app/heroes/67","https://liquipedia.net/mobilelegends/Leomord","https://mlbb.io/en/hero/leomord"],
     patch: { version: HERO_DB_PATCH, notes: ["The Oath Keeper, Momentum, Decimation Assault и два набора навыков верхового состояния сверены по MLBB Knowledge, Liquipedia и MLBB.io.","MLBB Knowledge указывает Fighter/Jungle и отдельный верховой набор навыков; данные сборок и матчапов привязаны к текущему справочному срезу.","Профессиональный VOD-разбор текущего патча остаётся pending."], reviewedAt: "2026-11-22" },
     confidence: "partial"
-  }
-
+  },
   {
     id: "hirara",
     names: { ru: "Хирара", en: "Hirara", aliases: [] },
