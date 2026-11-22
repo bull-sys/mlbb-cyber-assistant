@@ -317,7 +317,7 @@ export const heroCatalog = [
   catalogEntry("argus", "Argus", "Аргус", {
     roleValues: ["Fighter"], roleStatus: "verified",
     primaryLane: "EXP Lane", laneStatus: "verified", tacticalProfileStatus: "partial",
-    research: { checkedAt: "2026-11-22", roleAndLaneSources: ["https://mlbbhub.com/ru/heroes/argus", "https://mlbb-knowledge.vercel.app/heroes/45"], mechanicsSources: ["https://liquipedia.net/mobilelegends/Argus", "https://mlbb-knowledge.vercel.app/heroes/45"], rankedMetaSources: ["https://mlbbhub.com/ru/heroes/argus", "https://mlbbdex.com/en/statistics"], competitiveReviewStatus: "pending", method: "Fighter/EXP role and current passive/skill mechanics cross-checked across independent databases; pro VOD and draft review remain pending." }
+    research: { checkedAt: "2026-11-22", roleAndLaneSources: ["https://mlbbhub.com/ru/heroes/argus", "https://mlbb-knowledge.vercel.app/heroes/45", "https://www.mlbbguides.com/heroes/"], mechanicsSources: ["https://liquipedia.net/mobilelegends/Argus", "https://mlbb-knowledge.vercel.app/heroes/45"], rankedMetaSources: ["https://mlbbhub.com/ru/heroes/argus", "https://mlbbdex.com/en/statistics"], competitiveReviewStatus: "pending", method: "Fighter/EXP role and current passive/skill mechanics cross-checked across independent databases; pro VOD and draft review remain pending." }
   }),
   catalogEntry("arlott", "Arlott", "Арлотт", {
     identityStatus: "pending_review",
