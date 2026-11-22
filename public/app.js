@@ -87,8 +87,6 @@ async function syncDraftState(){
  finally{draftSyncInFlight=false;if(draftSyncAgain){draftSyncAgain=false;clearTimeout(draftSyncTimer);draftSyncTimer=setTimeout(syncDraftState,250)}}
 }
 function restoreDraft(){const saved=readLocalDraft();if(!saved)return;try{applyDraftState(saved);setDraftStatus("Черновик восстановлен с этого устройства")}catch{try{localStorage.removeItem(draftStorageKey)}catch{}}}
-function addHero(side){let id=side==="enemies"?"enemyPick":"allyPick",arr=side==="enemies"?enemies:allies,v=$(id).value;if(!v)return;if(arr.length>=5)return toast("Максимум 5 героев");if(arr.includes(v))return toast("Уже добавлен");arr.push(v);drawTeams();saveDraft()}
-$("addEnemy").onclick=()=>addHero("enemies");$("addAlly").onclick=()=>addHero("allies");
 let pickerTarget="enemies",pickerFilter="all";
 function pickerEntries(){
  const legacy=data.heroes.map(h=>({value:h.name,name:h.name,nameEn:"",supported:true,catalog:false}));
