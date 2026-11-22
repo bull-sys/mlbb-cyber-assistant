@@ -116,7 +116,34 @@ export const heroCatalog = [
       method: "Fighter/Marksman identity and Jungle role cross-checked across three hero references. Skill descriptions compared between Liquipedia, MLBB.io and MLBB Analytics. Ranked statistics are kept separate from tournament samples; recent patch-specific professional VOD review remains pending."
     }
   }),
-  catalogEntry("ling", "Ling", "Линг"),
+  catalogEntry("ling", "Ling", "Линг", {
+    roleValues: ["Assassin"],
+    roleStatus: "verified",
+    primaryLane: "Jungle",
+    flexibleLanes: [],
+    laneStatus: "verified",
+    tacticalProfileStatus: "partial",
+    research: {
+      checkedAt: "2026-11-22",
+      roleAndLaneSources: [
+        "https://mlbbhub.com/heroes/ling",
+        "https://www.mlbb.io/en/hero/ling",
+        "https://mlbbdex.com/en/heroes/ling"
+      ],
+      mechanicsSources: [
+        "https://www.mlbbguides.com/heroes/ling/skills/",
+        "https://www.mlbbanalytics.com/heroes?hero=Ling",
+        "https://mlbbdex.com/en/heroes/ling"
+      ],
+      rankedMetaSources: [
+        "https://mlbbhub.com/heroes/ling",
+        "https://www.mlbb.io/en/hero/ling",
+        "https://metammo.com/mobile-legends-guide/heroes/ling"
+      ],
+      competitiveReviewStatus: "partial",
+      method: "Assassin/Jungle identity cross-checked across MLBBHub, MLBB.io and MLBBdex. Skill mechanics compared across MLBB Guides and MLBB Analytics. Ranked aggregates are kept separate from tournament samples; current patch-specific professional VOD review remains pending."
+    }
+  }),
   catalogEntry("nolan", "Nolan", "Нолан"),
   catalogEntry("suyou", "Suyou", "Су Ё"),
   catalogEntry("jawhead", "Jawhead", "Кусака", {
