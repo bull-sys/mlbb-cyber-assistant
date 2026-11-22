@@ -9,10 +9,10 @@ Live patch reference: 2.2.23
 |---|---:|---|
 | Hero catalog entries | 133 / 133 current catalog entries | Names and IDs are available to the encyclopedia/catalog UI. This is not yet an independently confirmed official-client roster snapshot. |
 | Unique catalog IDs | 133 / 133 | No duplicate IDs after the Fanny catalog-entry correction. |
-| Role verified | 54 / 133 | Role labels have cross-source evidence. |
-| Primary lane verified | 52 / 133 | Primary lane has cross-source evidence. |
-| Tactical profile records | 17 / 133 | Profile records are linked to the catalog; one remains a placeholder without researched mechanics. |
-| Substantive partial tactical profiles | 16 / 133 | Hero-specific mechanics, strengths, weaknesses, item notes and team-fight guidance have been researched. |
+| Role verified | 57 / 133 | Role labels have cross-source evidence. |
+| Primary lane verified | 55 / 133 | Primary lane has cross-source evidence. |
+| Tactical profile records | 22 / 133 | Profile records are linked to the catalog; one remains a placeholder without researched mechanics. |
+| Substantive partial tactical profiles | 21 / 133 | Hero-specific mechanics, strengths, weaknesses, item notes and team-fight guidance have been researched. |
 | Tactical profiles marked complete | 0 / 133 | Profiles remain partial until current-patch and competitive evidence is sufficiently reviewed. |
 
 ## Tactical profile coverage
@@ -34,6 +34,11 @@ Current hero-specific profiles:
 - Argus (Аргус)
 - Khufra (Хуфра)
 - Diggie (Дигги)
+- Sun (Сан)
+- Belerick (Белерик)
+- Hanabi (Ханаби)
+- Xavier (Ксавьер)
+- Obsidia (Обсидия)
 
 Saber remains a legacy placeholder without researched mechanics and is not counted among the 16 substantive profiles.
 
@@ -58,6 +63,6 @@ A hero should move from catalog-only to tactical-profile coverage only after:
 
 ## Next work
 
-Expand tactical coverage in small reviewable batches. The latest batch added researched partial profiles for Masha, Marcel, Argus, Khufra and Diggie, and cross-source role/lane evidence for the four entries whose role/lane fields were not already verified. The preceding batch added Suyou, Jawhead (Кусака), Karrie, Bruno and Terizla. Keep each batch isolated in its own commits, run the full test suite, and do not mark a profile complete merely to increase the coverage percentage.
+Expand tactical coverage in small reviewable batches. The latest batch added researched partial profiles for Sun, Belerick, Hanabi, Xavier and Obsidia. Sun, Xavier and Obsidia also received cross-source role/lane verification; Belerick and Hanabi already had verified role/lane records. The preceding batch added Masha, Marcel, Argus, Khufra and Diggie. Keep each batch isolated in its own commits, run the full test suite, and do not mark a profile complete merely to increase the coverage percentage.
 
 The catalog roster status remains `incomplete` until it has been checked against an official-client roster snapshot. The current 133-entry count is a useful working baseline, not a claim of independent official verification.
