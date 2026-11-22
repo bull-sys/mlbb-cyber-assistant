@@ -87,11 +87,24 @@ async function syncDraftState(){
  finally{draftSyncInFlight=false;if(draftSyncAgain){draftSyncAgain=false;clearTimeout(draftSyncTimer);draftSyncTimer=setTimeout(syncDraftState,250)}}
 }
 function restoreDraft(){const saved=readLocalDraft();if(!saved)return;try{applyDraftState(saved);setDraftStatus("Черновик восстановлен с этого устройства")}catch{try{localStorage.removeItem(draftStorageKey)}catch{}}}
-let pickerTarget="enemies",pickerFilter="all";
+let pickerTarget="enemies",pickerFilter="all",pickerRoleFilter="all";
 function pickerEntries(){
- const legacy=data.heroes.map(h=>({value:h.name,name:h.name,nameEn:"",supported:true,catalog:false}));
- const catalog=(data.draftHeroOptions||[]).map(h=>({value:h.id,name:h.name,nameEn:h.nameEn,supported:Boolean(h.analysisSupported),catalog:true}));
- return [...legacy,...catalog];
+ const profiles=data.heroProfiles||[],catalog=data.heroCatalog||[];
+ const profileFor=(id,name)=>profiles.find(p=>p.id===id||p.names?.ru===name||p.names?.en===name)||null;
+ const catalogFor=name=>catalog.find(h=>h.displayNameRu===name||h.nameEn===name)||null;
+ const legacy=data.heroes.map(h=>{
+  const linked=catalogFor(h.name),profile=profileFor(linked?.id,h.name);
+  const roles=profile?.roles||linked?.role?.values||[];
+  const lanes=profile?.lanes||[linked?.lanes?.primary,...(linked?.lanes?.flexible||[])].filter(Boolean);
+  return {value:h.name,name:h.name,nameEn:linked?.nameEn||"",supported:true,catalog:false,roles,lanes,profile};
+ });
+ const options=(data.draftHeroOptions||[]).map(h=>{
+  const linked=catalog.find(x=>x.id===h.id),profile=profileFor(h.id,h.name);
+  const roles=profile?.roles||linked?.role?.values||[];
+  const lanes=profile?.lanes||[linked?.lanes?.primary,...(linked?.lanes?.flexible||[])].filter(Boolean);
+  return {value:h.id,name:h.name,nameEn:h.nameEn,supported:Boolean(h.analysisSupported),catalog:true,roles,lanes,profile};
+ });
+ return [...legacy,...options];
 }
 function pickerRecent(){
  try{return JSON.parse(localStorage.getItem("mlbb_recent_draft_heroes")||"[]").filter(x=>pickerEntries().some(h=>h.value===x)).slice(0,6)}catch{return []}
@@ -118,22 +131,30 @@ function heroPortraitUrl(hero){
  return "https://raw.githubusercontent.com/Ceplin03/database-mlbb.Mobile-Legends-Bang-Bang/master/images-hero/"+encodeURIComponent(filename)+".png";
 }
 function heroTileMarkup(h,extra=""){
- const url=heroPortraitUrl(h);
- return '<button class="hero-tile '+extra+'" data-picker-value="'+esc(h.value)+'"><span class="hero-portrait-wrap"><img class="hero-portrait" src="'+url+'" alt="" loading="lazy" decoding="async" onerror="this.hidden=true;this.parentElement.classList.add(\'portrait-missing\')"><span class="portrait-fallback">✦</span></span><b>'+esc(h.name)+'</b></button>';
+ const url=heroPortraitUrl(h),role=h.roles?.[0]||h.lanes?.[0]||"Роль уточняется";
+ const strength=h.profile?.strengths?.[0]||"",weakness=h.profile?.weaknesses?.[0]||"";
+ const facts=(strength||weakness)
+  ?'<span class="hero-card-fact positive"><i>＋</i>'+esc(strength)+'</span><span class="hero-card-fact negative"><i>−</i>'+esc(weakness)+'</span>'
+  :'<span class="hero-card-fact muted">Тактический профиль уточняется</span>';
+ const status=h.supported?'<span class="hero-status ready">АНАЛИЗ</span>':'<span class="hero-status pending">КАТАЛОГ</span>';
+ return '<button class="hero-tile '+extra+'" data-picker-value="'+esc(h.value)+'"><span class="hero-portrait-wrap"><img class="hero-portrait" src="'+url+'" alt="" loading="lazy" decoding="async" onerror="this.hidden=true;this.parentElement.classList.add(\'portrait-missing\')"><span class="portrait-fallback">✦</span></span><span class="hero-card-copy"><span class="hero-card-title"><b>'+esc(h.name)+'</b>'+status+'</span><small class="hero-role">'+esc(role)+'</small>'+facts+'</span></button>';
 }
 function renderHeroPicker(){
- const q=$("heroPickerSearch").value.trim().toLocaleLowerCase("ru");
- const entries=pickerEntries();
+ const q=$("heroPickerSearch").value.trim().toLocaleLowerCase("ru"),entries=pickerEntries();
  const recent=pickerRecent().map(value=>entries.find(h=>h.value===value)).filter(Boolean);
  $("recentHeroes").innerHTML=recent.length?'<small>НЕДАВНО ВЫБРАННЫЕ</small><div class="picker-recent-grid">'+recent.map(h=>heroTileMarkup(h,"recent")).join("")+'</div>':"";
+ const roleOptions=["Убийца","Маг","Стрелок","Боец","Танк","Поддержка","Лес","Золото","Опыт","Мид","Роум"];
+ const available=roleOptions.filter(role=>entries.some(h=>[...(h.roles||[]),...(h.lanes||[])].includes(role)));
+ $("pickerRoles").innerHTML=['Все роли',...available].map((role,i)=>'<button class="picker-role-chip '+((pickerRoleFilter===(i===0?"all":role))?"active":"")+'" data-picker-role="'+(i===0?"all":esc(role))+'">'+esc(role)+'</button>').join("");
  const filtered=entries.filter(h=>{
   const match=(h.name+" "+h.nameEn).toLocaleLowerCase("ru").includes(q);
-  return match&&(pickerFilter==="all"||(pickerFilter==="supported"&&h.supported)||(pickerFilter==="catalog"&&h.catalog));
+  const roleMatch=pickerRoleFilter==="all"||[...(h.roles||[]),...(h.lanes||[])].includes(pickerRoleFilter);
+  return match&&roleMatch&&(pickerFilter==="all"||(pickerFilter==="supported"&&h.supported)||(pickerFilter==="catalog"&&h.catalog));
  });
- $("heroPickerGrid").innerHTML=filtered.map(h=>heroTileMarkup(h)).join("")||'<p class="hint">Ничего не найдено. Попробуй другое написание.</p>';
+ $("heroPickerGrid").innerHTML=filtered.map(h=>heroTileMarkup(h)).join("")||'<p class="hint">Ничего не найдено. Попробуй другую роль или написание.</p>';
 }
 function openHeroPicker(target){
- pickerTarget=target;pickerFilter="all";$("heroPickerSearch").value="";
+ pickerTarget=target;pickerFilter="all";pickerRoleFilter="all";$("heroPickerSearch").value="";
  document.querySelectorAll("[data-picker-filter]").forEach(b=>b.classList.toggle("active",b.dataset.pickerFilter==="all"));
  $("pickerTitle").textContent=target==="enemies"?"Выбери героя противника":target==="allies"?"Выбери союзного героя":"Выбери своего героя";
  $("heroPicker").classList.remove("hidden");renderHeroPicker();$("heroPickerSearch").focus();
@@ -158,6 +179,7 @@ document.addEventListener("keydown",e=>{if(e.key==="Escape")$("heroPicker").clas
 $("heroPicker").onclick=e=>{if(e.target===$("heroPicker"))$("heroPicker").classList.add("hidden");const tile=e.target.closest("[data-picker-value]");if(tile)choosePickerHero(tile.dataset.pickerValue)};
 $("heroPickerSearch").addEventListener("input",renderHeroPicker);
 $("heroPicker").querySelector(".picker-tabs").onclick=e=>{const b=e.target.closest("[data-picker-filter]");if(!b)return;pickerFilter=b.dataset.pickerFilter;document.querySelectorAll("[data-picker-filter]").forEach(x=>x.classList.toggle("active",x===b));renderHeroPicker()};
+$("pickerRoles").onclick=e=>{const b=e.target.closest("[data-picker-role]");if(!b)return;pickerRoleFilter=b.dataset.pickerRole;renderHeroPicker()};
 
 document.addEventListener("click",e=>{let b=e.target.closest("[data-side]");if(b){(b.dataset.side==="enemies"?enemies:allies).splice(+b.dataset.i,1);drawTeams();saveDraft()}});
 $("nav").onclick=e=>{let b=e.target.closest("[data-page]");if(!b)return;document.querySelectorAll("nav button").forEach(x=>x.classList.toggle("active",x===b));document.querySelectorAll(".page").forEach(x=>x.classList.toggle("hidden",x.id!=="page-"+b.dataset.page))};
