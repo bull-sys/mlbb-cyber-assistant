@@ -265,6 +265,7 @@ export const heroCatalog = [
     primaryLane: "EXP Lane",
     flexibleLanes: [],
     laneStatus: "verified",
+    tacticalProfileStatus: "partial",
     research: {
       checkedAt: "2026-11-22",
       roleAndLaneSources: [
@@ -272,6 +273,8 @@ export const heroCatalog = [
         "https://mlbb-stats.com/heroes",
         "https://mlbbdex.com/en/heroes"
       ],
+      mechanicsSources: ["https://mlbb-knowledge.vercel.app/heroes/64","https://liquipedia.net/mobilelegends/Aldous","https://mlbb.io/en/hero/aldous"],
+      rankedMetaSources: ["https://mlbbhub.com/heroes/aldous","https://mlbbdex.com/en/heroes/aldous"],
       competitiveReviewStatus: "pending",
       method: "Role and lane tags cross-checked across independent hero databases; pro-draft usage and player VODs are reviewed separately before tactical recommendations are marked complete."
     },
@@ -771,6 +774,7 @@ export const heroCatalog = [
     primaryLane: "Roam",
     flexibleLanes: [],
     laneStatus: "verified",
+    tacticalProfileStatus: "partial",
     research: {
       checkedAt: "2026-11-22",
       roleAndLaneSources: [
@@ -778,6 +782,8 @@ export const heroCatalog = [
         "https://www.propublic.gg/heroes/stats?dir=asc&sort=name",
         "https://mlbbhub.com/heroes"
       ],
+      mechanicsSources: ["https://mlbb-knowledge.vercel.app/heroes/112","https://liquipedia.net/mobilelegends/Floryn","https://mlbb.io/en/hero/floryn"],
+      rankedMetaSources: ["https://mlbbhub.com/heroes/floryn","https://mlbbdex.com/en/heroes/floryn"],
       competitiveReviewStatus: "pending",
       method: "Role tags cross-checked against MLBBHub; lane placement checked against MLBB Guides and Propublic's Mythic+ 15-day lane table. Pro tournament usage is tracked separately and does not automatically determine ranked primary lane."
     },
@@ -1220,5 +1226,10 @@ export const heroCatalog = [
   catalogEntry("zilong", "Zilong", "Зилонг", {
     identityStatus: "pending_review",
     localizationStatus: "pending_review"
-  }),
+  }),,
+
+  catalogEntry("estes", "Estes", "Эстес", { roleValues:["Support"], roleStatus:"verified", primaryLane:"Roam", flexibleLanes:[], laneStatus:"verified", tacticalProfileStatus:"partial", research:{ checkedAt:"2026-11-22", roleAndLaneSources:["https://mlbb-knowledge.vercel.app/heroes/34","https://mlbbhub.com/heroes/estes","https://mlbb.io/en/hero/estes"], mechanicsSources:["https://liquipedia.net/mobilelegends/Estes","https://mlbb-knowledge.vercel.app/heroes/34","https://metammo.com/mobile-legends-guide/heroes/estes"], rankedMetaSources:["https://mlbbhub.com/heroes/estes","https://mlbbdex.com/en/heroes/estes"], competitiveReviewStatus:"pending", method:"Support/Roam role cross-checked across three databases; healing, link and area slow checked across independent skill references. Ranked and pro evidence are kept separate." } }),
+  catalogEntry("minotaur", "Minotaur", "Минотавр", { roleValues:["Tank","Support"], roleStatus:"verified", primaryLane:"Roam", flexibleLanes:["EXP Lane"], laneStatus:"verified", tacticalProfileStatus:"partial", research:{ checkedAt:"2026-11-22", roleAndLaneSources:["https://mlbbhub.com/heroes/minotaur","https://mlbb.io/en/hero/minotaur","https://mlbbdex.com/en/heroes/minotaur"], mechanicsSources:["https://mlbbhub.com/heroes/minotaur","https://liquipedia.net/mobilelegends/Minotaur","https://mlbb.io/en/hero/minotaur"], rankedMetaSources:["https://mlbbhub.com/heroes/minotaur","https://mlbbdex.com/en/heroes/minotaur"], competitiveReviewStatus:"pending", method:"Tank/Support and Roam primary role cross-checked across three databases; EXP retained as flexible lane. Rage-state control and healing reviewed separately from ranked aggregates." } }),
+  catalogEntry("lunox", "Lunox", "Люнокс", { roleValues:["Mage"], roleStatus:"verified", primaryLane:"Mid Lane", flexibleLanes:[], laneStatus:"verified", tacticalProfileStatus:"partial", research:{ checkedAt:"2026-11-22", roleAndLaneSources:["https://mlbbhub.com/ru/heroes/lunox","https://mlbb.io/en/hero/lunox","https://mlbb-knowledge.vercel.app/heroes/"], mechanicsSources:["https://liquipedia.net/mobilelegends/Lunox","https://kazukiofficial.com/heroes/lunox","https://mlbb.tools/patch-notes/2.2.23"], rankedMetaSources:["https://mlbbhub.com/ru/heroes/lunox","https://mlbbdex.com/en/heroes/lunox"], competitiveReviewStatus:"pending", method:"Mage/Mid identity cross-checked across three databases; Order/Chaos forms and patch 2.2.23 adjustments checked against independent skill and patch references. Current-patch pro VOD review remains pending." } }),
+
 ];
