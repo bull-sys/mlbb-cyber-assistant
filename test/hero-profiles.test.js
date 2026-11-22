@@ -54,7 +54,7 @@ test("Hanzo profile records the current reworked mechanics and separates evidenc
   assert.deepEqual(hanzo.matchups.strongAgainst, []);
   assert.deepEqual(hanzo.matchups.weakAgainst, []);
   const notes = hanzo.patch.notes.join(" ");
-  assert.match(notes, /рейтинговая статистика/);
+  assert.match(notes, /Рейтинговая статистика/);
   assert.match(notes, /Профессиональные данные/);
   assert.match(notes, /VOD/);
 });
