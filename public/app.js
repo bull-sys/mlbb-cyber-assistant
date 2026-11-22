@@ -1,6 +1,6 @@
 const $=id=>document.getElementById(id);
 const DRAFT_STORAGE_KEY="mlbb_draft_state_v1";
-let draftSyncTimer=null,draftSyncInFlight=false;
+let draftSyncTimer=null,draftSyncInFlight=false,draftSyncAgain=false;
 let token=localStorage.getItem("mlbb_token")||"",data={heroes:[],draftHeroOptions:[],heroCatalog:[],heroProfiles:[],items:[],talents:[],emblems:[],roles:[],ranks:[],styles:[]},enemies=[],allies=[],threats=new Set(),encyFilter="all",ocrWorker=null;
 const threatDefs=[["heal","💚 Отхил / вампиризм"],["magic","🔮 2+ мага / прокаст"],["speed","⚡ Скорость атаки"],["tank","🛡 Жирные танки"],["cc","⛓ Тяжёлый контроль"],["physical","⚔ Много физического урона"],["burst","💥 Взрывной урон"]];
 const $api=async(path,opts={})=>{let r=await fetch("/api"+path,{...opts,headers:{"Content-Type":"application/json",...(token?{Authorization:"Bearer "+token}:{}),...(opts.headers||{})}});let d=await r.json().catch(()=>({error:"Ошибка сервера"}));if(!r.ok)throw Error(d.error||"Ошибка");return d};
@@ -58,7 +58,8 @@ function restoreDraft(){
  catch{try{localStorage.removeItem(DRAFT_STORAGE_KEY)}catch{}}
 }
 async function syncDraftState(){
- if(!token||draftSyncInFlight)return;
+ if(!token)return;
+ if(draftSyncInFlight){draftSyncAgain=true;return}
  if(!navigator.onLine){setDraftStatus("Офлайн: черновик сохранён на устройстве, синхронизация будет позже");return}
  draftSyncInFlight=true;
  try{
@@ -77,7 +78,7 @@ async function syncDraftState(){
    setDraftStatus("Черновик пока сохраняется только на устройстве");
   }
  }catch(error){setDraftStatus("Серверная синхронизация отложена; локальная копия сохранена")}
- finally{draftSyncInFlight=false}
+ finally{draftSyncInFlight=false;if(draftSyncAgain){draftSyncAgain=false;clearTimeout(draftSyncTimer);draftSyncTimer=setTimeout(syncDraftState,250)}}
 }
 function restoreDraft(){try{const saved=JSON.parse(localStorage.getItem(DRAFT_STORAGE_KEY)||"null");if(!saved||saved.version!==1)return;const names=new Set([...data.heroes.map(h=>h.name),...(data.draftHeroOptions||[]).map(h=>h.id)]);enemies=Array.isArray(saved.enemies)?saved.enemies.filter(x=>names.has(x)).slice(0,5):[];allies=Array.isArray(saved.allies)?saved.allies.filter(x=>names.has(x)).slice(0,5):[];if(data.roles.includes(saved.lane))$("lane").value=saved.lane;if(names.has(saved.myHero))$("myHero").value=saved.myHero;const allowed=new Set(threatDefs.map(([id])=>id));threats=new Set(Array.isArray(saved.threats)?saved.threats.filter(x=>allowed.has(x)):[]);document.querySelectorAll("#threats [data-threat]").forEach(b=>b.classList.toggle("active",threats.has(b.dataset.threat)))}catch{try{localStorage.removeItem(DRAFT_STORAGE_KEY)}catch{}}}
 function addHero(side){let id=side==="enemies"?"enemyPick":"allyPick",arr=side==="enemies"?enemies:allies,v=$(id).value;if(!v)return;if(arr.length>=5)return toast("Максимум 5 героев");if(arr.includes(v))return toast("Уже добавлен");arr.push(v);drawTeams();saveDraft()}
