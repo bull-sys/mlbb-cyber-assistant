@@ -2522,10 +2522,7 @@ export const heroProfiles = [
     patch: { version: HERO_DB_PATCH, notes: ["The Oath Keeper, Momentum, Decimation Assault и два набора навыков верхового состояния сверены по MLBB Knowledge, Liquipedia и MLBB.io.","MLBB Knowledge указывает Fighter/Jungle и отдельный верховой набор навыков; данные сборок и матчапов привязаны к текущему справочному срезу.","Профессиональный VOD-разбор текущего патча остаётся pending."], reviewedAt: "2026-11-22" },
     confidence: "partial"
   }
-];
 
-export function validateHeroProfiles(profiles = heroProfiles) {
-  const errors = [
   {
     id: "hirara",
     names: { ru: "Хирара", en: "Hirara", aliases: [] },
@@ -2640,7 +2637,11 @@ export function validateHeroProfiles(profiles = heroProfiles) {
     patch: { version: HERO_DB_PATCH, notes: ["Роль Боец/линия опыта, пассивное Благословение храбрости и смена стойки Большого меча сверены по MLBB.io, MLBBHub и MLBBGuides.", "Справочники обновлены в пределах патча 2.2.23, однако отдельные числовые параметры различаются; профиль сохраняет общую механику.", "Профессиональный VOD-разбор текущего патча не выполнен."], reviewedAt: "2026-11-22" },
     confidence: "partial"
   },
+
 ];
+
+export function validateHeroProfiles(profiles = heroProfiles) {
+  const errors = [];
   const ids = new Set();
 
   for (const hero of profiles) {
