@@ -79,7 +79,7 @@ Current hero-specific profiles:
 - Eudora (Эйдора)
 - Pharsa (Фарса)
 - Nana (Нана)
-Saber remains a legacy placeholder without researched mechanics and is not counted among the 51 substantive profiles.
+Saber remains a legacy placeholder without researched mechanics and is not counted among the 61 substantive profiles (62 profile records total, including Saber).
 
 A profile being present does not mean all matchups, synergies, professional VODs or current-patch build variants are fully verified. Empty matchup/synergy arrays are intentional when evidence is insufficient; do not fill them with guesses.
 
