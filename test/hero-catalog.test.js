@@ -238,3 +238,28 @@ test("Atlas, Kagura, Layla, Miya and Granger have verified catalog roles and lan
   assert.equal(heroCatalog.find(item => item.id === "atlas").research.competitiveReviewStatus, "partial");
   assert.equal(heroCatalog.find(item => item.id === "kagura").research.competitiveReviewStatus, "pending");
 });
+
+
+test("Lukas, Thamuz, Eudora, Pharsa and Nana have verified catalog roles and lanes", () => {
+  const expected = [
+    ["lukas", ["Fighter"], "EXP Lane", ["Jungle"]],
+    ["thamuz", ["Fighter"], "EXP Lane", ["Jungle"]],
+    ["eudora", ["Mage"], "Mid Lane", []],
+    ["pharsa", ["Mage"], "Mid Lane", []],
+    ["nana", ["Mage"], "Mid Lane", []]
+  ];
+  for (const [id, roles, primary, flexible] of expected) {
+    const hero = heroCatalog.find(item => item.id === id);
+    assert.ok(hero, id);
+    assert.deepEqual(hero.role.values, roles);
+    assert.equal(hero.role.status, "verified");
+    assert.equal(hero.lanes.primary, primary);
+    assert.deepEqual(hero.lanes.flexible, flexible);
+    assert.equal(hero.lanes.status, "verified");
+    assert.equal(hero.tacticalProfile.status, "partial");
+    assert.ok(hero.research.roleAndLaneSources.length >= 3);
+    assert.ok(hero.research.mechanicsSources.length >= 3);
+  }
+  assert.equal(heroCatalog.find(item => item.id === "lukas").research.competitiveReviewStatus, "partial");
+  assert.equal(heroCatalog.find(item => item.id === "pharsa").research.competitiveReviewStatus, "partial");
+});
