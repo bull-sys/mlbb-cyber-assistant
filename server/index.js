@@ -14,6 +14,7 @@ import { fileURLToPath } from "node:url";
 import { heroes, items, talents, spells, emblems } from "./data.js";
 import { getHeroCatalogApiFields, isLegacyHeroName } from "./hero-catalog-adapter.js";
 import { heroProfiles, validateHeroProfiles } from "./hero-profiles.js";
+import { normalizeRegistration } from "./registration.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, "..");
@@ -33,6 +34,7 @@ app.use(helmet({contentSecurityPolicy:false,crossOriginEmbedderPolicy:false}));
 app.use(cors({origin:process.env.APP_URL||true}));
 app.use(express.json({limit:"1mb"}));
 app.use(rateLimit({windowMs:15*60*1000,limit:300,standardHeaders:true,legacyHeaders:false}));
+const authRateLimit=rateLimit({windowMs:15*60*1000,limit:10,standardHeaders:true,legacyHeaders:false,message:{error:"Слишком много попыток. Попробуй позже."}});
 const upload=multer({dest:uploadDir,limits:{fileSize:(Number(process.env.MAX_UPLOAD_MB)||8)*1024*1024},fileFilter:(req,file,cb)=>cb(null,/^image\/(png|jpeg|webp)$/.test(file.mimetype))});
 const secret=process.env.JWT_SECRET;
 if(!secret && process.env.NODE_ENV==="production") throw new Error("JWT_SECRET is required in production");
@@ -59,7 +61,25 @@ app.get("/api/data",(req,res)=>res.json({
   styles,
   disclaimer:"Справочник — стартовый фанатский набор. Сверяйте данные с текущим клиентом MLBB."
 }));
-app.post("/api/auth/login",async(req,res)=>{const {email,password}=req.body||{};const u=db.prepare("SELECT * FROM users WHERE email=?").get(String(email||"").toLowerCase().trim());if(!u||!await bcrypt.compare(String(password||""),u.password_hash))return res.status(401).json({error:"Неверный email или пароль"});res.json({token:issue(u.id),user:safeUser(u.id)})});
+app.post("/api/auth/register",authRateLimit,async(req,res)=>{
+ const input=normalizeRegistration(req.body||{});
+ if(!input.ok)return res.status(400).json({error:input.error});
+ try{
+  const passwordHash=await bcrypt.hash(input.password,12);
+  const createUser=db.transaction(()=>{
+   const result=db.prepare("INSERT INTO users(email,password_hash,nickname) VALUES(?,?,?)").run(input.email,passwordHash,input.nickname);
+   const id=Number(result.lastInsertRowid);
+   db.prepare("INSERT INTO profiles(user_id) VALUES(?)").run(id);
+   return id;
+  });
+  const id=createUser();
+  res.status(201).json({token:issue(id),user:safeUser(id)});
+ }catch(error){
+  if(String(error.code||"").includes("CONSTRAINT_UNIQUE"))return res.status(409).json({error:"Аккаунт с таким email уже существует"});
+  res.status(500).json({error:"Не удалось создать аккаунт"});
+ }
+});
+app.post("/api/auth/login",authRateLimit,async(req,res)=>{const {email,password}=req.body||{};const u=db.prepare("SELECT * FROM users WHERE email=?").get(String(email||"").toLowerCase().trim());if(!u||!await bcrypt.compare(String(password||""),u.password_hash))return res.status(401).json({error:"Неверный email или пароль"});res.json({token:issue(u.id),user:safeUser(u.id)})});
 app.get("/api/me",auth,(req,res)=>{const u=safeUser(req.user.id);if(!u)return res.status(404).json({error:"Пользователь не найден"});res.json({user:u})});
 app.put("/api/profile",auth,(req,res)=>{
  const b=req.body||{};const hero=String(b.hero||"");const role=String(b.role||"");const rank=String(b.rank||"");const style=String(b.style||"");
