@@ -11,13 +11,18 @@ Live patch reference: 2.2.23
 | Unique catalog IDs | 133 / 133 | No duplicate IDs after the Fanny catalog-entry correction. |
 | Role verified | 80 / 133 | Role labels have cross-source evidence. |
 | Primary lane verified | 79 / 133 | Primary lane has cross-source evidence. |
-| Tactical profile records | 87 / 133 | 87 profile records exist; Saber is an empty legacy placeholder and is marked missing in the catalog. |
-| Substantive partial tactical profiles | 86 / 133 | Hero-specific mechanics, strengths, weaknesses, item notes and team-fight guidance have been researched. |
+| Tactical profile records | 92 / 133 | 87 profile records exist; Saber is an empty legacy placeholder and is marked missing in the catalog. |
+| Substantive partial tactical profiles | 91 / 133 | Hero-specific mechanics, strengths, weaknesses, item notes and team-fight guidance have been researched. |
 | Tactical profiles marked complete | 0 / 133 | Profiles remain partial until current-patch and competitive evidence is sufficiently reviewed. |
 
 ## Tactical profile coverage
 
 Current hero-specific profiles:
+- Joy (Джой)
+- Kadita (Кадита)
+- Karina (Карина)
+- Lancelot (Ланселот)
+- Leomord (Леоморд)
 - Hayabusa (Хаябуса)\n- Hylos (Хилос)\n- Irithel (Иритэль)\n- Ixia (Иксия)\n- Johnson (Джонсон)\n- Grock (Грок)\n- Guinevere (Гвиневра)\n- Gusion (Госсен)\n- Harith (Харит)\n- Harley (Харли)\n- Faramis (Фарамис)\n- Fredrinn (Фредрин)\n- Gatotkaca (Гатоткача)\n- Gloo (Глу)\n- Gord (Горд)\n- Chip (Чип)\n- Cici (Сиси)\n- Claude (Клод)\n- Clint (Клинт)\n- Esmeralda (Эсмеральда)\n- Benedetta (Бенедетта)
 - Brody (Броуди)
 - Carmilla (Кармилла)
@@ -84,7 +89,7 @@ Current hero-specific profiles:
 - Eudora (Эйдора)
 - Pharsa (Фарса)
 - Nana (Нана)
-Saber remains a legacy placeholder without researched mechanics and is not counted among the 86 substantive profiles (87 profile records total, including Saber).
+Saber remains a legacy placeholder without researched mechanics and is not counted among the 91 substantive profiles (92 profile records total, including Saber).
 
 A profile being present does not mean all matchups, synergies, professional VODs or current-patch build variants are fully verified. Empty matchup/synergy arrays are intentional when evidence is insufficient; do not fill them with guesses.
 
@@ -107,6 +112,6 @@ A hero should move from catalog-only to tactical-profile coverage only after:
 
 ## Next work
 
-Expand tactical coverage in small reviewable batches. The latest batch added researched partial profiles for Hayabusa, Hylos, Irithel, Ixia and Johnson, with cross-source role/lane verification. The preceding batch added Grock, Guinevere, Gusion, Harith and Harley, with cross-source role/lane verification. The preceding batch added Faramis, Fredrinn, Gatotkaca, Gloo and Gord, with cross-source role/lane verification. The preceding batch added Chip, Cici, Claude, Clint and Esmeralda, with cross-source role/lane verification. The preceding batch added Benedetta, Brody, Carmilla, Cecilion and Chang'e, with cross-source role/lane verification. The preceding batch added Badang, Balmond, Bane, Baxia and Beatrix, with cross-source role/lane verification. The preceding batch added Franco, Akai, Alucard, Arlott and Aurora, with cross-source role/lane verification. The preceding batch added Lukas, Thamuz, Eudora, Pharsa and Nana, with cross-source role/lane verification. The preceding batch added Atlas, Kagura, Layla, Miya and Granger. The preceding batch added Kaja, Valir, Paquito, Aulus and Rafaela. The preceding batch added researched partial profiles for Cyclops, Julian, Tigreal, Chou and Dyrroth. The previous batch added Aldous, Floryn, Estes, Minotaur and Lunox. The previous batch added Sun, Belerick, Hanabi, Xavier and Obsidia. Sun, Xavier and Obsidia also received cross-source role/lane verification; Belerick and Hanabi already had verified role/lane records. Earlier batches added Masha, Marcel, Argus, Khufra and Diggie. Keep each batch isolated in its own commits, run the full test suite, and do not mark a profile complete merely to increase the coverage percentage. Atlas has a separate MPL ID S18 professional pick/ban snapshot; Miya has event-level MPL ID/PH S18 samples. These do not replace individual VOD review, which remains pending.
+Expand tactical coverage in small reviewable batches. The latest batch added researched partial profiles for Joy, Kadita, Karina, Lancelot and Leomord, with cross-source role/lane verification. The preceding batch added Hayabusa, Hylos, Irithel, Ixia and Johnson, with cross-source role/lane verification. The preceding batch added Grock, Guinevere, Gusion, Harith and Harley, with cross-source role/lane verification. The preceding batch added Faramis, Fredrinn, Gatotkaca, Gloo and Gord, with cross-source role/lane verification. The preceding batch added Chip, Cici, Claude, Clint and Esmeralda, with cross-source role/lane verification. The preceding batch added Benedetta, Brody, Carmilla, Cecilion and Chang'e, with cross-source role/lane verification. The preceding batch added Badang, Balmond, Bane, Baxia and Beatrix, with cross-source role/lane verification. The preceding batch added Franco, Akai, Alucard, Arlott and Aurora, with cross-source role/lane verification. The preceding batch added Lukas, Thamuz, Eudora, Pharsa and Nana, with cross-source role/lane verification. The preceding batch added Atlas, Kagura, Layla, Miya and Granger. The preceding batch added Kaja, Valir, Paquito, Aulus and Rafaela. The preceding batch added researched partial profiles for Cyclops, Julian, Tigreal, Chou and Dyrroth. The previous batch added Aldous, Floryn, Estes, Minotaur and Lunox. The previous batch added Sun, Belerick, Hanabi, Xavier and Obsidia. Sun, Xavier and Obsidia also received cross-source role/lane verification; Belerick and Hanabi already had verified role/lane records. Earlier batches added Masha, Marcel, Argus, Khufra and Diggie. Keep each batch isolated in its own commits, run the full test suite, and do not mark a profile complete merely to increase the coverage percentage. Atlas has a separate MPL ID S18 professional pick/ban snapshot; Miya has event-level MPL ID/PH S18 samples. These do not replace individual VOD review, which remains pending.
 
 The catalog roster status remains `incomplete` until it has been checked against an official-client roster snapshot. The current 133-entry count is a useful working baseline, not a claim of independent official verification.
