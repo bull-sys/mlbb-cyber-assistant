@@ -64,21 +64,12 @@ export const heroCatalog = [
 
   catalogEntry("tigreal", "Tigreal", "Тигрил"),
   catalogEntry("atlas", "Atlas", "Атлас"),
-  catalogEntry("franco", "Franco", "Франко"),
-  catalogEntry("minotaur", "Minotaur", "Минотавр"),
-  catalogEntry("angela", "Angela", "Ангела"),
-  catalogEntry("estes", "Estes", "Эстес"),
-  catalogEntry("diggie", "Diggie", "Дигги"),
-  catalogEntry("valir", "Valir", "Валир"),
-  catalogEntry("alice", "Alice", "Алиса"),
-
-  // Roster expansion: identity/localization remain pending; role and lane fields are researched separately.
-  catalogEntry("aamon", "Aamon", "Аамон", {
+  catalogEntry("franco", "Franco", "Франко", {
     identityStatus: "pending_review",
     localizationStatus: "pending_review",
-    roleValues: ["Assassin"],
+    roleValues: ["Tank"],
     roleStatus: "verified",
-    primaryLane: "Jungle",
+    primaryLane: "Roam",
     flexibleLanes: [],
     laneStatus: "verified",
     research: {
@@ -86,13 +77,12 @@ export const heroCatalog = [
       roleAndLaneSources: [
         "https://www.mlbbguides.com/heroes/",
         "https://mlbb-stats.com/heroes",
-        "https://mlbbdex.com/en/heroes"
+        "https://mlbb.io/en/heroes"
       ],
       competitiveReviewStatus: "pending",
-      method: "Role and lane tags cross-checked across independent hero databases; pro-draft usage and player VODs are reviewed separately before tactical recommendations are marked complete."
+      method: "Role tags cross-checked against MLBB Guides and MLBB Stats; lane placement cross-checked against MLBB Stats and MLBB.io. Professional tournament usage is reviewed separately from ranked lane prevalence."
     },
-  }),
-  catalogEntry("akai", "Akai", "Акай", {
+  }),  catalogEntry("akai", "Akai", "Акай", {
     identityStatus: "pending_review",
     localizationStatus: "pending_review",
     roleValues: ["Tank"],
@@ -645,41 +635,167 @@ export const heroCatalog = [
   }),
   catalogEntry("fredrinn", "Fredrinn", "Фредрин", {
     identityStatus: "pending_review",
-    localizationStatus: "pending_review"
-  }),
-  catalogEntry("freya", "Freya", "Фрея", {
+    localizationStatus: "pending_review",
+    roleValues: ["Fighter","Tank"],
+    roleStatus: "verified",
+    primaryLane: "Jungle",
+    flexibleLanes: [],
+    laneStatus: "verified",
+    research: {
+      checkedAt: "2026-11-22",
+      roleAndLaneSources: [
+        "https://www.mlbbguides.com/heroes/",
+        "https://mlbb-stats.com/heroes",
+        "https://mlbb.io/en/heroes"
+      ],
+      competitiveReviewStatus: "pending",
+      method: "Role tags cross-checked against MLBB Guides and MLBB Stats; lane placement cross-checked against MLBB Stats and MLBB.io. Professional tournament usage is reviewed separately from ranked lane prevalence."
+    },
+  }),  catalogEntry("freya", "Freya", "Фрея", {
     identityStatus: "pending_review",
-    localizationStatus: "pending_review"
-  }),
-  catalogEntry("gatotkaca", "Gatotkaca", "Гатоткача", {
+    localizationStatus: "pending_review",
+    roleValues: ["Fighter"],
+    roleStatus: "verified",
+    primaryLane: "EXP Lane",
+    flexibleLanes: ["Jungle"],
+    laneStatus: "verified",
+    research: {
+      checkedAt: "2026-11-22",
+      roleAndLaneSources: [
+        "https://www.mlbbguides.com/heroes/",
+        "https://mlbb-stats.com/heroes",
+        "https://mlbb.io/en/heroes"
+      ],
+      competitiveReviewStatus: "pending",
+      method: "Role tags cross-checked against MLBB Guides and MLBB Stats; lane placement cross-checked against MLBB Stats and MLBB.io. Professional tournament usage is reviewed separately from ranked lane prevalence."
+    },
+  }),  catalogEntry("gatotkaca", "Gatotkaca", "Гатоткача", {
     identityStatus: "pending_review",
-    localizationStatus: "pending_review"
-  }),
-  catalogEntry("gloo", "Gloo", "Глу", {
+    localizationStatus: "pending_review",
+    roleValues: ["Tank","Fighter"],
+    roleStatus: "verified",
+    primaryLane: "Roam",
+    flexibleLanes: ["EXP Lane"],
+    laneStatus: "verified",
+    research: {
+      checkedAt: "2026-11-22",
+      roleAndLaneSources: [
+        "https://www.mlbbguides.com/heroes/",
+        "https://mlbb-stats.com/heroes",
+        "https://mlbb.io/en/heroes"
+      ],
+      competitiveReviewStatus: "pending",
+      method: "Role tags cross-checked against MLBB Guides and MLBB Stats; lane placement cross-checked against MLBB Stats and MLBB.io. Professional tournament usage is reviewed separately from ranked lane prevalence."
+    },
+  }),  catalogEntry("gloo", "Gloo", "Глу", {
     identityStatus: "pending_review",
-    localizationStatus: "pending_review"
-  }),
-  catalogEntry("gord", "Gord", "Горд", {
+    localizationStatus: "pending_review",
+    roleValues: ["Tank"],
+    roleStatus: "verified",
+    primaryLane: "Roam",
+    flexibleLanes: ["EXP Lane"],
+    laneStatus: "verified",
+    research: {
+      checkedAt: "2026-11-22",
+      roleAndLaneSources: [
+        "https://www.mlbbguides.com/heroes/",
+        "https://mlbb-stats.com/heroes",
+        "https://mlbb.io/en/heroes"
+      ],
+      competitiveReviewStatus: "pending",
+      method: "Role tags cross-checked against MLBB Guides and MLBB Stats; lane placement cross-checked against MLBB Stats and MLBB.io. Professional tournament usage is reviewed separately from ranked lane prevalence."
+    },
+  }),  catalogEntry("gord", "Gord", "Горд", {
     identityStatus: "pending_review",
-    localizationStatus: "pending_review"
-  }),
-  catalogEntry("grock", "Grock", "Грок", {
+    localizationStatus: "pending_review",
+    roleValues: ["Mage"],
+    roleStatus: "verified",
+    primaryLane: "Mid Lane",
+    flexibleLanes: [],
+    laneStatus: "verified",
+    research: {
+      checkedAt: "2026-11-22",
+      roleAndLaneSources: [
+        "https://www.mlbbguides.com/heroes/",
+        "https://mlbb-stats.com/heroes",
+        "https://mlbb.io/en/heroes"
+      ],
+      competitiveReviewStatus: "pending",
+      method: "Role tags cross-checked against MLBB Guides and MLBB Stats; lane placement cross-checked against MLBB Stats and MLBB.io. Professional tournament usage is reviewed separately from ranked lane prevalence."
+    },
+  }),  catalogEntry("grock", "Grock", "Грок", {
     identityStatus: "pending_review",
-    localizationStatus: "pending_review"
-  }),
-  catalogEntry("guinevere", "Guinevere", "Гвиневра", {
+    localizationStatus: "pending_review",
+    roleValues: ["Tank"],
+    roleStatus: "verified",
+    primaryLane: "Roam",
+    flexibleLanes: [],
+    laneStatus: "verified",
+    research: {
+      checkedAt: "2026-11-22",
+      roleAndLaneSources: [
+        "https://www.mlbbguides.com/heroes/",
+        "https://mlbb-stats.com/heroes",
+        "https://mlbb.io/en/heroes"
+      ],
+      competitiveReviewStatus: "pending",
+      method: "Role tags cross-checked against MLBB Guides and MLBB Stats; lane placement cross-checked against MLBB Stats and MLBB.io. Professional tournament usage is reviewed separately from ranked lane prevalence."
+    },
+  }),  catalogEntry("guinevere", "Guinevere", "Гвиневра", {
     identityStatus: "pending_review",
-    localizationStatus: "pending_review"
-  }),
-  catalogEntry("gusion", "Gusion", "Госсен", {
+    localizationStatus: "pending_review",
+    roleValues: ["Fighter"],
+    roleStatus: "verified",
+    primaryLane: "EXP Lane",
+    flexibleLanes: [],
+    laneStatus: "verified",
+    research: {
+      checkedAt: "2026-11-22",
+      roleAndLaneSources: [
+        "https://www.mlbbguides.com/heroes/",
+        "https://mlbb-stats.com/heroes",
+        "https://mlbb.io/en/heroes"
+      ],
+      competitiveReviewStatus: "pending",
+      method: "Role tags cross-checked against MLBB Guides and MLBB Stats; lane placement cross-checked against MLBB Stats and MLBB.io. Professional tournament usage is reviewed separately from ranked lane prevalence."
+    },
+  }),  catalogEntry("gusion", "Gusion", "Госсен", {
     identityStatus: "pending_review",
-    localizationStatus: "pending_review"
-  }),
-  catalogEntry("hanabi", "Hanabi", "Ханаби", {
+    localizationStatus: "pending_review",
+    roleValues: ["Assassin"],
+    roleStatus: "verified",
+    primaryLane: "Jungle",
+    flexibleLanes: ["Mid Lane"],
+    laneStatus: "verified",
+    research: {
+      checkedAt: "2026-11-22",
+      roleAndLaneSources: [
+        "https://www.mlbbguides.com/heroes/",
+        "https://mlbb-stats.com/heroes",
+        "https://mlbb.io/en/heroes"
+      ],
+      competitiveReviewStatus: "pending",
+      method: "Role tags cross-checked against MLBB Guides and MLBB Stats; lane placement cross-checked against MLBB Stats and MLBB.io. Professional tournament usage is reviewed separately from ranked lane prevalence."
+    },
+  }),  catalogEntry("hanabi", "Hanabi", "Ханаби", {
     identityStatus: "pending_review",
-    localizationStatus: "pending_review"
-  }),
-  catalogEntry("harith", "Harith", "Харит", {
+    localizationStatus: "pending_review",
+    roleValues: ["Marksman"],
+    roleStatus: "verified",
+    primaryLane: "Gold Lane",
+    flexibleLanes: [],
+    laneStatus: "verified",
+    research: {
+      checkedAt: "2026-11-22",
+      roleAndLaneSources: [
+        "https://www.mlbbguides.com/heroes/",
+        "https://mlbb-stats.com/heroes",
+        "https://mlbb.io/en/heroes"
+      ],
+      competitiveReviewStatus: "pending",
+      method: "Role tags cross-checked against MLBB Guides and MLBB Stats; lane placement cross-checked against MLBB Stats and MLBB.io. Professional tournament usage is reviewed separately from ranked lane prevalence."
+    },
+  }),  catalogEntry("harith", "Harith", "Харит", {
     identityStatus: "pending_review",
     localizationStatus: "pending_review"
   }),
