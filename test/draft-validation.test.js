@@ -55,5 +55,5 @@ test("rejects non-array allies", () => {
 test("draft route uses shared validation before analysis", async () => {
   const { readFile } = await import("node:fs/promises");
   const source = await readFile(new URL("../server/index.js", import.meta.url), "utf8");
-  assert.match(source, /if\(!isValidDraftRequest\\(b,roles,isLegacyHeroName,isCatalogHeroId\\)/);
+  assert.match(source, /if\(!isValidDraftRequest\(b,roles,isLegacyHeroName,isCatalogHeroId\)/);
 });
