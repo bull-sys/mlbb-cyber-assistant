@@ -637,21 +637,25 @@ export const heroCatalog = [
   }),
   catalogEntry("leomord", "Leomord", "Леоморд", { identityStatus:"source_verified", localizationStatus:"pending_review", roleValues:["Fighter"], roleStatus:"verified", primaryLane:"Jungle", flexibleLanes:[], laneStatus:"verified", tacticalProfileStatus:"partial", research:{ checkedAt:"2026-11-22", roleAndLaneSources:["https://mlbb-knowledge.vercel.app/heroes/67","https://liquipedia.net/mobilelegends/Leomord","https://mlbb.io/en/hero/leomord"], mechanicsSources:["https://mlbb-knowledge.vercel.app/heroes/67","https://liquipedia.net/mobilelegends/Leomord","https://mlbb.io/en/hero/leomord"], rankedMetaSources:["https://mlbb-knowledge.vercel.app/heroes/67","https://mlbb.io/en/hero/leomord"], competitiveReviewStatus:"pending", method:"Fighter/Jungle classification, Oath Keeper passive and mounted Barbiel skill set cross-checked across three current hero references. Professional VOD review remains pending." } }),
   catalogEntry("lesley", "Lesley", "Лесли", {
-    identityStatus: "pending_review",
-    localizationStatus: "pending_review"
+    roleValues: ["Marksman", "Assassin"], roleStatus: "verified",
+    primaryLane: "Gold Lane", laneStatus: "verified", tacticalProfileStatus: "partial",
+    research: { checkedAt: "2026-11-22", roleAndLaneSources: ["https://mlbb.io/en/hero/lesley", "https://mlbbhub.com/ru/heroes/lesley"], mechanicsSources: ["https://mlbb.io/en/hero/lesley", "https://mobile-legends.fandom.com/wiki/Lesley"], rankedMetaSources: ["https://mlbb.io/en/hero/lesley", "https://mlbbhub.com/ru/heroes/lesley"], competitiveReviewStatus: "pending", method: "Marksman/Assassin and Gold Lane classification cross-checked across hero databases. Passive enhanced shot, camouflage, knockback and ultimate projectile interception reviewed separately. Ranked aggregates are not treated as professional evidence; current-patch VOD review remains pending." }
   }),
   catalogEntry("lolita", "Lolita", "Лолита", {
-    identityStatus: "pending_review",
-    localizationStatus: "pending_review"
+    roleValues: ["Support", "Tank"], roleStatus: "verified",
+    primaryLane: "Roam", laneStatus: "verified", tacticalProfileStatus: "partial",
+    research: { checkedAt: "2026-11-22", roleAndLaneSources: ["https://mlbb.io/en/hero/lolita", "https://www.mobillegends.com/en/hero/lolita/"], mechanicsSources: ["https://mlbb.io/en/hero/lolita", "https://liquipedia.net/mobilelegends/Lolita"], rankedMetaSources: ["https://mlbb.io/en/hero/lolita", "https://mlbbhub.com/ru/heroes/lolita"], competitiveReviewStatus: "pending", method: "Support/Tank and Roam classification cross-checked across independent hero databases. Passive ally shield, projectile reflection and charged area-control ultimate reviewed separately. Low pick-rate samples are treated cautiously; current-patch professional VOD review remains pending." }
   }),
 
   catalogEntry("luo-yi", "Luo Yi", "Ло И", {
-    identityStatus: "pending_review",
-    localizationStatus: "pending_review"
+    roleValues: ["Mage"], roleStatus: "verified",
+    primaryLane: "Mid Lane", laneStatus: "verified", tacticalProfileStatus: "partial",
+    research: { checkedAt: "2026-11-22", roleAndLaneSources: ["https://mlbb.io/en/hero/luo-yi", "https://mlbbhub.com/ru/heroes/luo-yi"], mechanicsSources: ["https://mlbb.io/en/hero/luo-yi", "https://liquipedia.net/mobilelegends/Luo_Yi", "https://metammo.com/mobile-legends-guide/heroes/luo-yi"], rankedMetaSources: ["https://mlbb.io/en/hero/luo-yi", "https://mlbbhub.com/ru/heroes/luo-yi"], competitiveReviewStatus: "pending", method: "Mage/Mid Lane classification and Yin/Yang mark reaction, field interaction and team teleport reviewed across independent hero references. Ranked aggregates remain separate from professional draft evidence; current-patch VOD review remains pending." }
   }),
   catalogEntry("lylia", "Lylia", "Лилия", {
-    identityStatus: "pending_review",
-    localizationStatus: "pending_review"
+    roleValues: ["Mage"], roleStatus: "verified",
+    primaryLane: "Mid Lane", laneStatus: "verified", tacticalProfileStatus: "partial",
+    research: { checkedAt: "2026-11-22", roleAndLaneSources: ["https://mlbb.io/en/hero/lylia", "https://mlbbhub.com/ru/heroes/lylia"], mechanicsSources: ["https://mlbb.io/en/hero/lylia", "https://metammo.com/mobile-legends-guide/heroes/lylia"], rankedMetaSources: ["https://mlbb.io/en/hero/lylia", "https://mlbbhub.com/ru/heroes/lylia"], competitiveReviewStatus: "pending", method: "Mage/Mid Lane classification and Gloom/Shadow Energy interaction with Black Shoes rewind reviewed across independent hero references. Numerical skill values are omitted where patch drift is possible; current-patch professional VOD review remains pending." }
   }),
   catalogEntry("marcel", "Marcel", "Марсель", {
     roleValues: ["Support"], roleStatus: "verified",
@@ -659,8 +663,9 @@ export const heroCatalog = [
     research: { checkedAt: "2026-11-22", roleAndLaneSources: ["https://www.mobilelegends.com/en/hero/28", "https://mlbbhub.com/ru/heroes/marcel"], mechanicsSources: ["https://www.mobilelegends.com/en/hero/28", "https://liquipedia.net/mobilelegends/Marcel", "https://mlbb.io/en/hero/marcel"], rankedMetaSources: ["https://mlbbhub.com/ru/heroes/marcel", "https://mlbbdex.com/en/statistics"], competitiveReviewStatus: "pending", method: "Official Moonton hero description and two independent databases used for mechanics; support/roam classification cross-checked. Pro VOD review remains pending." }
   }),
   catalogEntry("martis", "Martis", "Мартис", {
-    identityStatus: "pending_review",
-    localizationStatus: "pending_review"
+    roleValues: ["Fighter"], roleStatus: "verified",
+    primaryLane: "Jungle", flexibleLanes: ["EXP Lane"], laneStatus: "verified", tacticalProfileStatus: "partial",
+    research: { checkedAt: "2026-11-22", roleAndLaneSources: ["https://mlbb.io/en/hero/martis", "https://mlbb-knowledge.vercel.app/heroes/58", "https://liquipedia.net/mobilelegends/Martis"], mechanicsSources: ["https://mlbb.io/en/hero/martis", "https://mlbb-knowledge.vercel.app/heroes/58", "https://metammo.com/mobile-legends-guide/heroes/martis"], rankedMetaSources: ["https://mlbb.io/en/hero/martis", "https://mlbbhub.com/ru/heroes/martis"], professionalMetaSources: ["https://www.mlbbanalytics.com/heroes?search=Martis"], competitiveReviewStatus: "partial", method: "Fighter and Jungle/EXP placement cross-checked across MLBB.io, MLBB Knowledge and Liquipedia. Skill mechanics compared across four current hero references. Ranked aggregate and sparse tournament records are reported separately; no specific current-patch VOD review is claimed." }
   }),
   catalogEntry("masha", "Masha", "Маша", {
     roleValues: ["Fighter", "Tank"], roleStatus: "verified",
