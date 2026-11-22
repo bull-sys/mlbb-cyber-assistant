@@ -84,3 +84,13 @@ test("draft hero selection uses a searchable one-tap grid instead of native long
  assert.match(css, /\.hero-picker-grid\{display:grid/);
  assert.match(css, /max-height:min\(88dvh,820px\)/);
 });
+
+test("draft picker renders hero portraits with readable names and fallback", async () => {
+ const css = await readFile(new URL("../public/style.css", import.meta.url), "utf8");
+ assert.match(app, /function heroPortraitUrl/);
+ assert.match(app, /class="hero-portrait"/);
+ assert.match(app, /portrait-missing/);
+ assert.match(app, /images-hero/);
+ assert.match(css, /hero-portrait-wrap/);
+ assert.match(css, /object-fit:cover/);
+});
