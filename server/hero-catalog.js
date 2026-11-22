@@ -935,6 +935,24 @@ export const heroCatalog = [
     identityStatus: "pending_review",
     localizationStatus: "pending_review"
   }),
+  catalogEntry("aamon", "Aamon", "Аамон", {
+    roleValues: ["Assassin"],
+    roleStatus: "verified",
+    primaryLane: "Jungle",
+    laneStatus: "verified",
+    research: {
+      checkedAt: "2026-11-22",
+      roleAndLaneSources: ["https://www.mlbbguides.com/heroes/", "https://mlbb-stats.com/heroes", "https://mlbb.io/en/heroes"],
+      competitiveReviewStatus: "pending",
+      method: "Role and primary lane cross-checked across three independent hero databases; competitive role review remains separate."
+    }
+  }),
+  catalogEntry("alice", "Alice", "Алиса"),
+  catalogEntry("angela", "Angela", "Ангела"),
+  catalogEntry("diggie", "Diggie", "Дигги"),
+  catalogEntry("estes", "Estes", "Эстес"),
+  catalogEntry("minotaur", "Minotaur", "Минотавр"),
+  catalogEntry("valir", "Valir", "Валир"),
   catalogEntry("obsidia", "Obsidia", "Обсидия", {
     identityStatus: "pending_review",
     localizationStatus: "pending_review"
