@@ -297,63 +297,9 @@ export const heroCatalog = [
     }
   }),
   catalogEntry("aurora", "Aurora", "Аврора", { roleValues:["Mage"], roleStatus:"verified", primaryLane:"Mid Lane", laneStatus:"verified", tacticalProfileStatus:"partial", research:{checkedAt:"2026-11-22",roleAndLaneSources:["https://mlbbhub.com/ru/heroes/aurora","https://mlbbdex.com/en/heroes/aurora","https://mlbb-knowledge.vercel.app/heroes/36"],mechanicsSources:["https://liquipedia.net/mobilelegends/Aurora","https://mlbb-knowledge.vercel.app/heroes/36","https://mlbb.io/en/hero/aurora"],rankedMetaSources:["https://mlbbhub.com/ru/heroes/aurora","https://mlbbdex.com/en/heroes/aurora","https://mlbb.io/en/hero/aurora"],competitiveReviewStatus:"pending",method:"Mage/Mid identity and freeze, glacier and death-prevention mechanics cross-checked across Liquipedia, MLBB Knowledge, MLBB.io and current guides. Ranked snapshot is separate; VOD review pending."} }),
-  catalogEntry("badang", "Badang", "Баданг", {
-    identityStatus: "pending_review",
-    localizationStatus: "pending_review",
-    roleValues: ["Fighter"],
-    roleStatus: "verified",
-    primaryLane: "EXP Lane",
-    flexibleLanes: ["Roam"],
-    laneStatus: "pending_review",
-    research: {
-      checkedAt: "2026-11-22",
-      roleAndLaneSources: [
-        "https://www.mlbbguides.com/heroes/",
-        "https://mlbb-stats.com/heroes",
-        "https://mlbbdex.com/en/heroes"
-      ],
-      competitiveReviewStatus: "pending",
-      method: "Role and lane tags cross-checked across independent hero databases; pro-draft usage and player VODs are reviewed separately before tactical recommendations are marked complete."
-    },
-  }),
-  catalogEntry("balmond", "Balmond", "Балмонд", {
-    identityStatus: "pending_review",
-    localizationStatus: "pending_review",
-    roleValues: ["Fighter"],
-    roleStatus: "verified",
-    primaryLane: "Jungle",
-    flexibleLanes: ["EXP Lane"],
-    laneStatus: "verified",
-    research: {
-      checkedAt: "2026-11-22",
-      roleAndLaneSources: [
-        "https://www.mlbbguides.com/heroes/",
-        "https://mlbb-stats.com/heroes",
-        "https://mlbbdex.com/en/heroes"
-      ],
-      competitiveReviewStatus: "pending",
-      method: "Role and lane tags cross-checked across independent hero databases; pro-draft usage and player VODs are reviewed separately before tactical recommendations are marked complete."
-    },
-  }),
-  catalogEntry("bane", "Bane", "Бэйн", {
-    identityStatus: "pending_review",
-    localizationStatus: "pending_review",
-    roleValues: ["Fighter", "Mage"],
-    roleStatus: "verified",
-    primaryLane: "Jungle",
-    flexibleLanes: ["EXP Lane"],
-    laneStatus: "verified",
-    research: {
-      checkedAt: "2026-11-22",
-      roleAndLaneSources: [
-        "https://www.mlbbguides.com/heroes/",
-        "https://mlbb-stats.com/heroes",
-        "https://mlbbdex.com/en/heroes"
-      ],
-      competitiveReviewStatus: "pending",
-      method: "Role and lane tags cross-checked across independent hero databases; pro-draft usage and player VODs are reviewed separately before tactical recommendations are marked complete."
-    },
-  }),
+  catalogEntry("badang", "Badang", "Баданг", {roleValues:["Fighter"],roleStatus:"verified",primaryLane:"EXP Lane",flexibleLanes:["Roam"],laneStatus:"verified",tacticalProfileStatus:"partial",research:{checkedAt:"2026-11-22",roleAndLaneSources:["https://mlbbhub.com/ru/heroes/badang","https://mlbb-knowledge.vercel.app/heroes/77","https://www.mlbbguides.com/heroes/badang/"],mechanicsSources:["https://liquipedia.net/mobilelegends/Badang","https://mlbb-knowledge.vercel.app/heroes/77","https://www.mlbb.io/en/hero/badang"],rankedMetaSources:["https://mlbbhub.com/ru/heroes/badang","https://mlbb-stats.com/builds/badang","https://www.mlbbguides.com/heroes/badang/"],competitiveReviewStatus:"pending",method:"Fighter identity, EXP primary lane and flexible Roam usage cross-checked across current hero guides. Chivalry Fist, obstacle interaction and Fist Crack control immunity checked against independent skill references. Ranked samples remain separate from professional VOD review."} }),
+  catalogEntry("balmond", "Balmond", "Бальмонд", {roleValues:["Fighter"],roleStatus:"verified",primaryLane:"Jungle",flexibleLanes:["EXP Lane"],laneStatus:"verified",tacticalProfileStatus:"partial",research:{checkedAt:"2026-11-22",roleAndLaneSources:["https://mlbbhub.com/heroes/balmond","https://www.mlbb.io/en/hero/balmond","https://www.mlbbguides.com/heroes/balmond/"],mechanicsSources:["https://liquipedia.net/mobilelegends/Balmond","https://metammo.com/mobile-legends-guide/heroes/balmond","https://www.mlbb.io/en/hero/balmond"],rankedMetaSources:["https://mlbbhub.com/heroes/balmond","https://mlbb-stats.com/builds/balmond","https://www.mlbb.io/en/hero/balmond"],competitiveReviewStatus:"pending",method:"Fighter identity and Jungle/EXP use cross-checked across three current guides. Bloodthirst sustain, Soul Lock, Cyclone Sweep and Lethal Counter execute damage verified across independent mechanics references. Ranked and professional evidence remain distinct."} }),
+  catalogEntry("bane", "Bane", "Бейн", {roleValues:["Fighter","Mage"],roleStatus:"verified",primaryLane:"Jungle",flexibleLanes:["EXP Lane"],laneStatus:"verified",tacticalProfileStatus:"partial",research:{checkedAt:"2026-11-22",roleAndLaneSources:["https://mlbbhub.com/ru/heroes/bane","https://mlbb-knowledge.vercel.app/heroes/11","https://mlbbguides.com/heroes/bane/"],mechanicsSources:["https://liquipedia.net/mobilelegends/Bane","https://mlbb-knowledge.vercel.app/heroes/11","https://www.mlbbanalytics.com/heroes?search=Bane"],rankedMetaSources:["https://mlbbhub.com/ru/heroes/bane","https://mlbb-knowledge.vercel.app/heroes/11","https://mlbbdraft.com/en/hero/bane"],competitiveReviewStatus:"partial",method:"Fighter/Mage classification and Jungle/EXP usage cross-checked across three hero references. Shark Bite stacks, physical/magic skill split, self-heal and shark-wave ultimate checked independently. Historical tournament samples are not treated as current-patch VOD review."} }),
   catalogEntry("barats", "Barats", "Баратс", {
     identityStatus: "pending_review",
     localizationStatus: "pending_review",
@@ -370,44 +316,8 @@ export const heroCatalog = [
       method: "Tank/Fighter role and Jungle primary lane with EXP flexibility cross-checked across three current hero databases."
     },
   }),
-  catalogEntry("baxia", "Baxia", "Баксия", {
-    identityStatus: "pending_review",
-    localizationStatus: "pending_review",
-    roleValues: ["Tank"],
-    roleStatus: "verified",
-    primaryLane: "Jungle",
-    flexibleLanes: ["Roam"],
-    laneStatus: "verified",
-    research: {
-      checkedAt: "2026-11-22",
-      roleAndLaneSources: [
-        "https://www.mlbbguides.com/heroes/",
-        "https://mlbb-stats.com/heroes",
-        "https://mlbbdex.com/en/heroes"
-      ],
-      competitiveReviewStatus: "pending",
-      method: "Role and lane tags cross-checked across independent hero databases; pro-draft usage and player VODs are reviewed separately before tactical recommendations are marked complete."
-    },
-  }),
-  catalogEntry("beatrix", "Beatrix", "Беатрис", {
-    identityStatus: "pending_review",
-    localizationStatus: "pending_review",
-    roleValues: ["Marksman"],
-    roleStatus: "verified",
-    primaryLane: "Gold Lane",
-    flexibleLanes: [],
-    laneStatus: "verified",
-    research: {
-      checkedAt: "2026-11-22",
-      roleAndLaneSources: [
-        "https://www.mlbbguides.com/heroes/",
-        "https://mlbb-stats.com/heroes",
-        "https://mlbbdex.com/en/heroes"
-      ],
-      competitiveReviewStatus: "pending",
-      method: "Role and lane tags cross-checked across independent hero databases; pro-draft usage and player VODs are reviewed separately before tactical recommendations are marked complete."
-    },
-  }),
+  catalogEntry("baxia", "Baxia", "Баксия", {roleValues:["Tank"],roleStatus:"verified",primaryLane:"Jungle",flexibleLanes:["Roam"],laneStatus:"verified",tacticalProfileStatus:"partial",research:{checkedAt:"2026-11-22",roleAndLaneSources:["https://mlbbhub.com/ru/heroes/baxia","https://mlbb-knowledge.vercel.app/heroes/87","https://www.mlbbguides.com/heroes/baxia/"],mechanicsSources:["https://liquipedia.net/mobilelegends/Baxia","https://mlbb.tools/heroes/baxia","https://mlbb.io/en/hero/baxia"],rankedMetaSources:["https://mlbbhub.com/ru/heroes/baxia","https://www.mlbbguides.com/heroes/baxia/","https://mlbb-knowledge.vercel.app/heroes/87"],competitiveReviewStatus:"pending",method:"Tank identity and Jungle/Roam placements cross-checked across three current hero guides. Baxia Mark damage reduction and anti-heal/shield effect, rolling stun, shield throw and ultimate path checked across Liquipedia, mlbb.tools and MLBB.io. VOD review pending."} }),
+  catalogEntry("beatrix", "Beatrix", "Беатрис", {roleValues:["Marksman"],roleStatus:"verified",primaryLane:"Gold Lane",laneStatus:"verified",tacticalProfileStatus:"partial",research:{checkedAt:"2026-11-22",roleAndLaneSources:["https://liquipedia.net/mobilelegends/Beatrix","https://www.mlbbguides.com/heroes/beatrix/","https://mlbbhub.com/ru/heroes/beatrix"],mechanicsSources:["https://liquipedia.net/mobilelegends/Beatrix","https://mlbbnexus.com/heroes/beatrix","https://www.mlbbguides.com/heroes/beatrix/"],rankedMetaSources:["https://mlbbhub.com/ru/heroes/beatrix","https://www.mlbbguides.com/heroes/beatrix/","https://liquipedia.net/mobilelegends/Beatrix"],competitiveReviewStatus:"pending",method:"Marksman/Gold Lane identity cross-checked across Liquipedia, MLBBGuides and MLBBHub. Four-weapon selection, reload dash and weapon-specific ultimates compared across current skill references. The May build page is explicitly treated as stale; current ranked evidence is used instead. VOD review pending."} }),
   catalogEntry("belerick", "Belerick", "Белерик", {
     identityStatus: "pending_review",
     localizationStatus: "pending_review",
