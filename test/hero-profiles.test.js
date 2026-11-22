@@ -343,10 +343,10 @@ test("Badang, Balmond, Bane, Baxia and Beatrix have sourced partial tactical pro
 test("Benedetta, Brody, Carmilla, Cecilion and Chang'e have sourced partial tactical profiles", () => {
   const expected = [
     ["benedetta", "Бенедетта", "https://liquipedia.net/mobilelegends/Benedetta"],
-    ["brody", "Броуди", "https://liquipedia.net/mobilelegends/Brody"],
+    ["brody", "Броди", "https://liquipedia.net/mobilelegends/Brody"],
     ["carmilla", "Кармилла", "https://mlbb-knowledge.vercel.app/heroes/92"],
     ["cecilion", "Цицилион", "https://liquipedia.net/mobilelegends/Cecilion"],
-    ["change", "Чан’Э", "https://liquipedia.net/mobilelegends/Chang%27e"]
+    ["chang-e", "Чан’Э", "https://liquipedia.net/mobilelegends/Chang%27e"]
   ];
   for (const [id, name, source] of expected) {
     const hero = heroProfiles.find(item => item.id === id);
