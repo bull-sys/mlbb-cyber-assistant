@@ -270,3 +270,34 @@ test("Kaja, Valir, Paquito, Aulus and Rafaela have sourced partial tactical prof
   const valir = heroProfiles.find(item => item.id === "valir");
   assert.ok(valir.patch.notes.some(note => note.includes("Brawl-модификатор")));
 });
+
+
+test("Atlas, Kagura, Layla, Miya and Granger have sourced partial tactical profiles", () => {
+  const expected = [
+    ["atlas", "Атлас", "https://liquipedia.net/mobilelegends/Atlas"],
+    ["kagura", "Кагура", "https://liquipedia.net/mobilelegends/Kagura"],
+    ["layla", "Лейла", "https://mlbb-knowledge.vercel.app/heroes/18"],
+    ["miya", "Мия", "https://mlbb-knowledge.vercel.app/heroes/1"],
+    ["granger", "Грейнджер", "https://liquipedia.net/mobilelegends/Granger"]
+  ];
+  for (const [id, name, source] of expected) {
+    const hero = heroProfiles.find(item => item.id === id);
+    assert.ok(hero, id);
+    assert.equal(hero.names.ru, name);
+    assert.ok(hero.mechanics.length >= 4);
+    assert.ok(hero.strengths.length >= 3);
+    assert.ok(hero.weaknesses.length >= 3);
+    assert.ok(hero.sources.includes(source));
+    assert.equal(hero.confidence, "partial");
+    assert.equal(hero.patch.version, HERO_DB_PATCH);
+    assert.equal(hero.patch.reviewedAt, "2026-11-22");
+    assert.deepEqual(hero.matchups.strongAgainst, []);
+    assert.deepEqual(hero.matchups.weakAgainst, []);
+  }
+  const atlas = heroProfiles.find(item => item.id === "atlas");
+  assert.ok(atlas.patch.notes.some(note => note.includes("66 выборов")));
+  const kagura = heroProfiles.find(item => item.id === "kagura");
+  assert.ok(kagura.mechanics.some(note => note.includes("зонт")));
+  const granger = heroProfiles.find(item => item.id === "granger");
+  assert.ok(granger.mechanics.some(note => note.includes("энерг")));
+});
