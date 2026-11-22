@@ -159,3 +159,25 @@ test("Fanny has a cross-checked Assassin/Jungle profile with explicit ranked and
   assert.match(notes, /Профессиональные турниры/);
   assert.match(notes, /VOD/);
 });
+
+test("Suyou, Jawhead, Karrie, Bruno and Terizla have sourced partial tactical profiles", () => {
+  const expected = [
+    ["suyou", "Су Ё", "https://liquipedia.net/mobilelegends/Suyou"],
+    ["jawhead", "Кусака", "https://liquipedia.net/mobilelegends/Jawhead"],
+    ["karrie", "Кэрри", "https://liquipedia.net/mobilelegends/Karrie"],
+    ["bruno", "Бруно", "https://mlbb.tools/patch-notes/2.2.16"],
+    ["terizla", "Теризла", "https://liquipedia.net/mobilelegends/Terizla"]
+  ];
+  for (const [id, name, source] of expected) {
+    const hero = heroProfiles.find(entry => entry.id === id);
+    assert.ok(hero, id + " profile exists");
+    assert.equal(hero.names.ru, name);
+    assert.ok(hero.mechanics.length >= 3, id + " mechanics");
+    assert.ok(hero.strengths.length >= 2, id + " strengths");
+    assert.ok(hero.weaknesses.length >= 2, id + " weaknesses");
+    assert.ok(hero.sources.includes(source), id + " source");
+    assert.equal(hero.confidence, "partial");
+    assert.equal(hero.patch.version, HERO_DB_PATCH);
+    assert.equal(hero.patch.reviewedAt, "2026-11-22");
+  }
+});
