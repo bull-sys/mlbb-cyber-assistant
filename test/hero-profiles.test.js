@@ -241,3 +241,32 @@ test("Cyclops, Julian, Tigreal, Chou and Dyrroth have sourced partial tactical p
 
 
 test("Alpha, Freya, Edith, Barats and Hilda have sourced partial tactical profiles",()=>{const expected=[["alpha","Альфа","https://mlbb.io/en/hero/alpha"],["freya","Фрея","https://mlbb-knowledge.vercel.app/heroes/22"],["edith","Эдит","https://liquipedia.net/mobilelegends/Edith"],["barats","Баратс","https://liquipedia.net/mobilelegends/Barats"],["hilda","Хильда","https://liquipedia.net/mobilelegends/Hilda"]];for(const [id,name,source] of expected){const h=heroProfiles.find(x=>x.id===id);assert.ok(h,id);assert.equal(h.names.ru,name);assert.ok(h.mechanics.length>=4);assert.ok(h.strengths.length>=2);assert.ok(h.weaknesses.length>=2);assert.ok(h.sources.includes(source));assert.equal(h.confidence,"partial");assert.equal(h.patch.version,HERO_DB_PATCH);assert.equal(h.patch.reviewedAt,"2026-11-22");}});
+
+
+test("Kaja, Valir, Paquito, Aulus and Rafaela have sourced partial tactical profiles", () => {
+  const expected = [
+    ["kaja", "Каджа", "https://liquipedia.net/mobilelegends/Kaja"],
+    ["valir", "Валир", "https://liquipedia.net/mobilelegends/Valir"],
+    ["paquito", "Пакито", "https://liquipedia.net/mobilelegends/Paquito"],
+    ["aulus", "Аулус", "https://mlbb-knowledge.vercel.app/heroes/108"],
+    ["rafaela", "Рафаэль", "https://mobilelegends.com/hero/detail?heroid=14"]
+  ];
+  for (const [id, name, source] of expected) {
+    const hero = heroProfiles.find(item => item.id === id);
+    assert.ok(hero, id);
+    assert.equal(hero.names.ru, name);
+    assert.ok(hero.mechanics.length >= 4);
+    assert.ok(hero.strengths.length >= 2);
+    assert.ok(hero.weaknesses.length >= 2);
+    assert.ok(hero.sources.includes(source));
+    assert.equal(hero.confidence, "partial");
+    assert.equal(hero.patch.version, HERO_DB_PATCH);
+    assert.equal(hero.patch.reviewedAt, "2026-11-22");
+  }
+  const rafaela = heroProfiles.find(item => item.id === "rafaela");
+  assert.ok(rafaela.mechanics[0].includes("воскресить союзника"));
+  const kaja = heroProfiles.find(item => item.id === "kaja");
+  assert.ok(kaja.mechanics.some(note => note.includes("массовый контроль")));
+  const valir = heroProfiles.find(item => item.id === "valir");
+  assert.ok(valir.patch.notes.some(note => note.includes("Brawl-модификатор")));
+});
