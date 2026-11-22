@@ -1,30 +1,42 @@
-MLBB Cyber Assistant — Development Roadmap
+# MLBB Cyber Assistant — Development Roadmap
 
-This roadmap describes the next implementation stages. The project is an independent fan-made assistant and does not claim access to official Moonton APIs or live ranked statistics.
+The project is an independent fan-made MLBB assistant. It does not claim access to official Moonton APIs, live ranked statistics, or verified win rates.
 
-Priorities
+## Current implementation
 
-1. Improve draft analysis so the selected hero, allies, enemy composition, and lane all influence recommendations.
-2. Replace generic counter-build output with hero-aware, threat-aware item recommendations based on the local item catalogue.
-3. Expand and validate the hero, item, emblem, talent, and battle-spell data. Keep patch-sensitive values clearly labelled and easy to update.
-4. Improve screenshot assistance with confidence-aware OCR and manual confirmation; do not silently treat OCR guesses as confirmed picks.
-5. Make persistence reliable in production. Render’s ephemeral filesystem must not be treated as durable storage; configure a persistent database before relying on user accounts.
-6. Add automated tests for API validation, draft analysis, authentication, and core UI flows.
-7. Harden production security: restrict CORS to configured origins, add focused authentication rate limits, review token storage, and validate uploaded files.
+- PWA shell with manifest, service worker, offline app shell, and cached hero/item catalogue after the first successful online load.
+- Registration and login with input validation, bcrypt password hashing, JWT sessions, SQLite profiles, and authentication rate limits.
+- Guest draft analysis with strict payload validation and a dedicated request limit. OpenAI explanations are available only to authenticated users when a server-side API key is configured.
+- Draft analysis for enemy composition, allied synergy, counter-picks, item recommendations, emblem, battle spell, and general timing guidance.
+- Local counter-build recommendations based on the item catalogue, selected archetype, and marked enemy threats.
+- Browser-side screenshot OCR with manual confirmation of candidate hero names.
+- Player profiles, filters, likes, and mutual matches for accounts on the same deployment.
+- Automated tests for draft analysis, draft validation, guest authentication, registration, counter-builds, offline draft restore, and HTML escaping.
+- Node.js 22 Docker image and a temporary Render Blueprint for preview deployment.
 
-Working rules
+## Next priorities
 
-* Never invent live win rates, pick rates, or patch statistics.
-* Explain why a recommendation is made and identify uncertainty.
-* Keep the app usable on mobile Safari.
-* Prefer small, testable changes over large rewrites.
-* Verify health and key flows after each deployment.
+1. Deploy the preview and verify the health endpoint, registration, guest draft analysis, and the main UI on iPhone Safari.
+2. Check PWA installation, service-worker updates, and offline restoration on a real iPhone; automated tests cannot replace this.
+3. Add a persistent production database and backups. The free Render preview uses ephemeral storage and must not be used for durable accounts.
+4. Add email verification, password reset, account deletion, abuse reporting, moderation, and privacy/retention policies before a public community launch.
+5. Expand and validate hero, item, emblem, talent, and battle-spell data against each MLBB patch. Keep patch-sensitive information dated and sourced.
+6. Improve OCR confidence handling and hero recognition; text OCR is not reliable visual hero identification.
+7. Review production CORS, token storage, upload handling, rate limits, logging, and operational monitoring.
 
-Current known limitations
+## Working rules
 
-* Draft analysis is mostly tag-based and does not meaningfully use allies or the selected hero.
-* Counter-build recommendations are mostly static lane templates.
-* The hero and item catalogues are starter samples, not a complete current-patch database.
-* Browser OCR is text recognition, not reliable visual hero identification.
-* SQLite stored on an ephemeral Render filesystem can be lost on restart or redeploy.
-* There is no automated test suite yet.
+- Never invent live win rates, pick rates, or patch statistics.
+- Explain why a recommendation is made and identify uncertainty.
+- Keep the app usable on mobile Safari.
+- Prefer small, testable changes over large rewrites.
+- Verify health and key flows after every deployment.
+
+## Known limitations
+
+- The catalogue is a starter dataset and can be incomplete or outdated after a game patch.
+- Draft and item recommendations are deterministic heuristics unless an authenticated user has enabled the optional AI explanation. Neither mode is live match telemetry.
+- OCR uses browser-loaded third-party code and language data; first use requires an internet connection.
+- Free preview storage can be erased on restart or redeploy.
+- Search and mutual matching only include users registered on the same deployed instance.
+- Chat, push notifications, email verification, password reset, moderation, and production-grade account lifecycle controls are not implemented yet.
