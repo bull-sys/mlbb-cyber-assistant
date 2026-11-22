@@ -122,3 +122,16 @@ test("validator rejects normalized duplicate IDs and invalid or inherited status
   const inheritedIdentity = { ...validEntry, identity: inheritedStatus };
   assert.equal(validateHeroCatalog([inheritedIdentity]).ok, false);
 });
+
+test("Hanzo has cross-checked Assassin/Jungle data and a partial tactical profile", () => {
+  const hanzo = heroCatalog.find(hero => hero.id === "hanzo");
+  assert.ok(hanzo);
+  assert.deepEqual(hanzo.role.values, ["Assassin"]);
+  assert.equal(hanzo.role.status, "verified");
+  assert.equal(hanzo.lanes.primary, "Jungle");
+  assert.deepEqual(hanzo.lanes.flexible, []);
+  assert.equal(hanzo.lanes.status, "verified");
+  assert.equal(hanzo.tacticalProfile.status, "partial");
+  assert.equal(hanzo.research.competitiveReviewStatus, "partial");
+  assert.ok(hanzo.research.mechanicsSources.length >= 3);
+});
