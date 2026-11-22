@@ -263,3 +263,9 @@ test("Lukas, Thamuz, Eudora, Pharsa and Nana have verified catalog roles and lan
   assert.equal(heroCatalog.find(item => item.id === "lukas").research.competitiveReviewStatus, "partial");
   assert.equal(heroCatalog.find(item => item.id === "pharsa").research.competitiveReviewStatus, "partial");
 });
+
+
+test("Franco, Akai, Alucard, Arlott and Aurora have verified roles, lanes and sourced research", () => {
+ const expected=[["franco",["Tank"],"Roam",[]],["akai",["Tank"],"Roam",["Jungle"]],["alucard",["Fighter","Assassin"],"Jungle",["EXP Lane"]],["arlott",["Fighter","Assassin"],"EXP Lane",["Roam"]],["aurora",["Mage"],"Mid Lane",[]]];
+ for(const [id,roles,primary,flexible] of expected){const h=heroCatalog.find(x=>x.id===id);assert.ok(h,id);assert.deepEqual(h.role.values,roles);assert.equal(h.role.status,"verified");assert.equal(h.lanes.primary,primary);assert.deepEqual(h.lanes.flexible,flexible);assert.equal(h.lanes.status,"verified");assert.equal(h.tacticalProfile.status,"partial");assert.ok(h.research.roleAndLaneSources.length>=3);assert.ok(h.research.mechanicsSources.length>=3);assert.ok(h.research.rankedMetaSources.length>=3);}
+});
