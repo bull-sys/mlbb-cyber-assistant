@@ -82,3 +82,29 @@ test("Roger has a cross-checked Fighter/Marksman Jungle profile with explicit un
   assert.match(notes, /Профессиональные данные/);
   assert.match(notes, /VOD/);
 });
+
+test("Ling has a cross-checked Assassin/Jungle profile with explicit uncertainty", () => {
+  const ling = heroProfiles.find(hero => hero.id === "ling");
+  assert.ok(ling);
+  assert.equal(ling.names.en, "Ling");
+  assert.equal(ling.names.ru, "Линг");
+  assert.deepEqual(ling.roles, ["Убийца"]);
+  assert.deepEqual(ling.lanes, ["Лес"]);
+  assert.ok(ling.mechanics.length >= 5);
+  assert.ok(ling.mechanics.some(note => note.includes("Lightness Points")));
+  assert.ok(ling.mechanics.some(note => note.includes("меч")));
+  assert.ok(ling.strengths.length >= 3);
+  assert.ok(ling.weaknesses.length >= 3);
+  assert.ok(ling.sources.some(source => source.includes("mlbbhub.com")));
+  assert.ok(ling.sources.some(source => source.includes("mlbb.io")));
+  assert.ok(ling.sources.some(source => source.includes("mlbbanalytics.com")));
+  assert.equal(ling.confidence, "partial");
+  assert.equal(ling.patch.version, HERO_DB_PATCH);
+  assert.equal(ling.patch.reviewedAt, "2026-11-22");
+  assert.deepEqual(ling.matchups.strongAgainst, []);
+  assert.deepEqual(ling.matchups.weakAgainst, []);
+  const notes = ling.patch.notes.join(" ");
+  assert.match(notes, /Рейтинговая статистика/);
+  assert.match(notes, /Профессиональные данные/);
+  assert.match(notes, /VOD/);
+});
