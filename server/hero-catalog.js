@@ -63,5 +63,411 @@ export const heroCatalog = [
   catalogEntry("estes", "Estes", "Эстес"),
   catalogEntry("diggie", "Diggie", "Дигги"),
   catalogEntry("valir", "Valir", "Валир"),
-  catalogEntry("alice", "Alice", "Алиса")
+  catalogEntry("alice", "Alice", "Алиса"),
+
+  // Roster expansion: names are seeded; identity/localization and gameplay data remain pending review.
+  catalogEntry("aamon", "Aamon", "Аамон", {
+    identityStatus: "pending_review",
+    localizationStatus: "pending_review"
+  }),
+  catalogEntry("akai", "Akai", "Акай", {
+    identityStatus: "pending_review",
+    localizationStatus: "pending_review"
+  }),
+  catalogEntry("aldous", "Aldous", "Олдос", {
+    identityStatus: "pending_review",
+    localizationStatus: "pending_review"
+  }),
+  catalogEntry("alpha", "Alpha", "Альфа", {
+    identityStatus: "pending_review",
+    localizationStatus: "pending_review"
+  }),
+  catalogEntry("alucard", "Alucard", "Алукард", {
+    identityStatus: "pending_review",
+    localizationStatus: "pending_review"
+  }),
+  catalogEntry("argus", "Argus", "Аргус", {
+    identityStatus: "pending_review",
+    localizationStatus: "pending_review"
+  }),
+  catalogEntry("arlott", "Arlott", "Арлотт", {
+    identityStatus: "pending_review",
+    localizationStatus: "pending_review"
+  }),
+  catalogEntry("aulus", "Aulus", "Аулус", {
+    identityStatus: "pending_review",
+    localizationStatus: "pending_review"
+  }),
+  catalogEntry("aurora", "Aurora", "Аврора", {
+    identityStatus: "pending_review",
+    localizationStatus: "pending_review"
+  }),
+  catalogEntry("badang", "Badang", "Баданг", {
+    identityStatus: "pending_review",
+    localizationStatus: "pending_review"
+  }),
+  catalogEntry("balmond", "Balmond", "Балмонд", {
+    identityStatus: "pending_review",
+    localizationStatus: "pending_review"
+  }),
+  catalogEntry("bane", "Bane", "Бэйн", {
+    identityStatus: "pending_review",
+    localizationStatus: "pending_review"
+  }),
+  catalogEntry("barats", "Barats", "Баратс", {
+    identityStatus: "pending_review",
+    localizationStatus: "pending_review"
+  }),
+  catalogEntry("baxia", "Baxia", "Баксия", {
+    identityStatus: "pending_review",
+    localizationStatus: "pending_review"
+  }),
+  catalogEntry("beatrix", "Beatrix", "Беатрис", {
+    identityStatus: "pending_review",
+    localizationStatus: "pending_review"
+  }),
+  catalogEntry("belerick", "Belerick", "Белерик", {
+    identityStatus: "pending_review",
+    localizationStatus: "pending_review"
+  }),
+  catalogEntry("benedetta", "Benedetta", "Бенедетта", {
+    identityStatus: "pending_review",
+    localizationStatus: "pending_review"
+  }),
+  catalogEntry("brody", "Brody", "Броди", {
+    identityStatus: "pending_review",
+    localizationStatus: "pending_review"
+  }),
+  catalogEntry("carmilla", "Carmilla", "Кармилла", {
+    identityStatus: "pending_review",
+    localizationStatus: "pending_review"
+  }),
+  catalogEntry("cecilion", "Cecilion", "Сесилион", {
+    identityStatus: "pending_review",
+    localizationStatus: "pending_review"
+  }),
+  catalogEntry("chang-e", "Chang'e", "Чан’Э", {
+    identityStatus: "pending_review",
+    localizationStatus: "pending_review"
+  }),
+  catalogEntry("chip", "Chip", "Чип", {
+    identityStatus: "pending_review",
+    localizationStatus: "pending_review"
+  }),
+  catalogEntry("cici", "Cici", "Сиси", {
+    identityStatus: "pending_review",
+    localizationStatus: "pending_review"
+  }),
+  catalogEntry("claude", "Claude", "Клод", {
+    identityStatus: "pending_review",
+    localizationStatus: "pending_review"
+  }),
+  catalogEntry("clint", "Clint", "Клинт", {
+    identityStatus: "pending_review",
+    localizationStatus: "pending_review"
+  }),
+  catalogEntry("edith", "Edith", "Эдит", {
+    identityStatus: "pending_review",
+    localizationStatus: "pending_review"
+  }),
+  catalogEntry("esmeralda", "Esmeralda", "Эсмеральда", {
+    identityStatus: "pending_review",
+    localizationStatus: "pending_review"
+  }),
+  catalogEntry("fanny", "Fanny", "Фанни", {
+    identityStatus: "pending_review",
+    localizationStatus: "pending_review"
+  }),
+  catalogEntry("faramis", "Faramis", "Фарамис", {
+    identityStatus: "pending_review",
+    localizationStatus: "pending_review"
+  }),
+  catalogEntry("floryn", "Floryn", "Флорин", {
+    identityStatus: "pending_review",
+    localizationStatus: "pending_review"
+  }),
+  catalogEntry("fredrinn", "Fredrinn", "Фредрин", {
+    identityStatus: "pending_review",
+    localizationStatus: "pending_review"
+  }),
+  catalogEntry("freya", "Freya", "Фрея", {
+    identityStatus: "pending_review",
+    localizationStatus: "pending_review"
+  }),
+  catalogEntry("gatotkaca", "Gatotkaca", "Гатоткача", {
+    identityStatus: "pending_review",
+    localizationStatus: "pending_review"
+  }),
+  catalogEntry("gloo", "Gloo", "Глу", {
+    identityStatus: "pending_review",
+    localizationStatus: "pending_review"
+  }),
+  catalogEntry("gord", "Gord", "Горд", {
+    identityStatus: "pending_review",
+    localizationStatus: "pending_review"
+  }),
+  catalogEntry("grock", "Grock", "Грок", {
+    identityStatus: "pending_review",
+    localizationStatus: "pending_review"
+  }),
+  catalogEntry("guinevere", "Guinevere", "Гвиневра", {
+    identityStatus: "pending_review",
+    localizationStatus: "pending_review"
+  }),
+  catalogEntry("gusion", "Gusion", "Госсен", {
+    identityStatus: "pending_review",
+    localizationStatus: "pending_review"
+  }),
+  catalogEntry("hanabi", "Hanabi", "Ханаби", {
+    identityStatus: "pending_review",
+    localizationStatus: "pending_review"
+  }),
+  catalogEntry("harith", "Harith", "Харит", {
+    identityStatus: "pending_review",
+    localizationStatus: "pending_review"
+  }),
+  catalogEntry("harley", "Harley", "Харли", {
+    identityStatus: "pending_review",
+    localizationStatus: "pending_review"
+  }),
+  catalogEntry("hayabusa", "Hayabusa", "Хаябуса", {
+    identityStatus: "pending_review",
+    localizationStatus: "pending_review"
+  }),
+  catalogEntry("hilda", "Hilda", "Хильда", {
+    identityStatus: "pending_review",
+    localizationStatus: "pending_review"
+  }),
+  catalogEntry("hirara", "Hirara", "Хирара", {
+    identityStatus: "pending_review",
+    localizationStatus: "pending_review"
+  }),
+  catalogEntry("hylos", "Hylos", "Хилос", {
+    identityStatus: "pending_review",
+    localizationStatus: "pending_review"
+  }),
+  catalogEntry("irithel", "Irithel", "Иритэль", {
+    identityStatus: "pending_review",
+    localizationStatus: "pending_review"
+  }),
+  catalogEntry("ixia", "Ixia", "Иксия", {
+    identityStatus: "pending_review",
+    localizationStatus: "pending_review"
+  }),
+  catalogEntry("johnson", "Johnson", "Джонсон", {
+    identityStatus: "pending_review",
+    localizationStatus: "pending_review"
+  }),
+  catalogEntry("joy", "Joy", "Джой", {
+    identityStatus: "pending_review",
+    localizationStatus: "pending_review"
+  }),
+  catalogEntry("kadita", "Kadita", "Кадита", {
+    identityStatus: "pending_review",
+    localizationStatus: "pending_review"
+  }),
+  catalogEntry("kaja", "Kaja", "Каджа", {
+    identityStatus: "pending_review",
+    localizationStatus: "pending_review"
+  }),
+  catalogEntry("kalea", "Kalea", "Калеа", {
+    identityStatus: "pending_review",
+    localizationStatus: "pending_review"
+  }),
+  catalogEntry("karina", "Karina", "Карина", {
+    identityStatus: "pending_review",
+    localizationStatus: "pending_review"
+  }),
+  catalogEntry("khaleed", "Khaleed", "Халид", {
+    identityStatus: "pending_review",
+    localizationStatus: "pending_review"
+  }),
+  catalogEntry("khufra", "Khufra", "Хуфра", {
+    identityStatus: "pending_review",
+    localizationStatus: "pending_review"
+  }),
+  catalogEntry("kimmy", "Kimmy", "Кимми", {
+    identityStatus: "pending_review",
+    localizationStatus: "pending_review"
+  }),
+  catalogEntry("lancelot", "Lancelot", "Ланселот", {
+    identityStatus: "pending_review",
+    localizationStatus: "pending_review"
+  }),
+  catalogEntry("lapu-lapu", "Lapu-Lapu", "Лапу-Лапу", {
+    identityStatus: "pending_review",
+    localizationStatus: "pending_review"
+  }),
+  catalogEntry("leomord", "Leomord", "Леоморд", {
+    identityStatus: "pending_review",
+    localizationStatus: "pending_review"
+  }),
+  catalogEntry("lesley", "Lesley", "Лесли", {
+    identityStatus: "pending_review",
+    localizationStatus: "pending_review"
+  }),
+  catalogEntry("lolita", "Lolita", "Лолита", {
+    identityStatus: "pending_review",
+    localizationStatus: "pending_review"
+  }),
+  catalogEntry("lunox", "Lunox", "Люнокс", {
+    identityStatus: "pending_review",
+    localizationStatus: "pending_review"
+  }),
+  catalogEntry("luo-yi", "Luo Yi", "Ло И", {
+    identityStatus: "pending_review",
+    localizationStatus: "pending_review"
+  }),
+  catalogEntry("lylia", "Lylia", "Лилия", {
+    identityStatus: "pending_review",
+    localizationStatus: "pending_review"
+  }),
+  catalogEntry("marcel", "Marcel", "Марсель", {
+    identityStatus: "pending_review",
+    localizationStatus: "pending_review"
+  }),
+  catalogEntry("martis", "Martis", "Мартис", {
+    identityStatus: "pending_review",
+    localizationStatus: "pending_review"
+  }),
+  catalogEntry("masha", "Masha", "Маша", {
+    identityStatus: "pending_review",
+    localizationStatus: "pending_review"
+  }),
+  catalogEntry("mathilda", "Mathilda", "Матильда", {
+    identityStatus: "pending_review",
+    localizationStatus: "pending_review"
+  }),
+  catalogEntry("melissa", "Melissa", "Мелисса", {
+    identityStatus: "pending_review",
+    localizationStatus: "pending_review"
+  }),
+  catalogEntry("minsitthar", "Minsitthar", "Минситтар", {
+    identityStatus: "pending_review",
+    localizationStatus: "pending_review"
+  }),
+  catalogEntry("moskov", "Moskov", "Москов", {
+    identityStatus: "pending_review",
+    localizationStatus: "pending_review"
+  }),
+  catalogEntry("natalia", "Natalia", "Наталья", {
+    identityStatus: "pending_review",
+    localizationStatus: "pending_review"
+  }),
+  catalogEntry("natan", "Natan", "Натан", {
+    identityStatus: "pending_review",
+    localizationStatus: "pending_review"
+  }),
+  catalogEntry("novaria", "Novaria", "Новария", {
+    identityStatus: "pending_review",
+    localizationStatus: "pending_review"
+  }),
+  catalogEntry("obsidia", "Obsidia", "Обсидия", {
+    identityStatus: "pending_review",
+    localizationStatus: "pending_review"
+  }),
+  catalogEntry("odette", "Odette", "Одетта", {
+    identityStatus: "pending_review",
+    localizationStatus: "pending_review"
+  }),
+  catalogEntry("paquito", "Paquito", "Пакито", {
+    identityStatus: "pending_review",
+    localizationStatus: "pending_review"
+  }),
+  catalogEntry("phoveus", "Phoveus", "Фовеус", {
+    identityStatus: "pending_review",
+    localizationStatus: "pending_review"
+  }),
+  catalogEntry("popol-and-kupa", "Popol and Kupa", "Пополь и Купа", {
+    identityStatus: "pending_review",
+    localizationStatus: "pending_review"
+  }),
+  catalogEntry("rafaela", "Rafaela", "Рафаэль", {
+    identityStatus: "pending_review",
+    localizationStatus: "pending_review"
+  }),
+  catalogEntry("ruby", "Ruby", "Руби", {
+    identityStatus: "pending_review",
+    localizationStatus: "pending_review"
+  }),
+  catalogEntry("saber", "Saber", "Сабер", {
+    identityStatus: "pending_review",
+    localizationStatus: "pending_review"
+  }),
+  catalogEntry("selena", "Selena", "Селена", {
+    identityStatus: "pending_review",
+    localizationStatus: "pending_review"
+  }),
+  catalogEntry("silvanna", "Silvanna", "Сильванна", {
+    identityStatus: "pending_review",
+    localizationStatus: "pending_review"
+  }),
+  catalogEntry("sora", "Sora", "Сора", {
+    identityStatus: "pending_review",
+    localizationStatus: "pending_review"
+  }),
+  catalogEntry("sun", "Sun", "Сан", {
+    identityStatus: "pending_review",
+    localizationStatus: "pending_review"
+  }),
+  catalogEntry("uranus", "Uranus", "Уранус", {
+    identityStatus: "pending_review",
+    localizationStatus: "pending_review"
+  }),
+  catalogEntry("vale", "Vale", "Вэйл", {
+    identityStatus: "pending_review",
+    localizationStatus: "pending_review"
+  }),
+  catalogEntry("valentina", "Valentina", "Валентина", {
+    identityStatus: "pending_review",
+    localizationStatus: "pending_review"
+  }),
+  catalogEntry("vexana", "Vexana", "Вексана", {
+    identityStatus: "pending_review",
+    localizationStatus: "pending_review"
+  }),
+  catalogEntry("wanwan", "Wanwan", "Ванван", {
+    identityStatus: "pending_review",
+    localizationStatus: "pending_review"
+  }),
+  catalogEntry("x-borg", "X.Borg", "Икс.Борг", {
+    identityStatus: "pending_review",
+    localizationStatus: "pending_review"
+  }),
+  catalogEntry("xavier", "Xavier", "Ксавьер", {
+    identityStatus: "pending_review",
+    localizationStatus: "pending_review"
+  }),
+  catalogEntry("yi-sun-shin", "Yi Sun-shin", "Ли Сун-Син", {
+    identityStatus: "pending_review",
+    localizationStatus: "pending_review"
+  }),
+  catalogEntry("yin", "Yin", "Инь", {
+    identityStatus: "pending_review",
+    localizationStatus: "pending_review"
+  }),
+  catalogEntry("yu-zhong", "Yu Zhong", "Юй Чжун", {
+    identityStatus: "pending_review",
+    localizationStatus: "pending_review"
+  }),
+  catalogEntry("yve", "Yve", "Ив", {
+    identityStatus: "pending_review",
+    localizationStatus: "pending_review"
+  }),
+  catalogEntry("zetian", "Zetian", "Цзэтянь", {
+    identityStatus: "pending_review",
+    localizationStatus: "pending_review"
+  }),
+  catalogEntry("zhask", "Zhask", "Жаск", {
+    identityStatus: "pending_review",
+    localizationStatus: "pending_review"
+  }),
+  catalogEntry("zhuxin", "Zhuxin", "Чжусин", {
+    identityStatus: "pending_review",
+    localizationStatus: "pending_review"
+  }),
+  catalogEntry("zilong", "Zilong", "Зилонг", {
+    identityStatus: "pending_review",
+    localizationStatus: "pending_review"
+  }),
 ];
