@@ -88,7 +88,34 @@ export const heroCatalog = [
       method: "Assassin role and Jungle lane cross-checked across three independent hero references. Skill mechanics compared against Moonton skill text reproduced by METAMMO and MLBB.io, with the current reworked Hanekage form and its penalties checked against MLBBHub. Ranked statistics, individual tournament samples, and professional VOD review are kept separate; VOD review remains pending."
     }
   }),
-  catalogEntry("roger", "Roger", "Роджер"),
+  catalogEntry("roger", "Roger", "Роджер", {
+    roleValues: ["Fighter", "Marksman"],
+    roleStatus: "verified",
+    primaryLane: "Jungle",
+    flexibleLanes: [],
+    laneStatus: "verified",
+    tacticalProfileStatus: "partial",
+    research: {
+      checkedAt: "2026-11-22",
+      roleAndLaneSources: [
+        "https://mlbb.io/en/hero/roger",
+        "https://mlbbhub.com/ru/heroes/roger",
+        "https://liquipedia.net/mobilelegends/Roger"
+      ],
+      mechanicsSources: [
+        "https://liquipedia.net/mobilelegends/Roger",
+        "https://mlbb.io/en/hero/roger",
+        "https://www.mlbbanalytics.com/heroes?search=Roger"
+      ],
+      rankedMetaSources: [
+        "https://mlbb.io/en/hero/roger",
+        "https://mlbb-stats.com/builds/roger",
+        "https://mlbbhub.com/ru/heroes/roger"
+      ],
+      competitiveReviewStatus: "partial",
+      method: "Fighter/Marksman identity and Jungle role cross-checked across three hero references. Skill descriptions compared between Liquipedia, MLBB.io and MLBB Analytics. Ranked statistics are kept separate from tournament samples; recent patch-specific professional VOD review remains pending."
+    }
+  }),
   catalogEntry("ling", "Ling", "Линг"),
   catalogEntry("nolan", "Nolan", "Нолан"),
   catalogEntry("suyou", "Suyou", "Су Ё"),
