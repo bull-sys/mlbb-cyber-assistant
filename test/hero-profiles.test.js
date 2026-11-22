@@ -363,3 +363,18 @@ test("Benedetta, Brody, Carmilla, Cecilion and Chang'e have sourced partial tact
     assert.deepEqual(hero.matchups.weakAgainst, []);
   }
 });
+
+
+test("Russian hero labels use the confirmed in-game spellings", () => {
+  const expected = [
+    ["brody", "Броуди", "Броди"],
+    ["cecilion", "Сесилион", "Цицилион"],
+    ["jawhead", "Кусака", null]
+  ];
+  for (const [id, ru, legacyAlias] of expected) {
+    const hero = heroProfiles.find(item => item.id === id);
+    assert.ok(hero, id + " profile exists");
+    assert.equal(hero.names.ru, ru);
+    if (legacyAlias) assert.ok(hero.names.aliases.includes(legacyAlias));
+  }
+});
