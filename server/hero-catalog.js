@@ -284,6 +284,7 @@ export const heroCatalog = [
     primaryLane: "Jungle",
     flexibleLanes: ["EXP Lane"],
     laneStatus: "verified",
+    tacticalProfileStatus: "partial",
     research: {
       checkedAt: "2026-11-22",
       roleAndLaneSources: ["https://mlbbhub.com/heroes/alpha","https://mlbb.io/en/hero/alpha","https://mlbbdex.com/en/heroes/alpha"],
@@ -437,6 +438,7 @@ export const heroCatalog = [
     primaryLane: "Jungle",
     flexibleLanes: ["EXP Lane"],
     laneStatus: "verified",
+    tacticalProfileStatus: "partial",
     research: {
       checkedAt: "2026-11-22",
       roleAndLaneSources: ["https://mlbbhub.com/ru/heroes/barats","https://mlbb.io/en/hero/barats/build","https://mlbbdex.com/en/heroes/barats"],
@@ -677,6 +679,7 @@ export const heroCatalog = [
     primaryLane: "EXP Lane",
     flexibleLanes: ["Roam"],
     laneStatus: "verified",
+    tacticalProfileStatus: "partial",
     research: {
       checkedAt: "2026-11-22",
       roleAndLaneSources: ["https://mlbbhub.com/heroes/edith","https://mlbbdex.com/en/heroes/edith","https://metammo.com/mobile-legends-guide/heroes/edith"],
@@ -799,6 +802,7 @@ export const heroCatalog = [
     primaryLane: "EXP Lane",
     flexibleLanes: ["Jungle"],
     laneStatus: "verified",
+    tacticalProfileStatus: "partial",
     research: {
       checkedAt: "2026-11-22",
       roleAndLaneSources: ["https://mlbbhub.com/heroes/freya","https://mlbb.io/en/hero/freya","https://mlbb-knowledge.vercel.app/heroes/22"],
@@ -948,6 +952,7 @@ export const heroCatalog = [
     primaryLane: "Roam",
     flexibleLanes: ["EXP Lane"],
     laneStatus: "verified",
+    tacticalProfileStatus: "partial",
     research: { checkedAt:"2026-11-22", roleAndLaneSources:["https://mlbbhub.com/ru/heroes/hilda","https://mlbb.io/en/hero/hilda","https://mlbbdex.com/en/heroes/hilda"], competitiveReviewStatus:"pending", method:"Fighter/Tank role and Roam primary lane with EXP flexibility cross-checked across three hero databases." },
   }),  catalogEntry("hirara", "Hirara", "Хирара", {
     identityStatus: "pending_review",
