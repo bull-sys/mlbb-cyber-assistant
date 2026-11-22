@@ -18,6 +18,7 @@ import { heroProfiles, validateHeroProfiles } from "./hero-profiles.js";
 import { normalizeRegistration } from "./registration.js";
 import { getOptionalUser } from "./auth.js";
 import { isValidDraftRequest } from "./draft-validation.js";
+import { normalizeDraftState } from "./draft-state.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, "..");
@@ -30,6 +31,7 @@ db.exec(`
 CREATE TABLE IF NOT EXISTS users(id INTEGER PRIMARY KEY AUTOINCREMENT,email TEXT UNIQUE NOT NULL,password_hash TEXT NOT NULL,nickname TEXT NOT NULL,created_at TEXT DEFAULT CURRENT_TIMESTAMP);
 CREATE TABLE IF NOT EXISTS profiles(user_id INTEGER PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE,hero TEXT NOT NULL DEFAULT '',role TEXT NOT NULL DEFAULT 'Лес',rank TEXT NOT NULL DEFAULT 'Легенда',style TEXT NOT NULL DEFAULT 'Поднятие рейтинга',game_id TEXT DEFAULT '',bio TEXT DEFAULT '');
 CREATE TABLE IF NOT EXISTS likes(from_user INTEGER NOT NULL,to_user INTEGER NOT NULL,created_at TEXT DEFAULT CURRENT_TIMESTAMP,PRIMARY KEY(from_user,to_user));
+CREATE TABLE IF NOT EXISTS draft_states(user_id INTEGER PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE,state_json TEXT NOT NULL,updated_at INTEGER NOT NULL);
 `);
 const app=express();
 app.set("trust proxy", 1);
@@ -87,6 +89,19 @@ app.post("/api/auth/register",authRateLimit,async(req,res)=>{
 });
 app.post("/api/auth/login",authRateLimit,async(req,res)=>{const {email,password}=req.body||{};const u=db.prepare("SELECT * FROM users WHERE email=?").get(String(email||"").toLowerCase().trim());if(!u||!await bcrypt.compare(String(password||""),u.password_hash))return res.status(401).json({error:"Неверный email или пароль"});res.json({token:issue(u.id),user:safeUser(u.id)})});
 app.get("/api/me",auth,(req,res)=>{const u=safeUser(req.user.id);if(!u)return res.status(404).json({error:"Пользователь не найден"});res.json({user:u})});
+app.get("/api/draft-state",auth,(req,res)=>{
+ const row=db.prepare("SELECT state_json,updated_at FROM draft_states WHERE user_id=?").get(req.user.id);
+ if(!row)return res.json({state:null,updatedAt:null});
+ try{return res.json({state:JSON.parse(row.state_json),updatedAt:row.updated_at})}
+ catch{return res.status(500).json({error:"Не удалось прочитать сохранённый драфт"})}
+});
+app.put("/api/draft-state",auth,(req,res)=>{
+ const allowedHeroes=new Set([...heroes.map(hero=>hero.name),...getDraftHeroOptions().map(hero=>hero.id)]);
+ const state=normalizeDraftState(req.body?.state,{heroes:allowedHeroes,lanes:roles});
+ if(!state)return res.status(400).json({error:"Некорректный черновик драфта"});
+ db.prepare("INSERT INTO draft_states(user_id,state_json,updated_at) VALUES(?,?,?) ON CONFLICT(user_id) DO UPDATE SET state_json=excluded.state_json,updated_at=excluded.updated_at").run(req.user.id,JSON.stringify(state),state.savedAt);
+ res.json({state,updatedAt:state.savedAt});
+});
 app.put("/api/profile",auth,(req,res)=>{
  const b=req.body||{};const hero=String(b.hero||"");const role=String(b.role||"");const rank=String(b.rank||"");const style=String(b.style||"");
  if(!isLegacyHeroName(hero)||!roles.includes(role)||!ranks.includes(rank)||!styles.includes(style))return res.status(400).json({error:"Проверь героя, роль, ранг и стиль"});
