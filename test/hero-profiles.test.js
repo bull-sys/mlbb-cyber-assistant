@@ -301,3 +301,34 @@ test("Atlas, Kagura, Layla, Miya and Granger have sourced partial tactical profi
   const granger = heroProfiles.find(item => item.id === "granger");
   assert.ok(granger.mechanics.some(note => note.includes("энерг")));
 });
+
+
+test("Lukas, Thamuz, Eudora, Pharsa and Nana have sourced partial tactical profiles", () => {
+  const expected = [
+    ["lukas", "Лукас", "https://mlbb.tools/heroes/lukas"],
+    ["thamuz", "Тамуз", "https://liquipedia.net/mobilelegends/Thamuz"],
+    ["eudora", "Эйдора", "https://mobilelegends.com/hero/detail?heroid=15"],
+    ["pharsa", "Фарса", "https://mlbb.io/en/hero/pharsa"],
+    ["nana", "Нана", "https://liquipedia.net/mobilelegends/Nana"]
+  ];
+  for (const [id, name, source] of expected) {
+    const hero = heroProfiles.find(item => item.id === id);
+    assert.ok(hero, id);
+    assert.equal(hero.names.ru, name);
+    assert.ok(hero.mechanics.length >= 4);
+    assert.ok(hero.strengths.length >= 3);
+    assert.ok(hero.weaknesses.length >= 3);
+    assert.ok(hero.sources.includes(source));
+    assert.equal(hero.confidence, "partial");
+    assert.equal(hero.patch.version, HERO_DB_PATCH);
+    assert.equal(hero.patch.reviewedAt, "2026-11-22");
+    assert.deepEqual(hero.matchups.strongAgainst, []);
+    assert.deepEqual(hero.matchups.weakAgainst, []);
+  }
+  const lukas = heroProfiles.find(item => item.id === "lukas");
+  assert.ok(lukas.mechanics.some(note => note.includes("Resolve")));
+  const eudora = heroProfiles.find(item => item.id === "eudora");
+  assert.ok(eudora.mechanics.some(note => note.includes("Сверхпроводник")));
+  const nana = heroProfiles.find(item => item.id === "nana");
+  assert.ok(nana.mechanics.some(note => note.includes("Молина")));
+});
