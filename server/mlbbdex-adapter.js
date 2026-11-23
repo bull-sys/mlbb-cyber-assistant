@@ -84,27 +84,25 @@ async function getTalentAssets() {
 }
 
 export async function getGameAssets() {
-  try {
-    const [emblemsPayload, itemsPayload, talents] = await Promise.all([
-      cachedJson("emblems", BASE + "/api/v1/emblems?locale=en"),
-      cachedJson("items", BASE + "/api/v1/items?locale=en"),
-      getTalentAssets()
-    ]);
-    const normalizeAsset = item => ({
-      ...item,
-      image: absoluteImage(item.image || item.icon || item.iconUrl || item.imageUrl || item.images?.icon)
-    });
-    const emblems = (Array.isArray(emblemsPayload?.data) ? emblemsPayload.data : []).map(normalizeAsset);
-    const items = (Array.isArray(itemsPayload?.data) ? itemsPayload.data : []).map(normalizeAsset);
-    return {
-      ok: true,
-      emblems,
-      items,
-      talents,
-      sources: [emblemsPayload?.source, itemsPayload?.source].filter(Boolean),
-      updatedAt: new Date().toISOString()
-    };
-  } catch (error) {
-    return { ok: false, emblems: [], talents: [], error: String(error?.message || error).slice(0, 160) };
-  }
+  const [emblemsResult, itemsResult, talents] = await Promise.all([
+    cachedJson("emblems", BASE + "/api/v1/emblems?locale=en").catch(() => null),
+    cachedJson("items", BASE + "/api/v1/items?locale=en").catch(() => null),
+    getTalentAssets()
+  ]);
+  const normalizeAsset = item => {
+    const candidate = item.image || item.icon || item.iconUrl || item.icon_url ||
+      item.imageUrl || item.image_url || item.img || item.images?.icon ||
+      item.images?.small || item.icon?.url || item.image?.url || item.assets?.icon;
+    return { ...item, image: absoluteImage(candidate) };
+  };
+  const emblems = (Array.isArray(emblemsResult?.data) ? emblemsResult.data : []).map(normalizeAsset);
+  const items = (Array.isArray(itemsResult?.data) ? itemsResult.data : []).map(normalizeAsset);
+  return {
+    ok: true,
+    emblems,
+    items,
+    talents,
+    sources: [emblemsResult?.source, itemsResult?.source].filter(Boolean),
+    updatedAt: new Date().toISOString()
+  };
 }
