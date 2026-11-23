@@ -17,6 +17,28 @@ test("neutral reference dataset covers the full 133-hero working catalogue", () 
   }
 });
 
+test("verified catalog roles and lanes match the audited reference without duplicates", () => {
+  const laneAlias = value => ({
+    "EXP Lane": "Exp", "Exp Lane": "Exp", "Mid Lane": "Mid", "Gold Lane": "Gold"
+  })[value] || value;
+  const referenceById = new Map(heroReferenceData.map(hero => [hero.id, hero]));
+  for (const hero of heroCatalog) {
+    const reference = referenceById.get(hero.id);
+    assert.equal(new Set(hero.role.values).size, hero.role.values.length, hero.id + ": unique roles");
+    const lanes = [
+      ...(hero.lanes.primary ? [hero.lanes.primary] : []),
+      ...hero.lanes.flexible
+    ];
+    assert.equal(new Set(lanes).size, lanes.length, hero.id + ": unique lanes");
+    if (hero.role.status === "verified") {
+      assert.deepEqual([...hero.role.values].sort(), reference.roles.map(item => item.en).sort(), hero.id + ": verified roles");
+    }
+    if (hero.lanes.status === "verified") {
+      assert.deepEqual(lanes.map(laneAlias).sort(), reference.lanes.map(item => item.en).sort(), hero.id + ": verified lanes");
+    }
+  }
+});
+
 test("every hero reference has traceable identity, classification and base stats", () => {
   for (const hero of heroReferenceData) {
     assert.ok(hero.nameEn, hero.id + ": English name");
