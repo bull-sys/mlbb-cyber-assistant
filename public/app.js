@@ -491,7 +491,7 @@ function renderEncyHeroRemoteProfile(remote){
   let values=[],estimated=false,mode="";
   if(perLevel!==null&&first!==null){
    const calculatedLast=first+perLevel*14;
-   const tolerance=Math.max(0.05,Math.abs(last)*0.002);
+   const tolerance=Math.max(0.005,Math.abs(last)*0.0005);
    if(Math.abs(calculatedLast-last)<=tolerance){
     values=Array.from({length:15},(_,index)=>first+perLevel*index);
     mode="Рост по уровню опубликован источником";
