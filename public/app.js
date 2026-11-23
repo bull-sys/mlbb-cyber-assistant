@@ -292,7 +292,7 @@ function itemAssetKey(value){
  return String(value||"").normalize("NFKD").toLowerCase().replace(/[^a-z0-9]+/g,"");
 }
 function itemAssetSlug(value){
- return String(value||"").normalize("NFKD").replace(/[\\u0300-\\u036f]/gu,"").toLowerCase().replace(/&/g,"and").replace(/['’]/g,"").replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");
+ return String(value||"").normalize("NFKD").replace(/[\u0300-\u036f]/gu,"").toLowerCase().replace(/&/g,"and").replace(/['’]/g,"").replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");
 }
 function encyItemImage(item){
  const wanted=ITEM_IMAGE_NAMES[item?.name]||item?.name||"";
