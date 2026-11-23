@@ -553,7 +553,7 @@ test("Hayabusa, Hylos, Irithel, Ixia and Johnson have sourced partial tactical p
 });
 
 test("hero profile coverage count and unique IDs stay aligned with the audited baseline", () => {
-  assert.equal(heroProfiles.length, 103);
+  assert.equal(heroProfiles.length, 104);
   assert.equal(new Set(heroProfiles.map(hero => hero.id)).size, 102);
   const saber = heroProfiles.find(hero => hero.id === "saber");
   assert.ok(saber);
@@ -727,7 +727,7 @@ test("Melissa has a sourced partial tactical profile with doll-link damage and a
 });
 
 test("all local tactical profiles contain enough material for a useful hero passport", () => {
-  assert.equal(heroProfiles.length, 102);
+  assert.equal(heroProfiles.length, 104);
   for (const hero of heroProfiles) {
     assert.ok(hero.mechanics.length >= 3, hero.id + " mechanics");
     assert.ok(hero.strengths.length >= 2, hero.id + " strengths");
