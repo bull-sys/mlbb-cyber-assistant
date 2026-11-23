@@ -869,7 +869,7 @@ test("Aamon, Alice, Angela, Odette and Phoveus tactical profiles are sourced and
 });
 
 test("all local tactical profiles contain enough material for a useful hero passport", () => {
-  assert.equal(heroProfiles.length, 109);
+  assert.equal(heroProfiles.length, 114);
   for (const hero of heroProfiles) {
     assert.ok(hero.mechanics.length >= 3, hero.id + " mechanics");
     assert.ok(hero.strengths.length >= 2, hero.id + " strengths");
