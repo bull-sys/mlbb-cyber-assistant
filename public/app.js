@@ -416,7 +416,9 @@ function renderEncyHeroDescription(remote,hero){
  const specialties=(profile.specialties||[]).map(encyHeroRussianLabel);
  const title=encyRussianTextOrNote(profile.title,"");
  const region=encyHeroRussianLabel(profile.region||"");
- const release=profile.release||"";
+ const releaseRaw=profile.release||"";
+ const releaseDate=releaseRaw?new Date(releaseRaw):null;
+ const release=releaseDate&&!Number.isNaN(releaseDate.getTime())?new Intl.DateTimeFormat("ru-RU",{day:"numeric",month:"long",year:"numeric"}).format(releaseDate):releaseRaw;
  const lore=encyRussianTextOrNote(profile.lore||profile.story||profile.bio||profile.description,"История персонажа пока не представлена на русском языке в проверенном источнике.");
  const damageType=encyHeroRussianLabel(profile.damageType||"");
  const attackType=encyHeroRussianLabel(profile.attackType||"");
