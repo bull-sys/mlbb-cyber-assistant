@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import { heroProfiles, validateHeroProfiles, HERO_DB_PATCH } from "../server/hero-profiles.js";
+import { heroCatalog } from "../server/hero-catalog.js";
 
 test("hero profile database remains structurally valid", () => {
   const result = validateHeroProfiles();
@@ -667,4 +668,27 @@ test("Saber has a complete researched tactical profile instead of a placeholder"
   assert.equal(saber.patch.reviewedAt, "2026-11-22");
   assert.deepEqual(saber.matchups.strongAgainst, []);
   assert.deepEqual(saber.matchups.weakAgainst, []);
+});
+
+test("all local tactical profiles contain enough material for a useful hero passport", () => {
+  assert.equal(heroProfiles.length, 102);
+  for (const hero of heroProfiles) {
+    assert.ok(hero.mechanics.length >= 3, hero.id + " mechanics");
+    assert.ok(hero.strengths.length >= 2, hero.id + " strengths");
+    assert.ok(hero.weaknesses.length >= 2, hero.id + " weaknesses");
+    assert.ok(hero.itemNotes.length >= 1, hero.id + " item notes");
+    assert.ok(hero.teamfight.preferredPlan, hero.id + " teamfight plan");
+    assert.ok(hero.teamfight.targetPriority.length >= 1, hero.id + " target priorities");
+    assert.ok(hero.teamfight.avoid.length >= 1, hero.id + " tactical cautions");
+    assert.ok(hero.sources.length >= 1, hero.id + " sources");
+  }
+});
+
+test("tactical profile coverage is explicit and does not invent profiles for the remaining catalogue", () => {
+  assert.equal(heroCatalog.length, 133);
+  const profileIds = new Set(heroProfiles.map(hero => hero.id));
+  assert.equal(profileIds.size, heroProfiles.length);
+  assert.ok(heroProfiles.every(hero => heroCatalog.some(entry => entry.id === hero.id)));
+  const missing = heroCatalog.filter(hero => !profileIds.has(hero.id));
+  assert.equal(missing.length, 31);
 });
