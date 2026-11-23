@@ -321,7 +321,6 @@ async function loadEncyHeroSkills(id){
  try{
   const result=await $api("/hero-skills/"+encodeURIComponent(id));
   if(requestId!==encySkillRequestId||!host.isConnected)return;
-  const mechanics=Array.isArray(profile?.mechanics)?profile.mechanics:[];
   if(!result.skills?.length){
    host.innerHTML=encySkillFallback();
    return;
@@ -402,7 +401,7 @@ function renderEncyHeroModal(id){
   '<section class="ency-profile-section wide"><h3>Проверка данных</h3><p>Статус: '+esc(status)+' · Последняя отметка: '+esc(reviewed)+'. Сведения могут изменяться после обновлений игры.</p>'+(sources.length?'<div class="ency-source-list">'+sources.map((source,i)=>'<a href="'+esc(source)+'" target="_blank" rel="noopener">Источник '+(i+1)+' ↗</a>').join("")+'</div>':"")+'</section></div>';
   $("encyHeroModal").classList.remove("hidden");
  document.body.classList.add("ency-modal-open");
- loadEncyHeroSkills(id,p);\n loadEncyHeroKnowledge(id);
+ loadEncyHeroSkills(id);\n  loadEncyHeroKnowledge(id);
 }
 $("encyList").addEventListener("click",e=>{
  const card=e.target.closest("[data-open-hero]");
