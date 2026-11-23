@@ -48,10 +48,12 @@ async function getCombos(slug) {
     const marker = /<h[1-6][^>]*>[\\s\\S]*?Комбо[\\s\\S]*?<\\/h[1-6]>/iu;
     const match = marker.exec(html);
     if (!match) return [];
+    const level = Number(match[0].match(/^<h([1-6])/iu)?.[1] || 3);
     const start = match.index + match[0].length;
     const tail = html.slice(start);
-    const next = tail.search(/<h[1-6][^>]*>/iu);
-    const section = next >= 0 ? tail.slice(0, next) : tail.slice(0, 12000);
+    const nextHeading = new RegExp("<h[1-" + level + "][^>]*>", "iu");
+    const next = tail.search(nextHeading);
+    const section = next >= 0 ? tail.slice(0, next) : tail.slice(0, 16000);
     const groups = [];
     const headingPattern = /<h[2-6][^>]*>([\\s\\S]*?)<\\/h[2-6]>/giu;
     const headings = [...section.matchAll(headingPattern)];
