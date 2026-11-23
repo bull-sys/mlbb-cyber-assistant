@@ -421,9 +421,10 @@ function encyRussianTextOrNote(value,note){
  const text=String(value||"").trim();
  return text&&/[А-Яа-яЁё]/.test(text)?text:note;
 }
-function renderEncyHeroDescription(remote,hero){
+function renderEncyHeroDescription(remote,hero,tacticalProfile=null){
  const host=$("encyHeroDescription");if(!host)return;
  const profile=remote?.profile||{};
+ const tactical=tacticalProfile||(data.heroProfiles||[]).find(entry=>entry.id===hero?.id)||null;
  const roles=(profile.roles||hero?.role?.values||[]).map(encyHeroRussianLabel);
  const lanes=(profile.lanes||[hero?.lanes?.primary,...(hero?.lanes?.flexible||[])].filter(Boolean)).map(encyHeroRussianLabel);
  const specialties=(profile.specialties||[]).map(encyHeroRussianLabel);
@@ -450,12 +451,32 @@ function renderEncyHeroDescription(remote,hero){
  if(region)passport.push(["Регион",region]);
  if(title)passport.push(["Титул",title]);
  if(release)passport.push(["Дата выхода",release]);
- const uniqueness=specialties.length
-  ?"В справочнике отмечены особенности: "+specialties.join(", ").toLocaleLowerCase("ru")+"."
-  :"Подтверждённое краткое описание отличительных особенностей пока не найдено.";
+ const mechanics=Array.isArray(tactical?.mechanics)?tactical.mechanics.filter(Boolean):[];
+ const strengths=Array.isArray(tactical?.strengths)?tactical.strengths.filter(Boolean):[];
+ const weaknesses=Array.isArray(tactical?.weaknesses)?tactical.weaknesses.filter(Boolean):[];
+ const itemNotes=Array.isArray(tactical?.itemNotes)?tactical.itemNotes.filter(Boolean):[];
+ const teamfight=tactical?.teamfight||{};
+ const listSection=(heading,items,emptyText,extraClass="")=>{
+  if(!items.length)return '<section class="ency-tactical-block '+extraClass+'"><h4>'+esc(heading)+'</h4><p class="ency-unverified">'+esc(emptyText)+'</p></section>';
+  return '<section class="ency-tactical-block '+extraClass+'"><h4>'+esc(heading)+'</h4><ul>'+items.map(item=>'<li>'+esc(item)+'</li>').join("")+'</ul></section>';
+ };
+ const identity=mechanics[0]||"Подтверждённое описание уникальной механики пока не добавлено.";
+ const tacticalSections=[];
+ if(tactical){
+  tacticalSections.push('<div class="ency-hero-identity"><h4>Ключевая особенность</h4><p>'+esc(identity)+'</p></div>');
+  tacticalSections.push(listSection("За что стоит попробовать",strengths,"Сильные стороны ещё не описаны в проверенном профиле."));
+  tacticalSections.push(listSection("Что учитывать при выборе",weaknesses,"Ограничения персонажа ещё не описаны в проверенном профиле."));
+  if(teamfight.preferredPlan)tacticalSections.push('<section class="ency-tactical-block"><h4>Как реализовать в командном бою</h4><p>'+esc(teamfight.preferredPlan)+'</p></section>');
+  tacticalSections.push(listSection("Приоритетные цели",Array.isArray(teamfight.targetPriority)?teamfight.targetPriority:[],"Приоритетные цели пока не проверены."));
+  tacticalSections.push(listSection("Чего избегать",Array.isArray(teamfight.avoid)?teamfight.avoid:[],"Тактические ограничения пока не уточнены."));
+  tacticalSections.push(listSection("Заметки по предметам",itemNotes,"Предметные заметки пока не проверены для этого профиля."));
+  if(mechanics.length>1)tacticalSections.push('<details class="ency-tactical-details"><summary>Все особенности механик · '+mechanics.length+'</summary><ol>'+mechanics.slice(1).map(item=>'<li>'+esc(item)+'</li>').join("")+'</ol></details>');
+ }else{
+  tacticalSections.push('<section class="ency-tactical-block"><h4>Тактический профиль</h4><p class="ency-unverified">Для этого персонажа пока нет проверенного расширенного профиля. Не будем придумывать сильные стороны, контрпики и советы по драфту.</p></section>');
+ }
  host.innerHTML=
   '<div class="ency-hero-passport">'+passport.map(([label,value])=>'<div class="ency-passport-cell"><small>'+esc(label)+'</small><b>'+esc(value)+'</b></div>').join("")+'</div>'+
-  '<div class="ency-hero-identity"><h4>Чем выделяется персонаж</h4><p>'+esc(uniqueness)+'</p></div>'+
+  '<div class="ency-tactical-overview">'+tacticalSections.join("")+'</div>'+
   '<div class="ency-hero-lore"><h4>История персонажа</h4><p>'+esc(lore)+'</p>'+(loreCredit?'<small class="ency-lore-credit">'+esc(loreCredit)+'</small>':"")+'</div>';
 }
 function encyStatNumber(value){
@@ -580,7 +601,7 @@ async function loadEncyHeroKnowledge(id){
    if(!remote){remote=await $api("/hero-knowledge/"+encodeURIComponent(id));encyRemoteKnowledge.set(id,remote)}
    if(request!==encyKnowledgeRequest||!$("encyHeroModal")||$("encyHeroModal").classList.contains("hidden"))return;
    const currentHero=(data.heroCatalog||[]).find(hero=>hero.id===id);
-   renderEncyHeroDescription(remote,currentHero);
+   renderEncyHeroDescription(remote,currentHero,(data.heroProfiles||[]).find(entry=>entry.id===id)||null);
    renderEncyHeroRemoteProfile(remote);
    loadEncyHeroGrowth(id,remote,request);
    const badge=$("encyHeroProfileBadge");if(badge&&remote.profile)badge.textContent=remote.fallback?"Резервная база · 20.11.2026":"Справочные данные загружены";
@@ -613,7 +634,7 @@ function renderEncyHeroModal(id){
  const root=$("encyHeroModalContent"),name=hero.displayNameRu||hero.nameEn||hero.id,url=encyHeroPortrait(hero);
  const sources=Array.isArray(p?.sources)?p.sources:[];
   const reviewed=p?.patch?.reviewedAt||hero.research?.checkedAt||"Дата проверки не указана";
-  const status=p?(p.confidence==="complete"?"Полный справочный профиль":"Частичный справочный профиль"):"Справочный профиль загружается";
+  const status=p?(p.confidence==="complete"?"Полный справочный профиль":"Частичный справочный профиль"):"Тактический профиль пока не заполнен";
   root.innerHTML='<div class="ency-hero-cover" style="--ency-portrait:url(&quot;'+url+'&quot;)"><img src="'+url+'" alt="'+esc(name)+'" onerror="this.style.display=\'none\'"><div class="ency-hero-heading"><small>БАЗА ГЕРОЕВ</small><h2 id="encyHeroTitle">'+esc(name)+'</h2><p>'+esc((hero.role?.values||[]).map(encyHeroRussianLabel).join(", ")||"Роль уточняется")+' · '+esc([hero.lanes?.primary,...(hero.lanes?.flexible||[])].filter(Boolean).map(encyHeroRussianLabel).join(" / ")||"Линия уточняется")+'</p><span id="encyHeroProfileBadge" class="ency-profile-badge">'+esc(status)+'</span></div></div>'+
   '<div class="ency-profile-grid">'+
   '<section class="ency-profile-section wide"><h3>Паспорт персонажа</h3><div id="encyHeroDescription" class="ency-hero-description"><p class="ency-unverified">Загружаем описание персонажа...</p></div></section>'+
@@ -621,7 +642,7 @@ function renderEncyHeroModal(id){
   '<section class="ency-profile-section wide"><h3>Характеристики и развитие</h3><div id="encyHeroRemoteProfile" class="ency-remote-panel"><p class="ency-unverified">Загружаем характеристики...</p></div></section>'+
   '<section class="ency-profile-section wide"><h3>Проверка данных</h3><p>Статус: '+esc(status)+' · Последняя проверка: '+esc(reviewed)+'. Данные могут меняться после обновлений игры.</p>'+(sources.length?'<div class="ency-source-list">'+sources.map((source,i)=>'<a href="'+esc(source)+'" target="_blank" rel="noopener">Источник '+(i+1)+' ↗</a>').join("")+'</div>':"")+'</section></div>';
   $("encyHeroModal").classList.remove("hidden");
- renderEncyHeroDescription(null,hero);
+ renderEncyHeroDescription(null,hero,p);
  document.body.classList.add("ency-modal-open");
  loadEncyHeroSkills(id);
   loadEncyHeroKnowledge(id);
