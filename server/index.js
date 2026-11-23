@@ -16,6 +16,7 @@ import { getHeroCatalogApiFields, isLegacyHeroName } from "./hero-catalog-adapte
 import { heroCatalog } from "./hero-catalog.js";
 import { getHeroSkillAssets } from "./hero-skill-assets.js";
 import { getHeroKnowledge, getGameAssets } from "./mlbbdex-adapter.js";
+import { getHeroGrowthData } from "./hero-growth-adapter.js";
 import { getDraftHeroOptions, isCatalogHeroId, resolveDraftHeroSelection } from "./draft-hero-selection.js";
 import { heroProfiles, validateHeroProfiles } from "./hero-profiles.js";
 import { normalizeRegistration } from "./registration.js";
@@ -79,6 +80,15 @@ app.get("/api/hero-knowledge/:id",async(req,res)=>{
  const result=await getHeroKnowledge(hero);
  if(!result.ok)return res.status(503).json(result);
  res.set("Cache-Control","public, max-age=300, stale-while-revalidate=3600");
+ res.json(result);
+});
+app.get("/api/hero-growth/:id",async(req,res)=>{
+ const id=String(req.params.id||"").toLowerCase();
+ const hero=heroCatalog.find(entry=>entry.id===id);
+ if(!hero)return res.status(404).json({ok:false,error:"Герой не найден в каталоге"});
+ const result=await getHeroGrowthData(hero);
+ if(!result)return res.status(503).json({ok:false,error:"Дополнительный источник роста временно недоступен"});
+ res.set("Cache-Control","public, max-age=21600, stale-while-revalidate=43200");
  res.json(result);
 });
 app.get("/api/game-assets",async(req,res)=>{
