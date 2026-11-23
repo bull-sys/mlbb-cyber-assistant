@@ -12,7 +12,7 @@ Working branch: assistant/cyber-redesign-2
 | Neutral reference dataset | 133 / 133 | Every catalogue entry has a local reference record with title, role, lane, specialties, release metadata, region/resource labels, source ratings and base statistics. |
 | Role cross-check | 133 / 133 | Every role now matches the pinned reference and the matching MLBB.io page. |
 | Primary-lane cross-check | 132 / 133 | 132 entries have a verified primary lane; Badang remains pending because its split-lane record has no settled primary. |
-| Extended local profile records | 102 / 133 | 102 heroes have a structured local profile record. 31 still need a local extended record. |
+| Extended local profile records | 103 / 133 | 103 heroes have a structured local profile record. 30 still need a local extended record. |
 | Runtime profile endpoint | 133 / 133 supported by catalogue lookup | The encyclopedia requests the current neutral hero profile from MLBBDex. When that endpoint is unavailable, the new local reference dataset supplies the base passport and statistics. |
 | Local Russian lore summaries | 31 / 133 | The 31 profiles missing local extended records now have original Russian summaries based on a pinned CC BY-SA lore dataset; other biographies remain in the next audit pass. |
 | Russian skill descriptions | 528 source entries | The pinned Russian skill catalogue has descriptions for 132 heroes; automatic translation quality still requires editorial review. |
@@ -46,9 +46,9 @@ The dataset deliberately excludes authored gameplay analysis and equipment/build
 
 ## Local extended profiles still missing
 
-The following 31 heroes now have a local Russian lore summary. Their broader extended records remain separate work and must not be treated as complete merely because the biography exists:
+The following 30 heroes still need a local extended tactical record. Their Russian lore summaries do not count as gameplay profiles:
 
-Mathilda (Матильда), Melissa (Мелисса), Minsitthar (Минситтар), Moskov (Москов), Natalia (Наталья), Natan (Натан), Novaria (Новария), Aamon (Эймон), Alice (Алиса), Angela (Ангела), Odette (Одетта), Phoveus (Фовиус), Popol and Kupa (Пополь и Купа), Ruby (Руби), Selena (Селена), Silvanna (Сильвана), Sora (Сора), Uranus (Уранус), Vale (Вэйл), Valentina (Валентина), Vexana (Вексана), Wanwan (Ванван), X.Borg (Икс.Борг), Yi Sun-shin (Ли Сун-Син), Yin (Инь), Yu Zhong (Чонг), Yve (Ив), Zetian (Цзэтянь), Zhask (Заск), Zhuxin (Чжусинь), Zilong (Зилонг).
+Melissa (Мелисса), Minsitthar (Минситтар), Moskov (Москов), Natalia (Наталья), Natan (Натан), Novaria (Новария), Aamon (Эймон), Alice (Алиса), Angela (Ангела), Odette (Одетта), Phoveus (Фовиус), Popol and Kupa (Пополь и Купа), Ruby (Руби), Selena (Селена), Silvanna (Сильвана), Sora (Сора), Uranus (Уранус), Vale (Вэйл), Valentina (Валентина), Vexana (Вексана), Wanwan (Ванван), X.Borg (Икс.Борг), Yi Sun-shin (Ли Сун-Син), Yin (Инь), Yu Zhong (Чонг), Yve (Ив), Zetian (Цзэтянь), Zhask (Заск), Zhuxin (Чжусинь), Zilong (Зилонг).
 
 ## Completion standard for each encyclopedia profile
 
