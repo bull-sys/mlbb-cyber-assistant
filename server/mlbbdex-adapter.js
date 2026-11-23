@@ -91,14 +91,18 @@ export async function getGameAssets() {
     cachedJson("items", BASE + "/api/v1/items?locale=en").catch(() => null),
     getTalentAssets()
   ]);
-  const normalizeAsset = item => {
+  const normalizeAsset = (item, kind = "generic") => {
     const candidate = item.image || item.icon || item.iconUrl || item.icon_url ||
       item.imageUrl || item.image_url || item.img || item.images?.icon ||
       item.images?.small || item.icon?.url || item.image?.url || item.assets?.icon;
-    return { ...item, image: absoluteImage(candidate) };
+    const directImage = absoluteImage(candidate);
+    const itemImage = kind === "item"
+      ? absoluteImage("/visuels/objets/" + (item.slug || slugify(item.name)) + ".webp")
+      : null;
+    return { ...item, image: directImage || itemImage };
   };
-  const emblems = (Array.isArray(emblemsResult?.data) ? emblemsResult.data : []).map(normalizeAsset);
-  const items = (Array.isArray(itemsResult?.data) ? itemsResult.data : []).map(normalizeAsset);
+  const emblems = (Array.isArray(emblemsResult?.data) ? emblemsResult.data : []).map(item => normalizeAsset(item, "emblem"));
+  const items = (Array.isArray(itemsResult?.data) ? itemsResult.data : []).map(item => normalizeAsset(item, "item"));
   return {
     ok: true,
     emblems,
