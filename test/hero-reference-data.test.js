@@ -3,7 +3,25 @@ import test from "node:test";
 import { heroCatalog } from "../server/hero-catalog.js";
 import { heroProfiles } from "../server/hero-profiles.js";
 import { HERO_REFERENCE_SOURCE, heroReferenceData } from "../server/hero-reference-data.js";
+import { HERO_LORE_SOURCE, heroLoreData } from "../server/hero-lore-data.js";
 import { getHeroKnowledge } from "../server/mlbbdex-adapter.js";
+
+test("31 previously missing heroes have sourced Russian lore summaries", () => {
+  const expectedIds = [
+    "mathilda", "melissa", "minsitthar", "moskov", "natalia", "natan", "novaria",
+    "aamon", "alice", "angela", "odette", "phoveus", "popol-and-kupa", "ruby",
+    "selena", "silvanna", "sora", "uranus", "vale", "valentina", "vexana",
+    "wanwan", "x-borg", "yi-sun-shin", "yin", "yu-zhong", "yve", "zetian",
+    "zhask", "zhuxin", "zilong"
+  ];
+  assert.equal(heroLoreData.length, 31);
+  assert.deepEqual(heroLoreData.map(item => item.id).sort(), [...expectedIds].sort());
+  assert.equal(HERO_LORE_SOURCE.license, "CC BY-SA");
+  for (const entry of heroLoreData) {
+    assert.ok(entry.summary.length >= 100, entry.id + ": summary is substantive");
+    assert.ok(!/TODO|lorem ipsum|placeholder/iu.test(entry.summary), entry.id + ": no placeholder");
+  }
+});
 
 test("neutral reference dataset covers the full 133-hero working catalogue", () => {
   assert.equal(heroCatalog.length, 133);
@@ -88,6 +106,8 @@ test("encyclopedia returns dated local passport data when the live source is una
     assert.equal(result.fallback, true);
     assert.equal(result.profile.name, "Chang'e");
     assert.equal(result.profile.roles[0], "Маг");
+    assert.ok(result.profile.lore, "local lore is included in offline fallback");
+    assert.ok(result.profile.loreSource);
     assert.ok(result.profile.stats.hp1 > 0);
     assert.equal(result.source.license, "CC BY-SA");
     assert.equal(result.updatedAt, "2026-11-20");

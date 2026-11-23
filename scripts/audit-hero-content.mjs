@@ -55,7 +55,11 @@ function collectTextFields(value, path = "", output = [], depth = 0) {
 }
 function pickLoreCandidates(fields) {
   const exact = /(^|\.)(lore|story|bio|biography|background|history|origin|description|quote|overview|introduction)(\.|$)/iu;
-  return fields.filter(field => exact.test(field.path) && field.text.length >= 60);
+  return fields.filter(field =>
+    exact.test(field.path) &&
+    !/^skills\[/iu.test(field.path) &&
+    field.text.length >= 60
+  );
 }
 function auditRussianSkillText(hero, russianSkills) {
   const key = slug(hero.nameEn);
