@@ -1,3 +1,5 @@
+import { heroReferenceData, HERO_REFERENCE_SOURCE } from "./hero-reference-data.js";
+
 const BASE = "https://mlbbdex.com";
 const TTL = 6 * 60 * 60 * 1000;
 const cache = new Map();
@@ -39,30 +41,84 @@ function stripHtml(value) {
     .replace(/\s+/gu, " ").trim();
 }
 
+const heroReferenceBySlug = new Map(heroReferenceData.map(hero => [hero.slug, hero]));
+
+function staticHeroKnowledge(hero, slug) {
+  const reference = heroReferenceBySlug.get(slug);
+  if (!reference) return null;
+  return {
+    ok: true,
+    fallback: true,
+    stale: true,
+    profile: {
+      id: reference.heroId,
+      name: reference.nameEn,
+      title: reference.titleEn,
+      roles: reference.roles.map(value => value.ru),
+      lanes: reference.lanes.map(value => value.ru),
+      specialties: reference.specialties.map(value => value.ru),
+      release: reference.release,
+      region: reference.region,
+      resource: reference.resource,
+      stats: reference.stats,
+      ratings: reference.ratings,
+      images: {}
+    },
+    source: HERO_REFERENCE_SOURCE,
+    updatedAt: HERO_REFERENCE_SOURCE.updatedAt,
+    dataPatch: null,
+    note: "Используется локальный резервный набор базовых характеристик. История и часть сведений требуют подключения к источнику."
+  };
+}
+
 export async function getHeroKnowledge(hero) {
   const slug = slugify(hero?.nameEn || hero?.id);
   if (!slug) return { ok: false, error: "Неизвестный герой" };
   try {
     const profilePayload = await cachedJson("hero:" + slug, BASE + "/api/v1/heroes/" + encodeURIComponent(slug));
     const profile = profilePayload?.data || null;
+    if (!profile) {
+      const fallback = staticHeroKnowledge(hero, slug);
+      return fallback || { ok: false, error: "Профиль героя отсутствует в источнике." };
+    }
     const images = profile?.images || {};
-    const { analysis: _analysis, builds: _builds, ...neutralProfile } = profile || {};
+    const { analysis: _analysis, builds: _builds, ...neutralProfile } = profile;
+    const reference = heroReferenceBySlug.get(slug);
+    const mergedProfile = {
+      ...(reference ? {
+        id: reference.heroId,
+        name: reference.nameEn,
+        title: reference.titleEn,
+        roles: reference.roles.map(value => value.ru),
+        lanes: reference.lanes.map(value => value.ru),
+        specialties: reference.specialties.map(value => value.ru),
+        release: reference.release,
+        region: reference.region,
+        resource: reference.resource,
+        stats: reference.stats,
+        ratings: reference.ratings
+      } : {}),
+      ...neutralProfile,
+      stats: { ...(reference?.stats || {}), ...(neutralProfile.stats || {}) },
+      ratings: { ...(reference?.ratings || {}), ...(neutralProfile.ratings || {}) },
+      images: {
+        ...images,
+        portrait: absoluteImage(images.portrait),
+        icon: absoluteImage(images.icon)
+      }
+    };
     return {
-      ok: Boolean(profile),
-      profile: profile ? {
-        ...neutralProfile,
-        images: {
-          ...images,
-          portrait: absoluteImage(images.portrait),
-          icon: absoluteImage(images.icon)
-        }
-      } : null,
-      source: profilePayload?.source || null,
+      ok: true,
+      profile: mergedProfile,
+      source: profilePayload?.source || HERO_REFERENCE_SOURCE,
       updatedAt: new Date().toISOString(),
-      dataPatch: profile?.patch || null
+      dataPatch: profile?.patch || null,
+      fallback: false
     };
   } catch (error) {
-    return { ok: false, error: "Не удалось получить актуальный профиль героя.", detail: String(error?.message || error).slice(0, 160) };
+    const fallback = staticHeroKnowledge(hero, slug);
+    if (fallback) return { ...fallback, detail: String(error?.message || error).slice(0, 160) };
+    return { ok: false, error: "Не удалось получить профиль героя.", detail: String(error?.message || error).slice(0, 160) };
   }
 }
 
