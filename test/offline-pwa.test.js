@@ -15,7 +15,7 @@ const app = await readFile(
 test("service worker keeps the game catalog available offline after a successful load", () => {
   assert.match(serviceWorker, /const CACHE="mlbb-cyber-v[0-9]+"/);
   assert.match(serviceWorker, /const DATA_CACHE="mlbb-cyber-data-v1"/);
-  assert.match(serviceWorker, /url\.pathname==="\/api\/data"/);
+  assert.match(serviceWorker, /url\.pathname!=="\/api\/data"/);
   assert.match(serviceWorker, /cache\.put\(request,copy\)/);
   assert.match(serviceWorker, /caches\.match\(request\)/);
   assert.match(serviceWorker, /status:503/);
