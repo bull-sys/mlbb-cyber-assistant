@@ -3222,7 +3222,6 @@ export const heroProfiles = [
     },
     confidence: "partial"
   },
-,
   {
     id: "minsitthar",
     names: { ru: "Минситтар", en: "Minsitthar", aliases: [] },
