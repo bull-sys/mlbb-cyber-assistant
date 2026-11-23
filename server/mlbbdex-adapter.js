@@ -85,18 +85,23 @@ async function getTalentAssets() {
 
 export async function getGameAssets() {
   try {
-    const [emblemsPayload, talents] = await Promise.all([
+    const [emblemsPayload, itemsPayload, talents] = await Promise.all([
       cachedJson("emblems", BASE + "/api/v1/emblems?locale=en"),
+      cachedJson("items", BASE + "/api/v1/items?locale=en"),
       getTalentAssets()
     ]);
-    const emblems = (Array.isArray(emblemsPayload?.data) ? emblemsPayload.data : []).map(item => ({
-      ...item, image: absoluteImage(item.image)
-    }));
+    const normalizeAsset = item => ({
+      ...item,
+      image: absoluteImage(item.image || item.icon || item.iconUrl || item.imageUrl || item.images?.icon)
+    });
+    const emblems = (Array.isArray(emblemsPayload?.data) ? emblemsPayload.data : []).map(normalizeAsset);
+    const items = (Array.isArray(itemsPayload?.data) ? itemsPayload.data : []).map(normalizeAsset);
     return {
       ok: true,
       emblems,
+      items,
       talents,
-      sources: [emblemsPayload?.source].filter(Boolean),
+      sources: [emblemsPayload?.source, itemsPayload?.source].filter(Boolean),
       updatedAt: new Date().toISOString()
     };
   } catch (error) {
