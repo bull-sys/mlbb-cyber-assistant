@@ -57,3 +57,12 @@ test("encyclopedia passport exposes sourced tactical profile sections", async ()
   assert.match(app, /Тактический профиль пока не заполнен/);
   assert.match(app, /renderEncyHeroDescription\(remote,currentHero,/);
 });
+
+test("draft counter cards display profile evidence without inventing missing profiles", async () => {
+  const app = await readFile(new URL("../public/app.js", import.meta.url), "utf8");
+  assert.match(app, /profile\.identity\|\|/);
+  assert.match(app, /profile\.strength\|\|/);
+  assert.match(app, /profile\.caution\|\|/);
+  assert.match(app, /Тактический паспорт этого героя пока не проверен/);
+  assert.match(app, /counter-profile-evidence/);
+});
