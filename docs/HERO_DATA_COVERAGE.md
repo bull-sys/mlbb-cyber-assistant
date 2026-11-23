@@ -12,7 +12,7 @@ Working branch: assistant/cyber-redesign-2
 | Neutral reference dataset | 133 / 133 | Every catalogue entry has a local reference record with title, role, lane, specialties, release metadata, region/resource labels, source ratings and base statistics. |
 | Role cross-check | 133 / 133 | Every role now matches the pinned reference and the matching MLBB.io page. |
 | Primary-lane cross-check | 132 / 133 | 132 entries have a verified primary lane; Badang remains pending because its split-lane record has no settled primary. |
-| Extended local profile records | 119 / 133 | 119 heroes have a structured local profile record. 14 still need a local extended record. |
+| Extended local profile records | 124 / 133 | 124 heroes have a structured local profile record. 9 still need a local extended record. |
 | Runtime profile endpoint | 133 / 133 supported by catalogue lookup | The encyclopedia requests the current neutral hero profile from MLBBDex. When that endpoint is unavailable, the new local reference dataset supplies the base passport and statistics. |
 | Local Russian lore summaries | 31 / 133 | The 31 profiles missing local extended records now have original Russian summaries based on a pinned CC BY-SA lore dataset; other biographies remain in the next audit pass. |
 | Russian skill descriptions | 528 source entries | The pinned Russian skill catalogue has descriptions for 132 heroes; automatic translation quality still requires editorial review. |
@@ -46,9 +46,9 @@ The dataset deliberately excludes authored gameplay analysis and equipment/build
 
 ## Local extended profiles still missing
 
-The following 14 heroes still need a local extended tactical record. Their Russian lore summaries do not count as gameplay profiles:
+The following 9 heroes still need a local extended tactical record. Their Russian lore summaries do not count as gameplay profiles:
 
-Uranus (Уранус), Vale (Вэйл), Valentina (Валентина), Vexana (Вексана), Wanwan (Ванван), X.Borg (Икс.Борг), Yi Sun-shin (Ли Сун-Син), Yin (Инь), Yu Zhong (Чонг), Yve (Ив), Zetian (Цзэтянь), Zhask (Заск), Zhuxin (Чжусинь), Zilong (Зилонг).
+X.Borg (Икс.Борг), Yi Sun-shin (Ли Сун-Син), Yin (Инь), Yu Zhong (Чонг), Yve (Ив), Zetian (Цзэтянь), Zhask (Заск), Zhuxin (Чжусинь), Zilong (Зилонг).
 
 ## Completion standard for each encyclopedia profile
 
@@ -199,3 +199,13 @@ The same profile evidence is now attached to supported Draft Assistant counter-p
 - Role/lane classifications updated: Popol and Kupa — Marksman, Gold Lane primary with Jungle flex; Ruby — Fighter, EXP Lane with Roam flex; Selena — Assassin/Mage, Mid Lane; Silvanna — Fighter/EXP Lane; Sora — Fighter/Assassin, EXP Lane.
 - Matchup and synergy arrays remain empty pending a separate evidence review; ranking aggregates are not presented as universal counter claims.
 - Coverage is now 119 / 133; 14 tactical profiles remain.
+
+
+## Five additional tactical profiles — 2026-11-23 (Uranus, Vale, Valentina, Vexana, Wanwan)
+
+- Added five partial tactical profiles with hero-specific mechanics, strengths, weaknesses, item principles, teamfight plans, target priorities, cautions and source links.
+- Uranus — Tank/EXP Lane; Vale, Valentina and Vexana — Mage/Mid Lane; Wanwan — Marksman/Gold Lane. Role and primary lane were cross-checked against current independent hero references.
+- Vale's current three-skill kit is used; older guides describing removed skill-upgrade variants are not treated as current.
+- Valentina's ultimate is documented as composition-dependent; Wanwan's ultimate activation condition and second-skill control cleanse are explicitly represented.
+- Matchup and synergy arrays remain empty pending a separate evidence review. Community build samples are labelled as limited rather than treated as consensus.
+- Coverage is now 124 / 133; 9 tactical profiles remain.
