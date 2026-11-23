@@ -553,7 +553,7 @@ test("Hayabusa, Hylos, Irithel, Ixia and Johnson have sourced partial tactical p
 });
 
 test("hero profile coverage count and unique IDs stay aligned with the audited baseline", () => {
-  assert.equal(heroProfiles.length, 129);
+  assert.equal(heroProfiles.length, 133);
   assert.equal(new Set(heroProfiles.map(hero => hero.id)).size, 119);
   const saber = heroProfiles.find(hero => hero.id === "saber");
   assert.ok(saber);
@@ -964,8 +964,39 @@ test("X.Borg, Yi Sun-shin, Yin, Yu Zhong and Yve tactical profiles are sourced a
   }
 });
 
+
+test("Zetian, Zhask, Zhuxin and Zilong tactical profiles are sourced and structurally complete", () => {
+  const expected = [
+    ["zetian", "Цзэтянь", ["Маг"], ["Средняя линия"]],
+    ["zhask", "Заск", ["Маг"], ["Средняя линия"]],
+    ["zhuxin", "Чжусинь", ["Маг"], ["Средняя линия"]],
+    ["zilong", "Зилонг", ["Боец", "Убийца"], ["Линия опыта"]]
+  ];
+  for (const [id, ru, roles, lanes] of expected) {
+    const hero = heroProfiles.find(entry => entry.id === id);
+    assert.ok(hero, id + " profile exists");
+    assert.equal(hero.names.ru, ru);
+    assert.deepEqual(hero.roles, roles);
+    assert.deepEqual(hero.lanes, lanes);
+    assert.ok(hero.mechanics.length >= 4);
+    assert.ok(hero.strengths.length >= 4);
+    assert.ok(hero.weaknesses.length >= 4);
+    assert.ok(hero.itemNotes.length >= 3);
+    assert.ok(hero.teamfight.preferredPlan);
+    assert.ok(hero.teamfight.targetPriority.length >= 3);
+    assert.ok(hero.teamfight.avoid.length >= 3);
+    assert.ok(hero.sources.length >= 3);
+    assert.equal(hero.confidence, "partial");
+    assert.equal(hero.patch.version, HERO_DB_PATCH);
+    assert.equal(hero.patch.reviewedAt, "2026-11-23");
+    assert.deepEqual(hero.matchups.strongAgainst, []);
+    assert.deepEqual(hero.matchups.weakAgainst, []);
+    assert.deepEqual(hero.synergies, []);
+  }
+});
+
 test("all local tactical profiles contain enough material for a useful hero passport", () => {
-  assert.equal(heroProfiles.length, 129);
+  assert.equal(heroProfiles.length, 133);
   for (const hero of heroProfiles) {
     assert.ok(hero.mechanics.length >= 3, hero.id + " mechanics");
     assert.ok(hero.strengths.length >= 2, hero.id + " strengths");
@@ -984,5 +1015,5 @@ test("tactical profile coverage is explicit and does not invent profiles for the
   assert.equal(profileIds.size, heroProfiles.length);
   assert.ok(heroProfiles.every(hero => heroCatalog.some(entry => entry.id === hero.id)));
   const missing = heroCatalog.filter(hero => !profileIds.has(hero.id));
-  assert.equal(missing.length, 4);
+  assert.equal(missing.length, 0);
 });
