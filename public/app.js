@@ -130,6 +130,11 @@ function heroPortraitUrl(hero){
  const filename=filenames[id]||id;
  return "https://raw.githubusercontent.com/Ceplin03/database-mlbb.Mobile-Legends-Bang-Bang/master/images-hero/"+encodeURIComponent(filename)+".png";
 }
+function setPickerAccent(hero){
+ const panel=$("heroPicker").querySelector(".picker-panel");
+ if(!hero){panel.style.removeProperty("--picker-hero-image");return}
+ panel.style.setProperty("--picker-hero-image",'url("'+heroPortraitUrl(hero)+'")');
+}
 function heroTileMarkup(h,extra=""){
  const url=heroPortraitUrl(h),role=h.roles?.[0]||h.lanes?.[0]||"Роль уточняется";
  const strength=h.profile?.strengths?.[0]||"",weakness=h.profile?.weaknesses?.[0]||"";
@@ -138,11 +143,13 @@ function heroTileMarkup(h,extra=""){
   :'<span class="hero-card-fact muted">Тактический профиль уточняется</span>';
  const status=h.supported?'<span class="hero-status ready">АНАЛИЗ</span>':'<span class="hero-status pending">КАТАЛОГ</span>';
  const selected=pickerTarget==="enemies"?enemies.includes(h.value):pickerTarget==="allies"?allies.includes(h.value):$("myHero").value===h.value;
- return '<button class="hero-tile '+extra+(selected?" selected":"")+'" aria-pressed="'+selected+'" data-picker-value="'+esc(h.value)+'"><span class="hero-portrait-wrap"><img class="hero-portrait" src="'+url+'" alt="" loading="lazy" decoding="async" onerror="this.hidden=true;this.parentElement.classList.add(\'portrait-missing\')"><span class="portrait-fallback">✦</span></span><span class="hero-card-copy"><span class="hero-card-title"><b>'+esc(h.name)+'</b>'+status+'</span><small class="hero-role">'+esc(role)+'</small>'+facts+'</span></button>';
+ return '<button class="hero-tile '+extra+(selected?" selected":"")+'" style="--hero-portrait-glow:url(&quot;'+url+'&quot;)" aria-pressed="'+selected+'" data-picker-value="'+esc(h.value)+'"><span class="hero-portrait-wrap"><img class="hero-portrait" src="'+url+'" alt="" loading="lazy" decoding="async" onerror="this.hidden=true;this.parentElement.classList.add(\'portrait-missing\')"><span class="portrait-fallback">✦</span></span><span class="hero-card-copy"><span class="hero-card-title"><b>'+esc(h.name)+'</b>'+status+'</span><small class="hero-role">'+esc(role)+'</small>'+facts+'</span></button>';
 }
 function renderHeroPicker(){
  const q=$("heroPickerSearch").value.trim().toLocaleLowerCase("ru"),entries=pickerEntries();
  const current=pickerTarget==="enemies"?enemies:pickerTarget==="allies"?allies:[];
+ const accentValue=pickerTarget==="myHero"?$("myHero").value:(current[current.length-1]||current[0]);
+ setPickerAccent(entries.find(h=>h.value===accentValue)||null);
  $("pickerSelectionStatus").textContent=pickerTarget==="myHero"?"Выбери своего героя":("Выбрано "+current.length+" из 5 · можно добавить несколько подряд");
  const recent=pickerRecent().map(value=>entries.find(h=>h.value===value)).filter(Boolean);
  $("recentHeroes").innerHTML=recent.length?'<small>НЕДАВНО ВЫБРАННЫЕ</small><div class="picker-recent-grid">'+recent.map(h=>heroTileMarkup(h,"recent")).join("")+'</div>':"";
