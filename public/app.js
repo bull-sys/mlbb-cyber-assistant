@@ -312,6 +312,11 @@ function encySkillRussianDescription(skill,index,mechanics){
  if(found)return {text:found,language:"ru"};
  return skill.description?{text:skill.description,language:"en"}:{text:"Описание этого навыка пока не найдено в проверенной базе.",language:"unknown"};
 }
+function encySkillFallback(profile){
+ const mechanics=Array.isArray(profile?.mechanics)?profile.mechanics:[];
+ if(!mechanics.length)return '<p class="ency-unverified">Навыки и их изображения пока не удалось загрузить.</p>';
+ return '<p class="ency-unverified">Изображения навыков временно недоступны. Ниже сохранены текстовые описания из профиля героя.</p><ul>'+mechanics.map(line=>'<li>'+esc(line)+'</li>').join("")+'</ul>';
+}
 async function loadEncyHeroSkills(id,profile){
  const requestId=++encySkillRequestId;
  const host=$("encyHeroSkills");
@@ -321,7 +326,7 @@ async function loadEncyHeroSkills(id,profile){
   if(requestId!==encySkillRequestId||!host.isConnected)return;
   const mechanics=Array.isArray(profile?.mechanics)?profile.mechanics:[];
   if(!result.skills?.length){
-   host.innerHTML='<p class="ency-unverified">Навыки для этого героя пока не удалось загрузить из источника игрового клиента.</p>';
+   host.innerHTML=encySkillFallback(profile);
    return;
   }
   host.innerHTML=result.skills.map((skill,index)=>{
@@ -333,7 +338,7 @@ async function loadEncyHeroSkills(id,profile){
   }).join("")+'<p class="ency-skill-credit">Иконки навыков загружены из данных игрового клиента Moonton. Изображения и игровые материалы принадлежат правообладателю.</p>';
  }catch(error){
   if(requestId!==encySkillRequestId||!host.isConnected)return;
-  host.innerHTML='<p class="ency-unverified">Не удалось загрузить иконки навыков. Попробуй открыть героя позже.</p>';
+  host.innerHTML=encySkillFallback(profile);
  }
 }
 function renderEncyHeroModal(id){
