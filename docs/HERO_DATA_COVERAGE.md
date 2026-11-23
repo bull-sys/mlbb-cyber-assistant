@@ -12,7 +12,7 @@ Working branch: assistant/cyber-redesign-2
 | Neutral reference dataset | 133 / 133 | Every catalogue entry has a local reference record with title, role, lane, specialties, release metadata, region/resource labels, source ratings and base statistics. |
 | Role cross-check | 133 / 133 | Every role now matches the pinned reference and the matching MLBB.io page. |
 | Primary-lane cross-check | 132 / 133 | 132 entries have a verified primary lane; Badang remains pending because its split-lane record has no settled primary. |
-| Extended local profile records | 124 / 133 | 124 heroes have a structured local profile record. 9 still need a local extended record. |
+| Extended local profile records | 129 / 133 | 129 heroes have a structured local profile record. 4 still need a local extended record. |
 | Runtime profile endpoint | 133 / 133 supported by catalogue lookup | The encyclopedia requests the current neutral hero profile from MLBBDex. When that endpoint is unavailable, the new local reference dataset supplies the base passport and statistics. |
 | Local Russian lore summaries | 31 / 133 | The 31 profiles missing local extended records now have original Russian summaries based on a pinned CC BY-SA lore dataset; other biographies remain in the next audit pass. |
 | Russian skill descriptions | 528 source entries | The pinned Russian skill catalogue has descriptions for 132 heroes; automatic translation quality still requires editorial review. |
@@ -46,9 +46,9 @@ The dataset deliberately excludes authored gameplay analysis and equipment/build
 
 ## Local extended profiles still missing
 
-The following 9 heroes still need a local extended tactical record. Their Russian lore summaries do not count as gameplay profiles:
+The following 4 heroes still need a local extended tactical record. Their Russian lore summaries do not count as gameplay profiles:
 
-X.Borg (Икс.Борг), Yi Sun-shin (Ли Сун-Син), Yin (Инь), Yu Zhong (Чонг), Yve (Ив), Zetian (Цзэтянь), Zhask (Заск), Zhuxin (Чжусинь), Zilong (Зилонг).
+Zetian (Цзэтянь), Zhask (Заск), Zhuxin (Чжусинь), Zilong (Зилонг).
 
 ## Completion standard for each encyclopedia profile
 
@@ -209,3 +209,13 @@ The same profile evidence is now attached to supported Draft Assistant counter-p
 - Valentina's ultimate is documented as composition-dependent; Wanwan's ultimate activation condition and second-skill control cleanse are explicitly represented.
 - Matchup and synergy arrays remain empty pending a separate evidence review. Community build samples are labelled as limited rather than treated as consensus.
 - Coverage is now 124 / 133; 9 tactical profiles remain.
+
+
+## Five additional tactical profiles — 2026-11-23 (X.Borg, Yi Sun-shin, Yin, Yu Zhong, Yve)
+
+- Added five partial tactical profiles with distinct passive and skill mechanics, strengths, weaknesses, item principles, teamfight plans, target priorities, cautions and source links.
+- X.Borg — Fighter/EXP Lane; Yi Sun-shin — Assassin/Marksman, Jungle; Yin — Fighter/Assassin, Jungle primary with EXP flex; Yu Zhong — Fighter/EXP Lane; Yve — Mage/Mid Lane.
+- X.Borg's two armor states, overheating and ultimate armor break are explicitly modelled. Yi Sun-shin's current weapon-switch mastery and repeat-use global ultimate are included. Yin's base/Lieh skill variants and isolation are distinguished. Yu Zhong's Dragon-to-Dragonoid transition is documented.
+- Yve's passive uses the current three-stack Galactic Power description; the outdated ten-stack description found on an older MLBB.io page is explicitly excluded.
+- Matchup and synergy arrays remain empty pending separate evidence review; professional VOD review remains pending.
+- Coverage is now 129 / 133; 4 tactical profiles remain.
