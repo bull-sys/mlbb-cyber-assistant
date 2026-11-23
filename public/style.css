@@ -861,3 +861,13 @@ details.ency-info-card.visual.emblem[open]{
 .ency-tactical-details li{color:#cfc3d5;font-size:11px;line-height:1.55}
 .ency-tactical-details li+li{margin-top:7px}
 @media(max-width:650px){.ency-tactical-overview{grid-template-columns:1fr;gap:7px}.ency-tactical-block:first-child,.ency-tactical-details{grid-column:1}}
+
+
+/* Draft cards: transparent profile evidence under each counter recommendation */
+.counter-profile-evidence{display:grid;gap:7px;margin-top:10px;padding:10px;border:1px solid rgba(198,132,220,.2);border-radius:10px;background:rgba(16,10,22,.55)}
+.counter-profile-evidence>div{min-width:0}
+.counter-profile-evidence small,.counter-profile-status{display:block;color:#d9a1e7;font-size:8px;font-weight:850;letter-spacing:.1em}
+.counter-profile-evidence p{margin:3px 0 0;color:#cfc3d5;font-size:10px;line-height:1.5}
+.counter-profile-status{padding-top:4px;color:#988ba2;font-weight:600;letter-spacing:0}
+.counter-profile-missing{display:block;margin-top:8px;color:#a99daf;font-size:10px;line-height:1.45}
+@media(max-width:600px){.counter-profile-evidence{padding:8px}.counter-profile-evidence p{font-size:10px}}
