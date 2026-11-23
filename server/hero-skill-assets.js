@@ -208,7 +208,8 @@ export async function getHeroSkillAssets(heroNameEn, heroNameRu = "") {
       .replace(/[\u0300-\u036f]/gu, "").toLowerCase()
       .replace(/&/g, "and").replace(/['’]/g, "")
       .replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
-    const localized = Array.isArray(russianSkills?.[slug]) ? russianSkills[slug] : [];
+    const localizedKey = russianSkills?.[slug] ? slug : Object.keys(russianSkills || {}).find(key => normalizeName(key) === normalizeName(slug));
+    const localized = Array.isArray(russianSkills?.[localizedKey]) ? russianSkills[localizedKey] : [];
     const matching = hero.skills.map((skill, index) => {
       const candidate = localized[index];
       const sameSkill = candidate && normalizeName(candidate.name) === normalizeName(skill.name);
