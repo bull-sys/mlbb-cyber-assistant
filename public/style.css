@@ -620,3 +620,30 @@ body.ency-modal-open{overflow:hidden}
  .ency-info-copy p{font-size:8px}
 }
 @media(max-width:350px){.ency{grid-template-columns:1fr}}
+
+/* Encyclopedia refinement: compact item/emblem/talent cards with readable descriptions */
+.ency-group-heading{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;padding:10px 3px 3px;margin-top:5px;border-bottom:1px solid rgba(203,150,224,.18);color:#e9d9f1}
+.ency-group-heading b{font-size:11px;letter-spacing:.08em;text-transform:uppercase}
+.ency-group-heading small{font-size:9px;color:#9d91a5}
+.ency-info-card.visual{display:grid;grid-template-columns:54px minmax(0,1fr);align-items:center;gap:9px;min-height:94px;padding:8px;background:#17141b;border:1px solid rgba(203,150,224,.16);border-radius:12px;overflow:hidden}
+.ency-info-visual{width:54px;height:54px;flex:0 0 54px;display:grid;place-items:center;border-radius:10px;background:#100e14;border:1px solid rgba(203,150,224,.18);overflow:hidden}
+.ency-info-icon{display:block;width:100%;height:100%;object-fit:contain;padding:4px}
+.ency-info-icon.placeholder{display:grid;place-items:center;color:#a77ab9;font-size:20px}
+.ency-info-copy{min-width:0;display:flex;flex-direction:column;gap:3px}
+.ency-info-copy>b{font-size:10px;line-height:1.2;color:#f1eaf4;overflow-wrap:anywhere}
+.ency-info-copy>small{font-size:8px;color:#b9a7c1;line-height:1.2}
+.ency-info-copy p{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;overflow:hidden;margin:2px 0 0;color:#c4bbc8;font-size:8px;line-height:1.35}
+.ency-info-card .ency-item-price{display:inline-flex;align-self:flex-start;padding:3px 6px;border-radius:5px;background:#24202a;color:#d9c3e4;font-size:8px}
+.ency-hero-description{display:flex;flex-direction:column;gap:9px}
+.ency-hero-bio{margin:0;color:#e2d9e7;font-size:12px;line-height:1.55}
+.ency-hero-facts{display:flex;flex-wrap:wrap;gap:6px}
+.ency-hero-facts span{padding:5px 7px;border:1px solid rgba(203,150,224,.18);border-radius:7px;background:#151219;color:#c9b9d0;font-size:9px;line-height:1.3}
+@media(max-width:650px){
+ .ency-group-heading{padding-top:8px}
+ .ency-info-card.visual{grid-template-columns:48px minmax(0,1fr);gap:7px;min-height:88px;padding:7px}
+ .ency-info-visual{width:48px;height:48px}
+ .ency-info-copy>b{font-size:9px}
+ .ency-info-copy>small{font-size:7px}
+ .ency-info-copy p{font-size:7.5px;-webkit-line-clamp:3}
+ .ency-hero-bio{font-size:11px}
+}
