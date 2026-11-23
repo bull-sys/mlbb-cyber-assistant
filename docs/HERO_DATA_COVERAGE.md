@@ -73,3 +73,18 @@ The new tests check:
 - existing extended profile IDs remain linked to the catalogue.
 
 The official-client roster itself remains marked incomplete until independently checked against an official-client snapshot.
+
+## Level-by-level base-stat charts
+
+The encyclopedia now has a second, per-hero source lookup for level growth:
+
+- `server/hero-growth-adapter.js` reads only the **Base stats** table from the independent MLBB.io hero page. It does not import the site's builds, counters, matchup data, or other analysis.
+- Supported rows include HP, HP regeneration, mana, mana regeneration, physical attack, physical defense, magic defense, attack speed, movement speed and basic attack range.
+- The source's level-1 value, level-15 value and published per-level increment are retained separately. The adapter caches successful results for 12 hours and does not persist a fabricated value when a page or table is unavailable.
+- A solid chart is used only when the published increment is consistent with the two endpoint values within a small rounding tolerance. If only endpoints are available, or the increment is inconsistent, the chart uses a dashed line and labels intermediate levels as an estimate. Constant values such as movement speed are displayed as fixed parameters, not as a growth curve.
+- If the source cannot be parsed, the UI falls back to the existing MLBBDex values. It shows a dashed endpoint-only estimate when both endpoints exist, or a clear unavailable state when they do not.
+- The UI credits the source page and its reported update date. MLBBDex remains the primary reference source for the offline passport and base-stat fallback.
+
+**Important coverage limit:** adding the adapter does not mean that all 133 external pages have already been independently crawled and audited. Coverage is determined per hero at request time. The page parser has fixture tests for numeric parsing, absent growth values, and missing tables; live-page coverage and visual rendering still require a full preview pass.
+
+**Additional source:** [MLBB.io hero database](https://mlbb.io/en/hero/helcurt). It is an independent community resource, not an official Moonton service. Its page identifies official Mobile Legends hero data as its underlying source. Cross-check conflicting values before treating them as confirmed.
