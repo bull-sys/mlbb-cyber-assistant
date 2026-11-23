@@ -344,6 +344,70 @@ async function loadEncyHeroSkills(id,profile){
   host.innerHTML=encySkillFallback(profile);
  }
 }
+function encySlug(value){
+ return String(value||"").normalize("NFKD").replace(/[\\u0300-\\u036f]/gu,"").toLowerCase().replace(/&/g,"and").replace(/['’]/g,"").replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");
+}
+function renderEncyHeroCombos(groups){
+ const host=$("encyHeroCombos");if(!host)return;
+ if(!Array.isArray(groups)||!groups.length){
+  host.innerHTML='<p class="ency-unverified">Для этого героя пока не удалось получить подтверждённые игровые комбо. Не будем подменять их догадками.</p>';
+  return;
+ }
+ host.innerHTML=groups.map(group=>'<article class="ency-combo-card"><h4>'+esc(group.title||"Комбо")+'</h4>'+(group.steps?.length?'<ol>'+group.steps.map(step=>'<li>'+esc(step)+'</li>').join("")+'</ol>':"")+(group.explanation?'<p>'+esc(group.explanation)+'</p>':"")+'</article>').join("");
+}
+function renderEncyHeroBuilds(remote){
+ const host=$("encyHeroBuilds");if(!host)return;
+ const builds=remote?.builds||{};
+ const cards=[];
+ for(const [lane,ranks] of Object.entries(builds)){
+  for(const [rank,entries] of Object.entries(ranks||{})){
+   for(const build of (Array.isArray(entries)?entries:[]))cards.push({lane,rank,build});
+  }
+ }
+ if(!cards.length){
+  host.innerHTML='<p class="ency-unverified">Актуальные сборки для выбранного героя пока не найдены в статистике источника.</p>';
+  return;
+ }
+ host.innerHTML=cards.slice(0,3).map(({lane,rank,build},index)=>{
+  const emblem=(encyRemoteAssets?.emblems||[]).find(item=>encySlug(item.role)===encySlug(build.emblem)||encySlug(item.name).includes(encySlug(build.emblem)));
+  const items=(build.items||[]).map(item=>'<div class="ency-build-item">'+(item.image?'<img src="'+esc(item.image)+'" alt="" loading="lazy" decoding="async" onerror="this.remove()">':'<span>✦</span>')+'<small>'+esc(item.name)+'</small></div>').join("");
+  const talents=(build.talents||[]).map(talent=>'<div class="ency-build-talent">'+(talent.image?'<img src="'+esc(talent.image)+'" alt="" loading="lazy" decoding="async" onerror="this.remove()">':'<span>✦</span>')+'<small>'+esc(talent.name)+'</small></div>').join("");
+  const stats=[Number.isFinite(Number(build.winRate))?Number(build.winRate).toFixed(1)+"% побед":null,Number.isFinite(Number(build.pickRate))?Number(build.pickRate).toFixed(1)+"% матчей":null].filter(Boolean).join(" · ");
+  return '<article class="ency-build-card"><div class="ency-build-top"><b>Сборка '+(index+1)+'</b><span>'+esc(lane)+' · '+esc(rank)+'</span></div>'+(stats?'<small class="ency-build-stats">'+esc(stats)+'</small>':"")+'<div class="ency-build-items">'+items+'</div><div class="ency-build-extras">'+(emblem?'<div class="ency-build-emblem">'+(emblem.image?'<img src="'+esc(emblem.image)+'" alt="" loading="lazy">':"")+'<span>'+esc(emblem.name)+'</span></div>':'<span class="ency-build-label">Эмблема: '+esc(build.emblem||"не указана")+'</span>')+'<div class="ency-build-talents">'+talents+'</div><span class="ency-build-label">Заклинание: '+esc(build.spell||"не указано")+'</span></div></article>';
+ }).join("")+'<p class="ency-data-credit">Сборки собраны по рейтинговой статистике источника; порядок и популярность зависят от выбранной линии и ранга.</p>';
+}
+async function loadEncyHeroKnowledge(id){
+ const request=++encyKnowledgeRequest;
+ const combos=$("encyHeroCombos"),builds=$("encyHeroBuilds");
+ try{
+  let remote=encyRemoteKnowledge.get(id);
+  if(!remote){remote=await $api("/hero-knowledge/"+encodeURIComponent(id));encyRemoteKnowledge.set(id,remote)}
+  if(request!==encyKnowledgeRequest||!$("encyHeroModal")||$("encyHeroModal").classList.contains("hidden"))return;
+  renderEncyHeroCombos(remote.combos);
+  renderEncyHeroBuilds(remote);
+  const portrait=remote.profile?.images?.portrait;
+  if(portrait){
+   const cover=$("encyHeroModalContent").querySelector(".ency-hero-cover");
+   const image=cover?.querySelector(":scope > img");
+   if(cover)cover.style.setProperty("--ency-portrait",'url("'+portrait.replace(/["\\\\]/g,"")+'")');
+   if(image){image.src=portrait;image.style.display=""}
+  }
+  const source=remote.source;
+  if(source?.url){
+   const credits=$("encyHeroModalContent").querySelector(".ency-profile-grid");
+   if(credits&&!credits.querySelector(".ency-remote-credit")){
+    const note=document.createElement("p");
+    note.className="ency-remote-credit";
+    note.textContent="Внешние данные: MLBBDex / Mobile Legends Wiki (CC BY-SA). Игровые изображения © Moonton.";
+    credits.append(note);
+   }
+  }
+ }catch(error){
+  if(request!==encyKnowledgeRequest)return;
+  if(combos)combos.innerHTML='<p class="ency-unverified">Не удалось загрузить комбо. Повтори позже — неподтверждённые последовательности не показываем.</p>';
+  if(builds)builds.innerHTML='<p class="ency-unverified">Не удалось загрузить рейтинговые сборки.</p>';
+ }
+}
 function renderEncyHeroModal(id){
  const hero=(data.heroCatalog||[]).find(x=>x.id===id);
  if(!hero)return;
@@ -364,11 +428,13 @@ function renderEncyHeroModal(id){
  '<section class="ency-profile-section"><h3>Кто контрит его</h3>'+list(p?.matchups?.weakAgainst)+'</section>'+
  '<section class="ency-profile-section"><h3>С кем сочетается</h3>'+list(p?.synergies)+'</section>'+
  '<section class="ency-profile-section wide"><h3>План командной драки</h3><p>'+esc(p?.teamfight?.preferredPlan||"План боя ещё не проверен.")+'</p>'+(p?.teamfight?.targetPriority?.length?'<h4>Приоритет целей</h4>'+list(p.teamfight.targetPriority):"")+(p?.teamfight?.avoid?.length?'<h4>Чего избегать</h4>'+list(p.teamfight.avoid):"")+'</section>'+
+ '<section class="ency-profile-section wide"><h3>Комбо и когда их применять</h3><div id="encyHeroCombos" class="ency-remote-panel"><p class="ency-unverified">Загружаем проверенные последовательности...</p></div></section>'+
+ '<section class="ency-profile-section wide"><h3>Актуальные сборки и эмблемы</h3><div id="encyHeroBuilds" class="ency-remote-panel"><p class="ency-unverified">Загружаем данные рейтинговых сборок...</p></div></section>'+
  '<section class="ency-profile-section wide"><h3>Заметки по сборке</h3>'+list(p?.itemNotes)+'</section>'+
  '<section class="ency-profile-section wide"><h3>Проверка данных</h3><p>Статус: '+esc(status)+' · Последняя отметка: '+esc(reviewed)+'. Точные характеристики и рекомендации следует сверять с текущим патчем.</p>'+(sources.length?'<div class="ency-source-list">'+sources.map((s,i)=>'<a href="'+esc(s)+'" target="_blank" rel="noopener">Источник '+(i+1)+' ↗</a>').join("")+'</div>':"")+'</section></div>';
  $("encyHeroModal").classList.remove("hidden");
  document.body.classList.add("ency-modal-open");
- loadEncyHeroSkills(id,p);
+ loadEncyHeroSkills(id,p);\n loadEncyHeroKnowledge(id);
 }
 $("encyList").addEventListener("click",e=>{
  const card=e.target.closest("[data-open-hero]");
