@@ -17,18 +17,18 @@ const LABELS = new Map([
 
 function cleanText(value) {
   return String(value || "")
-    .replace(/<script[\\s\\S]*?<\\/script>/giu, " ")
-    .replace(/<style[\\s\\S]*?<\\/style>/giu, " ")
+    .replace(/<script[\s\S]*?<\/script>/giu, " ")
+    .replace(/<style[\s\S]*?<\/style>/giu, " ")
     .replace(/<[^>]+>/gu, " ")
     .replace(/&nbsp;/giu, " ").replace(/&amp;/giu, "&")
     .replace(/&#39;/giu, "'").replace(/&quot;/giu, '"')
-    .replace(/\\s+/gu, " ").trim();
+    .replace(/\s+/gu, " ").trim();
 }
 
 function numberFrom(value) {
   const text = cleanText(value).replace(/,/g, "").replace(/%/g, "").trim();
   if (!text || text === "—" || text === "-" || text.toLowerCase() === "n/a") return null;
-  const match = text.match(/[+-]?\\d+(?:\\.\\d+)?/);
+  const match = text.match(/[+-]?\d+(?:\.\d+)?/);
   if (!match) return null;
   const number = Number(match[0]);
   return Number.isFinite(number) ? number : null;
@@ -36,21 +36,21 @@ function numberFrom(value) {
 
 function parseBaseStatsTable(html) {
   const source = String(html || "");
-  const heading = source.search(/base\\s+stats/i);
+  const heading = source.search(/base\s+stats/i);
   if (heading < 0) return { stats: {}, error: "Base stats section not found" };
   const tail = source.slice(heading);
-  const tableStart = tail.search(/<table\\b/i);
+  const tableStart = tail.search(/<table\b/i);
   if (tableStart < 0) return { stats: {}, error: "Base stats table not found" };
-  const tableMatch = tail.slice(tableStart).match(/<table\\b[^>]*>([\\s\\S]*?)<\\/table>/i);
+  const tableMatch = tail.slice(tableStart).match(/<table\b[^>]*>([\s\S]*?)<\/table>/i);
   if (!tableMatch) return { stats: {}, error: "Base stats table is incomplete" };
 
   const stats = {};
-  const rows = tableMatch[1].match(/<tr\\b[^>]*>[\\s\\S]*?<\\/tr>/giu) || [];
+  const rows = tableMatch[1].match(/<tr\b[^>]*>[\s\S]*?<\/tr>/giu) || [];
   for (const row of rows) {
-    const cells = [...row.matchAll(/<(?:td|th)\\b[^>]*>([\\s\\S]*?)<\\/(?:td|th)>/giu)]
+    const cells = [...row.matchAll(/<(?:td|th)\b[^>]*>([\s\S]*?)<\/(?:td|th)>/giu)]
       .map(match => cleanText(match[1]));
     if (cells.length < 2) continue;
-    const key = LABELS.get(cells[0].toLowerCase().replace(/\\s+/g, " ").trim());
+    const key = LABELS.get(cells[0].toLowerCase().replace(/\s+/g, " ").trim());
     if (!key) continue;
     const level1 = numberFrom(cells[1]);
     const level15 = numberFrom(cells[2]);
@@ -66,7 +66,7 @@ function parseBaseStatsTable(html) {
 
 function pageUpdatedAt(html) {
   const text = cleanText(String(html || "").slice(0, 180000));
-  const match = text.match(/Data updated\\s+([A-Za-z]{3,9}\\s+\\d{1,2},\\s+\\d{4})/i);
+  const match = text.match(/Data updated\s+([A-Za-z]{3,9}\s+\d{1,2},\s+\d{4})/i);
   if (!match) return null;
   const date = new Date(match[1]);
   return Number.isNaN(date.getTime()) ? null : date.toISOString().slice(0, 10);
@@ -88,7 +88,7 @@ export function parseHeroGrowthPage(html, heroId = "") {
 
 export async function getHeroGrowthData(hero) {
   const slug = String(hero?.id || hero?.nameEn || "")
-    .normalize("NFKD").replace(/[\\u0300-\\u036f]/gu, "")
+    .normalize("NFKD").replace(/[\u0300-\u036f]/gu, "")
     .toLowerCase().replace(/&/g, "and").replace(/['’]/g, "")
     .replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
   if (!slug) return null;
