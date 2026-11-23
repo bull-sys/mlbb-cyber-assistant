@@ -15,14 +15,14 @@ export const heroes = [
   {name:"Грейнджер",role:"Золото",type:"marksman",tags:["burst","physical"],style:["poke","burst"],strengths:["squishy-targets"]},
 
   {name:"Теризла",role:"Опыт",type:"fighter",tags:["frontline","control"],style:["engage","teamfight"],strengths:["grouped-enemies","frontline"]},
-  {name:"Диррот",role:"Опыт",type:"fighter",tags:["sustain","armor-break"],style:["duel","anti-tank"],strengths:["frontline","extended-fight"]},
+  {name:"Дариус",role:"Опыт",type:"fighter",tags:["sustain","armor-break"],style:["duel","anti-tank"],strengths:["frontline","extended-fight"]},
   {name:"Чу",role:"Опыт",type:"fighter",tags:["pickoff","control"],style:["catch","displacement"],strengths:["isolated-targets","backline"]},
   {name:"Лукас",role:"Опыт",type:"fighter",tags:["duel","sustain"],style:["duel","transform"],strengths:["isolated-targets","extended-fight"]},
   {name:"Тамуз",role:"Опыт",type:"fighter",tags:["sustain","frontline"],style:["engage","extended-fight"],strengths:["frontline","grouped-enemies"]},
 
   {name:"Эудора",role:"Мид",type:"mage",tags:["burst","magic","control"],style:["pickoff","ambush"],strengths:["squishy-targets","isolated-targets"]},
   {name:"Кагура",role:"Мид",type:"mage",tags:["mobility","burst"],style:["pickoff","mobility"],strengths:["backline","isolated-targets"]},
-  {name:"Фарса",role:"Мид",type:"mage",tags:["range","magic","burst"],style:["artillery","siege"],strengths:["grouped-enemies","backline"]},
+  {name:"Фаша",role:"Мид",type:"mage",tags:["range","magic","burst"],style:["artillery","siege"],strengths:["grouped-enemies","backline"]},
   {name:"Циклоп",role:"Мид",type:"mage",tags:["dps","magic"],style:["chase","sustained-damage"],strengths:["mobile-targets","extended-fight"]},
   {name:"Нана",role:"Мид",type:"mage",tags:["control","magic"],style:["zone-control","anti-dive"],strengths:["engage","mobile-targets"]},
   {name:"Джулиан",role:"Мид",type:"mage",tags:["burst","control"],style:["combo","flexible"],strengths:["squishy-targets","isolated-targets"]},
