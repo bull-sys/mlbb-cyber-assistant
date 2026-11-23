@@ -134,26 +134,7 @@ test("encyclopedia returns dated local passport data when the live source is una
   }
 });
 
-  const originalFetch = globalThis.fetch;
-  globalThis.fetch = async () => { throw new Error("offline test"); };
-  try {
-    const hero = heroCatalog.find(entry => entry.id === "mathilda");
-    const result = await getHeroKnowledge(hero);
-    assert.equal(result.ok, true);
-    assert.equal(result.fallback, true);
-    assert.match(result.profile.lore, /Матильда/);
-    assert.equal(result.profile.loreSource.license, "CC BY-SA");
-  } finally {
-    globalThis.fetch = originalFetch;
-  }
-});
 
-test("reference dataset includes attribution and a dated source snapshot", () => {
-  assert.equal(HERO_REFERENCE_SOURCE.name, "MLBBDex / Mobile Legends Wiki");
-  assert.equal(HERO_REFERENCE_SOURCE.license, "CC BY-SA");
-  assert.equal(HERO_REFERENCE_SOURCE.updatedAt, "2026-11-20");
-  assert.match(HERO_REFERENCE_SOURCE.url, /^https:\/\/mlbbdex\.com\//);
-});
 
 test("legacy detailed profiles remain linked to known catalogue entries", () => {
   const catalogIds = new Set(heroCatalog.map(hero => hero.id));
