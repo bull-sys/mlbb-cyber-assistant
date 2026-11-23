@@ -459,23 +459,23 @@ function encyStatNumber(value){
  const number=Number(value);
  return Number.isFinite(number)?number:null;
 }
-function encyStatCard(label,value,levelLabel){
+function encyStatCard(label,value,levelLabel,description){
  if(value===null||value===undefined)return "";
- return '<div class="ency-stat-chip"><small>'+esc(label)+(levelLabel?' · '+esc(levelLabel):"")+'</small><b>'+esc(String(value))+'</b></div>';
+ return '<div class="ency-stat-chip"><small>'+esc(label)+(levelLabel?' · '+esc(levelLabel):"")+'</small><b>'+esc(String(value))+'</b>'+(description?'<p>'+esc(description)+'</p>':"")+'</div>';
 }
 function renderEncyHeroRemoteProfile(remote){
  const host=$("encyHeroRemoteProfile");if(!host)return;
  const profile=remote?.profile||{},stats=profile.stats||{},ratings=profile.ratings||{};
  const growthStats=remote?.growthData?.stats||{};
  const statDefs=[
-  {key:"hp",label:"Здоровье",first:"hp1",last:"hp15"},
-  {key:"hpRegen",label:"Восстановление здоровья",first:"hp_regen1",last:"hp_regen15"},
-  {key:"mana",label:"Запас маны",first:"mana1",last:"mana15"},
-  {key:"manaRegen",label:"Восстановление маны",first:"mana_regen1",last:"mana_regen15"},
-  {key:"physicalAttack",label:"Физическая атака",first:"physical_atk1",last:"physical_atk15"},
-  {key:"physicalDefense",label:"Физическая защита",first:"physical_def1",last:"physical_def15"},
-  {key:"magicDefense",label:"Магическая защита",first:"magic_def1",last:"magic_def15"},
-  {key:"attackSpeed",label:"Скорость атаки",first:"atk_spd1",last:"atk_spd15"}
+  {key:"hp",label:"Здоровье",description:"Общий запас здоровья персонажа.",first:"hp1",last:"hp15"},
+  {key:"hpRegen",label:"Восстановление здоровья",description:"Сколько здоровья восстанавливается за единицу времени.",first:"hp_regen1",last:"hp_regen15"},
+  {key:"mana",label:"Запас маны",description:"Количество маны, доступное герою, если он использует этот ресурс.",first:"mana1",last:"mana15"},
+  {key:"manaRegen",label:"Восстановление маны",description:"Сколько маны восстанавливается за единицу времени.",first:"mana_regen1",last:"mana_regen15"},
+  {key:"physicalAttack",label:"Физическая атака",description:"Базовое значение физической атаки без дополнительных источников.",first:"physical_atk1",last:"physical_atk15"},
+  {key:"physicalDefense",label:"Физическая защита",description:"Показатель защиты от физического урона.",first:"physical_def1",last:"physical_def15"},
+  {key:"magicDefense",label:"Магическая защита",description:"Показатель защиты от магического урона.",first:"magic_def1",last:"magic_def15"},
+  {key:"attackSpeed",label:"Скорость атаки",description:"Базовая скорость выполнения обычных атак.",first:"atk_spd1",last:"atk_spd15"}
  ];
  const fmt=value=>Number(value).toLocaleString("ru-RU",{maximumFractionDigits:3});
  const graphs=[],base=[];
@@ -486,7 +486,7 @@ function renderEncyHeroRemoteProfile(remote){
   const perLevel=encyStatNumber(source.perLevel);
   if(first===null&&last===null)return "";
   if(first===null||last===null||(first===last&&perLevel===null)){
-   return encyStatCard(definition.label,first??last,first!==null?"уровень 1":"уровень 15");
+   return encyStatCard(definition.label,first??last,first!==null?"уровень 1":"уровень 15",definition.description);
   }
   let values=[],estimated=false,mode="";
   if(perLevel!==null&&first!==null){
@@ -514,7 +514,7 @@ function renderEncyHeroRemoteProfile(remote){
   const axis=[["1",22],["4",76],["8",149],["12",222],["15",278]].map(([label,pos])=>'<text x="'+pos+'" y="105" text-anchor="middle">'+label+'</text>').join("");
   const grid=[22,49,76].map(pos=>'<line x1="22" y1="'+pos+'" x2="278" y2="'+pos+'" class="ency-graph-grid"/>').join("");
   const delta=last-first;
-  return '<article class="ency-stat-graph"><div class="ency-stat-graph-head"><b>'+esc(definition.label)+'</b><span>'+esc(fmt(first))+' → '+esc(fmt(last))+'</span></div>'+
+  return '<article class="ency-stat-graph"><div class="ency-stat-graph-head"><b>'+esc(definition.label)+'</b><span>'+esc(fmt(first))+' → '+esc(fmt(last))+'</span></div><p class="ency-stat-graph-desc">'+esc(definition.description)+'</p>'+
    '<svg class="ency-stat-chart" viewBox="0 0 300 112" role="img" aria-label="'+esc(definition.label)+': уровень 1 — '+esc(fmt(first))+', уровень 15 — '+esc(fmt(last))+'">'+grid+
    '<polyline points="'+points+'" class="ency-graph-line '+(estimated?"estimated":"")+'"/>'+markers+axis+'</svg>'+
    '<div class="ency-stat-graph-foot"><span>Δ '+(delta>=0?"+":"")+esc(fmt(delta))+'</span><small>'+esc(mode)+'</small></div></article>';
@@ -524,10 +524,10 @@ function renderEncyHeroRemoteProfile(remote){
   if(result.includes("ency-stat-graph"))graphs.push(result);
   else if(result)base.push(result);
  }
- const staticDefs=[["Скорость передвижения","movement_spd"],["Дальность обычной атаки","basic_atk_range"]];
- for(const [label,key] of staticDefs){
+ const staticDefs=[["Скорость передвижения","movement_spd","Базовая скорость перемещения персонажа."],["Дальность обычной атаки","basic_atk_range","Дистанция, на которой доступна обычная атака."]];
+ for(const [label,key,description] of staticDefs){
   const value=encyStatNumber(stats[key])??encyStatNumber(growthStats[key]?.level1);
-  if(value!==null)base.push(encyStatCard(label,value,"постоянное значение"));
+  if(value!==null)base.push(encyStatCard(label,value,"постоянное значение",description));
  }
  const ratingNames={offense:"Атака",durability:"Живучесть",abilityEffects:"Эффекты умений",difficulty:"Сложность освоения"};
  const ratingValues=Object.entries(ratingNames).filter(([key])=>Number.isFinite(Number(ratings[key]))).map(([key,label])=>encyStatCard(label,ratings[key]+"/10","оценка справочника"));
