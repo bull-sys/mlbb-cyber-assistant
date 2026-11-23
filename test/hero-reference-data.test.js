@@ -81,6 +81,21 @@ test("every hero reference has traceable identity, classification and base stats
   }
 });
 
+test("offline fallback includes sourced lore for heroes in the local lore dataset", async () => {
+  const originalFetch = globalThis.fetch;
+  globalThis.fetch = async () => { throw new Error("offline test"); };
+  try {
+    const hero = heroCatalog.find(entry => entry.id === "mathilda");
+    const result = await getHeroKnowledge(hero);
+    assert.equal(result.ok, true);
+    assert.equal(result.fallback, true);
+    assert.match(result.profile.lore, /Матильда/);
+    assert.equal(result.profile.loreSource.license, "CC BY-SA");
+  } finally {
+    globalThis.fetch = originalFetch;
+  }
+});
+
 test("reference dataset includes attribution and a dated source snapshot", () => {
   assert.equal(HERO_REFERENCE_SOURCE.name, "MLBBDex / Mobile Legends Wiki");
   assert.equal(HERO_REFERENCE_SOURCE.license, "CC BY-SA");
@@ -106,8 +121,6 @@ test("encyclopedia returns dated local passport data when the live source is una
     assert.equal(result.fallback, true);
     assert.equal(result.profile.name, "Chang'e");
     assert.equal(result.profile.roles[0], "Маг");
-    assert.ok(result.profile.lore, "local lore is included in offline fallback");
-    assert.ok(result.profile.loreSource);
     assert.ok(result.profile.stats.hp1 > 0);
     assert.equal(result.source.license, "CC BY-SA");
     assert.equal(result.updatedAt, "2026-11-20");
