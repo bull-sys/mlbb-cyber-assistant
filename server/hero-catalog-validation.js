@@ -1,6 +1,6 @@
 const STATUS_VALUES = {
   identity: new Set(["pending_review", "user_confirmed", "source_verified"]),
-  localization: new Set(["pending_review", "user_confirmed", "client_verified"]),
+  localization: new Set(["pending_review", "user_confirmed", "client_verified", "source_verified"]),
   role: new Set(["pending_review", "verified"]),
   lanes: new Set(["pending_review", "verified"]),
   tacticalProfile: new Set(["missing", "partial", "complete"])
