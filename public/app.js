@@ -347,65 +347,51 @@ async function loadEncyHeroSkills(id,profile){
 function encySlug(value){
  return String(value||"").normalize("NFKD").replace(/[\\u0300-\\u036f]/gu,"").toLowerCase().replace(/&/g,"and").replace(/['’]/g,"").replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");
 }
-function renderEncyHeroCombos(groups){
- const host=$("encyHeroCombos");if(!host)return;
- if(!Array.isArray(groups)||!groups.length){
-  host.innerHTML='<p class="ency-unverified">Для этого героя пока не удалось получить подтверждённые игровые комбо. Не будем подменять их догадками.</p>';
-  return;
- }
- host.innerHTML=groups.map(group=>'<article class="ency-combo-card"><h4>'+esc(group.title||"Комбо")+'</h4>'+(group.steps?.length?'<ol>'+group.steps.map(step=>'<li>'+esc(step)+'</li>').join("")+'</ol>':"")+(group.explanation?'<p>'+esc(group.explanation)+'</p>':"")+'</article>').join("");
-}
 function renderEncyHeroRemoteProfile(remote){
- const host=$("encyHeroRemoteProfile");if(!host)return;
- const profile=remote?.profile||{},analysis=profile.analysis||{},ratings=profile.ratings||{};
- const rows=[];
- if(analysis.summary)rows.push('<p>'+esc(analysis.summary)+'</p>');
- if(analysis.analysis)rows.push('<p>'+esc(analysis.analysis)+'</p>');
- const strengths=Array.isArray(analysis.strengths)?analysis.strengths:[];
- const weaknesses=Array.isArray(analysis.weaknesses)?analysis.weaknesses:[];
- if(strengths.length)rows.push('<h4>Сильные стороны · оригинал источника</h4><ul>'+strengths.map(x=>'<li>'+esc(x)+'</li>').join("")+'</ul>');
- if(weaknesses.length)rows.push('<h4>Ограничения · оригинал источника</h4><ul>'+weaknesses.map(x=>'<li>'+esc(x)+'</li>').join("")+'</ul>');
- const strong=Array.isArray(analysis.strongAgainst)?analysis.strongAgainst:[];
- const weak=Array.isArray(analysis.weakAgainst)?analysis.weakAgainst:[];
- if(strong.length||weak.length)rows.push('<h4>Матчапы из базы</h4><p>Силен против: '+esc(strong.join(", ")||"нет данных")+'</p><p>Сложные соперники: '+esc(weak.join(", ")||"нет данных")+'</p>');
- const ratingNames={offense:"Атака",durability:"Живучесть",abilityEffects:"Эффекты навыков",difficulty:"Сложность"};
- const ratingHtml=Object.entries(ratingNames).filter(([key])=>Number.isFinite(Number(ratings[key]))).map(([key,label])=>'<span class="ency-rating-chip">'+esc(label)+': '+esc(String(ratings[key]))+'/10</span>').join("");
- if(ratingHtml)rows.push('<div class="ency-rating-row">'+ratingHtml+'</div>');
- if(profile.patch)rows.push('<small class="ency-data-credit">Патч источника: '+esc(String(profile.patch))+'</small>');
- if(remote?.source?.url)rows.push('<small class="ency-data-credit">Внешние данные: MLBBDex / Mobile Legends Wiki. Описания на языке оригинала помечены отдельно.</small>');
- host.innerHTML=rows.join("")||'<p class="ency-unverified">Внешний источник пока не содержит дополнительного тактического разбора этого героя.</p>';
+  const host=$("encyHeroRemoteProfile");if(!host)return;
+  const profile=remote?.profile||{},stats=profile.stats||{},ratings=profile.ratings||{};
+  const labels={hp:"Здоровье",hpRegen:"Восстановление здоровья",mana:"Мана",manaRegen:"Восстановление маны",physicalAttack:"Физическая атака",magicPower:"Магическая сила",physicalDefense:"Физическая защита",magicDefense:"Магическая защита",attackSpeed:"Скорость атаки",movementSpeed:"Скорость передвижения",attackRange:"Дальность атаки"};
+  const values=Object.entries(labels).filter(([key])=>stats[key]!==undefined&&stats[key]!==null).map(([key,label])=>'<div class="ency-stat-chip"><small>'+esc(label)+'</small><b>'+esc(String(stats[key]))+'</b></div>');
+  const ratingNames={offense:"Атака",durability:"Живучесть",abilityEffects:"Эффекты навыков",difficulty:"Сложность"};
+  const ratingValues=Object.entries(ratingNames).filter(([key])=>Number.isFinite(Number(ratings[key]))).map(([key,label])=>'<div class="ency-stat-chip"><small>'+esc(label)+'</small><b>'+esc(String(ratings[key]))+'/10</b></div>');
+  const sections=[];
+  if(values.length)sections.push('<h4>Базовые характеристики</h4><div class="ency-stat-grid">'+values.join("")+'</div>');
+  if(ratingValues.length)sections.push('<h4>Оценки из справочника</h4><div class="ency-stat-grid">'+ratingValues.join("")+'</div>');
+  if(profile.resource)sections.push('<p><b>Ресурс:</b> '+esc(String(profile.resource))+'</p>');
+  if(profile.range)sections.push('<p><b>Тип атаки:</b> '+esc(String(profile.range))+'</p>');
+  if(profile.patch)sections.push('<small class="ency-data-credit">Версия данных источника: '+esc(String(profile.patch))+'</small>');
+  if(remote?.source?.url)sections.push('<small class="ency-data-credit">Источник: MLBBDex / Mobile Legends Wiki. Изображения принадлежат правообладателям.</small>');
+  host.innerHTML=sections.join("")||'<p class="ency-unverified">Дополнительные базовые характеристики пока не опубликованы.</p>';
 }
 async function loadEncyHeroKnowledge(id){
- const request=++encyKnowledgeRequest;
- const combos=$("encyHeroCombos");
- try{
-  let remote=encyRemoteKnowledge.get(id);
-  if(!remote){remote=await $api("/hero-knowledge/"+encodeURIComponent(id));encyRemoteKnowledge.set(id,remote)}
-  if(request!==encyKnowledgeRequest||!$("encyHeroModal")||$("encyHeroModal").classList.contains("hidden"))return;
-  renderEncyHeroCombos(remote.combos);
-  renderEncyHeroRemoteProfile(remote);
-  const badge=$("encyHeroProfileBadge");if(badge&&remote.profile)badge.textContent="Данные героя загружены · тактика проверяется";
-  const portrait=remote.profile?.images?.portrait;
-  if(portrait){
-   const cover=$("encyHeroModalContent").querySelector(".ency-hero-cover");
-   const image=cover?.querySelector(":scope > img");
-   if(cover)cover.style.setProperty("--ency-portrait",'url("'+portrait.replace(/["\\\\]/g,"")+'")');
-   if(image){image.src=portrait;image.style.display=""}
-  }
-  const source=remote.source;
-  if(source?.url){
-   const credits=$("encyHeroModalContent").querySelector(".ency-profile-grid");
-   if(credits&&!credits.querySelector(".ency-remote-credit")){
-    const note=document.createElement("p");
-    note.className="ency-remote-credit";
-    note.textContent="Внешние данные: MLBBDex / Mobile Legends Wiki (CC BY-SA). Игровые изображения © Moonton.";
-    credits.append(note);
+  const request=++encyKnowledgeRequest;
+  try{
+   let remote=encyRemoteKnowledge.get(id);
+   if(!remote){remote=await $api("/hero-knowledge/"+encodeURIComponent(id));encyRemoteKnowledge.set(id,remote)}
+   if(request!==encyKnowledgeRequest||!$("encyHeroModal")||$("encyHeroModal").classList.contains("hidden"))return;
+   renderEncyHeroRemoteProfile(remote);
+   const badge=$("encyHeroProfileBadge");if(badge&&remote.profile)badge.textContent="Справочные данные загружены";
+   const portrait=remote.profile?.images?.portrait;
+   if(portrait){
+    const cover=$("encyHeroModalContent").querySelector(".ency-hero-cover");
+    const image=cover?.querySelector(":scope > img");
+    if(cover)cover.style.setProperty("--ency-portrait",'url("'+portrait+'")');
+    if(image){image.src=portrait;image.style.display=""}
    }
+   const source=remote.source;
+   if(source?.url){
+    const credits=$("encyHeroModalContent").querySelector(".ency-profile-grid");
+    if(credits&&!credits.querySelector(".ency-remote-credit")){
+     const note=document.createElement("p");
+     note.className="ency-remote-credit";
+     note.textContent="Источник данных: MLBBDex / Mobile Legends Wiki (CC BY-SA). Игровые изображения © Moonton.";
+     credits.append(note);
+    }
+   }
+  }catch(error){
+   if(request!==encyKnowledgeRequest)return;
+   const host=$("encyHeroRemoteProfile");if(host)host.innerHTML='<p class="ency-unverified">Не удалось загрузить характеристики. Попробуй позже.</p>';
   }
- }catch(error){
-  if(request!==encyKnowledgeRequest)return;
-  if(combos)combos.innerHTML='<p class="ency-unverified">Не удалось загрузить комбо. Повтори позже — неподтверждённые последовательности не показываем.</p>';
- }
 }
 function renderEncyHeroModal(id){
  const hero=(data.heroCatalog||[]).find(x=>x.id===id);
