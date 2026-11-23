@@ -563,3 +563,11 @@ body.ency-modal-open{overflow:hidden}
  .ency-info-visual{width:50px;height:50px;flex-basis:50px}
  .ency-combo-card{padding:10px}
 }
+
+/* Neutral hero reference stats */
+.ency-stat-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:10px 0 14px}
+.ency-stat-chip{min-width:0;padding:10px;border:1px solid rgba(190,143,215,.18);border-radius:10px;background:rgba(17,12,23,.72)}
+.ency-stat-chip small{display:block;color:#a99bb2;font-size:10px;line-height:1.35}
+.ency-stat-chip b{display:block;margin-top:4px;color:#f1e7f5;font-size:13px;font-variant-numeric:tabular-nums}
+.ency-remote-panel h4{margin:12px 0 7px;color:#dfb8ed;font-size:12px}
+@media(max-width:380px){.ency-stat-grid{gap:6px}.ency-stat-chip{padding:8px}}
