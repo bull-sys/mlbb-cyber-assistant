@@ -1,5 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
+import { readFile } from "node:fs/promises";
+import { Script } from "node:vm";
 import { parseHeroGrowthPage } from "../server/hero-growth-adapter.js";
 
 const helcurtFixture = `
@@ -35,4 +37,9 @@ test("returns a clear error for missing stat tables", () => {
   const result = parseHeroGrowthPage("<h2>Hero info</h2>", "hero");
   assert.equal(result.error, "Base stats section not found");
   assert.deepEqual(result.stats, {});
+});
+
+test("encyclopedia client script remains syntactically valid", async () => {
+  const app = await readFile(new URL("../public/app.js", import.meta.url), "utf8");
+  assert.doesNotThrow(() => new Script(app));
 });
