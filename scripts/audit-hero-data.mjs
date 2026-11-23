@@ -238,6 +238,38 @@ const growthStatusCounts = Object.fromEntries(GROWTH_KEYS.map(key => [
   }, {})
 ]));
 const parsedCount = growthResults.filter(result => result.status === "parsed").length;
+const normalizeLane = value => ({
+  "EXP Lane": "Exp", "Exp Lane": "Exp", "Mid Lane": "Mid", "Gold Lane": "Gold"
+})[value] || value;
+const catalogRoleMismatches = heroCatalog.filter(hero => {
+  const reference = localBySlug.get(hero.id);
+  return JSON.stringify(sorted(hero.role?.values || [])) !== JSON.stringify(sorted(reference?.roles.map(item => item.en) || []));
+}).map(hero => hero.id);
+const catalogLaneDifferences = heroCatalog.filter(hero => {
+  const reference = localBySlug.get(hero.id);
+  const catalogLanes = [
+    ...(hero.lanes?.primary ? [normalizeLane(hero.lanes.primary)] : []),
+    ...(hero.lanes?.flexible || []).map(normalizeLane)
+  ];
+  const referenceLanes = (reference?.lanes || []).map(item => item.en);
+  return JSON.stringify(sorted(catalogLanes)) !== JSON.stringify(sorted(referenceLanes));
+}).map(hero => ({
+  id: hero.id,
+  nameEn: hero.nameEn,
+  status: hero.lanes?.status || "unknown",
+  catalog: [
+    ...(hero.lanes?.primary ? [hero.lanes.primary] : []),
+    ...(hero.lanes?.flexible || [])
+  ],
+  reference: (localBySlug.get(hero.id)?.lanes || []).map(item => item.en)
+}));
+const catalogClassificationAudit = {
+  verifiedRoleCount: heroCatalog.filter(hero => hero.role?.status === "verified").length,
+  roleReferenceMismatches: catalogRoleMismatches,
+  verifiedLaneCount: heroCatalog.filter(hero => hero.lanes?.status === "verified").length,
+  pendingLaneIds: heroCatalog.filter(hero => hero.lanes?.status !== "verified").map(hero => hero.id),
+  laneDifferencesAgainstSingleLaneReference: catalogLaneDifferences
+};
 const pageProfiles = heroes.map(hero => ({ id: hero.id, nameEn: hero.nameEn, ...(hero.liveGrowth?.pageProfile || {}) }));
 const pageClassificationAudit = {
   parsedHeadings: pageProfiles.filter(item => item.status === "parsed").length,
@@ -274,6 +306,7 @@ const report = {
   referenceDifferenceCount: referenceDifferences.length,
   referenceDifferences,
   pageClassificationAudit,
+  catalogClassificationAudit,
   liveGrowth: {
     parsedPages: parsedCount,
     unavailableOrUnparsedPages: heroCatalog.length - parsedCount,
@@ -288,6 +321,7 @@ console.log(JSON.stringify({
   upstream: report.pinnedUpstreamCount,
   referenceDifferenceCount: report.referenceDifferenceCount,
   pageClassificationAudit: report.pageClassificationAudit,
+  catalogClassificationAudit: report.catalogClassificationAudit,
   parsedGrowthPages: report.liveGrowth.parsedPages,
   unavailableOrUnparsedPages: report.liveGrowth.unavailableOrUnparsedPages,
   identityStatusCounts: report.identityStatusCounts,
