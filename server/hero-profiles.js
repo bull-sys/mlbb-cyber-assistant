@@ -2055,7 +2055,7 @@ export const heroProfiles = [
     confidence: "partial"
   },
   {
-    id: "cici", names: { ru: "Чичи", en: "Cici", aliases: [] },
+    id: "cici", names: { ru: "Сиси", en: "Cici", aliases: [] },
     roles: ["Боец"], lanes: ["EXP-линия"],
     combat: { damage: "physical", range: "ranged", mobility: "high", burst: "medium", dps: "high", durability: "medium", sustain: "high", control: "slow_and_link", engage: "medium", disengage: "high", waveClear: "medium", objectiveDamage: "medium" },
     mechanics: [
@@ -2400,7 +2400,7 @@ export const heroProfiles = [
     patch:{version:HERO_DB_PATCH,notes:["Thickened Blood, Law and Order, Ring of Punishment и Glorious Pathway сверены по MLBB Knowledge и MLBBHub на 2026-11-22.","Отдельно отмечено расходование здоровья вместо маны и постоянное потребление маны вторым навыком.","Роум и EXP варианты рассматриваются отдельно; профессиональный VOD-разбор текущего патча pending."],reviewedAt:"2026-11-22"},confidence:"partial"
   },
   {
-    id:"irithel",names:{ru:"Иритель",en:"Irithel",aliases:[]},roles:["Стрелок"],lanes:["Золотая линия"],
+    id:"irithel",names:{ru:"Иритэль",en:"Irithel",aliases:[]},roles:["Стрелок"],lanes:["Золотая линия"],
     combat:{damage:"physical",range:"ranged",mobility:"high",burst:"medium",dps:"very_high",durability:"low",sustain:"medium",control:"slow",engage:"medium",disengage:"high",waveClear:"high",objectiveDamage:"high"},
     mechanics:[
       "Пассивная способность «Сердце джунглей» позволяет Иритель атаковать во время движения. Перемещение накапливает заряды, а следующая базовая атака выпускает дополнительный снаряд.",
