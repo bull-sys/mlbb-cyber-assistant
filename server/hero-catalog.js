@@ -30,9 +30,9 @@ const catalogEntry = (id, nameEn, displayNameRu, {
     : (reference?.roles || []).map(value => value.en);
   const sourceLanes = (reference?.lanes || []).map(value => value.en);
   const resolvedPrimaryLane = primaryLane || sourceLanes[0] || null;
-  const resolvedFlexibleLanes = flexibleLanes.length
-    ? flexibleLanes
-    : (primaryLane ? [] : sourceLanes.slice(1));
+  const resolvedFlexibleLanes = [...new Set(
+    flexibleLanes.length ? flexibleLanes : (primaryLane ? [] : sourceLanes.slice(1))
+  )].filter(lane => lane !== resolvedPrimaryLane);
   return {
     id,
     nameEn,
