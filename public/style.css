@@ -844,3 +844,20 @@ details.ency-info-card.visual.emblem[open]{
 
 .ency-stat-graph-desc{margin:4px 0 0!important;color:#a99bad!important;font-size:9px!important;line-height:1.4!important}
 .ency-stat-chip p{margin:4px 0 0;color:#9f93a7;font-size:9px;line-height:1.4}
+
+
+/* Tactical passport: show verified hero identity, draft context and fight plan */
+.ency-tactical-overview{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin-top:10px}
+.ency-tactical-block{min-width:0;padding:12px;border:1px solid rgba(190,126,211,.22);border-radius:12px;background:rgba(13,10,19,.72)}
+.ency-tactical-block h4{margin:0 0 8px;color:#e7b2ed;font-size:11px;letter-spacing:.02em}
+.ency-tactical-block p{margin:0;color:#d2c6d7;font-size:11px;line-height:1.6}
+.ency-tactical-block ul,.ency-tactical-details ol{margin:0;padding-left:17px}
+.ency-tactical-block li,.ency-tactical-details li{color:#cfc3d5;font-size:11px;line-height:1.55}
+.ency-tactical-block li+li,.ency-tactical-details li+li{margin-top:6px}
+.ency-tactical-block:first-child{grid-column:1/-1;border-color:rgba(218,143,231,.4);background:linear-gradient(120deg,rgba(104,48,120,.18),rgba(13,10,19,.8))}
+.ency-tactical-details{grid-column:1/-1;padding:11px 12px;border:1px solid rgba(190,126,211,.2);border-radius:11px;background:rgba(13,10,19,.55)}
+.ency-tactical-details summary{color:#e4b0eb;font-size:11px;font-weight:800;cursor:pointer}
+.ency-tactical-details ol{margin-top:10px;padding-left:20px}
+.ency-tactical-details li{color:#cfc3d5;font-size:11px;line-height:1.55}
+.ency-tactical-details li+li{margin-top:7px}
+@media(max-width:650px){.ency-tactical-overview{grid-template-columns:1fr;gap:7px}.ency-tactical-block:first-child,.ency-tactical-details{grid-column:1}}
