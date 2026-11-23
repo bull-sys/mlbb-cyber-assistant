@@ -307,7 +307,9 @@ function renderEncy(){
  const talents=talentSource.map(x=>{
   const slug=x.slug||itemAssetSlug(x.name||x.nameEn);
   const fallback=data.talents.find(t=>itemAssetKey(t.name)===itemAssetKey(x.name)||itemAssetKey(t.name)===itemAssetKey(TALENT_LOCAL_NAMES[slug]||""));
-  return {...x,name:TALENT_LOCAL_NAMES[slug]||x.name||fallback?.name||"Талант",description:x.description||x.summary||fallback?.description||"Описание таланта уточняется.",category:"Талант эмблемы",type:"talent",image:x.image||x.icon||(TALENT_LOCAL_NAMES[slug]?"https://mlbbdex.com/visuels/talents/"+slug+".webp":null)};
+  const tier=Number(x.tier||fallback?.tier||0);
+  const category=tier===1?"Атрибут · уровень 1":tier===2?"Талант · уровень 2":tier===3?"Ключевой талант · уровень 3":"Талант эмблемы";
+  return {...x,tier,name:TALENT_LOCAL_NAMES[slug]||x.name||fallback?.name||"Талант",description:x.description||x.summary||fallback?.description||"Описание таланта уточняется.",category,type:"talent",image:x.image||x.icon||(TALENT_LOCAL_NAMES[slug]?"https://mlbbdex.com/visuels/talents/"+slug+".webp":null)};
  });
  const emblemSource=encyRemoteAssets?.emblems?.length?encyRemoteAssets.emblems:data.emblems;
  const emblems=emblemSource.map(x=>{
@@ -322,7 +324,7 @@ function renderEncy(){
   const lanes=[hero.lanes?.primary,...(hero.lanes?.flexible||[])].filter(Boolean).join(", ")||"Линия уточняется";
   return {name,category:hero.nameEn||hero.id,type:"hero",hero,profile,roles,lanes};
  });
- const groups=[{type:"hero",title:"Герои",entries:heroEntries},{type:"item",title:"Предметы",entries:items},{type:"emblem",title:"Эмблемы",entries:emblems},{type:"talent",title:"Таланты и перки",entries:talents}];
+ const groups=[{type:"hero",title:"Герои",entries:heroEntries},{type:"item",title:"Предметы",entries:items},{type:"emblem",title:"Эмблемы",entries:emblems},{type:"talent",title:"Таланты и атрибуты",entries:talents}];
  const selected=groups.filter(group=>encyFilter==="all"||group.type===encyFilter);
  let html="";
  for(const group of selected){
