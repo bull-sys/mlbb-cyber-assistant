@@ -355,17 +355,26 @@ function encyTransliterate(value){
  return String(value||"").replace(/[^a-zA-Z0-9 -]/g," ").replace(/[A-Z]/g,ch=>ch.toLowerCase()).replace(/shch|sch|yo|zh|kh|ts|ch|sh|yu|ya|[a-z]/g,part=>map[part]||part).replace(/\s+/g," ").trim();
 }
 function encyRussianSkillName(value){
- const text=String(value||"").trim();
- return /[А-Яа-яЁё]/.test(text)?text:encyTransliterate(text)||"Название не указано";
+ return String(value||"").trim()||"Название не указано";
 }
 function encyRussianMeta(value){
- return String(value||"").replace(/\bCooldown\b/gi,"Перезарядка").replace(/\bMana\b/gi,"Мана").replace(/\bEnergy\b/gi,"Энергия").replace(/\bCost\b/gi,"Расход").replace(/\bsec(?:onds?)?\b/gi,"сек.").replace(/\bsecond\b/gi,"сек.").replace(/\s+/g," ").trim();
+ return String(value||"")
+  .replace(/\bCooldown\b/gi,"Перезарядка")
+  .replace(/\bCD\b/gi,"Перезарядка")
+  .replace(/\bMana Cost\b/gi,"Расход маны")
+  .replace(/\bEnergy Cost\b/gi,"Расход энергии")
+  .replace(/\bMana\b/gi,"Мана")
+  .replace(/\bEnergy\b/gi,"Энергия")
+  .replace(/\bCost\b/gi,"Расход")
+  .replace(/\bsec(?:onds?)?\b/gi,"сек.")
+  .replace(/\bsecond\b/gi,"сек.")
+  .replace(/(\d+(?:\.\d+)?)\s*s\b/gi,"$1 сек.")
+  .replace(/\s+/g," ").trim();
 }
 function encySkillRussianDescription(skill){
- const text=String(skill?.description||"").trim();
- if(!text)return {text:"Описание этого умения пока не опубликовано в проверенном источнике.",language:"unknown"};
- if(/[А-Яа-яЁё]/.test(text))return {text,language:"ru"};
- return {text:"Русский перевод описания ещё не прошёл проверку. Чтобы не показывать неточный перевод, оригинальный текст здесь скрыт.",language:"pending"};
+ const text=String(skill?.descriptionRu||"").trim();
+ if(text)return {text,language:"ru"};
+ return {text:"Русское описание пока не найдено в источнике. Мы не подставляем английский текст и не выдаём машинную транслитерацию за перевод.",language:"pending"};
 }
 function encySkillFallback(){
  return '<p class="ency-unverified">Проверенные описания умений временно недоступны. Попробуй открыть профиль позже.</p>';
@@ -382,9 +391,11 @@ async function loadEncyHeroSkills(id){
    const desc=encySkillRussianDescription(skill);
    const icon=skill.iconUrl?'<img src="'+esc(skill.iconUrl)+'" alt="" loading="lazy" decoding="async" onerror="this.remove()">':'<span>✦</span>';
    const meta=skill.cooldownAndCost?'<small class="ency-skill-meta">'+esc(encyRussianMeta(skill.cooldownAndCost))+'</small>':'';
-   const language=desc.language==="pending"?' <span class="ency-skill-language">ПЕРЕВОД УТОЧНЯЕТСЯ</span>':"";
-   return '<article class="ency-skill-row"><div class="ency-skill-icon">'+icon+'</div><div class="ency-skill-content"><div class="ency-skill-heading"><span class="ency-skill-slot">'+encySkillSlotLabel(index)+'</span><b>'+esc(encyRussianSkillName(skill.name))+'</b>'+language+'</div><p>'+esc(desc.text)+'</p>'+meta+'</div></article>';
-  }).join("")+'<p class="ency-skill-credit">Названия и параметры приведены по данным игрового клиента. Тексты без подтверждённого русского перевода не публикуются как готовые.</p>';
+   const original=skill.nameRu&&skill.nameRu!==skill.name?'<small class="ency-skill-original">Оригинальное название: '+esc(skill.name)+'</small>':'';
+   const language=desc.language==="pending"?' <span class="ency-skill-language pending">ПЕРЕВОД УТОЧНЯЕТСЯ</span>':' <span class="ency-skill-language">РУССКОЕ ОПИСАНИЕ</span>';
+   const title=skill.nameRu||skill.name||"Название не указано";
+   return '<article class="ency-skill-row"><div class="ency-skill-icon">'+icon+'</div><div class="ency-skill-content"><div class="ency-skill-heading"><span class="ency-skill-slot">'+encySkillSlotLabel(index)+'</span><b>'+esc(encyRussianSkillName(title))+'</b>'+language+'</div>'+original+'<p>'+esc(desc.text)+'</p>'+meta+'</div></article>';
+  }).join("")+'<p class="ency-skill-credit">Описания: русская локализация базы MLBBDex на основе Mobile Legends Wiki. Перевод автоматический, поэтому отдельные игровые термины ещё могут требовать редакторской правки. Оригинальные названия умений сохранены для точной сверки.</p>';
  }catch(error){
   if(requestId!==encySkillRequestId||!host.isConnected)return;
   host.innerHTML=encySkillFallback();
