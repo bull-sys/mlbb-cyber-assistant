@@ -506,7 +506,7 @@ async function loadEncyHeroKnowledge(id){
    const currentHero=(data.heroCatalog||[]).find(hero=>hero.id===id);
    renderEncyHeroDescription(remote,currentHero);
    renderEncyHeroRemoteProfile(remote);
-   const badge=$("encyHeroProfileBadge");if(badge&&remote.profile)badge.textContent="Справочные данные загружены";
+   const badge=$("encyHeroProfileBadge");if(badge&&remote.profile)badge.textContent=remote.fallback?"Резервная база · 20.11.2026":"Справочные данные загружены";
    const portrait=remote.profile?.images?.portrait;
    if(portrait){
     const cover=$("encyHeroModalContent").querySelector(".ency-hero-cover");
@@ -520,7 +520,7 @@ async function loadEncyHeroKnowledge(id){
     if(credits&&!credits.querySelector(".ency-remote-credit")){
      const note=document.createElement("p");
      note.className="ency-remote-credit";
-     note.textContent="Источник данных: MLBBDex / Mobile Legends Wiki (CC BY-SA). Игровые изображения © Moonton.";
+     note.textContent=remote.fallback?"Резервные базовые данные: MLBBDex / Mobile Legends Wiki (CC BY-SA), снимок от 20.11.2026. История и часть сведений требуют подключения к источнику.":"Источник данных: MLBBDex / Mobile Legends Wiki (CC BY-SA). Игровые изображения © Moonton.";
      credits.append(note);
     }
    }
