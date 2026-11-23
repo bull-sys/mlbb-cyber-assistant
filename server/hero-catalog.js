@@ -705,7 +705,31 @@ export const heroCatalog = [
   }),
   catalogEntry("mathilda", "Mathilda", "Матильда", {
     identityStatus: "pending_review",
-    localizationStatus: "pending_review"
+    localizationStatus: "pending_review",
+    roleValues: ["Support", "Assassin"],
+    roleStatus: "verified",
+    primaryLane: "Roam",
+    flexibleLanes: [],
+    laneStatus: "verified",
+    tacticalProfileStatus: "partial",
+    research: {
+      checkedAt: "2026-11-23",
+      roleAndLaneSources: [
+        "https://mlbb.io/en/hero/mathilda",
+        "https://mlbb-knowledge.vercel.app/heroes/102"
+      ],
+      mechanicsSources: [
+        "https://liquipedia.net/mobilelegends/Mathilda",
+        "https://mlbb.io/en/hero/mathilda",
+        "https://mlbb-knowledge.vercel.app/heroes/102"
+      ],
+      rankedMetaSources: [
+        "https://mlbb.io/en/hero/mathilda",
+        "https://mlbbhub.com/ru/heroes/mathilda"
+      ],
+      competitiveReviewStatus: "pending",
+      method: "Support/Assassin and Roam classification cross-checked against MLBB.io and MLBB Knowledge. Skill mechanics compared across Liquipedia, MLBB.io and MLBB Knowledge. Ranked build references are kept separate from professional draft evidence; current-patch professional VOD review remains pending."
+    }
   }),
   catalogEntry("melissa", "Melissa", "Мелисса", {
     identityStatus: "pending_review",
