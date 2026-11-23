@@ -283,27 +283,13 @@ function encyHeroPortrait(hero){
 const EMBLEM_IMAGE_KEYS={
  "Общая":"common","Танк":"tank","Убийцы":"assassin","Мага":"mage","Бойца":"fighter","Стрелка":"marksman","Поддержки":"support"
 };
-const ITEM_IMAGE_NAMES={
- "Господство льда":"Dominance Ice","Щит Афины":"Athena's Shield","Сияющая броня":"Radiant Armor",
- "Древняя кираса":"Antique Cuirass","Шипованная броня":"Blade Armor","Бессмертие":"Immortality",
- "Зимняя корона":"Winter Crown","Топор войны":"War Axe","Пылающий жезл":"Glowing Wand",
- "Ожерелье заточения":"Necklace of Durance","Трезубец":"Sea Halberd","Злобный рык":"Malefic Roar",
- "Палочка гения":"Genius Wand","Божественный меч":"Divine Glaive","Ветер природы":"Wind of Nature",
- "Ярость берсерка":"Berserker's Fury","Клинок отчаяния":"Blade of Despair"
-};
 function itemAssetKey(value){
  return String(value||"").normalize("NFKD").toLowerCase().replace(/[^a-z0-9]+/g,"");
 }
 function itemAssetSlug(value){
  return String(value||"").normalize("NFKD").replace(/[\u0300-\u036f]/gu,"").toLowerCase().replace(/&/g,"and").replace(/['’]/g,"").replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");
 }
-function encyItemImage(item){
- const wanted=ITEM_IMAGE_NAMES[item?.name]||item?.name||"";
- const key=itemAssetKey(wanted);
- const assets=encyRemoteAssets?.items||[];
- const match=assets.find(asset=>[asset.name,asset.nameEn,asset.title,asset.slug,asset.id,asset.key].some(value=>itemAssetKey(value)===key));
- return match?.image||match?.icon||item?.image||("https://mlbbdex.com/visuels/objets/"+itemAssetSlug(match?.slug||wanted)+".webp");
-}
+function encyItemImage(item){return item?.image||null;}
 const EMBLEM_LOCAL_NAMES={tank:"Эмблема танка",fighter:"Эмблема бойца",assassin:"Эмблема убийцы",mage:"Эмблема мага",marksman:"Эмблема стрелка",support:"Эмблема поддержки"};
 const EMBLEM_LOCAL_DESCRIPTIONS={tank:"Эмблема с защитными характеристиками.",fighter:"Эмблема с характеристиками бойца.",assassin:"Эмблема с физическими атакующими характеристиками.",mage:"Эмблема с магическими характеристиками.",marksman:"Эмблема с характеристиками стрелка.",support:"Эмблема с характеристиками поддержки."};
 const TALENT_LOCAL_NAMES={
