@@ -184,7 +184,7 @@ $("heroPicker").querySelector(".picker-tabs").onclick=e=>{const b=e.target.close
 $("pickerRoles").onclick=e=>{const b=e.target.closest("[data-picker-role]");if(!b)return;pickerRoleFilter=b.dataset.pickerRole;renderHeroPicker()};
 
 document.addEventListener("click",e=>{let b=e.target.closest("[data-side]");if(b){(b.dataset.side==="enemies"?enemies:allies).splice(+b.dataset.i,1);drawTeams();saveDraft()}});
-$("nav").onclick=e=>{let b=e.target.closest("[data-page]");if(!b)return;document.querySelectorAll("nav button").forEach(x=>x.classList.toggle("active",x===b));document.querySelectorAll(".page").forEach(x=>x.classList.toggle("hidden",x.id!=="page-"+b.dataset.page))};
+document.addEventListener("click",e=>{const b=e.target.closest("[data-page]");if(!b)return;const page=b.dataset.page;if(!document.getElementById("page-"+page))return;document.querySelectorAll("#nav [data-page]").forEach(x=>x.classList.toggle("active",x.dataset.page===page));document.querySelectorAll(".page").forEach(x=>x.classList.toggle("hidden",x.id!=="page-"+page));window.scrollTo({top:0,behavior:"smooth"})});
 $("testDraft").onclick=()=>{enemies=["Тигрил","Эудора","Кэрри","Диррот","Атлас"];allies=["Ангела","Линг","Теризла"];$("lane").value="Лес";$("myHero").value="Хелкарт";drawTeams();saveDraft();runDraft()};
 $("analyze").onclick=runDraft;$("lane").addEventListener("change",saveDraft);$("myHero").addEventListener("change",()=>{$("myHeroChoice").textContent=$("myHero").value?draftHeroLabel($("myHero").value):"Не выбран";saveDraft()});
 async function runDraft(){
