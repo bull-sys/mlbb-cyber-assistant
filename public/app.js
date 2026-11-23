@@ -348,13 +348,27 @@ function renderEncy(){
 }
 let encySkillRequestId=0;
 function encySkillSlotLabel(index){
- return ["ПАССИВКА","НАВЫК 1","НАВЫК 2","УЛЬТИМЕЙТ"][index]||("ДОПОЛНИТЕЛЬНАЯ СПОСОБНОСТЬ "+(index-3));
+ return ["ПАССИВНОЕ УМЕНИЕ","УМЕНИЕ 1","УМЕНИЕ 2","УЛЬТИМЕЙТ"][index]||("ДОПОЛНИТЕЛЬНОЕ УМЕНИЕ "+(index-3));
+}
+function encyTransliterate(value){
+ const map={"shch":"щ","sch":"щ","yo":"ё","zh":"ж","kh":"х","ts":"ц","ch":"ч","sh":"ш","yu":"ю","ya":"я","a":"а","b":"б","c":"к","d":"д","e":"е","f":"ф","g":"г","h":"х","i":"и","j":"дж","k":"к","l":"л","m":"м","n":"н","o":"о","p":"п","q":"к","r":"р","s":"с","t":"т","u":"у","v":"в","w":"в","x":"кс","y":"й","z":"з"};
+ return String(value||"").replace(/[^a-zA-Z0-9 -]/g," ").replace(/[A-Z]/g,ch=>ch.toLowerCase()).replace(/shch|sch|yo|zh|kh|ts|ch|sh|yu|ya|[a-z]/g,part=>map[part]||part).replace(/\s+/g," ").trim();
+}
+function encyRussianSkillName(value){
+ const text=String(value||"").trim();
+ return /[А-Яа-яЁё]/.test(text)?text:encyTransliterate(text)||"Название не указано";
+}
+function encyRussianMeta(value){
+ return String(value||"").replace(/\bCooldown\b/gi,"Перезарядка").replace(/\bMana\b/gi,"Мана").replace(/\bEnergy\b/gi,"Энергия").replace(/\bCost\b/gi,"Расход").replace(/\bsec(?:onds?)?\b/gi,"сек.").replace(/\bsecond\b/gi,"сек.").replace(/\s+/g," ").trim();
 }
 function encySkillRussianDescription(skill){
-  return skill.description?{text:skill.description,language:"en"}:{text:"Описание навыка пока не опубликовано в проверенном источнике.",language:"unknown"};
+ const text=String(skill?.description||"").trim();
+ if(!text)return {text:"Описание этого умения пока не опубликовано в проверенном источнике.",language:"unknown"};
+ if(/[А-Яа-яЁё]/.test(text))return {text,language:"ru"};
+ return {text:"Русский перевод описания ещё не прошёл проверку. Чтобы не показывать неточный перевод, оригинальный текст здесь скрыт.",language:"pending"};
 }
 function encySkillFallback(){
-  return '<p class="ency-unverified">Проверенные описания навыков временно недоступны. Попробуй открыть профиль позже.</p>';
+ return '<p class="ency-unverified">Проверенные описания умений временно недоступны. Попробуй открыть профиль позже.</p>';
 }
 async function loadEncyHeroSkills(id){
  const requestId=++encySkillRequestId;
@@ -363,17 +377,14 @@ async function loadEncyHeroSkills(id){
  try{
   const result=await $api("/hero-skills/"+encodeURIComponent(id));
   if(requestId!==encySkillRequestId||!host.isConnected)return;
-  if(!result.skills?.length){
-   host.innerHTML=encySkillFallback();
-   return;
-  }
+  if(!result.skills?.length){host.innerHTML=encySkillFallback();return;}
   host.innerHTML=result.skills.map((skill,index)=>{
    const desc=encySkillRussianDescription(skill);
    const icon=skill.iconUrl?'<img src="'+esc(skill.iconUrl)+'" alt="" loading="lazy" decoding="async" onerror="this.remove()">':'<span>✦</span>';
-   const meta=skill.cooldownAndCost?'<small class="ency-skill-meta">'+esc(skill.cooldownAndCost)+'</small>':'';
-   const lang=desc.language==="en"?' <span class="ency-skill-language">ОРИГИНАЛ EN</span>':"";
-   return '<article class="ency-skill-row"><div class="ency-skill-icon">'+icon+'</div><div class="ency-skill-content"><div class="ency-skill-heading"><span class="ency-skill-slot">'+encySkillSlotLabel(index)+'</span><b>'+esc(skill.name)+'</b>'+lang+'</div><p>'+esc(desc.text)+'</p>'+meta+'</div></article>';
-  }).join("")+'<p class="ency-skill-credit">Иконки навыков загружены из данных игрового клиента Moonton. Изображения и игровые материалы принадлежат правообладателю.</p>';
+   const meta=skill.cooldownAndCost?'<small class="ency-skill-meta">'+esc(encyRussianMeta(skill.cooldownAndCost))+'</small>':'';
+   const language=desc.language==="pending"?' <span class="ency-skill-language">ПЕРЕВОД УТОЧНЯЕТСЯ</span>':"";
+   return '<article class="ency-skill-row"><div class="ency-skill-icon">'+icon+'</div><div class="ency-skill-content"><div class="ency-skill-heading"><span class="ency-skill-slot">'+encySkillSlotLabel(index)+'</span><b>'+esc(encyRussianSkillName(skill.name))+'</b>'+language+'</div><p>'+esc(desc.text)+'</p>'+meta+'</div></article>';
+  }).join("")+'<p class="ency-skill-credit">Названия и параметры приведены по данным игрового клиента. Тексты без подтверждённого русского перевода не публикуются как готовые.</p>';
  }catch(error){
   if(requestId!==encySkillRequestId||!host.isConnected)return;
   host.innerHTML=encySkillFallback();
@@ -382,42 +393,91 @@ async function loadEncyHeroSkills(id){
 function encySlug(value){
  return String(value||"").normalize("NFKD").replace(/[\\u0300-\\u036f]/gu,"").toLowerCase().replace(/&/g,"and").replace(/['’]/g,"").replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");
 }
+function encyHeroRussianLabel(value){
+ const map={
+  Tank:"Танк",Fighter:"Боец",Assassin:"Убийца",Mage:"Маг",Marksman:"Стрелок",Support:"Поддержка",
+  "EXP Lane":"Линия опыта","Gold Lane":"Линия золота","Mid Lane":"Центральная линия",Jungle:"Лес",Roam:"Роум",
+  Initiator:"Инициатор","Crowd Control":"Контроль",Burst:"Взрывной урон",Poke:"Дальний урон",Reap:"Добивание",Charge:"Рывок",Damage:"Урон",Guard:"Защита",
+  Physical:"Физический",Magic:"Магический",Mixed:"Смешанный",Melee:"Ближний бой",Ranged:"Дальний бой",Hybrid:"Гибридный",
+  Mana:"Мана",Energy:"Энергия",None:"Не использует отдельный ресурс",
+  "Land of Dawn":"Земля Рассвета"
+ };
+ return map[value]||(/^[A-Za-z0-9 -]+$/.test(String(value||""))?encyTransliterate(value):String(value||""));
+}
+function encyRussianTextOrNote(value,note){
+ const text=String(value||"").trim();
+ return text&&/[А-Яа-яЁё]/.test(text)?text:note;
+}
 function renderEncyHeroDescription(remote,hero){
  const host=$("encyHeroDescription");if(!host)return;
  const profile=remote?.profile||{};
- const roles=(profile.roles||hero?.role?.values||[]).map(value=>({Tank:"Танк",Fighter:"Боец",Assassin:"Убийца",Mage:"Маг",Marksman:"Стрелок",Support:"Поддержка"}[value]||value));
- const lanes=(profile.lanes||[hero?.lanes?.primary,...(hero?.lanes?.flexible||[])].filter(Boolean)).map(value=>({"EXP Lane":"Опыт","Gold Lane":"Золото","Mid Lane":"Мид",Jungle:"Лес",Roam:"Роум"}[value]||value));
- const specialties=(profile.specialties||[]).map(value=>({Initiator:"Инициатор","Crowd Control":"Контроль",Burst:"Взрывной урон",Poke:"Дальний урон",Reap:"Добивание",Charge:"Рывок",Damage:"Урон",Support:"Поддержка",Guard:"Защита"}[value]||value));
- const title=profile.title||"";
- const region=profile.region||"";
+ const roles=(profile.roles||hero?.role?.values||[]).map(encyHeroRussianLabel);
+ const lanes=(profile.lanes||[hero?.lanes?.primary,...(hero?.lanes?.flexible||[])].filter(Boolean)).map(encyHeroRussianLabel);
+ const specialties=(profile.specialties||[]).map(encyHeroRussianLabel);
+ const title=encyRussianTextOrNote(profile.title,"");
+ const region=encyHeroRussianLabel(profile.region||"");
  const release=profile.release||"";
- const bio=profile.bio||profile.lore||profile.story||profile.description||"";
- const damageType=({Physical:"физический",Magic:"магический",Mixed:"смешанный"}[profile.damageType]||profile.damageType||"");
- const attackType=({Melee:"ближний бой",Ranged:"дальний бой",Hybrid:"гибридный"}[profile.attackType]||profile.attackType||"");
- const overview=[title?"Титул: "+title:"",roles.length?"Класс: "+roles.join(", "):"",specialties.length?"Особенности: "+specialties.join(", "):"",damageType?"Тип урона: "+damageType:"",attackType?"Тип атаки: "+attackType:""].filter(Boolean).join(". ")+".";
- const facts=[];
- if(lanes.length)facts.push("Линия: "+lanes.join(", "));
- if(region)facts.push("Регион: "+region);
- if(release)facts.push("Выход в игре: "+release);
- host.innerHTML='<p class="ency-hero-bio">'+esc(String(bio||overview||"Справочные данные персонажа пока уточняются."))+'</p>'+
-  (facts.length?'<div class="ency-hero-facts">'+facts.map(fact=>'<span>'+esc(fact)+'</span>').join("")+'</div>':"");
+ const lore=encyRussianTextOrNote(profile.lore||profile.story||profile.bio||profile.description,"История персонажа пока не представлена на русском языке в проверенном источнике.");
+ const damageType=encyHeroRussianLabel(profile.damageType||"");
+ const attackType=encyHeroRussianLabel(profile.attackType||"");
+ const resource=encyHeroRussianLabel(profile.resource||"");
+ const passport=[];
+ if(roles.length)passport.push(["Класс",roles.join(", ")]);
+ if(lanes.length)passport.push(["Линии",lanes.join(", ")]);
+ if(specialties.length)passport.push(["Специализация",specialties.join(", ")]);
+ if(damageType)passport.push(["Тип урона",damageType]);
+ if(attackType)passport.push(["Тип атаки",attackType]);
+ if(resource)passport.push(["Ресурс",resource]);
+ if(region)passport.push(["Регион",region]);
+ if(title)passport.push(["Титул",title]);
+ if(release)passport.push(["Дата выхода",release]);
+ const uniqueness=specialties.length
+  ?"В справочнике отмечены особенности: "+specialties.join(", ").toLocaleLowerCase("ru")+"."
+  :"Подтверждённое краткое описание отличительных особенностей пока не найдено.";
+ host.innerHTML=
+  '<div class="ency-hero-passport">'+passport.map(([label,value])=>'<div class="ency-passport-cell"><small>'+esc(label)+'</small><b>'+esc(value)+'</b></div>').join("")+'</div>'+
+  '<div class="ency-hero-identity"><h4>Чем выделяется персонаж</h4><p>'+esc(uniqueness)+'</p></div>'+
+  '<div class="ency-hero-lore"><h4>История персонажа</h4><p>'+esc(lore)+'</p></div>';
+}
+function encyStatNumber(value){
+ if(value===undefined||value===null||value==="")return null;
+ const number=Number(value);
+ return Number.isFinite(number)?number:null;
+}
+function encyStatCard(label,value,levelLabel){
+ if(value===null||value===undefined)return "";
+ return '<div class="ency-stat-chip"><small>'+esc(label)+(levelLabel?' · '+esc(levelLabel):"")+'</small><b>'+esc(String(value))+'</b></div>';
 }
 function renderEncyHeroRemoteProfile(remote){
-  const host=$("encyHeroRemoteProfile");if(!host)return;
-  const profile=remote?.profile||{},stats=profile.stats||{},ratings=profile.ratings||{};
-  const labels={hp1:"Здоровье · ур. 1",hp15:"Здоровье · ур. 15",hp_regen1:"Регенерация HP",mana1:"Мана",mana_regen1:"Регенерация маны",physical_atk1:"Физическая атака",physical_def1:"Физическая защита",magic_def1:"Магическая защита",atk_spd1:"Скорость атаки",movement_spd:"Скорость передвижения",basic_atk_range:"Дальность базовой атаки"};
-  const values=Object.entries(labels).filter(([key])=>stats[key]!==undefined&&stats[key]!==null).map(([key,label])=>'<div class="ency-stat-chip"><small>'+esc(label)+'</small><b>'+esc(String(stats[key]))+'</b></div>');
-  const ratingNames={offense:"Атака",durability:"Живучесть",abilityEffects:"Эффекты навыков",difficulty:"Сложность"};
-  const ratingValues=Object.entries(ratingNames).filter(([key])=>Number.isFinite(Number(ratings[key]))).map(([key,label])=>'<div class="ency-stat-chip"><small>'+esc(label)+'</small><b>'+esc(String(ratings[key]))+'/10</b></div>');
-  const sections=[];
-  if(values.length)sections.push('<h4>Базовые характеристики</h4><div class="ency-stat-grid">'+values.join("")+'</div>');
-  if(ratingValues.length)sections.push('<h4>Оценки из справочника</h4><div class="ency-stat-grid">'+ratingValues.join("")+'</div>');
-  if(profile.resource)sections.push('<p><b>Ресурс:</b> '+esc(String(profile.resource))+'</p>');
-  if(profile.attackType)sections.push('<p><b>Тип базовой атаки:</b> '+esc(String(profile.attackType))+'</p>');
-  if(profile.damageType)sections.push('<p><b>Тип урона:</b> '+esc(String(profile.damageType))+'</p>');
-  if(profile.patch)sections.push('<small class="ency-data-credit">Версия данных источника: '+esc(String(profile.patch))+'</small>');
-  if(remote?.source?.url)sections.push('<small class="ency-data-credit">Источник: MLBBDex / Mobile Legends Wiki. Изображения принадлежат правообладателям.</small>');
-  host.innerHTML=sections.join("")||'<p class="ency-unverified">Дополнительные базовые характеристики пока не опубликованы.</p>';
+ const host=$("encyHeroRemoteProfile");if(!host)return;
+ const profile=remote?.profile||{},stats=profile.stats||{},ratings=profile.ratings||{};
+ const statDefs=[
+  ["hp","Здоровье","hp1","hp15"],["physical_atk","Физическая атака","physical_atk1","physical_atk15"],
+  ["physical_def","Физическая защита","physical_def1","physical_def15"],["magic_def","Магическая защита","magic_def1","magic_def15"],
+  ["hp_regen","Восстановление здоровья","hp_regen1","hp_regen15"],["mana","Запас маны","mana1","mana15"],
+  ["mana_regen","Восстановление маны","mana_regen1","mana_regen15"],["atk_spd","Скорость атаки","atk_spd1","atk_spd15"],
+  ["movement_spd","Скорость передвижения","movement_spd",null],["basic_atk_range","Дальность обычной атаки","basic_atk_range",null]
+ ];
+ const growth=[],base=[];
+ for(const [,label,firstKey,lastKey] of statDefs){
+  const first=encyStatNumber(stats[firstKey]),last=lastKey?encyStatNumber(stats[lastKey]):null;
+  if(first===null&&last===null)continue;
+  if(first!==null&&last!==null&&lastKey!==firstKey){
+   const delta=last-first;
+   growth.push('<div class="ency-growth-card"><div><small>'+esc(label)+'</small><b>'+esc(String(first))+' <span>→</span> '+esc(String(last))+'</b></div><em>'+ (delta>=0?"+":"")+esc(String(Number(delta.toFixed(2))))+'</em></div>');
+  }else{
+   base.push(encyStatCard(label,first!==null?first:last,"базовое значение"));
+  }
+ }
+ const ratingNames={offense:"Атака",durability:"Живучесть",abilityEffects:"Эффекты умений",difficulty:"Сложность освоения"};
+ const ratingValues=Object.entries(ratingNames).filter(([key])=>Number.isFinite(Number(ratings[key]))).map(([key,label])=>encyStatCard(label,ratings[key]+"/10","оценка справочника"));
+ const sections=[];
+ if(growth.length)sections.push('<h4>Изменение характеристик · уровень 1 → 15</h4><div class="ency-growth-grid">'+growth.join("")+'</div>');
+ if(base.length)sections.push('<h4>Другие базовые параметры</h4><div class="ency-stat-grid">'+base.join("")+'</div>');
+ if(ratingValues.length)sections.push('<h4>Оценки справочника</h4><div class="ency-stat-grid">'+ratingValues.join("")+'</div>');
+ if(profile.patch)sections.push('<small class="ency-data-credit">Версия данных: '+esc(String(profile.patch))+'</small>');
+ if(remote?.source?.url)sections.push('<small class="ency-data-credit">Источник характеристик: MLBBDex / Mobile Legends Wiki. Изображения принадлежат правообладателям.</small>');
+ host.innerHTML=sections.join("")||'<p class="ency-unverified">Характеристики этого персонажа пока не опубликованы в проверенном источнике.</p>';
 }
 async function loadEncyHeroKnowledge(id){
   const request=++encyKnowledgeRequest;
@@ -459,12 +519,12 @@ function renderEncyHeroModal(id){
  const sources=Array.isArray(p?.sources)?p.sources:[];
   const reviewed=p?.patch?.reviewedAt||hero.research?.checkedAt||"Дата проверки не указана";
   const status=p?(p.confidence==="complete"?"Полный справочный профиль":"Частичный справочный профиль"):"Справочный профиль загружается";
-  root.innerHTML='<div class="ency-hero-cover" style="--ency-portrait:url(&quot;'+url+'&quot;)"><img src="'+url+'" alt="'+esc(name)+'" onerror="this.style.display=\'none\'"><div class="ency-hero-heading"><small>HERO DATABASE / '+esc(hero.nameEn)+'</small><h2 id="encyHeroTitle">'+esc(name)+'</h2><p>'+esc(hero.nameEn)+' · '+esc((hero.role?.values||[]).join(", ")||"Роль уточняется")+' · '+esc([hero.lanes?.primary,...(hero.lanes?.flexible||[])].filter(Boolean).join(" / ")||"Линия уточняется")+'</p><span id="encyHeroProfileBadge" class="ency-profile-badge">'+esc(status)+'</span></div></div>'+
+  root.innerHTML='<div class="ency-hero-cover" style="--ency-portrait:url(&quot;'+url+'&quot;)"><img src="'+url+'" alt="'+esc(name)+'" onerror="this.style.display=\'none\'"><div class="ency-hero-heading"><small>БАЗА ГЕРОЕВ / '+esc(hero.nameEn)+'</small><h2 id="encyHeroTitle">'+esc(name)+'</h2><p>'+esc(hero.nameEn)+' · '+esc((hero.role?.values||[]).map(encyHeroRussianLabel).join(", ")||"Роль уточняется")+' · '+esc([hero.lanes?.primary,...(hero.lanes?.flexible||[])].filter(Boolean).map(encyHeroRussianLabel).join(" / ")||"Линия уточняется")+'</p><span id="encyHeroProfileBadge" class="ency-profile-badge">'+esc(status)+'</span></div></div>'+
   '<div class="ency-profile-grid">'+
-  '<section class="ency-profile-section wide"><h3>О персонаже</h3><div id="encyHeroDescription" class="ency-hero-description"><p class="ency-unverified">Загружаем описание персонажа...</p></div></section>'+
-  '<section class="ency-profile-section wide"><h3>Пассивка и навыки</h3><div id="encyHeroSkills" class="ency-skill-list"><p class="ency-unverified">Загружаем описания навыков...</p></div></section>'+
-  '<section class="ency-profile-section wide"><h3>Базовые характеристики</h3><div id="encyHeroRemoteProfile" class="ency-remote-panel"><p class="ency-unverified">Загружаем характеристики...</p></div></section>'+
-  '<section class="ency-profile-section wide"><h3>Проверка данных</h3><p>Статус: '+esc(status)+' · Последняя отметка: '+esc(reviewed)+'. Сведения могут изменяться после обновлений игры.</p>'+(sources.length?'<div class="ency-source-list">'+sources.map((source,i)=>'<a href="'+esc(source)+'" target="_blank" rel="noopener">Источник '+(i+1)+' ↗</a>').join("")+'</div>':"")+'</section></div>';
+  '<section class="ency-profile-section wide"><h3>Паспорт персонажа</h3><div id="encyHeroDescription" class="ency-hero-description"><p class="ency-unverified">Загружаем описание персонажа...</p></div></section>'+
+  '<section class="ency-profile-section wide"><h3>Умения персонажа</h3><div id="encyHeroSkills" class="ency-skill-list"><p class="ency-unverified">Загружаем описания навыков...</p></div></section>'+
+  '<section class="ency-profile-section wide"><h3>Характеристики и развитие</h3><div id="encyHeroRemoteProfile" class="ency-remote-panel"><p class="ency-unverified">Загружаем характеристики...</p></div></section>'+
+  '<section class="ency-profile-section wide"><h3>Проверка данных</h3><p>Статус: '+esc(status)+' · Последняя проверка: '+esc(reviewed)+'. Данные могут меняться после обновлений игры.</p>'+(sources.length?'<div class="ency-source-list">'+sources.map((source,i)=>'<a href="'+esc(source)+'" target="_blank" rel="noopener">Источник '+(i+1)+' ↗</a>').join("")+'</div>':"")+'</section></div>';
   $("encyHeroModal").classList.remove("hidden");
  renderEncyHeroDescription(null,hero);
  document.body.classList.add("ency-modal-open");
