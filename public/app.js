@@ -355,6 +355,26 @@ function renderEncyHeroCombos(groups){
  }
  host.innerHTML=groups.map(group=>'<article class="ency-combo-card"><h4>'+esc(group.title||"Комбо")+'</h4>'+(group.steps?.length?'<ol>'+group.steps.map(step=>'<li>'+esc(step)+'</li>').join("")+'</ol>':"")+(group.explanation?'<p>'+esc(group.explanation)+'</p>':"")+'</article>').join("");
 }
+function renderEncyHeroRemoteProfile(remote){
+ const host=$("encyHeroRemoteProfile");if(!host)return;
+ const profile=remote?.profile||{},analysis=profile.analysis||{},ratings=profile.ratings||{};
+ const rows=[];
+ if(analysis.summary)rows.push('<p>'+esc(analysis.summary)+'</p>');
+ if(analysis.analysis)rows.push('<p>'+esc(analysis.analysis)+'</p>');
+ const strengths=Array.isArray(analysis.strengths)?analysis.strengths:[];
+ const weaknesses=Array.isArray(analysis.weaknesses)?analysis.weaknesses:[];
+ if(strengths.length)rows.push('<h4>Сильные стороны · оригинал источника</h4><ul>'+strengths.map(x=>'<li>'+esc(x)+'</li>').join("")+'</ul>');
+ if(weaknesses.length)rows.push('<h4>Ограничения · оригинал источника</h4><ul>'+weaknesses.map(x=>'<li>'+esc(x)+'</li>').join("")+'</ul>');
+ const strong=Array.isArray(analysis.strongAgainst)?analysis.strongAgainst:[];
+ const weak=Array.isArray(analysis.weakAgainst)?analysis.weakAgainst:[];
+ if(strong.length||weak.length)rows.push('<h4>Матчапы из базы</h4><p>Силен против: '+esc(strong.join(", ")||"нет данных")+'</p><p>Сложные соперники: '+esc(weak.join(", ")||"нет данных")+'</p>');
+ const ratingNames={offense:"Атака",durability:"Живучесть",abilityEffects:"Эффекты навыков",difficulty:"Сложность"};
+ const ratingHtml=Object.entries(ratingNames).filter(([key])=>Number.isFinite(Number(ratings[key]))).map(([key,label])=>'<span class="ency-rating-chip">'+esc(label)+': '+esc(String(ratings[key]))+'/10</span>').join("");
+ if(ratingHtml)rows.push('<div class="ency-rating-row">'+ratingHtml+'</div>');
+ if(profile.patch)rows.push('<small class="ency-data-credit">Патч источника: '+esc(String(profile.patch))+'</small>');
+ if(remote?.source?.url)rows.push('<small class="ency-data-credit">Внешние данные: MLBBDex / Mobile Legends Wiki. Описания на языке оригинала помечены отдельно.</small>');
+ host.innerHTML=rows.join("")||'<p class="ency-unverified">Внешний источник пока не содержит дополнительного тактического разбора этого героя.</p>';
+}
 async function loadEncyHeroKnowledge(id){
  const request=++encyKnowledgeRequest;
  const combos=$("encyHeroCombos");
@@ -363,6 +383,8 @@ async function loadEncyHeroKnowledge(id){
   if(!remote){remote=await $api("/hero-knowledge/"+encodeURIComponent(id));encyRemoteKnowledge.set(id,remote)}
   if(request!==encyKnowledgeRequest||!$("encyHeroModal")||$("encyHeroModal").classList.contains("hidden"))return;
   renderEncyHeroCombos(remote.combos);
+  renderEncyHeroRemoteProfile(remote);
+  const badge=$("encyHeroProfileBadge");if(badge&&remote.profile)badge.textContent="Данные героя загружены · тактика проверяется";
   const portrait=remote.profile?.images?.portrait;
   if(portrait){
    const cover=$("encyHeroModalContent").querySelector(".ency-hero-cover");
@@ -395,10 +417,11 @@ function renderEncyHeroModal(id){
  const reviewed=p?.patch?.reviewedAt||hero.research?.checkedAt||"Дата проверки не указана";
  const status=p?(p.confidence==="complete"?"Полный профиль":"Частичный профиль"):"Профиль не загружен";
  const mechanics=p?.mechanics||[];
- root.innerHTML='<div class="ency-hero-cover" style="--ency-portrait:url(&quot;'+url+'&quot;)"><img src="'+url+'" alt="'+esc(name)+'" onerror="this.style.display=\'none\'"><div class="ency-hero-heading"><small>HERO DATABASE / '+esc(hero.nameEn)+'</small><h2 id="encyHeroTitle">'+esc(name)+'</h2><p>'+esc(hero.nameEn)+' · '+esc((hero.role?.values||[]).join(", ")||"Роль уточняется")+' · '+esc([hero.lanes?.primary,...(hero.lanes?.flexible||[])].filter(Boolean).join(" / ")||"Линия уточняется")+'</p><span class="ency-profile-badge">'+esc(status)+'</span></div></div>'+
+ root.innerHTML='<div class="ency-hero-cover" style="--ency-portrait:url(&quot;'+url+'&quot;)"><img src="'+url+'" alt="'+esc(name)+'" onerror="this.style.display=\'none\'"><div class="ency-hero-heading"><small>HERO DATABASE / '+esc(hero.nameEn)+'</small><h2 id="encyHeroTitle">'+esc(name)+'</h2><p>'+esc(hero.nameEn)+' · '+esc((hero.role?.values||[]).join(", ")||"Роль уточняется")+' · '+esc([hero.lanes?.primary,...(hero.lanes?.flexible||[])].filter(Boolean).join(" / ")||"Линия уточняется")+'</p><span id="encyHeroProfileBadge" class="ency-profile-badge">'+esc(status)+'</span></div></div>'+
  '<div class="ency-profile-grid">'+
  '<section class="ency-profile-section wide"><h3>Тактика и стиль игры</h3><p>'+esc(p?.teamfight?.preferredPlan||"Рекомендации по стилю игры пока не подтверждены.")+'</p></section>'+
  '<section class="ency-profile-section wide"><h3>Пассивка и навыки</h3><div id="encyHeroSkills" class="ency-skill-list"><p class="ency-unverified">Загружаем изображения навыков и описания...</p></div></section>'+
+ '<section class="ency-profile-section wide"><h3>Дополнительные данные героя</h3><div id="encyHeroRemoteProfile" class="ency-remote-panel"><p class="ency-unverified">Загружаем характеристики и тактическую сводку...</p></div></section>'+
  '<section class="ency-profile-section"><h3>Сильные стороны</h3>'+list(p?.strengths)+'</section>'+
  '<section class="ency-profile-section"><h3>Слабые стороны</h3>'+list(p?.weaknesses)+'</section>'+
  '<section class="ency-profile-section"><h3>Кого контрит</h3>'+list(p?.matchups?.strongAgainst)+'</section>'+
