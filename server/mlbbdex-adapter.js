@@ -1,4 +1,5 @@
 import { heroReferenceData, HERO_REFERENCE_SOURCE } from "./hero-reference-data.js";
+import { getHeroGrowthData } from "./hero-growth-adapter.js";
 
 const BASE = "https://mlbbdex.com";
 const TTL = 6 * 60 * 60 * 1000;
@@ -74,12 +75,14 @@ function staticHeroKnowledge(hero, slug) {
 export async function getHeroKnowledge(hero) {
   const slug = slugify(hero?.id || hero?.nameEn);
   if (!slug) return { ok: false, error: "Неизвестный герой" };
+  const growthPromise = getHeroGrowthData(hero);
   try {
     const profilePayload = await cachedJson("hero:" + slug, BASE + "/api/v1/heroes/" + encodeURIComponent(slug));
+    const growthData = await growthPromise;
     const profile = profilePayload?.data || null;
     if (!profile) {
       const fallback = staticHeroKnowledge(hero, slug);
-      return fallback || { ok: false, error: "Профиль героя отсутствует в источнике." };
+      return fallback ? { ...fallback, growthData } : { ok: false, error: "Профиль героя отсутствует в источнике.", growthData };
     }
     const images = profile?.images || {};
     const { analysis: _analysis, builds: _builds, ...neutralProfile } = profile;
@@ -126,11 +129,13 @@ export async function getHeroKnowledge(hero) {
       source: profilePayload?.source || HERO_REFERENCE_SOURCE,
       updatedAt: new Date().toISOString(),
       dataPatch: profile?.patch || null,
-      fallback: false
+      fallback: false,
+      growthData
     };
   } catch (error) {
+    const growthData = await growthPromise;
     const fallback = staticHeroKnowledge(hero, slug);
-    if (fallback) return { ...fallback, detail: String(error?.message || error).slice(0, 160) };
+    if (fallback) return { ...fallback, growthData, detail: String(error?.message || error).slice(0, 160) };
     return { ok: false, error: "Не удалось получить профиль героя.", detail: String(error?.message || error).slice(0, 160) };
   }
 }
