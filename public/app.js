@@ -377,7 +377,7 @@ function encySkillRussianDescription(skill){
  return {text:"Русское описание пока не найдено в источнике. Мы не подставляем английский текст и не выдаём машинную транслитерацию за перевод.",language:"pending"};
 }
 function encySkillFallback(){
- return '<p class="ency-unverified">Проверенные описания умений временно недоступны. Попробуй открыть профиль позже.</p>';
+ return '<p class="ency-unverified">Не удалось загрузить данные об умениях. Попробуй открыть профиль позже.</p>';
 }
 async function loadEncyHeroSkills(id){
  const requestId=++encySkillRequestId;
