@@ -12,17 +12,15 @@ test("Helcurt state name keeps its original term until Russian localization is v
   assert.equal(value, "Хелкарт remains in Prowler state.");
 });
 
-test("31 previously missing heroes have sourced Russian lore summaries", () => {
-  const expectedIds = [
-    "mathilda", "melissa", "minsitthar", "moskov", "natalia", "natan", "novaria",
-    "aamon", "alice", "angela", "odette", "phoveus", "popol-and-kupa", "ruby",
-    "selena", "silvanna", "sora", "uranus", "vale", "valentina", "vexana",
-    "wanwan", "x-borg", "yi-sun-shin", "yin", "yu-zhong", "yve", "zetian",
-    "zhask", "zhuxin", "zilong"
-  ];
-  assert.equal(heroLoreData.length, 31);
-  assert.deepEqual(heroLoreData.map(item => item.id).sort(), [...expectedIds].sort());
+test("all 133 heroes have sourced Russian lore summaries", () => {
+  assert.equal(heroLoreData.length, 133);
+  assert.equal(new Set(heroLoreData.map(item => item.id)).size, 133);
+  assert.deepEqual(
+    heroLoreData.map(item => item.id).sort(),
+    heroCatalog.map(item => item.id).sort()
+  );
   assert.equal(HERO_LORE_SOURCE.license, "CC BY-SA");
+  assert.equal(HERO_LORE_SOURCE.revision, "92f0fe94e4226ab6057db25711c4d65b3ca12130");
   for (const entry of heroLoreData) {
     assert.ok(entry.summary.length >= 100, entry.id + ": summary is substantive");
     assert.ok(!/TODO|lorem ipsum|placeholder/iu.test(entry.summary), entry.id + ": no placeholder");
@@ -87,7 +85,69 @@ test("every hero reference has traceable identity, classification and base stats
   }
 });
 
-test("offline fallback includes sourced lore for heroes in the local lore dataset", async () => {
+test("offline fallback provides lore for every hero in the catalogue", async () => {
+  const originalFetch = globalThis.fetch;
+  globalThis.fetch = async () => { throw new Error("offline test"); };
+  try {
+    for (const hero of heroCatalog) {
+      const result = await getHeroKnowledge(hero);
+      assert.equal(result.ok, true, hero.id + ": offline profile");
+      assert.equal(result.fallback, true, hero.id + ": fallback flag");
+      assert.ok(result.profile.lore?.length >= 100, hero.id + ": offline lore");
+      assert.equal(result.profile.loreSource.revision, HERO_LORE_SOURCE.revision, hero.id + ": lore attribution");
+    }
+  } finally {
+    globalThis.fetch = originalFetch;
+  }
+});
+
+  const originalFetch = globalThis.fetch;
+  globalThis.fetch = async () => { throw new Error("offline test"); };
+  try {
+    const hero = heroCatalog.find(entry => entry.id === "mathilda");
+    const result = await getHeroKnowledge(hero);
+    assert.equal(result.ok, true);
+    assert.equal(result.fallback, true);
+    assert.match(result.profile.lore, /Матильда/);
+    assert.equal(result.profile.loreSource.license, "CC BY-SA");
+  } finally {
+    globalThis.fetch = originalFetch;
+  }
+});
+
+test("reference dataset includes attribution and a dated source snapshot", () => {
+  assert.equal(HERO_REFERENCE_SOURCE.name, "MLBBDex / Mobile Legends Wiki");
+  assert.equal(HERO_REFERENCE_SOURCE.license, "CC BY-SA");
+  assert.equal(HERO_REFERENCE_SOURCE.updatedAt, "2026-11-20");
+  assert.match(HERO_REFERENCE_SOURCE.url, /^https:\/\/mlbbdex\.com\//);
+});
+
+test("legacy detailed profiles remain linked to known catalogue entries", () => {
+  const catalogIds = new Set(heroCatalog.map(hero => hero.id));
+  assert.equal(heroProfiles.length, 102);
+  for (const profile of heroProfiles) {
+    assert.ok(catalogIds.has(profile.id), "profile without catalogue entry: " + profile.id);
+  }
+});
+
+test("encyclopedia returns dated local passport data when the live source is unavailable", async () => {
+  const originalFetch = globalThis.fetch;
+  globalThis.fetch = async () => { throw new Error("offline test"); };
+  try {
+    const hero = heroCatalog.find(entry => entry.id === "chang-e");
+    const result = await getHeroKnowledge(hero);
+    assert.equal(result.ok, true);
+    assert.equal(result.fallback, true);
+    assert.equal(result.profile.name, "Chang'e");
+    assert.equal(result.profile.roles[0], "Маг");
+    assert.ok(result.profile.stats.hp1 > 0);
+    assert.equal(result.source.license, "CC BY-SA");
+    assert.equal(result.updatedAt, "2026-11-20");
+  } finally {
+    globalThis.fetch = originalFetch;
+  }
+});
+
   const originalFetch = globalThis.fetch;
   globalThis.fetch = async () => { throw new Error("offline test"); };
   try {
