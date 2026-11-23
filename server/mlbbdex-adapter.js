@@ -13,12 +13,14 @@ async function cachedJson(key, url) {
 }
 
 const slugify = value => String(value || "")
-  .normalize("NFKD").replace(/[\\u0300-\\u036f]/gu, "")
+  .normalize("NFKD").replace(/[\u0300-\u036f]/gu, "")
   .toLowerCase().replace(/&/g, "and").replace(/['’]/g, "")
   .replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
 
 function absoluteImage(value) {
   if (!value) return null;
+  if (typeof value === "object") value = value.url || value.src || value.href || null;
+  if (typeof value !== "string") return null;
   try {
     const url = new URL(value, BASE);
     return url.protocol === "https:" && (url.hostname === "mlbbdex.com" || url.hostname.endsWith(".mlbbdex.com")) ? url.href : null;
@@ -27,14 +29,14 @@ function absoluteImage(value) {
 
 function stripHtml(value) {
   return String(value || "")
-    .replace(/<script[\\s\\S]*?<\\/script>/giu, " ")
-    .replace(/<style[\\s\\S]*?<\\/style>/giu, " ")
+    .replace(/<script[\s\S]*?<\/script>/giu, " ")
+    .replace(/<style[\s\S]*?<\/style>/giu, " ")
     .replace(/<[^>]+>/gu, " ")
     .replace(/&nbsp;/giu, " ").replace(/&amp;/giu, "&")
     .replace(/&quot;/giu, '"').replace(/&#39;/giu, "'")
-    .replace(/&#(\\d+);/gu, (_, n) => String.fromCodePoint(Number(n)))
+    .replace(/&#(\d+);/gu, (_, n) => String.fromCodePoint(Number(n)))
     .replace(/&lt;/giu, "<").replace(/&gt;/giu, ">")
-    .replace(/\\s+/gu, " ").trim();
+    .replace(/\s+/gu, " ").trim();
 }
 
 export async function getHeroKnowledge(hero) {
@@ -69,7 +71,7 @@ async function getTalentAssets() {
     const response = await fetch(BASE + "/ru/emblems", { headers: { "user-agent": "Mozilla/5.0 MLBB-Cyber-Assistant" }, signal: AbortSignal.timeout(12000) });
     if (!response.ok) return [];
     const html = await response.text();
-    const matches = [...html.matchAll(/(?:src|data-src)="([^"]*(?:visuels\\/talents\\/|visuels%2Ftalents%2F)([^"/?%]+)(?:\\.webp|%2Ewebp)[^"]*)"/giu)];
+    const matches = [...html.matchAll(/(?:src|data-src)="([^"]*(?:visuels\/talents\/|visuels%2Ftalents%2F)([^"/?%]+)(?:\.webp|%2Ewebp)[^"]*)"/giu)];
     const unique = new Map();
     for (const match of matches) {
       const slug = match[2];
