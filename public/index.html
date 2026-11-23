@@ -25,7 +25,22 @@
 <section id="page-team" class="page hidden"><div class="card"><small>MODULE 03 / TEAM FINDER</small><h2>Твоя анкета</h2><div class="two"><div><label>Мейн-герой</label><select id="profileHero"></select></div><div><label>Роль</label><select id="profileRole"></select></div><div><label>Ранг</label><select id="profileRank"></select></div><div><label>Стиль</label><select id="profileStyle"></select></div></div><label>Игровой ID (необязательно)</label><input id="gameId" placeholder="123456789 (1234)"><label>О себе</label><input id="bio" maxlength="240" placeholder="Когда играешь, чего ищешь..."><button id="saveProfile" class="btn">Сохранить анкету</button><p id="profileStatus" class="hint"></p></div><div class="card"><h2>Найти тиммейта</h2><div class="two"><div><label>Фильтр героя</label><select id="filterHero"></select></div><div><label>Фильтр роли</label><select id="filterRole"></select></div><div><label>Фильтр ранга</label><select id="filterRank"></select></div><div><label>Фильтр стиля</label><select id="filterStyle"></select></div></div><div class="row"><button id="findDuo" class="btn">Найти идеальное дуо</button><button id="searchPlayers" class="btn secondary">Все совпадения</button></div><div id="players" class="playerlist"></div></div><div class="card"><h2>Взаимные совпадения</h2><button id="loadMatches" class="btn secondary">Обновить матчи</button><div id="matches"></div></div></section>
 <section id="page-ency" class="page hidden"><div class="card"><small>KNOWLEDGE DATABASE</small><h2>Энциклопедия</h2><input id="encySearch" placeholder="Поиск героя, предмета, таланта, эмблемы..."><div id="encyFilters" class="chips"><button class="chip active" data-filter="all">Всё</button><button class="chip" data-filter="hero">Герои</button><button class="chip" data-filter="item">Предметы</button><button class="chip" data-filter="talent">Таланты</button><button class="chip" data-filter="emblem">Эмблемы</button></div><div id="encyList" class="ency"></div><p class="hint">Каталог героев включает записи с разным уровнем проверки. Статусы показывают, какие данные ещё требуют подтверждения; наличие героя в каталоге не означает, что его контрпики и тактика уже поддерживаются анализатором драфта.</p></div></section>
 </main><footer>FAN-MADE · NOT AFFILIATED WITH MOONTON · <button id="logout" class="link hidden">Выйти</button></footer></div>
-<script src="/app.js?v=20261123-5" onerror="window.__MLBB_SCRIPT_LOAD_FAILED=true"></script><script>
+<script>
+(()=> {
+ const send=(kind,message="",line=0,column=0,file="")=>{
+  try{
+   const payload={kind:String(kind).slice(0,40),message:String(message).slice(0,240),line:Number(line)||0,column:Number(column)||0,file:String(file).split("?")[0].split("/").pop().slice(0,80),build:"20261123-diag1",stage:window.__MLBB_APP_DIAGNOSTICS?.stage||"before-app"};
+   const body=JSON.stringify(payload);
+   if(navigator.sendBeacon)navigator.sendBeacon("/api/diagnostics",new Blob([body],{type:"application/json"}));
+   else fetch("/api/diagnostics",{method:"POST",headers:{"Content-Type":"application/json"},body,keepalive:true}).catch(()=>{});
+  }catch{}
+ };
+ window.__MLBB_REPORT_DIAG=send;
+ window.addEventListener("error",e=>send("runtime-error",e.message,e.lineno,e.colno,e.filename));
+ window.addEventListener("unhandledrejection",e=>send("unhandled-rejection",e.reason?.message||e.reason||"Promise rejected"));
+})();
+</script>
+<script src="/app.js?v=20261123-6" onerror="window.__MLBB_SCRIPT_LOAD_FAILED=true;window.__MLBB_REPORT_DIAG?.('script-load-error','app.js failed to load')"></script><script>
 (()=> {
  let pointer="нет",click="нет",panel=null,stateText="ожидаю запуска";
  const update=()=>{
