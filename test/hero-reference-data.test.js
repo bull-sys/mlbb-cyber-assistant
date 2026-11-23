@@ -29,7 +29,11 @@ test("every hero reference has traceable identity, classification and base stats
     assert.ok(hero.stats.physical_def1 !== undefined, hero.id + ": physical defense");
     assert.ok(hero.stats.magic_def1 !== undefined, hero.id + ": magic defense");
     assert.ok(hero.stats.movement_spd !== undefined, hero.id + ": movement speed");
-    for (const value of Object.values(hero.stats)) {
+    for (const [key, value] of Object.entries(hero.stats)) {
+      if (key === "basic_atk_range" && typeof value === "string") {
+        assert.ok(value.trim(), hero.id + ": non-empty conditional attack range label");
+        continue;
+      }
       assert.equal(typeof value, "number", hero.id + ": numeric stat values");
       assert.ok(Number.isFinite(value), hero.id + ": finite stat values");
     }
