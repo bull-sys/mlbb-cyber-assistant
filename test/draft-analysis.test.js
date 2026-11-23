@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
 import { heroes, items } from "../server/data.js";
+import { heroProfiles } from "../server/hero-profiles.js";
 
 // Keep production code untouched: load the local analyze() declaration from
 // server/index.js and evaluate only that function with the real catalogue.
@@ -98,7 +99,7 @@ if (serverSource.slice(analyzeEnd, endpointStart).trim() !== "") {
 const analyzeSource = serverSource.slice(analyzeStart, analyzeEnd);
 let analyze;
 try {
-  analyze = new Function("heroes", "items", `${analyzeSource}\nreturn analyze;`)(heroes, items);
+  analyze = new Function("heroes", "items", "heroProfiles", `${analyzeSource}\nreturn analyze;`)(heroes, items, heroProfiles);
 } catch (error) {
   throw new Error(`Draft analysis tests could not compile the complete analyze() function from server/index.js: ${error.message}`, { cause: error });
 }
@@ -226,4 +227,15 @@ test("equal counter scores retain catalogue order", () => {
 
   assert.equal(result.counters[0].score, result.counters[1].score);
   assert.deepEqual(result.counters.map(candidate => candidate.name), ["Бруно", "Грейнджер"]);
+});
+
+test("counter-picks include profile-specific identity, strength, and caution", () => {
+  const result = run({ lane: "Золото", enemies: ["Эйдора"] });
+  assert.ok(result.counters.length > 0);
+  for (const candidate of result.counters) {
+    assert.ok(candidate.profileEvidence, candidate.name + " profile evidence");
+    assert.ok(candidate.profileEvidence.identity, candidate.name + " identity");
+    assert.ok(candidate.profileEvidence.strength, candidate.name + " strength");
+    assert.ok(candidate.profileEvidence.caution, candidate.name + " caution");
+  }
 });
