@@ -15,8 +15,7 @@ const STAT_KEYS = [
 ];
 const GROWTH_KEYS = [
   "hp", "hpRegen", "mana", "manaRegen", "physicalAttack",
-  "physicalDefense", "magicDefense", "attackSpeed", "movementSpeed",
-  "basicAttackRange"
+  "physicalDefense", "magicDefense", "attackSpeed", "movementSpeed"
 ];
 
 const numeric = value => {
@@ -217,6 +216,7 @@ const report = {
   growthConcurrency: CONCURRENCY,
   upstreamError,
   referenceFieldCoverage: sourceCoverage,
+  staticBasicAttackRangeCoverage: sourceCoverage.basic_atk_range,
   identityStatusCounts: countStatuses("identity"),
   roleStatusCounts: countStatuses("role"),
   laneStatusCounts: countStatuses("lanes"),
