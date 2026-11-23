@@ -3154,7 +3154,6 @@ export const heroProfiles = [
     },
     confidence: "partial"
   },
-,
   {
     id: "melissa",
     names: { ru: "Мелисса", en: "Melissa", aliases: [] },
