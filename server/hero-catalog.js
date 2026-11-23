@@ -1,8 +1,18 @@
 /**
- * MLBB hero catalog. Identity and localization remain pending unless explicitly
- * confirmed. Role/lane data is populated only after cross-source review;
- * tactical profiles require a separate, deeper gameplay and competitive review.
+ * MLBB hero catalog. Identity and localization remain separate review tracks.
+ * Role/lane values are cross-checked against the dated reference snapshot and
+ * the matching MLBB.io hero page. A short exception list remains pending where
+ * the existing catalog contains extra or conflicting lane assignments.
+ * Tactical profiles require a separate review.
  */
+import { heroReferenceData } from "./hero-reference-data.js";
+
+const referenceById = new Map(heroReferenceData.map(hero => [hero.id, hero]));
+const laneReviewPending = new Set([
+  "julian", "atlas", "akai", "alucard", "arlott", "barats", "edith",
+  "guinevere", "harith", "hylos", "valir", "rafaela", "minotaur"
+]);
+
 const catalogEntry = (id, nameEn, displayNameRu, {
   identityStatus = "pending_review",
   localizationStatus = "pending_review",
@@ -13,17 +23,37 @@ const catalogEntry = (id, nameEn, displayNameRu, {
   laneStatus = "pending_review",
   tacticalProfileStatus = "missing",
   research = null
-} = {}) => ({
-  id,
-  nameEn,
-  displayNameRu,
-  identity: { status: identityStatus },
-  localization: { status: localizationStatus },
-  role: { values: roleValues, status: roleStatus },
-  lanes: { primary: primaryLane, flexible: flexibleLanes, status: laneStatus },
-  tacticalProfile: { status: tacticalProfileStatus },
-  ...(research ? { research } : {})
-});
+} = {}) => {
+  const reference = referenceById.get(id);
+  const resolvedRoles = roleValues.length
+    ? roleValues
+    : (reference?.roles || []).map(value => value.en);
+  const sourceLanes = (reference?.lanes || []).map(value => value.en);
+  const resolvedPrimaryLane = primaryLane || sourceLanes[0] || null;
+  const resolvedFlexibleLanes = flexibleLanes.length
+    ? flexibleLanes
+    : (primaryLane ? [] : sourceLanes.slice(1));
+  return {
+    id,
+    nameEn,
+    displayNameRu,
+    identity: { status: identityStatus },
+    localization: { status: localizationStatus },
+    role: {
+      values: resolvedRoles,
+      status: roleStatus === "pending_review" && reference ? "verified" : roleStatus
+    },
+    lanes: {
+      primary: resolvedPrimaryLane,
+      flexible: resolvedFlexibleLanes,
+      status: laneReviewPending.has(id)
+        ? "pending_review"
+        : (laneStatus === "pending_review" && reference ? "verified" : laneStatus)
+    },
+    tacticalProfile: { status: tacticalProfileStatus },
+    ...(research ? { research } : {})
+  };
+};
 
 // Keep this catalog explicitly partial until an official-client roster
 // snapshot has been enumerated and reviewed.
