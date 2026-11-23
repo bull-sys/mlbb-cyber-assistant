@@ -149,3 +149,17 @@ No missing biography, stat, lane, or localization is to be inferred from another
 - The pinned Russian skill dataset contains 528 skill entries across the 133-hero roster. No entry in this snapshot has an empty description.
 - The raw skill source still contains the mistranslated Helcurt state label «Бродяги» in three descriptions. The display normalizer now preserves the source's canonical term «Prowler» for Helcurt instead of showing that misleading translation. The term remains untranslated until a verified official Russian equivalent is found; Moonton's own English hero spotlight uses «Prowler State».
 - The audit checks for suspicious wording; it does not certify every machine-translated sentence as publication-quality Russian. A separate editorial pass is still required for names, grammar, terminology and patch-specific accuracy.
+
+## Tactical passport rendering — 2026-11-23
+
+The encyclopedia passport now renders the existing local tactical profile instead of reducing the hero's identity to generic role/specialty labels:
+
+- The first documented mechanic is highlighted as the hero's key distinguishing feature.
+- Strengths are shown as reasons to try the hero and as tactical value to consider during draft.
+- Weaknesses are shown beside strengths so the selection is not presented as universally good.
+- The teamfight plan, target priorities, cautions and item notes are visible in the passport.
+- Remaining mechanics are grouped in a collapsible section to keep the mobile layout readable.
+- A hero without a local tactical profile is explicitly marked as not yet profiled. The UI does not invent matchups, synergies or counter-picks.
+- Profile validation now checks the minimum tactical content, source URLs, patch review date and teamfight guidance for each of the 102 existing profiles.
+
+This is the encyclopedia-facing first step. It does not claim that every profile has confirmed matchup data or that the draft scoring engine already consumes all tactical notes. Draft integration remains a separate task so that recommendations can be grounded in explicit, reviewable profile fields.
