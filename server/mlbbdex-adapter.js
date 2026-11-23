@@ -1,9 +1,6 @@
 const BASE = "https://mlbbdex.com";
-const EQUIPMENT_ASSET_BASE = "https://raw.githubusercontent.com/Ceplin03/database-mlbb.Mobile-Legends-Bang-Bang/master/logo-equipment/";
-const EQUIPMENT_DATA_URL = "https://raw.githubusercontent.com/Ceplin03/database-mlbb.Mobile-Legends-Bang-Bang/master/equipment.json";
 const TTL = 6 * 60 * 60 * 1000;
 const cache = new Map();
-let equipmentMapCache = null;
 
 async function cachedJson(key, url) {
   const old = cache.get(key);
@@ -26,22 +23,6 @@ function absoluteImage(value) {
     const url = new URL(value, BASE);
     return url.protocol === "https:" && (url.hostname === "mlbbdex.com" || url.hostname.endsWith(".mlbbdex.com")) ? url.href : null;
   } catch { return null; }
-}
-
-async function getEquipmentMap() {
-  if (equipmentMapCache) return equipmentMapCache;
-  try {
-    const response = await fetch(EQUIPMENT_DATA_URL, { signal: AbortSignal.timeout(12000) });
-    if (!response.ok) throw new Error("equipment asset index unavailable");
-    const records = await response.json();
-    equipmentMapCache = new Map((Array.isArray(records) ? records : []).map(item => [
-      String(item["name-equipment"] || "").toLowerCase(),
-      EQUIPMENT_ASSET_BASE + encodeURIComponent(item["logo-equipment"] || "")
-    ]).filter(([name, url]) => name && !url.endsWith("/")));
-  } catch {
-    equipmentMapCache = new Map();
-  }
-  return equipmentMapCache;
 }
 
 function stripHtml(value) {
@@ -98,33 +79,15 @@ export async function getHeroKnowledge(hero) {
   const slug = slugify(hero?.nameEn || hero?.id);
   if (!slug) return { ok: false, error: "Неизвестный герой" };
   try {
-    const [profilePayload, buildsPayload, countersPayload, combos] = await Promise.all([
+    const [profilePayload, countersPayload, combos] = await Promise.all([
       cachedJson("hero:" + slug, BASE + "/api/v1/heroes/" + encodeURIComponent(slug)),
-      cachedJson("builds:" + slug, BASE + "/api/v1/heroes/" + encodeURIComponent(slug) + "/builds"),
       cachedJson("counters:" + slug, BASE + "/api/v1/heroes/" + encodeURIComponent(slug) + "/counters").catch(() => ({ data: null })),
       getCombos(slug)
     ]);
     const profile = profilePayload?.data || null;
-    const equipment = await getEquipmentMap();
-    const buildData = buildsPayload?.data || {};
-    const normalizeBuild = build => ({
-      ...build,
-      items: (Array.isArray(build.items) ? build.items : []).map(name => ({
-        name,
-        image: BASE + "/visuels/objets/" + slugify(name) + ".webp"
-      })),
-      talents: (Array.isArray(build.talents) ? build.talents : []).map(name => ({
-        name,
-        image: BASE + "/visuels/talents/" + slugify(name) + ".webp"
-      }))
-    });
-    const builds = Object.fromEntries(Object.entries(buildData).map(([lane, ranks]) => [
-      lane,
-      Object.fromEntries(Object.entries(ranks || {}).map(([rank, entries]) => [
-        rank, Array.isArray(entries) ? entries.slice(0, 3).map(normalizeBuild) : []
-      ]))
-    ]));
     const images = profile?.images || {};
+    const { builds: _rankedBuilds, ...analysisWithoutBuilds } = profile?.analysis || {};
+    if (profile) profile.analysis = analysisWithoutBuilds;
     return {
       ok: Boolean(profile),
       profile: profile ? {
@@ -135,7 +98,6 @@ export async function getHeroKnowledge(hero) {
           icon: absoluteImage(images.icon)
         }
       } : null,
-      builds,
       counters: countersPayload?.data || null,
       combos,
       source: profilePayload?.source || null,
@@ -168,28 +130,21 @@ async function getTalentAssets() {
 
 export async function getGameAssets() {
   try {
-    const [itemsPayload, emblemsPayload, talents] = await Promise.all([
-      cachedJson("items", BASE + "/api/v1/items?locale=en"),
+    const [emblemsPayload, talents] = await Promise.all([
       cachedJson("emblems", BASE + "/api/v1/emblems?locale=en"),
       getTalentAssets()
     ]);
-    const equipment = await getEquipmentMap();
-    const items = (Array.isArray(itemsPayload?.data) ? itemsPayload.data : []).filter(item => !item.removed).map(item => ({
-      ...item,
-      image: absoluteImage(item.image) || BASE + "/visuels/objets/" + slugify(item.name) + ".webp"
-    }));
     const emblems = (Array.isArray(emblemsPayload?.data) ? emblemsPayload.data : []).map(item => ({
       ...item, image: absoluteImage(item.image)
     }));
     return {
       ok: true,
-      items,
       emblems,
       talents,
-      sources: [itemsPayload?.source, emblemsPayload?.source].filter(Boolean),
+      sources: [emblemsPayload?.source].filter(Boolean),
       updatedAt: new Date().toISOString()
     };
   } catch (error) {
-    return { ok: false, items: [], emblems: [], error: String(error?.message || error).slice(0, 160) };
+    return { ok: false, emblems: [], talents: [], error: String(error?.message || error).slice(0, 160) };
   }
 }
