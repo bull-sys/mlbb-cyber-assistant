@@ -475,6 +475,9 @@ function renderEncyHeroRemoteProfile(remote){
  if(growth.length)sections.push('<h4>Изменение характеристик · уровень 1 → 15</h4><div class="ency-growth-grid">'+growth.join("")+'</div>');
  if(base.length)sections.push('<h4>Другие базовые параметры</h4><div class="ency-stat-grid">'+base.join("")+'</div>');
  if(ratingValues.length)sections.push('<h4>Оценки справочника</h4><div class="ency-stat-grid">'+ratingValues.join("")+'</div>');
+ const rawLabels={hp1:"Здоровье · уровень 1",hp15:"Здоровье · уровень 15",hp_regen1:"Восстановление здоровья",mana1:"Запас маны",mana_regen1:"Восстановление маны",physical_atk1:"Физическая атака",physical_def1:"Физическая защита",magic_def1:"Магическая защита",atk_spd1:"Скорость атаки",movement_spd:"Скорость передвижения",basic_atk_range:"Дальность обычной атаки"};
+ const rawValues=Object.entries(rawLabels).filter(([key])=>stats[key]!==undefined&&stats[key]!==null).map(([key,label])=>encyStatCard(label,stats[key],"из источника"));
+ if(rawValues.length)sections.push('<details class="ency-raw-stats"><summary>Все доступные значения характеристик</summary><div class="ency-stat-grid">'+rawValues.join("")+'</div></details>');
  if(profile.patch)sections.push('<small class="ency-data-credit">Версия данных: '+esc(String(profile.patch))+'</small>');
  if(remote?.source?.url)sections.push('<small class="ency-data-credit">Источник характеристик: MLBBDex / Mobile Legends Wiki. Изображения принадлежат правообладателям.</small>');
  host.innerHTML=sections.join("")||'<p class="ency-unverified">Характеристики этого персонажа пока не опубликованы в проверенном источнике.</p>';
@@ -519,7 +522,7 @@ function renderEncyHeroModal(id){
  const sources=Array.isArray(p?.sources)?p.sources:[];
   const reviewed=p?.patch?.reviewedAt||hero.research?.checkedAt||"Дата проверки не указана";
   const status=p?(p.confidence==="complete"?"Полный справочный профиль":"Частичный справочный профиль"):"Справочный профиль загружается";
-  root.innerHTML='<div class="ency-hero-cover" style="--ency-portrait:url(&quot;'+url+'&quot;)"><img src="'+url+'" alt="'+esc(name)+'" onerror="this.style.display=\'none\'"><div class="ency-hero-heading"><small>БАЗА ГЕРОЕВ / '+esc(hero.nameEn)+'</small><h2 id="encyHeroTitle">'+esc(name)+'</h2><p>'+esc(hero.nameEn)+' · '+esc((hero.role?.values||[]).map(encyHeroRussianLabel).join(", ")||"Роль уточняется")+' · '+esc([hero.lanes?.primary,...(hero.lanes?.flexible||[])].filter(Boolean).map(encyHeroRussianLabel).join(" / ")||"Линия уточняется")+'</p><span id="encyHeroProfileBadge" class="ency-profile-badge">'+esc(status)+'</span></div></div>'+
+  root.innerHTML='<div class="ency-hero-cover" style="--ency-portrait:url(&quot;'+url+'&quot;)"><img src="'+url+'" alt="'+esc(name)+'" onerror="this.style.display=\'none\'"><div class="ency-hero-heading"><small>БАЗА ГЕРОЕВ</small><h2 id="encyHeroTitle">'+esc(name)+'</h2><p>'+esc((hero.role?.values||[]).map(encyHeroRussianLabel).join(", ")||"Роль уточняется")+' · '+esc([hero.lanes?.primary,...(hero.lanes?.flexible||[])].filter(Boolean).map(encyHeroRussianLabel).join(" / ")||"Линия уточняется")+'</p><span id="encyHeroProfileBadge" class="ency-profile-badge">'+esc(status)+'</span></div></div>'+
   '<div class="ency-profile-grid">'+
   '<section class="ency-profile-section wide"><h3>Паспорт персонажа</h3><div id="encyHeroDescription" class="ency-hero-description"><p class="ency-unverified">Загружаем описание персонажа...</p></div></section>'+
   '<section class="ency-profile-section wide"><h3>Умения персонажа</h3><div id="encyHeroSkills" class="ency-skill-list"><p class="ency-unverified">Загружаем описания навыков...</p></div></section>'+
