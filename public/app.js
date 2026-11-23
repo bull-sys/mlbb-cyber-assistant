@@ -346,10 +346,11 @@ function renderEncy(){
    const visual=x.image?'<img class="ency-info-icon" src="'+esc(x.image)+'" alt="" loading="lazy" decoding="async" onerror="this.outerHTML=\'<span class=&quot;ency-info-icon placeholder&quot;>✦</span>\'">':'<span class="ency-info-icon placeholder">✦</span>';
    const details=x.description||x.summary||x.bonus||"Описание уточняется";
    const meta=x.price?'<small class="ency-item-price">'+esc(String(x.price))+' золота</small>':"";
-   if(x.type==="emblem"||x.type==="talent"){
-    return '<details class="ency-info-card visual '+x.type+'"><summary class="ency-info-summary"><div class="ency-info-visual">'+visual+'</div><div class="ency-info-copy"><b>'+esc(x.name)+'</b><small>'+esc(x.category||"")+'</small><span class="ency-expand-hint">Открыть описание <i>＋</i></span></div></summary><div class="ency-info-expanded"><p>'+esc(details)+'</p></div></details>';
+   if(x.type==="emblem"||x.type==="talent"||x.type==="item"){
+    const tags=Array.isArray(x.tags)&&x.tags.length?'<small class="ency-info-tags">Метки: '+x.tags.map(tag=>esc(String(tag).replace(/-/g," "))).join(" · ")+'</small>':"";
+    const expandedMeta=meta?'<p class="ency-info-expanded-meta">'+meta+'</p>':"";
+    return '<details class="ency-info-card visual '+x.type+'"><summary class="ency-info-summary"><div class="ency-info-visual">'+visual+'</div><div class="ency-info-copy"><b>'+esc(x.name)+'</b><small>'+esc(x.category||"")+'</small><span class="ency-expand-hint">Нажми, чтобы открыть сведения <i>＋</i></span></div></summary><div class="ency-info-expanded"><p>'+esc(details)+'</p>'+tags+expandedMeta+'</div></details>';
    }
-   return '<article class="ency-info-card visual '+x.type+'"><div class="ency-info-visual">'+visual+'</div><div class="ency-info-copy"><b>'+esc(x.name)+'</b><small>'+esc(x.category||"")+'</small><p>'+esc(details)+'</p>'+meta+'</div></article>';
   }).join("");
  }
  $("encyList").innerHTML=html||"<p>Ничего не найдено</p>";
