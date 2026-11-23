@@ -516,3 +516,19 @@ body.ency-modal-open{overflow:hidden}
  .ency-profile-section p,.ency-profile-section li{font-size:10px}
 }
 @media(max-width:380px){.ency-hero-card{grid-template-columns:86px minmax(0,1fr)}.ency-hero-image{width:86px;height:116px}}
+
+
+/* Hero encyclopedia: individual skill rows */
+.ency-skill-list{display:grid;gap:10px;margin-top:12px}
+.ency-skill-row{display:flex;align-items:flex-start;gap:13px;padding:12px;border:1px solid rgba(183,139,255,.2);border-radius:13px;background:rgba(12,13,19,.72);min-width:0}
+.ency-skill-icon{width:58px;height:58px;flex:0 0 58px;display:grid;place-items:center;overflow:hidden;border:1px solid rgba(216,168,255,.42);border-radius:12px;background:#17131e;color:#d9a8ff;font-size:22px}
+.ency-skill-icon img{display:block;width:100%;height:100%;object-fit:cover}
+.ency-skill-content{min-width:0;flex:1}
+.ency-skill-heading{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:1px 0 7px}
+.ency-skill-heading b{font-size:14px;color:#f1eafa;line-height:1.35}
+.ency-skill-slot{font-size:9px;letter-spacing:.1em;font-weight:800;color:#d6a5ff}
+.ency-skill-content p{margin:0;color:#c7c1d0;font-size:12px;line-height:1.55;overflow-wrap:anywhere}
+.ency-skill-meta{display:block;margin-top:7px;color:#a69bb5;font-size:10px}
+.ency-skill-language{font-size:9px;color:#a99bb8;letter-spacing:.08em}
+.ency-skill-credit{margin:2px 0 0;color:#8f879c;font-size:10px;line-height:1.45}
+@media(max-width:520px){.ency-skill-row{gap:10px;padding:10px}.ency-skill-icon{width:52px;height:52px;flex-basis:52px}.ency-skill-content p{font-size:11px}}
