@@ -43,3 +43,17 @@ test("encyclopedia client script remains syntactically valid", async () => {
   const app = await readFile(new URL("../public/app.js", import.meta.url), "utf8");
   assert.doesNotThrow(() => new Script(app));
 });
+
+test("encyclopedia passport exposes sourced tactical profile sections", async () => {
+  const app = await readFile(new URL("../public/app.js", import.meta.url), "utf8");
+  assert.match(app, /function renderEncyHeroDescription\(remote,hero,tacticalProfile=null\)/);
+  assert.match(app, /Ключевая особенность/);
+  assert.match(app, /За что стоит попробовать/);
+  assert.match(app, /Что учитывать при выборе/);
+  assert.match(app, /Как реализовать в командном бою/);
+  assert.match(app, /Приоритетные цели/);
+  assert.match(app, /Чего избегать/);
+  assert.match(app, /Заметки по предметам/);
+  assert.match(app, /Тактический профиль пока не заполнен/);
+  assert.match(app, /renderEncyHeroDescription\(remote,currentHero,/);
+});
