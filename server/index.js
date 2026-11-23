@@ -465,6 +465,21 @@ app.post("/api/ai/draft",guestDraftRateLimit,optionalAuth,async(req,res)=>{
  res.json(result);
 });
 app.post("/api/draft/ocr-upload",auth,upload.single("image"),(req,res)=>{if(req.file)fs.unlink(req.file.path,()=>{});res.status(410).json({error:"Серверный OCR не используется: распознавание скриншота выполняется локально в браузере."})});
+app.post("/api/diagnostics",(req,res)=>{
+ const b=req.body||{};
+ const allowed=new Set(["runtime-error","unhandled-rejection","script-load-error","startup-timeout"]);
+ const kind=String(b.kind||"").slice(0,40);
+ if(!allowed.has(kind))return res.status(400).json({error:"Unsupported diagnostic event"});
+ const clean=(value,max)=>String(value||"").replace(/[\r\n\t]/g," ").slice(0,max);
+ const entry={
+  build:clean(b.build,40),kind,stage:clean(b.stage,40),message:clean(b.message,240),
+  file:clean(b.file,80).replace(/[^a-zA-Z0-9._-]/g,""),
+  line:Number.isFinite(Number(b.line))?Math.max(0,Math.min(100000,Number(b.line))):0,
+  column:Number.isFinite(Number(b.column))?Math.max(0,Math.min(10000,Number(b.column))):0
+ };
+ console.warn("[browser-diagnostic]",JSON.stringify(entry));
+ res.status(204).end();
+});
 app.use(express.static(path.join(root,"public")));
 app.get("*",(req,res)=>res.sendFile(path.join(root,"public","index.html")));
 const port=Number(process.env.PORT)||3000;
