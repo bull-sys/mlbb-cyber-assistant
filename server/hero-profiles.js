@@ -1292,7 +1292,7 @@ export const heroProfiles = [
   },
 
   {
-    id:"aldous", names:{ru:"Алдос",en:"Aldous",aliases:[]}, roles:["Боец"], lanes:["Линия опыта"],
+    id:"aldous", names:{ru:"Олдос",en:"Aldous",aliases:[]}, roles:["Боец"], lanes:["Линия опыта"],
     combat:{damage:"physical",range:"melee",mobility:"high",burst:"very_high",dps:"medium",durability:"medium",sustain:"low",control:"stun_and_knockback",engage:"high",disengage:"low",waveClear:"medium",objectiveDamage:"high"},
     mechanics:[
       "Пассивный эффект «Трансформация контракта» периодически усиливает следующую базовую атаку и даёт щит.",
@@ -1452,7 +1452,7 @@ export const heroProfiles = [
   },
   {
     id: "dyrroth",
-    names: { ru: "Дариус", en: "Dyrroth", aliases: [] },
+    names: { ru: "Диррот", en: "Dyrroth", aliases: [] },
     roles: ["Боец"],
     lanes: ["Линия опыта","Лес"],
     combat: { damage:"physical", range:"melee", mobility:"high", burst:"very_high", dps:"medium", durability:"medium", sustain:"high", control:"slow_and_armor_reduction", engage:"high", disengage:"medium", waveClear:"medium", objectiveDamage:"high" },
@@ -1499,7 +1499,7 @@ export const heroProfiles = [
     confidence:"partial"
   },
   {
-    id:"barats", names:{ru:"Бартс",en:"Barats",aliases:[]}, roles:["Танк","Боец"], lanes:["Лес","Линия опыта"],
+    id:"barats", names:{ru:"Баратс",en:"Barats",aliases:[]}, roles:["Танк","Боец"], lanes:["Лес","Линия опыта"],
     combat:{damage:"physical",range:"ranged",mobility:"low",burst:"high",dps:"high",durability:"very_high",sustain:"medium",control:"suppress_and_pull",engage:"high",disengage:"low",waveClear:"high",objectiveDamage:"high"},
     mechanics:["Пассивный эффект «Большой парень» накапливает до десяти зарядов, когда Бартс или Детона попадают навыками. Заряды увеличивают размер Детоны и гибридную защиту; на максимуме дают дополнительную устойчивость и круговое наступание базовыми атаками.","Первый навык «Командная работа» выпускает перед Детоной разлитую смесь, а затем поджигает её. Область действия становится шире при большем количестве зарядов пассивного эффекта.","Второй навык «Эксперт по ракетам» запускает ракеты в область: взрыв замедляет врагов, а выхлоп толкает их в сторону Бартса. Это инструмент для подтягивания противника в удобную позицию.","Ультимейт «Добро пожаловать, Детона» позволяет Детоне проглотить первую задетую цель и подавить её. Если цель сталкивается с героем или стеной, происходит дополнительный взрыв и оглушение; успешное попадание сразу даёт максимальные заряды пассивного эффекта.","Бартс зависит от поддержания зарядов. Если долго не попадать навыками, Детона уменьшается и теряет часть защиты, поэтому перед объектом важно поддерживать пассивный эффект."], strengths:["Высокая устойчивость при полных зарядах пассивного эффекта.","Ультимейт способен временно убрать важного врага из боя и создать массовый контроль при столкновении.","Второй навык помогает стягивать врагов в зону союзного урона."], weaknesses:["Потеря зарядов снижает защиту и силу передней линии.","Большой размер и ограниченная мобильность делают его уязвимым к кайту и процентному урону.","Промах ультимейтом лишает команду ключевого инструмента."],
     matchups:{strongAgainst:[],weakAgainst:[]}, synergies:[], itemNotes:["MLBB.io: 11 сборок сообщества; часто встречаются War Axe, Thunder Belt, Brute Force Breastplate и Guardian Helmet; выбор ботинок зависит от контроля и типа урона.","Для Jungle используется Retribution; для EXP не переносить лесной набор автоматически. Против физического урона рассматривать Antique Cuirass, против магического — Radiant Armor."],
@@ -1520,7 +1520,7 @@ export const heroProfiles = [
   },
 
   {
-    id:"kaja", names:{ru:"Кайя",en:"Kaja",aliases:[]}, roles:["Поддержка"], lanes:["Роум"],
+    id:"kaja", names:{ru:"Каджа",en:"Kaja",aliases:[]}, roles:["Поддержка"], lanes:["Роум"],
     combat:{damage:"magic",range:"ranged",mobility:"high",burst:"medium",dps:"medium",durability:"medium",sustain:"medium",control:"root_and_slow",engage:"high",disengage:"medium",waveClear:"medium",objectiveDamage:"low"},
     mechanics:[
       "Пассивный эффект «Крылья молнии» накладывает на врагов Паралич при попадании навыками: цель ненадолго замедляется и наносит на 8% меньше урона в течение 5 секунд.",
@@ -1769,7 +1769,7 @@ export const heroProfiles = [
     confidence:"partial"
   },
   {
-    id:"pharsa", names:{ru:"Фаша",en:"Pharsa",aliases:[]}, roles:["Маг"], lanes:["Средняя линия"],
+    id:"pharsa", names:{ru:"Фарса",en:"Pharsa",aliases:[]}, roles:["Маг"], lanes:["Средняя линия"],
     combat:{damage:"magic",range:"very_long",mobility:"very_high",burst:"very_high",dps:"medium",durability:"low",sustain:"low",control:"stun_and_slow",engage:"high",disengage:"high",waveClear:"high",objectiveDamage:"medium"},
     mechanics:[
       "Пассивный эффект «Духовное единство»: Вэрри периодически переходит в состояние охоты и усиливает следующую атаку Фарсы по вражескому герою дополнительным магическим уроном и сильным замедлением. Интервал зависит от уровня ультимейта.",
@@ -1895,7 +1895,7 @@ export const heroProfiles = [
     patch:{version:HERO_DB_PATCH,notes:["Bloodthirst, Soul Lock, Cyclone Sweep и Lethal Counter сверены по Liquipedia, METAMMO и MLBB.io.","MLBB.io на 22 ноября 2026 показывает около 46.4% побед; MLBBHub и MLBB Stats используют другие окна и ранговые срезы.","Текущая профессиональная VOD-проверка не выполнена; VOD review pending."],reviewedAt:"2026-11-22"},confidence:"partial"
   },
   {
-    id:"bane",names:{ru:"Бэйн",en:"Bane",aliases:[]},roles:["Боец","Маг"],lanes:["Лес","Линия опыта"],
+    id:"bane",names:{ru:"Бейн",en:"Bane",aliases:[]},roles:["Боец","Маг"],lanes:["Лес","Линия опыта"],
     combat:{damage:"physical_and_magic",range:"ranged",mobility:"medium",burst:"high",dps:"medium",durability:"medium",sustain:"high",control:"knockback_and_slow",engage:"medium",disengage:"medium",waveClear:"high",objectiveDamage:"high"},
     mechanics:["Пассивный эффект «Укус акулы» накапливает до двух зарядов энергии после применения навыков. Следующие базовые атаки расходуют заряды и наносят дополнительный физический урон по области.","Первый навык «Пушка краба» поражает первую цель на линии снаряда, после чего дополнительный снаряд может попасть по врагу за ней; приоритет может отдаваться герою.","Второй навык «Эль» сначала восстанавливает здоровье и ускоряет Бэйна, а повторное применение выпускает веер чернильной жидкости с магическим уроном. Заряженный выстрел усиливает попадание.","Ультимейт «Смертельный улов» направляет стаю акул вперёд, наносит магический урон, подбрасывает и замедляет врагов. Способность также наносит часть урона по башням.","Бэйн сочетает физические усиленные атаки и магический урон навыков, поэтому сборка может смещаться в одну из двух сторон; не смешивай предметы без плана."],
     strengths:["Гибридный урон усложняет подбор защиты против него.","Второй навык даёт восстановление здоровья и ускорение.","Ультимейт помогает начать бой, зачистить область и давить башни."],
@@ -2847,7 +2847,7 @@ export const heroProfiles = [
     {
       "id": "luo-yi",
       "names": {
-        "ru": "Ло Йи",
+        "ru": "Ло И",
         "en": "Luo Yi",
         "aliases": []
       },
