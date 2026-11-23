@@ -64,7 +64,7 @@ async function getCombos(slug) {
     });
     if (!response.ok) return [];
     const html = await response.text();
-    const marker = /<h[1-6][^>]*>\\s*(?:<[^>]+>\\s*)*Комбо(?:\\s*<[^>]+>)*\\s*<\\/h[1-6]>/iu;
+    const marker = /<h[1-6][^>]*>[\\s\\S]*?Комбо[\\s\\S]*?<\\/h[1-6]>/iu;
     const match = marker.exec(html);
     if (!match) return [];
     const start = match.index + match[0].length;
@@ -152,14 +152,14 @@ async function getTalentAssets() {
     const response = await fetch(BASE + "/ru/emblems", { headers: { "user-agent": "Mozilla/5.0 MLBB-Cyber-Assistant" }, signal: AbortSignal.timeout(12000) });
     if (!response.ok) return [];
     const html = await response.text();
-    const matches = [...html.matchAll(/(?:src|data-src)="([^"]*visuels\\/talents\\/([^"/?]+)\\.webp[^"]*)"/giu)];
+    const matches = [...html.matchAll(/(?:src|data-src)="([^"]*(?:visuels\\/talents\\/|visuels%2Ftalents%2F)([^"/?%]+)(?:\\.webp|%2Ewebp)[^"]*)"/giu)];
     const unique = new Map();
     for (const match of matches) {
       const slug = match[2];
       if (!unique.has(slug)) unique.set(slug, {
         slug,
         name: slug.split("-").map(part => part.charAt(0).toUpperCase() + part.slice(1)).join(" "),
-        image: absoluteImage(match[1])
+        image: BASE + "/visuels/talents/" + slug + ".webp"
       });
     }
     return [...unique.values()];
