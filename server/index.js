@@ -13,6 +13,8 @@ import fs from "node:fs";
 import { fileURLToPath } from "node:url";
 import { heroes, items, talents, spells, emblems } from "./data.js";
 import { getHeroCatalogApiFields, isLegacyHeroName } from "./hero-catalog-adapter.js";
+import { heroCatalog } from "./hero-catalog.js";
+import { getHeroSkillAssets } from "./hero-skill-assets.js";
 import { getDraftHeroOptions, isCatalogHeroId, resolveDraftHeroSelection } from "./draft-hero-selection.js";
 import { heroProfiles, validateHeroProfiles } from "./hero-profiles.js";
 import { normalizeRegistration } from "./registration.js";
@@ -69,6 +71,15 @@ app.get("/api/data",(req,res)=>res.json({
   styles,
   disclaimer:"Справочник — стартовый фанатский набор. Сверяйте данные с текущим клиентом MLBB."
 }));
+app.get("/api/hero-skills/:id",async(req,res)=>{
+ const id=String(req.params.id||"").toLowerCase();
+ const hero=heroCatalog.find(entry=>entry.id===id);
+ if(!hero)return res.status(404).json({ok:false,error:"Герой не найден в каталоге"});
+ const result=await getHeroSkillAssets(hero.nameEn);
+ if(!result.ok)return res.status(503).json(result);
+ res.set("Cache-Control","public, max-age=300, stale-while-revalidate=3600");
+ res.json(result);
+});
 app.post("/api/auth/register",authRateLimit,async(req,res)=>{
  const input=normalizeRegistration(req.body||{});
  if(!input.ok)return res.status(400).json({error:input.error});
