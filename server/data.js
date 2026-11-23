@@ -15,7 +15,7 @@ export const heroes = [
   {name:"Грейнджер",role:"Золото",type:"marksman",tags:["burst","physical"],style:["poke","burst"],strengths:["squishy-targets"]},
 
   {name:"Теризла",role:"Опыт",type:"fighter",tags:["frontline","control"],style:["engage","teamfight"],strengths:["grouped-enemies","frontline"]},
-  {name:"Дариус",role:"Опыт",type:"fighter",tags:["sustain","armor-break"],style:["duel","anti-tank"],strengths:["frontline","extended-fight"]},
+  {name:"Диррот",role:"Опыт",type:"fighter",tags:["sustain","armor-break"],style:["duel","anti-tank"],strengths:["frontline","extended-fight"]},
   {name:"Чу",role:"Опыт",type:"fighter",tags:["pickoff","control"],style:["catch","displacement"],strengths:["isolated-targets","backline"]},
   {name:"Лукас",role:"Опыт",type:"fighter",tags:["duel","sustain"],style:["duel","transform"],strengths:["isolated-targets","extended-fight"]},
   {name:"Тамуз",role:"Опыт",type:"fighter",tags:["sustain","frontline"],style:["engage","extended-fight"],strengths:["frontline","grouped-enemies"]},
