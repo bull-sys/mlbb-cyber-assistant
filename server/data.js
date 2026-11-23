@@ -22,7 +22,7 @@ export const heroes = [
 
   {name:"Эйдора",role:"Мид",type:"mage",tags:["burst","magic","control"],style:["pickoff","ambush"],strengths:["squishy-targets","isolated-targets"]},
   {name:"Кагура",role:"Мид",type:"mage",tags:["mobility","burst"],style:["pickoff","mobility"],strengths:["backline","isolated-targets"]},
-  {name:"Фаша",role:"Мид",type:"mage",tags:["range","magic","burst"],style:["artillery","siege"],strengths:["grouped-enemies","backline"]},
+  {name:"Фарса",role:"Мид",type:"mage",tags:["range","magic","burst"],style:["artillery","siege"],strengths:["grouped-enemies","backline"]},
   {name:"Циклоп",role:"Мид",type:"mage",tags:["dps","magic"],style:["chase","sustained-damage"],strengths:["mobile-targets","extended-fight"]},
   {name:"Нана",role:"Мид",type:"mage",tags:["control","magic"],style:["zone-control","anti-dive"],strengths:["engage","mobile-targets"]},
   {name:"Джулиан",role:"Мид",type:"mage",tags:["burst","control"],style:["combo","flexible"],strengths:["squishy-targets","isolated-targets"]},
