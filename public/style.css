@@ -699,3 +699,125 @@ details.ency-info-card{display:block;min-width:0}
  .ency-growth-grid{grid-template-columns:1fr}
  .ency-growth-card{padding:9px}
 }
+
+
+/* Talent and emblem accordion: expand inside the grid, never as a side popover */
+details.ency-info-card.visual.talent,
+details.ency-info-card.visual.emblem{
+ display:block;
+ min-width:0;
+ width:100%;
+ box-sizing:border-box;
+}
+details.ency-info-card.visual.talent[open],
+details.ency-info-card.visual.emblem[open]{
+ grid-column:1/-1;
+ align-self:start;
+ padding:10px;
+ overflow:visible;
+}
+.ency-info-summary{
+ display:flex;
+ align-items:center;
+ gap:12px;
+ width:100%;
+ min-width:0;
+ box-sizing:border-box;
+ padding:0;
+}
+.ency-info-summary .ency-info-visual{
+ flex:0 0 54px;
+}
+.ency-info-summary .ency-info-copy{
+ flex:1 1 auto;
+ min-width:0;
+}
+.ency-info-summary .ency-info-copy>b,
+.ency-info-summary .ency-info-copy>small{
+ overflow-wrap:anywhere;
+ word-break:normal;
+}
+.ency-expand-hint{
+ width:100%;
+ min-width:0;
+}
+.ency-expand-hint i{
+ flex:0 0 auto;
+}
+.ency-info-expanded{
+ display:block;
+ width:100%;
+ min-width:0;
+ box-sizing:border-box;
+ margin:10px 0 0;
+ padding:12px 13px;
+ border:1px solid rgba(203,150,224,.15);
+ border-left:0;
+ border-radius:10px;
+ background:#121016;
+}
+.ency-info-expanded p{
+ display:block;
+ width:100%;
+ min-width:0;
+ margin:0;
+ color:#ded4e3;
+ font-size:11px;
+ line-height:1.6;
+ white-space:normal;
+ overflow-wrap:anywhere;
+ word-break:normal;
+}
+.ency-info-card.visual.talent[open] .ency-expand-hint,
+.ency-info-card.visual.emblem[open] .ency-expand-hint{
+ color:#e3b4ef;
+}
+.ency-info-card.visual.talent[open] .ency-expand-hint i,
+.ency-info-card.visual.emblem[open] .ency-expand-hint i{
+ transform:rotate(45deg);
+}
+.ency-skill-heading{
+ display:flex;
+ flex-wrap:wrap;
+ align-items:center;
+ gap:6px 9px;
+ min-width:0;
+}
+.ency-skill-heading>b{
+ min-width:0;
+ overflow-wrap:anywhere;
+}
+.ency-skill-original{
+ display:block;
+ margin-top:3px;
+ color:#93889b;
+ font-size:9px;
+ line-height:1.35;
+}
+.ency-skill-language{
+ display:inline-flex;
+ align-items:center;
+ padding:3px 6px;
+ border:1px solid rgba(177,117,202,.25);
+ border-radius:6px;
+ color:#d7a9e5;
+ font-size:8px;
+ line-height:1.2;
+}
+.ency-skill-language.pending{
+ color:#b7a9bc;
+ border-color:rgba(183,169,188,.2);
+}
+.ency-skill-credit{
+ color:#93899b;
+ font-size:9px;
+ line-height:1.5;
+}
+@media(max-width:650px){
+ details.ency-info-card.visual.talent[open],
+ details.ency-info-card.visual.emblem[open]{padding:9px}
+ .ency-info-summary{gap:9px}
+ .ency-info-summary .ency-info-visual{flex-basis:48px}
+ .ency-info-expanded{margin-top:8px;padding:10px}
+ .ency-info-expanded p{font-size:10px;line-height:1.55}
+}
