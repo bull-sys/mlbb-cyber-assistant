@@ -1,4 +1,4 @@
-// Exact snapshot of the 32 hero records in server/data.js at commit
+// Approved compatibility snapshot of the 32 hero records; localized Eudora name updated from
 // 13b6d5e88ceda5330adf172c196ea22f94e315f0. Preserve order and field values.
 export const heroLegacyBaseline = [
   {name:"Хелкарт",role:"Лес",type:"assassin",tags:["burst","pickoff","silence","ambush"],style:["hunt","backline"],strengths:["squishy-targets","isolated-targets"]},
@@ -18,7 +18,7 @@ export const heroLegacyBaseline = [
   {name:"Чу",role:"Опыт",type:"fighter",tags:["pickoff","control"],style:["catch","displacement"],strengths:["isolated-targets","backline"]},
   {name:"Лукас",role:"Опыт",type:"fighter",tags:["duel","sustain"],style:["duel","transform"],strengths:["isolated-targets","extended-fight"]},
   {name:"Тамуз",role:"Опыт",type:"fighter",tags:["sustain","frontline"],style:["engage","extended-fight"],strengths:["frontline","grouped-enemies"]},
-  {name:"Эудора",role:"Мид",type:"mage",tags:["burst","magic","control"],style:["pickoff","ambush"],strengths:["squishy-targets","isolated-targets"]},
+  {name:"Эйдора",role:"Мид",type:"mage",tags:["burst","magic","control"],style:["pickoff","ambush"],strengths:["squishy-targets","isolated-targets"]},
   {name:"Кагура",role:"Мид",type:"mage",tags:["mobility","burst"],style:["pickoff","mobility"],strengths:["backline","isolated-targets"]},
   {name:"Фарса",role:"Мид",type:"mage",tags:["range","magic","burst"],style:["artillery","siege"],strengths:["grouped-enemies","backline"]},
   {name:"Циклоп",role:"Мид",type:"mage",tags:["dps","magic"],style:["chase","sustained-damage"],strengths:["mobile-targets","extended-fight"]},
