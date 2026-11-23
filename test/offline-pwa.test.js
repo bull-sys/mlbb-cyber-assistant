@@ -6,13 +6,14 @@ const serviceWorker = await readFile(
   new URL("../public/sw.js", import.meta.url),
   "utf8"
 );
+const css = await readFile(new URL("../public/style.css", import.meta.url), "utf8");
 const app = await readFile(
   new URL("../public/app.js", import.meta.url),
   "utf8"
 );
 
 test("service worker keeps the game catalog available offline after a successful load", () => {
-  assert.match(serviceWorker, /const CACHE="mlbb-cyber-v\\d+"/);
+  assert.match(serviceWorker, /const CACHE="mlbb-cyber-v[0-9]+"/);
   assert.match(serviceWorker, /const DATA_CACHE="mlbb-cyber-data-v1"/);
   assert.match(serviceWorker, /url\.pathname==="\/api\/data"/);
   assert.match(serviceWorker, /cache\.put\(request,copy\)/);
