@@ -1452,7 +1452,7 @@ export const heroProfiles = [
   },
   {
     id: "dyrroth",
-    names: { ru: "Диррот", en: "Dyrroth", aliases: [] },
+    names: { ru: "Дариус", en: "Dyrroth", aliases: [] },
     roles: ["Боец"],
     lanes: ["Линия опыта","Лес"],
     combat: { damage:"physical", range:"melee", mobility:"high", burst:"very_high", dps:"medium", durability:"medium", sustain:"high", control:"slow_and_armor_reduction", engage:"high", disengage:"medium", waveClear:"medium", objectiveDamage:"high" },
@@ -2055,7 +2055,7 @@ export const heroProfiles = [
     confidence: "partial"
   },
   {
-    id: "cici", names: { ru: "Сиси", en: "Cici", aliases: [] },
+    id: "cici", names: { ru: "Чичи", en: "Cici", aliases: [] },
     roles: ["Боец"], lanes: ["EXP-линия"],
     combat: { damage: "physical", range: "ranged", mobility: "high", burst: "medium", dps: "high", durability: "medium", sustain: "high", control: "slow_and_link", engage: "medium", disengage: "high", waveClear: "medium", objectiveDamage: "medium" },
     mechanics: [
