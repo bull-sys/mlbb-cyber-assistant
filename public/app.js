@@ -532,22 +532,23 @@ function renderEncyHeroRemoteProfile(remote){
     mode="Промежуточные значения рассчитаны по уровням 1 и 15";
    }
   }else{
-   values=[first,last];
+   values=Array.from({length:15},(_,index)=>first+(last-first)*index/14);
    estimated=true;
-   mode="Источник публикует только уровни 1 и 15";
+   mode="Промежуточные значения рассчитаны по уровням 1 и 15";
   }
   const min=Math.min(...values),max=Math.max(...values),span=max-min||1;
-  const x=index=>values.length===2?(index===0?22:278):22+index*(256/14);
+  const x=index=>22+index*(256/14);
   const y=value=>80-((value-min)/span)*54;
   const points=values.map((value,index)=>x(index).toFixed(1)+","+y(value).toFixed(1)).join(" ");
-  const markerIndexes=values.length===2?[0,1]:[0,7,14];
-  const markers=markerIndexes.map(index=>'<circle cx="'+x(index).toFixed(1)+'" cy="'+y(values[index]).toFixed(1)+'" r="3.5" fill="#d78cf0"><title>Уровень '+(values.length===2?(index===0?1:15):index+1)+': '+fmt(values[index])+'</title></circle>').join("");
+  const markerIndexes=[0,3,7,11,14];
+  const markers=markerIndexes.map(index=>'<circle cx="'+x(index).toFixed(1)+'" cy="'+y(values[index]).toFixed(1)+'" r="3" fill="#d78cf0"><title>Уровень '+(index+1)+': '+fmt(values[index])+'</title></circle>').join("");
   const axis=[["1",22],["4",76],["8",149],["12",222],["15",278]].map(([label,pos])=>'<text x="'+pos+'" y="105" text-anchor="middle">'+label+'</text>').join("");
   const grid=[22,49,76].map(pos=>'<line x1="22" y1="'+pos+'" x2="278" y2="'+pos+'" class="ency-graph-grid"/>').join("");
   const delta=last-first;
-  return '<article class="ency-stat-graph"><div class="ency-stat-graph-head"><b>'+esc(definition.label)+'</b><span>'+esc(fmt(first))+' → '+esc(fmt(last))+'</span></div><p class="ency-stat-graph-desc">'+esc(definition.description)+'</p>'+
+  const initialY=y(values[0]).toFixed(1);
+  return '<article class="ency-stat-graph" data-values="'+esc(JSON.stringify(values))+'" data-min="'+min+'" data-max="'+max+'"><div class="ency-stat-graph-head"><b>'+esc(definition.label)+'</b><span class="ency-stat-current-value">'+esc(fmt(values[0]))+'</span></div><p class="ency-stat-graph-desc">'+esc(definition.description)+'</p>'+
    '<svg class="ency-stat-chart" viewBox="0 0 300 112" role="img" aria-label="'+esc(definition.label)+': уровень 1 — '+esc(fmt(first))+', уровень 15 — '+esc(fmt(last))+'">'+grid+
-   '<polyline points="'+points+'" class="ency-graph-line '+(estimated?"estimated":"")+'"/>'+markers+axis+'</svg>'+
+   '<polyline points="'+points+'" class="ency-graph-line '+(estimated?"estimated":"")+'"/><line class="ency-current-guide" x1="22" y1="18" x2="22" y2="82"/><circle class="ency-current-marker" cx="22" cy="'+initialY+'" r="5"/>'+markers+axis+'</svg>'+
    '<div class="ency-stat-graph-foot"><span>Δ '+(delta>=0?"+":"")+esc(fmt(delta))+'</span><small>'+esc(mode)+'</small></div></article>';
  };
  for(const definition of statDefs){
@@ -566,8 +567,8 @@ function renderEncyHeroRemoteProfile(remote){
  const ratingValues=Object.entries(ratingNames).filter(([key])=>Number.isFinite(Number(ratings[key]))).map(([key,label])=>encyStatCard(label,ratings[key]+"/10","оценка справочника"));
  const sections=[];
  if(graphs.length){
-  sections.push('<h4>Рост характеристик · уровни 1–15</h4><div class="ency-stat-graph-grid">'+graphs.join("")+'</div>');
-  sections.push('<p class="ency-graph-note">Сплошная линия — рост, опубликованный источником. Пунктир — расчётная оценка между крайними уровнями; она не выдаётся за точные игровые значения.</p>');
+  sections.push('<h4>Рост характеристик · уровни 1–15</h4><div class="ency-level-control"><label for="encyLevelSlider">Уровень героя <b id="encyLevelOutput">1</b></label><input id="encyLevelSlider" type="range" min="1" max="15" step="1" value="1" aria-label="Выбрать уровень героя от 1 до 15"><div class="ency-level-ticks"><span>1</span><span>5</span><span>10</span><span>15</span></div></div><div class="ency-stat-graph-grid">'+graphs.join("")+'</div>');
+  sections.push('<p class="ency-graph-note">Перемещай ползунок — все графики и значения обновятся одновременно. Сплошная линия — рост, опубликованный источником. Пунктир — расчётная оценка между крайними уровнями; она не выдаётся за точные игровые значения.</p>');
  }else{
   sections.push('<p class="ency-unverified">Подтверждённая таблица роста по уровням пока не найдена. Доступные базовые значения показаны отдельно.</p>');
  }
@@ -585,6 +586,26 @@ function renderEncyHeroRemoteProfile(remote){
   sections.push('<small class="ency-data-credit">'+(remote?.growthUnavailable?"Дополнительный источник роста временно недоступен; графики показывают только опубликованные значения основного справочника.":"Проверяем дополнительный источник роста; пока показаны опубликованные значения основного справочника.")+'</small>');
  }
  host.innerHTML=sections.join("")||'<p class="ency-unverified">Характеристики этого персонажа пока не опубликованы в проверенном источнике.</p>';
+ const slider=host.querySelector("#encyLevelSlider");
+ if(slider){
+  const updateLevel=()=>{
+   const level=Number(slider.value),index=level-1;
+   const output=host.querySelector("#encyLevelOutput");
+   if(output)output.textContent=String(level);
+   host.querySelectorAll(".ency-stat-graph").forEach(card=>{
+    let values=[];try{values=JSON.parse(card.dataset.values||"[]")}catch{}
+    if(values.length!==15)return;
+    const value=values[index],min=Number(card.dataset.min),max=Number(card.dataset.max),span=max-min||1;
+    const x=22+index*(256/14),y=80-((value-min)/span)*54;
+    const marker=card.querySelector(".ency-current-marker"),guide=card.querySelector(".ency-current-guide"),readout=card.querySelector(".ency-stat-current-value");
+    if(marker){marker.setAttribute("cx",x.toFixed(1));marker.setAttribute("cy",y.toFixed(1));}
+    if(guide){guide.setAttribute("x1",x.toFixed(1));guide.setAttribute("x2",x.toFixed(1));}
+    if(readout)readout.textContent=fmt(value);
+   });
+  };
+  slider.addEventListener("input",updateLevel);
+  updateLevel();
+ }
 }
 async function loadEncyHeroGrowth(id,remote,request){
  try{
