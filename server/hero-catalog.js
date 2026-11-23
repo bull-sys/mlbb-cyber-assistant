@@ -892,7 +892,7 @@ export const heroCatalog = [
     localizationStatus: "pending_review",
     roleValues: ["Marksman"], roleStatus: "verified", primaryLane: "Gold Lane", flexibleLanes: ["Jungle"], laneStatus: "verified", tacticalProfileStatus: "partial",
     research: { checkedAt: "2026-11-23", roleAndLaneSources: ["https://mlbb.io/en/hero/popol-and-kupa","https://liquipedia.net/mobilelegends/Patch_2.2.23"], mechanicsSources: ["https://mlbb.io/en/hero/popol-and-kupa","https://liquipedia.net/mobilelegends/Patch_2.2.23"], competitiveReviewStatus: "pending", method: "Marksman with Gold Lane primary and Jungle flexibility cross-checked against MLBB.io; the current 2.2.23 revamp source checked separately." }
-  })),
+  }),
   catalogEntry("rafaela", "Rafaela", "Рафаэль", {
     roleValues: ["Support"], roleStatus: "verified", primaryLane: "Roam",
     flexibleLanes: ["Mid Lane"], laneStatus: "verified", tacticalProfileStatus: "partial",
@@ -910,7 +910,7 @@ export const heroCatalog = [
     localizationStatus: "pending_review",
     roleValues: ["Fighter"], roleStatus: "verified", primaryLane: "EXP Lane", flexibleLanes: ["Roam"], laneStatus: "verified", tacticalProfileStatus: "partial",
     research: { checkedAt: "2026-11-23", roleAndLaneSources: ["https://mlbb.io/en/hero/ruby","https://mlbbhub.com/heroes/ruby"], mechanicsSources: ["https://mlbb.io/en/hero/ruby","https://mlbbhub.com/heroes/ruby"], competitiveReviewStatus: "pending", method: "Role and primary lane cross-checked against current MLBB.io hero data and an independent reference; flexible lanes are marked only where supported." }
-  })),
+  }),
   catalogEntry("saber", "Saber", "Сабер", {
     roleValues: ["Assassin"],
     roleStatus: "verified",
@@ -943,19 +943,19 @@ export const heroCatalog = [
     localizationStatus: "pending_review",
     roleValues: ["Assassin", "Mage"], roleStatus: "verified", primaryLane: "Mid Lane", flexibleLanes: ["Roam"], laneStatus: "verified", tacticalProfileStatus: "partial",
     research: { checkedAt: "2026-11-23", roleAndLaneSources: ["https://mlbb.io/en/hero/selena","https://mlbb-knowledge.vercel.app/heroes/63"], mechanicsSources: ["https://mlbb.io/en/hero/selena","https://mlbb-knowledge.vercel.app/heroes/63"], competitiveReviewStatus: "pending", method: "Role and primary lane cross-checked against current MLBB.io hero data and an independent reference; flexible lanes are marked only where supported." }
-  })),
+  }),
   catalogEntry("silvanna", "Silvanna", "Сильвана", {
     identityStatus: "pending_review",
     localizationStatus: "pending_review",
     roleValues: ["Fighter"], roleStatus: "verified", primaryLane: "EXP Lane", laneStatus: "verified", tacticalProfileStatus: "partial",
     research: { checkedAt: "2026-11-23", roleAndLaneSources: ["https://mlbb.io/en/hero/silvanna","https://mlbbhub.com/heroes/silvanna"], mechanicsSources: ["https://mlbb.io/en/hero/silvanna","https://mlbbhub.com/heroes/silvanna"], competitiveReviewStatus: "pending", method: "Role and primary lane cross-checked against current MLBB.io hero data and an independent reference; flexible lanes are marked only where supported." }
-  })),
+  }),
   catalogEntry("sora", "Sora", "Сора", {
     identityStatus: "pending_review",
     localizationStatus: "pending_review",
     roleValues: ["Fighter", "Assassin"], roleStatus: "verified", primaryLane: "EXP Lane", laneStatus: "verified", tacticalProfileStatus: "partial",
     research: { checkedAt: "2026-11-23", roleAndLaneSources: ["https://mlbb.io/en/hero/sora","https://www.mobilelegends.com/en/help"], mechanicsSources: ["https://mlbb.io/en/hero/sora","https://www.mobilelegends.com/en/help"], competitiveReviewStatus: "pending", method: "Role and primary lane cross-checked against current MLBB.io hero data and an independent reference; flexible lanes are marked only where supported." }
-  })),
+  }),
   catalogEntry("sun", "Sun", "Сан", {
     roleValues: ["Fighter"], roleStatus: "verified", primaryLane: "EXP Lane",
     flexibleLanes: ["Jungle"], laneStatus: "verified", tacticalProfileStatus: "partial",
