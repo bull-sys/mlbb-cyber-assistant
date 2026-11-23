@@ -57,7 +57,8 @@
   if(!state)stateText="app.js НЕ ЗАПУСТИЛСЯ";
   else if(state.stage==="runtime-error"||state.stage==="data-error")stateText=state.stage+": "+(state.error||"без описания");
   else stateText="JS "+state.stage;
+  if(!state||state.stage!=="ready")window.__MLBB_REPORT_DIAG?.("startup-timeout",state?.error||state?.stage||"app.js did not start");
   update();
- },1800);
+ },5000);
 })();
 </script><script>if("serviceWorker"in navigator){let refreshing=false;navigator.serviceWorker.addEventListener("controllerchange",()=>{if(!refreshing){refreshing=true;window.location.reload()}});window.addEventListener("load",()=>navigator.serviceWorker.register("/sw.js",{updateViaCache:"none"}).then(reg=>reg.update()).catch(()=>{}))}</script></body></html>
