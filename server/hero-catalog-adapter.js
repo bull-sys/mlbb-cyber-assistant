@@ -7,7 +7,7 @@ import { validateHeroCatalog } from "./hero-catalog-validation.js";
 
 const CONFIGURED_MAPPINGS = Object.freeze([
   Object.freeze({ id: "jawhead", legacyName: "Кусака" }),
-  Object.freeze({ id: "dyrroth", legacyName: "Дариус" })
+  Object.freeze({ id: "dyrroth", legacyName: "Диррот" })
 ]);
 
 export function isLegacyHeroName(name) {
