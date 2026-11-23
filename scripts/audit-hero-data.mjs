@@ -25,7 +25,7 @@ const normalizeName = value => String(value || "")
 function pageIdentityAndClassification(html, expectedName) {
   const heading = String(html || "").match(/<h1\b[^>]*>([\s\S]*?)<\/h1>/iu);
   if (!heading) return { heading: null, nameMatches: false, roles: [], lanes: [], status: "heading-not-found" };
-  const headingText = heading[1].replace(/<[^>]*>/gu, " ").replace(/&amp;/giu, "&").replace(/\s+/gu, " ").trim();
+  const headingText = heading[1].replace(/<[^>]*>/gu, " ").replace(/&amp;/giu, "&").replace(/&#x27;|&#39;/giu, "\\'").replace(/&quot;/giu, '"\').replace(/\s+/gu, " ").trim();
   const offset = (heading.index || 0) + heading[0].length;
   const tail = String(html).slice(offset, offset + 1400);
   const headerText = tail.replace(/<script[\s\S]*?<\/script>/giu, " ")
