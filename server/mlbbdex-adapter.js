@@ -99,6 +99,19 @@ export async function getHeroKnowledge(hero) {
         ratings: reference.ratings
       } : {}),
       ...neutralProfile,
+      title: neutralProfile.title || reference?.titleEn || null,
+      roles: Array.isArray(neutralProfile.roles) && neutralProfile.roles.length
+        ? neutralProfile.roles
+        : (reference?.roles || []).map(value => value.ru),
+      lanes: Array.isArray(neutralProfile.lanes) && neutralProfile.lanes.length
+        ? neutralProfile.lanes
+        : (reference?.lanes || []).map(value => value.ru),
+      specialties: Array.isArray(neutralProfile.specialties) && neutralProfile.specialties.length
+        ? neutralProfile.specialties
+        : (reference?.specialties || []).map(value => value.ru),
+      release: neutralProfile.release || reference?.release || null,
+      region: neutralProfile.region || reference?.region || null,
+      resource: neutralProfile.resource || reference?.resource || null,
       stats: { ...(reference?.stats || {}), ...(neutralProfile.stats || {}) },
       ratings: { ...(reference?.ratings || {}), ...(neutralProfile.ratings || {}) },
       images: {
