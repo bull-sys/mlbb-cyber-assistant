@@ -396,7 +396,7 @@ function encySlug(value){
 function encyHeroRussianLabel(value){
  const map={
   Tank:"Танк",Fighter:"Боец",Assassin:"Убийца",Mage:"Маг",Marksman:"Стрелок",Support:"Поддержка",
-  "EXP Lane":"Линия опыта","Gold Lane":"Линия золота","Mid Lane":"Центральная линия",Jungle:"Лес",Roam:"Роум",
+  "EXP Lane":"Линия опыта","Gold Lane":"Линия золота","Mid Lane":"Центральная линия",Gold:"Линия золота",Mid:"Центральная линия",Exp:"Линия опыта",Jungle:"Лес",Roam:"Роум",
   Initiator:"Инициатор","Crowd Control":"Контроль",Burst:"Взрывной урон",Poke:"Дальний урон",Reap:"Добивание",Charge:"Рывок",Damage:"Урон",Guard:"Защита",
   Physical:"Физический",Magic:"Магический",Mixed:"Смешанный",Melee:"Ближний бой",Ranged:"Дальний бой",Hybrid:"Гибридный",
   Mana:"Мана",Energy:"Энергия",None:"Не использует отдельный ресурс",
@@ -418,7 +418,7 @@ function renderEncyHeroDescription(remote,hero){
  const region=encyHeroRussianLabel(profile.region||"");
  const releaseRaw=profile.release||"";
  const releaseDate=releaseRaw?new Date(releaseRaw):null;
- const release=releaseDate&&!Number.isNaN(releaseDate.getTime())?new Intl.DateTimeFormat("ru-RU",{day:"numeric",month:"long",year:"numeric"}).format(releaseDate):releaseRaw;
+ const release=releaseDate&&!Number.isNaN(releaseDate.getTime())?new Intl.DateTimeFormat("ru-RU",{day:"numeric",month:"long",year:"numeric"}).format(releaseDate):encyRussianTextOrNote(releaseRaw,"");
  const lore=encyRussianTextOrNote(profile.lore||profile.story||profile.bio||profile.description,"История персонажа пока не представлена на русском языке в проверенном источнике.");
  const damageType=encyHeroRussianLabel(profile.damageType||"");
  const attackType=encyHeroRussianLabel(profile.attackType||"");
