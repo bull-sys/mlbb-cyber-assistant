@@ -196,6 +196,6 @@ The same profile evidence is now attached to supported Draft Assistant counter-p
 - Added five partial tactical profiles with hero-specific mechanics, strengths, weaknesses, item principles, teamfight plans, target priorities, cautions and source links.
 - Popol and Kupa is documented against the 2.2.23 revamp released November 11, 2026; older pre-revamp guides are not treated as current.
 - Ruby, Selena, Silvanna and Sora mechanics were checked against current hero references. Sora's Thunder/Torrent choice and upgraded arts are separately described.
-- Role/lane classifications updated: Popol and Kupa — Marksman, Gold Lane primary with Jungle flex; Ruby — Fighter, EXP Lane with Roam flex; Selena — Assassin/Mage, Mid Lane with Roam flex; Silvanna — Fighter/EXP Lane; Sora — Fighter/Assassin, EXP Lane.
+- Role/lane classifications updated: Popol and Kupa — Marksman, Gold Lane primary with Jungle flex; Ruby — Fighter, EXP Lane with Roam flex; Selena — Assassin/Mage, Mid Lane; Silvanna — Fighter/EXP Lane; Sora — Fighter/Assassin, EXP Lane.
 - Matchup and synergy arrays remain empty pending a separate evidence review; ranking aggregates are not presented as universal counter claims.
 - Coverage is now 119 / 133; 14 tactical profiles remain.
