@@ -941,7 +941,7 @@ export const heroCatalog = [
   catalogEntry("selena", "Selena", "Селена", {
     identityStatus: "pending_review",
     localizationStatus: "pending_review",
-    roleValues: ["Assassin", "Mage"], roleStatus: "verified", primaryLane: "Mid Lane", flexibleLanes: ["Roam"], laneStatus: "verified", tacticalProfileStatus: "partial",
+    roleValues: ["Assassin", "Mage"], roleStatus: "verified", primaryLane: "Mid Lane", laneStatus: "verified", tacticalProfileStatus: "partial",
     research: { checkedAt: "2026-11-23", roleAndLaneSources: ["https://mlbb.io/en/hero/selena","https://mlbb-knowledge.vercel.app/heroes/63"], mechanicsSources: ["https://mlbb.io/en/hero/selena","https://mlbb-knowledge.vercel.app/heroes/63"], competitiveReviewStatus: "pending", method: "Role and primary lane cross-checked against current MLBB.io hero data and an independent reference; flexible lanes are marked only where supported." }
   }),
   catalogEntry("silvanna", "Silvanna", "Сильвана", {
