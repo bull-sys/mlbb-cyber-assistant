@@ -274,28 +274,74 @@ function esc(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&l
 $("searchPlayers").onclick=()=>searchPlayers(false);$("findDuo").onclick=()=>searchPlayers(true);
 $("players").onclick=async e=>{let b=e.target.closest("[data-like]");if(!b)return;try{let d=await $api("/players/"+b.dataset.like+"/like",{method:"POST",body:"{}"});toast(d.mutual?"Взаимный матч!":"Лайк отправлен");b.disabled=true;b.textContent=d.mutual?"✓ Матч":"✓ Отправлено"}catch(e){toast(e.message)}};
 $("loadMatches").onclick=async()=>{try{let d=await $api("/matches");$("matches").innerHTML=d.matches.map(p=>`<div class="slot"><span>${esc(p.nickname)} · ${esc(p.hero)} · ${p.role}</span><b>${esc(p.game_id||"ID не указан")}</b></div>`).join("")||'<p class="hint">Взаимных совпадений пока нет.</p>'}catch(e){toast(e.message)}};
+function encyHeroPortrait(hero){
+ return heroPortraitUrl({value:hero.id,name:hero.displayNameRu||hero.nameEn,nameEn:hero.nameEn});
+}
 function renderEncy(){
  const q=$("encySearch").value.toLowerCase();
  const items=data.items.map(x=>({...x,type:"item"}));
  const talents=data.talents.map(x=>({...x,category:"Тир "+x.tier,type:"talent"}));
  const emblems=data.emblems.map(x=>({name:"Эмблема "+x,category:"Эмблема",description:"Система характеристик и трёх тиров талантов для соответствующего архетипа.",type:"emblem"}));
  const heroEntries=(data.heroCatalog||[]).map(hero=>{
-  const roles=Array.isArray(hero.role?.values)?hero.role.values.join(", "):"Не проверено";
-  const lanes=[hero.lanes?.primary,...(hero.lanes?.flexible||[])].filter(Boolean).join(", ")||"Не проверено";
   const profile=(data.heroProfiles||[]).find(entry=>entry.id===hero.id);
-  const tactical=profile?[
-   profile.mechanics?.length?"Механики: "+profile.mechanics.join(" "):"",
-   profile.strengths?.length?"Сильные стороны: "+profile.strengths.join(" "):"",
-   profile.weaknesses?.length?"Ограничения: "+profile.weaknesses.join(" "):"",
-   profile.teamfight?.preferredPlan?"План боя: "+profile.teamfight.preferredPlan:""
-  ].filter(Boolean).join(" "):"";
-  const description="Роль: "+roles+" · Линия: "+lanes+" · Тактический профиль: "+(hero.tacticalProfile?.status||"missing")+(tactical?" · "+tactical:"");
-  return {name:hero.displayNameRu||hero.nameEn||hero.id,category:hero.nameEn||hero.id,description,type:"hero",status:"Локализация: "+(hero.localization?.status||"pending_review")+" · Роль: "+(hero.role?.status||"pending_review")+" · Линия: "+(hero.lanes?.status||"pending_review")+(profile?" · Уровень профиля: "+profile.confidence:"")};
+  const name=hero.displayNameRu||hero.nameEn||hero.id;
+  const roles=Array.isArray(hero.role?.values)?hero.role.values.join(", "):"Роль уточняется";
+  const lanes=[hero.lanes?.primary,...(hero.lanes?.flexible||[])].filter(Boolean).join(", ")||"Линия уточняется";
+  return {name,category:hero.nameEn||hero.id,type:"hero",hero,profile,roles,lanes};
  });
  const all=[...items,...talents,...emblems,...heroEntries];
- const list=all.filter(x=>(encyFilter==="all"||x.type===encyFilter)&&(x.name+" "+x.category+" "+x.description+" "+(x.status||"")).toLowerCase().includes(q));
- $("encyList").innerHTML=list.map(x=>`<article><b>${esc(x.name)}</b><small style="display:block;color:#39e5ff;margin-top:5px">${esc(x.category)}</small>${x.status?`<small class="hint">${esc(x.status)}</small>`:""}<p>${esc(x.description)}</p></article>`).join("")||"<p>Ничего не найдено</p>";
+ const list=all.filter(x=>(encyFilter==="all"||x.type===encyFilter)&&(x.name+" "+x.category+" "+(x.description||"")+" "+(x.roles||"")+" "+(x.lanes||"")).toLowerCase().includes(q));
+ $("encyList").innerHTML=list.map(x=>{
+  if(x.type==="hero"){
+   const url=encyHeroPortrait(x.hero),p=x.profile;
+   const status=p?(p.confidence==="complete"?"Профиль проверен": "Профиль частичный"):"Профиль в работе";
+   const fact=p?.strengths?.[0]||"Тактические данные пополняются";
+   return '<button class="ency-hero-card" type="button" data-open-hero="'+esc(x.hero.id)+'" style="--ency-portrait:url(&quot;'+url+'&quot;)"><span class="ency-hero-image"><img src="'+url+'" alt="" loading="lazy" onerror="this.parentElement.classList.add(\'missing\');this.remove()"></span><span class="ency-hero-copy"><b>'+esc(x.name)+'</b><small>'+esc(x.category)+'</small><span class="ency-hero-meta">'+esc(x.roles)+' · '+esc(x.lanes)+'</span><span class="ency-hero-status">'+esc(status)+'</span><span class="ency-hero-fact">'+esc(fact)+'</span><span class="ency-hero-open">Открыть профиль ↗</span></span></button>';
+  }
+  return '<article class="ency-info-card"><b>'+esc(x.name)+'</b><small>'+esc(x.category)+'</small><p>'+esc(x.description||"Описание уточняется")+'</p></article>';
+ }).join("")||"<p>Ничего не найдено</p>";
 }
+function renderEncyHeroModal(id){
+ const hero=(data.heroCatalog||[]).find(x=>x.id===id);
+ if(!hero)return;
+ const p=(data.heroProfiles||[]).find(x=>x.id===id);
+ const root=$("encyHeroModalContent"),name=hero.displayNameRu||hero.nameEn||hero.id,url=encyHeroPortrait(hero);
+ const list=(arr)=>Array.isArray(arr)&&arr.length?'<ul>'+arr.map(x=>'<li>'+esc(x)+'</li>').join("")+'</ul>':'<p class="ency-unverified">Данные этого раздела ещё не заполнены проверенными сведениями.</p>';
+ const sources=Array.isArray(p?.sources)?p.sources:[];
+ const reviewed=p?.patch?.reviewedAt||hero.research?.checkedAt||"Дата проверки не указана";
+ const status=p?(p.confidence==="complete"?"Полный профиль":"Частичный профиль"):"Профиль не загружен";
+ const mechanics=p?.mechanics||[];
+ root.innerHTML='<div class="ency-hero-cover" style="--ency-portrait:url(&quot;'+url+'&quot;)"><img src="'+url+'" alt="'+esc(name)+'" onerror="this.style.display=\'none\'"><div class="ency-hero-heading"><small>HERO DATABASE / '+esc(hero.nameEn)+'</small><h2 id="encyHeroTitle">'+esc(name)+'</h2><p>'+esc(hero.nameEn)+' · '+esc((hero.role?.values||[]).join(", ")||"Роль уточняется")+' · '+esc([hero.lanes?.primary,...(hero.lanes?.flexible||[])].filter(Boolean).join(" / ")||"Линия уточняется")+'</p><span class="ency-profile-badge">'+esc(status)+'</span></div></div>'+
+ '<div class="ency-profile-grid">'+
+ '<section class="ency-profile-section wide"><h3>Тактика и стиль игры</h3><p>'+esc(p?.teamfight?.preferredPlan||"Рекомендации по стилю игры пока не подтверждены.")+'</p></section>'+
+ '<section class="ency-profile-section wide"><h3>Пассивка и навыки</h3>'+list(mechanics)+'</section>'+
+ '<section class="ency-profile-section"><h3>Сильные стороны</h3>'+list(p?.strengths)+'</section>'+
+ '<section class="ency-profile-section"><h3>Слабые стороны</h3>'+list(p?.weaknesses)+'</section>'+
+ '<section class="ency-profile-section"><h3>Кого контрит</h3>'+list(p?.matchups?.strongAgainst)+'</section>'+
+ '<section class="ency-profile-section"><h3>Кто контрит его</h3>'+list(p?.matchups?.weakAgainst)+'</section>'+
+ '<section class="ency-profile-section"><h3>С кем сочетается</h3>'+list(p?.synergies)+'</section>'+
+ '<section class="ency-profile-section wide"><h3>План командной драки</h3><p>'+esc(p?.teamfight?.preferredPlan||"План боя ещё не проверен.")+'</p>'+(p?.teamfight?.targetPriority?.length?'<h4>Приоритет целей</h4>'+list(p.teamfight.targetPriority):"")+(p?.teamfight?.avoid?.length?'<h4>Чего избегать</h4>'+list(p.teamfight.avoid):"")+'</section>'+
+ '<section class="ency-profile-section wide"><h3>Заметки по сборке</h3>'+list(p?.itemNotes)+'</section>'+
+ '<section class="ency-profile-section wide"><h3>Проверка данных</h3><p>Статус: '+esc(status)+' · Последняя отметка: '+esc(reviewed)+'. Точные характеристики и рекомендации следует сверять с текущим патчем.</p>'+(sources.length?'<div class="ency-source-list">'+sources.map((s,i)=>'<a href="'+esc(s)+'" target="_blank" rel="noopener">Источник '+(i+1)+' ↗</a>').join("")+'</div>':"")+'</section></div>';
+ $("encyHeroModal").classList.remove("hidden");
+ document.body.classList.add("ency-modal-open");
+}
+$("encyList").addEventListener("click",e=>{
+ const card=e.target.closest("[data-open-hero]");
+ if(card)renderEncyHeroModal(card.dataset.openHero);
+});
+$("encyHeroModal").addEventListener("click",e=>{
+ if(e.target=== $("encyHeroModal")||e.target.closest("[data-ency-close]")){
+  $("encyHeroModal").classList.add("hidden");
+  document.body.classList.remove("ency-modal-open");
+ }
+});
+document.addEventListener("keydown",e=>{
+ if(e.key==="Escape"&&!$("encyHeroModal").classList.contains("hidden")){
+  $("encyHeroModal").classList.add("hidden");
+  document.body.classList.remove("ency-modal-open");
+ }
+});
 $("encySearch").oninput=renderEncy;$("encyFilters").onclick=e=>{let b=e.target.closest("[data-filter]");if(!b)return;encyFilter=b.dataset.filter;document.querySelectorAll("#encyFilters .chip").forEach(x=>x.classList.toggle("active",x===b));renderEncy()};
 $("ocr").onclick=async()=>{let f=$("screenshot").files[0];if(!f)return toast("Выбери скриншот");$("ocrStatus").textContent="Загружаю OCR-движок и распознаю текст...";try{if(!window.Tesseract){await new Promise((ok,no)=>{let s=document.createElement("script");s.src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js";s.onload=ok;s.onerror=no;document.head.append(s)})}let result=await Tesseract.recognize(f,"eng+rus");let text=result.data.text.toLowerCase();let found=data.heroes.map(h=>h.name).filter(n=>text.includes(n.toLowerCase()));$("ocrStatus").textContent=found.length?"Кандидаты распознавания: "+found.join(", ")+". Добавь проверенных героев вручную.":"Не удалось уверенно распознать названия. Попробуй более чёткий скриншот или добавь героев вручную.";if(found.length)found.forEach(h=>{if(enemies.length<5&&!enemies.includes(h))enemies.push(h)});drawTeams();saveDraft()}catch(e){$("ocrStatus").textContent="OCR не загрузился. Проверь подключение к интернету и попробуй ещё раз."}};
 document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="visible")syncDraftState()});
