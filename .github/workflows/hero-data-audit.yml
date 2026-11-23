@@ -32,10 +32,14 @@ jobs:
           node-version: 22
       - name: Audit all 133 hero records and source pages
         run: node scripts/audit-hero-data.mjs
+      - name: Audit biographies and Russian skill descriptions for all heroes
+        run: node scripts/audit-hero-content.mjs
       - name: Upload audit report
         uses: actions/upload-artifact@v4
         with:
           name: hero-data-audit
-          path: artifacts/hero-data-audit.json
+          path: |
+            artifacts/hero-data-audit.json
+            artifacts/hero-content-audit.json
           if-no-files-found: error
           retention-days: 14
