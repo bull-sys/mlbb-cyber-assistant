@@ -532,3 +532,34 @@ body.ency-modal-open{overflow:hidden}
 .ency-skill-language{font-size:9px;color:#a99bb8;letter-spacing:.08em}
 .ency-skill-credit{margin:2px 0 0;color:#8f879c;font-size:10px;line-height:1.45}
 @media(max-width:520px){.ency-skill-row{gap:10px;padding:10px}.ency-skill-icon{width:52px;height:52px;flex-basis:52px}.ency-skill-content p{font-size:11px}}
+
+
+/* Encyclopedia refinements: full-proportion hero artwork and readable combo/perk cards */
+.ency-hero-image{background:radial-gradient(ellipse at 50% 35%,rgba(150,88,180,.18),rgba(18,12,25,.96) 72%);border-color:rgba(215,157,242,.32)}
+.ency-hero-image img{object-fit:contain;object-position:center bottom;padding:3px;box-sizing:border-box}
+.ency-hero-image.missing:after{content:"✦";display:grid;place-items:center;height:100%;color:#d88bea;font-size:28px}
+.ency-hero-cover>img{object-fit:contain;object-position:center bottom;max-height:100%;width:auto}
+.ency-info-card.visual{display:flex;align-items:center;gap:12px;min-height:84px}
+.ency-info-visual{width:58px;height:58px;flex:0 0 58px;display:grid;place-items:center;border:1px solid rgba(207,145,235,.32);border-radius:13px;background:radial-gradient(circle,rgba(139,78,166,.2),#15101c 72%);overflow:hidden}
+.ency-info-icon{width:100%;height:100%;object-fit:contain;padding:5px;box-sizing:border-box}
+.ency-info-icon.placeholder{display:grid;place-items:center;color:#d7a2f1;font-size:22px}
+.ency-info-copy{min-width:0;flex:1}
+.ency-info-copy>b{font-size:13px;line-height:1.25}
+.ency-info-copy>small{display:block;margin-top:4px;color:#d7a3e8;font-size:10px}
+.ency-info-copy p{margin:5px 0 0;font-size:10px;line-height:1.4}
+.ency-remote-panel{display:grid;gap:10px}
+.ency-combo-card{padding:12px;border:1px solid rgba(192,132,224,.2);border-radius:12px;background:rgba(11,9,16,.72)}
+.ency-combo-card h4{margin:0 0 8px;color:#e4b2f0;font-size:12px}
+.ency-combo-card ol{margin:0;padding-left:20px}
+.ency-combo-card li{padding-left:3px;color:#e1d8e8;font-size:11px;line-height:1.5}
+.ency-combo-card li+li{margin-top:4px}
+.ency-combo-card p{margin:8px 0 0;color:#c9bdcf;font-size:11px;line-height:1.55}
+.ency-rating-row{display:flex;flex-wrap:wrap;gap:7px;margin-top:10px}
+.ency-rating-chip{padding:6px 8px;border:1px solid rgba(200,144,226,.24);border-radius:9px;color:#e5d6ed;font-size:10px}
+.ency-remote-credit,.ency-data-credit{display:block;margin:8px 0 0;color:#8f8499;font-size:9px;line-height:1.45}
+@media(max-width:520px){
+ .ency-hero-image{width:94px;height:116px}
+ .ency-info-card.visual{gap:10px;padding:10px}
+ .ency-info-visual{width:50px;height:50px;flex-basis:50px}
+ .ency-combo-card{padding:10px}
+}
