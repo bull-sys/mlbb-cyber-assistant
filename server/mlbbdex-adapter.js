@@ -103,7 +103,7 @@ export async function getGameAssets() {
     emblems,
     items,
     talents,
-    sources: [emblemsResult?.source, itemsResult?.source].filter(Boolean),
+    sources: [emblemsResult?.source].filter(Boolean),
     updatedAt: new Date().toISOString()
   };
 }
