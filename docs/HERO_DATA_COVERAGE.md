@@ -12,7 +12,7 @@ Working branch: assistant/cyber-redesign-2
 | Neutral reference dataset | 133 / 133 | Every catalogue entry has a local reference record with title, role, lane, specialties, release metadata, region/resource labels, source ratings and base statistics. |
 | Role cross-check | 133 / 133 | Every role now matches the pinned reference and the matching MLBB.io page. |
 | Primary-lane cross-check | 132 / 133 | 132 entries have a verified primary lane; Badang remains pending because its split-lane record has no settled primary. |
-| Extended local profile records | 129 / 133 | 129 heroes have a structured local profile record. 4 still need a local extended record. |
+| Extended local profile records | 133 / 133 | All 133 heroes have a structured local profile record. |
 | Runtime profile endpoint | 133 / 133 supported by catalogue lookup | The encyclopedia requests the current neutral hero profile from MLBBDex. When that endpoint is unavailable, the new local reference dataset supplies the base passport and statistics. |
 | Local Russian lore summaries | 31 / 133 | The 31 profiles missing local extended records now have original Russian summaries based on a pinned CC BY-SA lore dataset; other biographies remain in the next audit pass. |
 | Russian skill descriptions | 528 source entries | The pinned Russian skill catalogue has descriptions for 132 heroes; automatic translation quality still requires editorial review. |
@@ -46,9 +46,7 @@ The dataset deliberately excludes authored gameplay analysis and equipment/build
 
 ## Local extended profiles still missing
 
-The following 4 heroes still need a local extended tactical record. Their Russian lore summaries do not count as gameplay profiles:
-
-Zetian (Цзэтянь), Zhask (Заск), Zhuxin (Чжусинь), Zilong (Зилонг).
+No catalogue heroes remain without a local extended tactical profile.
 
 ## Completion standard for each encyclopedia profile
 
@@ -219,3 +217,13 @@ The same profile evidence is now attached to supported Draft Assistant counter-p
 - Yve's passive uses the current three-stack Galactic Power description; the outdated ten-stack description found on an older MLBB.io page is explicitly excluded.
 - Matchup and synergy arrays remain empty pending separate evidence review; professional VOD review remains pending.
 - Coverage is now 129 / 133; 4 tactical profiles remain.
+
+
+## Final four tactical profiles — 2026-11-23 (Zetian, Zhask, Zhuxin, Zilong)
+
+- Added four partial tactical profiles with hero-specific mechanics, strengths, weaknesses, item principles, teamfight plans, target priorities, cautions and source links.
+- Zetian — Mage/Mid Lane; Zhask — Mage/Mid Lane; Zhuxin — Mage/Mid Lane; Zilong — Fighter/Assassin, EXP Lane.
+- Zetian's global ultimate, Zhask's summoned spawn and fusion, Zhuxin's Soul Snare capture threshold, and Zilong's passive trigger and kill-reset mechanic are documented separately.
+- Zhuxin references disagree on passive butterfly cap and mana-return percentage; the profile records the shared mechanic and explicitly avoids treating disputed values as settled.
+- Matchup and synergy arrays remain empty pending separate evidence review. Professional VOD review remains pending.
+- Coverage is now 133 / 133; no tactical profiles remain missing.
