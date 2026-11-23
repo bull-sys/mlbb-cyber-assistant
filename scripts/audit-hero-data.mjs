@@ -17,6 +17,36 @@ const GROWTH_KEYS = [
   "hp", "hpRegen", "mana", "manaRegen", "physicalAttack",
   "physicalDefense", "magicDefense", "attackSpeed", "movementSpeed"
 ];
+const ROLE_NAMES = ["Assassin", "Fighter", "Mage", "Marksman", "Support", "Tank"];
+const normalizeName = value => String(value || "")
+  .normalize("NFKD").replace(/[\u0300-\u036f]/gu, "")
+  .toLowerCase().replace(/[^a-z0-9]/gu, "");
+
+function pageIdentityAndClassification(html, expectedName) {
+  const heading = String(html || "").match(/<h1\b[^>]*>([\s\S]*?)<\/h1>/iu);
+  if (!heading) return { heading: null, nameMatches: false, roles: [], lanes: [], status: "heading-not-found" };
+  const headingText = heading[1].replace(/<[^>]*>/gu, " ").replace(/&amp;/giu, "&").replace(/\s+/gu, " ").trim();
+  const offset = (heading.index || 0) + heading[0].length;
+  const tail = String(html).slice(offset, offset + 1400);
+  const headerText = tail.replace(/<script[\s\S]*?<\/script>/giu, " ")
+    .replace(/<style[\s\S]*?<\/style>/giu, " ")
+    .replace(/<[^>]+>/gu, " ").replace(/&nbsp;/giu, " ")
+    .replace(/&amp;/giu, "&").replace(/\s+/gu, " ").trim();
+  const roles = ROLE_NAMES.filter(role => new RegExp("\\b" + role + "\\b", "iu").test(headerText));
+  const laneAliases = [
+    ["Jungle", /\bJungle\b/iu], ["Roam", /\bRoam\b/iu],
+    ["Mid", /\bMid(?:\s+Lane)?\b/iu], ["Exp", /\bExp(?:\s+Lane)?\b/iu],
+    ["Gold", /\bGold(?:\s+Lane)?\b/iu]
+  ];
+  const lanes = laneAliases.filter(([, pattern]) => pattern.test(headerText)).map(([lane]) => lane);
+  return {
+    heading: headingText,
+    nameMatches: normalizeName(headingText) === normalizeName(expectedName),
+    roles,
+    lanes,
+    status: roles.length && lanes.length ? "parsed" : "partial"
+  };
+}
 
 const numeric = value => {
   if (value === undefined || value === null || value === "") return null;
@@ -109,6 +139,7 @@ async function auditGrowth(hero) {
     };
     const parsed = parseHeroGrowthPage(html, hero.id);
     const stats = parsed.stats || {};
+    const pageProfile = pageIdentityAndClassification(html, hero.nameEn);
     const chartStatus = Object.fromEntries(GROWTH_KEYS.map(key => [
       key, classifyGrowth(stats[key], key)
     ]));
@@ -121,6 +152,7 @@ async function auditGrowth(hero) {
       stats,
       missing: GROWTH_KEYS.filter(key => !stats[key]),
       chartStatus,
+      pageProfile,
       parseError: parsed.error || null
     };
   } catch (error) {
@@ -206,6 +238,25 @@ const growthStatusCounts = Object.fromEntries(GROWTH_KEYS.map(key => [
   }, {})
 ]));
 const parsedCount = growthResults.filter(result => result.status === "parsed").length;
+const pageProfiles = heroes.map(hero => ({ id: hero.id, nameEn: hero.nameEn, ...(hero.liveGrowth?.pageProfile || {}) }));
+const pageClassificationAudit = {
+  parsedHeadings: pageProfiles.filter(item => item.status === "parsed").length,
+  nameMatches: pageProfiles.filter(item => item.nameMatches).length,
+  roleMatches: pageProfiles.filter(item => item.status === "parsed" && JSON.stringify(sorted(item.roles)) === JSON.stringify(sorted(
+    heroReferenceData.find(hero => hero.id === item.id)?.roles.map(role => role.en) || []
+  ))).length,
+  laneMatches: pageProfiles.filter(item => item.status === "parsed" && JSON.stringify(sorted(item.lanes)) === JSON.stringify(sorted(
+    heroReferenceData.find(hero => hero.id === item.id)?.lanes.map(lane => lane.en) || []
+  ))).length,
+  mismatches: pageProfiles.filter(item => {
+    const ref = heroReferenceData.find(hero => hero.id === item.id);
+    return !item.nameMatches || JSON.stringify(sorted(item.roles)) !== JSON.stringify(sorted(ref?.roles.map(role => role.en) || [])) ||
+      JSON.stringify(sorted(item.lanes)) !== JSON.stringify(sorted(ref?.lanes.map(lane => lane.en) || []));
+  }).map(item => ({
+    id: item.id, nameEn: item.nameEn, heading: item.heading,
+    roles: item.roles, lanes: item.lanes, status: item.status
+  }))
+};
 const report = {
   generatedAt: new Date().toISOString(),
   rosterCount: heroCatalog.length,
@@ -222,6 +273,7 @@ const report = {
   laneStatusCounts: countStatuses("lanes"),
   referenceDifferenceCount: referenceDifferences.length,
   referenceDifferences,
+  pageClassificationAudit,
   liveGrowth: {
     parsedPages: parsedCount,
     unavailableOrUnparsedPages: heroCatalog.length - parsedCount,
@@ -235,6 +287,7 @@ console.log(JSON.stringify({
   roster: report.rosterCount,
   upstream: report.pinnedUpstreamCount,
   referenceDifferenceCount: report.referenceDifferenceCount,
+  pageClassificationAudit: report.pageClassificationAudit,
   parsedGrowthPages: report.liveGrowth.parsedPages,
   unavailableOrUnparsedPages: report.liveGrowth.unavailableOrUnparsedPages,
   identityStatusCounts: report.identityStatusCounts,
