@@ -260,8 +260,8 @@ function recommendBuild({items,archetype,threats=[]}){
 $("buildBtn").onclick=()=>{
  const result=recommendBuild({items:data.items,archetype:$("archetype").value,threats:[...threats]});
  $("buildResult").innerHTML=result.length
-  ?`<h3>Рекомендованный порядок</h3>${result.map((item,i)=>`<div class="result"><b>${i+1}. ${esc(item.name)}</b><small> · ${esc(item.category)}</small><p>${esc(item.reasons.join(" · "))}</p><p class="hint">${esc(item.description||"Ситуативный предмет")}</p></div>`).join("")}<p class="hint">Учитываются архетип и отмеченные угрозы. Это рекомендация по тегам каталога, а не расчёт винрейта или точных параметров текущего патча.</p>`
-  :'<p class="hint">Для этого сочетания архетипа и угроз в каталоге пока нет подходящих предметов.</p>';
+  ?`<h3>Справочные карточки предметов</h3>${result.map((item,i)=>{const icon=encyItemImage(item);return `<div class="result build-result-card">${icon?`<img class="build-item-icon" src="${esc(icon)}" alt="" loading="lazy" decoding="async" onerror="this.remove()">`:'<span class="build-item-icon placeholder">✦</span>'}<div class="build-item-copy"><b>${i+1}. ${esc(item.name)}</b><small> · ${esc(item.category)}</small><p>${esc(item.reasons.join(" · "))}</p><p class="hint">${esc(item.description||"Описание предмета уточняется")}</p></div></div>`}).join("")}<p class="hint">Иконки — визуальные обозначения предметов из справочника. Характеристики и описания требуют сверки с текущей версией игры.</p>`
+  :'<p class="hint">В каталоге пока нет карточек для отображения.</p>';
 };
 async function auth(action){let body={email:$("email").value,password:$("password").value,nickname:$("nickname").value};try{let d=await $api("/auth/"+action,{method:"POST",body:JSON.stringify(body)});token=d.token;localStorage.setItem("mlbb_token",token);const restored=await refreshMe();$("authMessage").textContent=restored?"Успешный вход":"Не удалось подтвердить сессию. Войди ещё раз."}catch(e){$("authMessage").textContent=e.message}}
 $("login").onclick=()=>auth("login");$("register").onclick=()=>auth("register");
@@ -277,11 +277,29 @@ $("loadMatches").onclick=async()=>{try{let d=await $api("/matches");$("matches")
 function encyHeroPortrait(hero){
  return heroPortraitUrl({value:hero.id,name:hero.displayNameRu||hero.nameEn,nameEn:hero.nameEn});
 }
+const ITEM_IMAGE_NAMES={
+ "Господство льда":"Dominance Ice","Щит Афины":"Athena's Shield","Сияющая броня":"Radiant Armor",
+ "Древняя кираса":"Antique Cuirass","Шипованная броня":"Blade Armor","Бессмертие":"Immortality",
+ "Зимняя корона":"Winter Crown","Топор войны":"War Axe","Пылающий жезл":"Glowing Wand",
+ "Ожерелье заточения":"Necklace of Durance","Трезубец":"Sea Halberd","Злобный рык":"Malefic Roar",
+ "Палочка гения":"Genius Wand","Божественный меч":"Divine Glaive","Ветер природы":"Wind of Nature",
+ "Ярость берсерка":"Berserker's Fury","Клинок отчаяния":"Blade of Despair"
+};
+function itemAssetKey(value){
+ return String(value||"").normalize("NFKD").replace(/[\\u0300-\\u036f]/gu,"").toLowerCase().replace(/[^a-z0-9]+/g,"");
+}
+function encyItemImage(item){
+ const wanted=ITEM_IMAGE_NAMES[item?.name]||item?.name||"";
+ const key=itemAssetKey(wanted);
+ const assets=encyRemoteAssets?.items||[];
+ const match=assets.find(asset=>[asset.name,asset.nameEn,asset.slug,asset.id].some(value=>itemAssetKey(value)===key));
+ return match?.image||match?.icon||item?.image||null;
+}
 function renderEncy(){
  const q=$("encySearch").value.toLowerCase();
- const items=(encyRemoteAssets?.items?.length?encyRemoteAssets.items:data.items).map(x=>({...x,type:"item",category:x.category||"Предмет"}));
+ const items=data.items.map(x=>({...x,image:encyItemImage(x),type:"item",category:x.category||"Предмет"}));
  const talents=(encyRemoteAssets?.talents?.length?encyRemoteAssets.talents:data.talents).map(x=>({...x,category:"Талант эмблемы",type:"talent",image:x.image||null}));
- const emblems=(encyRemoteAssets?.emblems?.length?encyRemoteAssets.emblems:data.emblems).map(x=>typeof x==="string"?({name:"Эмблема "+x,category:"Эмблема",description:"Описание эмблемы уточняется.",type:"emblem"}):({...x,name:x.name||("Эмблема "+x.role),category:"Эмблема",description:x.description||x.bestFor||"",type:"emblem"}));
+ const emblems=(encyRemoteAssets?.emblems?.length?encyRemoteAssets.emblems:data.emblems).map(x=>typeof x==="string"?({name:"Эмблема "+x,category:"Эмблема",description:"Описание эмблемы уточняется.",type:"emblem"}):({...x,image:x.image||x.icon||null,name:x.name||("Эмблема "+x.role),category:"Эмблема",description:x.description||x.bestFor||"",type:"emblem"}));
  const heroEntries=(data.heroCatalog||[]).map(hero=>{
   const profile=(data.heroProfiles||[]).find(entry=>entry.id===hero.id);
   const name=hero.displayNameRu||hero.nameEn||hero.id;
