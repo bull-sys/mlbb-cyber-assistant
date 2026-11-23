@@ -3093,26 +3093,70 @@ export const heroProfiles = [
 export function validateHeroProfiles(profiles = heroProfiles) {
   const errors = [];
   const ids = new Set();
+  const textArray = (value, minimum = 1) =>
+    Array.isArray(value) &&
+    value.length >= minimum &&
+    value.every(entry => typeof entry === "string" && entry.trim().length > 0);
 
   for (const hero of profiles) {
-    if (!hero.id) {
+    const id = typeof hero?.id === "string" ? hero.id.trim() : "";
+    if (!id) {
       errors.push("Missing hero ID");
       continue;
     }
+    if (ids.has(id)) errors.push("Duplicate ID: " + id);
+    ids.add(id);
 
-    if (ids.has(hero.id)) {
-      errors.push("Duplicate ID: " + hero.id);
+    if (!hero.names?.ru || !hero.names?.en) {
+      errors.push(id + ": missing Russian or English name");
     }
-
-    ids.add(hero.id);
-
-    if (!hero.names?.ru) {
-      errors.push(hero.id + ": missing Russian name");
+    if (!Array.isArray(hero.roles) || !hero.roles.length) {
+      errors.push(id + ": missing role");
     }
-
-    if (!hero.matchups?.strongAgainst ||
-        !hero.matchups?.weakAgainst) {
-      errors.push(hero.id + ": missing matchup data");
+    if (!Array.isArray(hero.lanes) || !hero.lanes.length) {
+      errors.push(id + ": missing lane");
+    }
+    if (!hero.combat || typeof hero.combat !== "object") {
+      errors.push(id + ": missing combat profile");
+    }
+    if (!textArray(hero.mechanics, 3)) {
+      errors.push(id + ": expected at least 3 documented mechanics");
+    }
+    if (!textArray(hero.strengths, 2)) {
+      errors.push(id + ": expected at least 2 strengths");
+    }
+    if (!textArray(hero.weaknesses, 2)) {
+      errors.push(id + ": expected at least 2 weaknesses");
+    }
+    if (!Array.isArray(hero.matchups?.strongAgainst) ||
+        !Array.isArray(hero.matchups?.weakAgainst)) {
+      errors.push(id + ": missing matchup arrays");
+    }
+    if (!Array.isArray(hero.synergies)) {
+      errors.push(id + ": missing synergy array");
+    }
+    if (!textArray(hero.itemNotes, 1)) {
+      errors.push(id + ": missing item notes");
+    }
+    if (typeof hero.teamfight?.preferredPlan !== "string" ||
+        !hero.teamfight.preferredPlan.trim()) {
+      errors.push(id + ": missing teamfight plan");
+    }
+    if (!textArray(hero.teamfight?.targetPriority, 1)) {
+      errors.push(id + ": missing target priorities");
+    }
+    if (!textArray(hero.teamfight?.avoid, 1)) {
+      errors.push(id + ": missing tactical cautions");
+    }
+    if (!textArray(hero.sources, 1) ||
+        !hero.sources.every(source => /^https:\/\//i.test(source))) {
+      errors.push(id + ": missing valid HTTPS sources");
+    }
+    if (!hero.patch?.version || !hero.patch?.reviewedAt) {
+      errors.push(id + ": missing patch version or review date");
+    }
+    if (!["partial", "complete"].includes(hero.confidence)) {
+      errors.push(id + ": invalid confidence status");
     }
   }
 
