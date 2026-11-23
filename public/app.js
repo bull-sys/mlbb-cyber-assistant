@@ -216,7 +216,13 @@ async function runDraft(){
    return;
   }
   const threats=(d.threats||[]).map(item=>'<span class="threat-tag">'+esc(item)+'</span>').join("")||'<span class="report-muted">Явные угрозы по базе не определены</span>';
-  const counters=(d.counters||[]).map((item,index)=>'<article class="counter-card"><div class="counter-rank">'+String(index+1).padStart(2,"0")+'</div><div class="counter-copy"><div class="counter-title"><b>'+esc(item.name)+'</b><span>'+esc(item.role||"Роль не указана")+'</span></div><p>'+esc(item.reason)+'</p></div><div class="counter-score"><b>'+esc(item.score)+'</b><small>оценка</small></div></article>').join("")||'<div class="report-empty">В текущей базе пока нет подтверждённых контрпиков для этого состава.</div>';
+  const counters=(d.counters||[]).map((item,index)=>{
+   const profile=item.profileEvidence;
+   const profileDetails=profile
+    ?'<div class="counter-profile-evidence"><div><small>КЛЮЧЕВАЯ МЕХАНИКА</small><p>'+esc(profile.identity||"Не описана")+'</p></div><div><small>СИЛЬНАЯ СТОРОНА</small><p>'+esc(profile.strength||"Не описана")+'</p></div><div><small>УЧТИ ПРИ ВЫБОРЕ</small><p>'+esc(profile.caution||"Не описано")+'</p></div><small class="counter-profile-status">Данные из тактического паспорта · '+(profile.confidence==="complete"?"полный профиль":"частичный профиль")+'</small></div>'
+    :'<small class="counter-profile-missing">Тактический паспорт этого героя пока не проверен; дополнительная оценка не приводится.</small>';
+   return '<article class="counter-card"><div class="counter-rank">'+String(index+1).padStart(2,"0")+'</div><div class="counter-copy"><div class="counter-title"><b>'+esc(item.name)+'</b><span>'+esc(item.role||"Роль не указана")+'</span></div><p>'+esc(item.reason)+'</p>'+profileDetails+'</div><div class="counter-score"><b>'+esc(item.score)+'</b><small>оценка</small></div></article>';
+  }).join("")||'<div class="report-empty">В текущей базе пока нет подтверждённых контрпиков для этого состава.</div>';
   const build=(d.buildDetails||[]).map((item,index)=>'<article class="build-card"><span class="build-number">'+(index+1)+'</span><div><b>'+esc(item.name)+'</b><small>'+(index===0?"Стартовый слот":index>=4?"Ситуативный слот":"Основной слот")+'</small><p>'+esc((item.reasons||[]).join(" · ")||"Подбор по архетипу и угрозам")+'</p></div></article>').join("")||'<div class="report-empty">Нет подтверждённого порядка предметов.</div>';
   const timing=d.timing||{};
   const phases=[["РАННЯЯ ИГРА",timing.early],["СРЕДНЯЯ ИГРА",timing.mid],["ПОЗДНЯЯ ИГРА",timing.late]].filter(x=>x[1]).map(x=>'<article class="phase-card"><small>'+x[0]+'</small><p>'+esc(x[1])+'</p></article>').join("");
