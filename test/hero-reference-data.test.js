@@ -44,7 +44,7 @@ test("reference dataset includes attribution and a dated source snapshot", () =>
 
 test("legacy detailed profiles remain linked to known catalogue entries", () => {
   const catalogIds = new Set(heroCatalog.map(hero => hero.id));
-  assert.equal(heroProfiles.length, 96);
+  assert.equal(heroProfiles.length, 102);
   for (const profile of heroProfiles) {
     assert.ok(catalogIds.has(profile.id), "profile without catalogue entry: " + profile.id);
   }
