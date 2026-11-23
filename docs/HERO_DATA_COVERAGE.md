@@ -14,7 +14,8 @@ Working branch: assistant/cyber-redesign-2
 | Primary-lane cross-check | 132 / 133 | 132 entries have a verified primary lane; Badang remains pending because its split-lane record has no settled primary. |
 | Extended local profile records | 102 / 133 | 102 heroes have a structured local profile record. 31 still need a local extended record. |
 | Runtime profile endpoint | 133 / 133 supported by catalogue lookup | The encyclopedia requests the current neutral hero profile from MLBBDex. When that endpoint is unavailable, the new local reference dataset supplies the base passport and statistics. |
-| Local fallback lore and skill text | Not complete | The static fallback intentionally does not invent lore or skill descriptions. Those sections require sourced data and remain marked unavailable if the live source cannot provide them. |
+| Local Russian lore summaries | 31 / 133 | The 31 profiles missing local extended records now have original Russian summaries based on a pinned CC BY-SA lore dataset; other biographies remain in the next audit pass. |
+| Russian skill descriptions | 528 source entries | The pinned Russian skill catalogue has descriptions for 132 heroes; automatic translation quality still requires editorial review. |
 
 ## New neutral reference dataset
 
@@ -39,12 +40,13 @@ The dataset deliberately excludes authored gameplay analysis and equipment/build
 - Current source fields are merged with the local base-reference snapshot, so a missing optional field does not erase a known base statistic.
 - If the external profile endpoint fails, the adapter returns the local record and marks it as a dated fallback.
 - The UI distinguishes current source data from fallback data. It does not present the fallback snapshot as live.
-- Skill descriptions continue to come from the separate skill-data path. Russian descriptions are machine-translated source text and must remain visibly identified as such.
+- A separate local lore dataset supplies concise Russian summaries for the 31 previously missing extended profiles, including source revision and CC BY-SA attribution. The adapter exposes the same `lore` field to the existing encyclopedia section in both live and offline modes.
+- Skill descriptions continue to come from the separate skill-data path. Russian descriptions are machine-translated source text and must remain visibly identified as such. The content audit flagged the literal Helcurt state translation “Бродяга”; this is a localization defect, not an approved Russian term, and must be corrected in a dedicated terminology pass.
 - No missing story, statistic, translation or patch note should be filled with a guess.
 
 ## Local extended profiles still missing
 
-The following 31 heroes are present in the 133-entry catalogue and the new neutral reference dataset, but do not yet have a local extended profile record:
+The following 31 heroes now have a local Russian lore summary. Their broader extended records remain separate work and must not be treated as complete merely because the biography exists:
 
 Mathilda (Матильда), Melissa (Мелисса), Minsitthar (Минситтар), Moskov (Москов), Natalia (Наталья), Natan (Натан), Novaria (Новария), Aamon (Эймон), Alice (Алиса), Angela (Ангела), Odette (Одетта), Phoveus (Фовиус), Popol and Kupa (Пополь и Купа), Ruby (Руби), Selena (Селена), Silvanna (Сильвана), Sora (Сора), Uranus (Уранус), Vale (Вэйл), Valentina (Валентина), Vexana (Вексана), Wanwan (Ванван), X.Borg (Икс.Борг), Yi Sun-shin (Ли Сун-Син), Yin (Инь), Yu Zhong (Чонг), Yve (Ив), Zetian (Цзэтянь), Zhask (Заск), Zhuxin (Чжусинь), Zilong (Зилонг).
 
