@@ -286,13 +286,13 @@ const ITEM_IMAGE_NAMES={
  "Ярость берсерка":"Berserker's Fury","Клинок отчаяния":"Blade of Despair"
 };
 function itemAssetKey(value){
- return String(value||"").normalize("NFKD").replace(/[\\u0300-\\u036f]/gu,"").toLowerCase().replace(/[^a-z0-9]+/g,"");
+ return String(value||"").normalize("NFKD").toLowerCase().replace(/[^a-z0-9]+/g,"");
 }
 function encyItemImage(item){
  const wanted=ITEM_IMAGE_NAMES[item?.name]||item?.name||"";
  const key=itemAssetKey(wanted);
  const assets=encyRemoteAssets?.items||[];
- const match=assets.find(asset=>[asset.name,asset.nameEn,asset.slug,asset.id].some(value=>itemAssetKey(value)===key));
+ const match=assets.find(asset=>[asset.name,asset.nameEn,asset.title,asset.slug,asset.id,asset.key].some(value=>itemAssetKey(value)===key));
  return match?.image||match?.icon||item?.image||null;
 }
 function renderEncy(){
