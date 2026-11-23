@@ -48,10 +48,13 @@ function readLocalDraft(){try{return JSON.parse(localStorage.getItem(draftStorag
 function applyDraftState(saved){
  if(!saved||saved.version!==1)return;
  const names=new Set([...data.heroes.map(h=>h.name),...(data.draftHeroOptions||[]).map(h=>h.id)]);
- enemies=Array.isArray(saved.enemies)?saved.enemies.filter(x=>names.has(x)).slice(0,5):[];
- allies=Array.isArray(saved.allies)?saved.allies.filter(x=>names.has(x)).slice(0,5):[];
+ const aliases={"Диррот":"Дариус","Фарса":"Фаша","Олдос":"Алдос","Баксия":"Баксий","Бейн":"Бэйн","Баратс":"Бартс","Сиси":"Чичи","Иритэль":"Иритель","Каджа":"Кайя","Ло И":"Ло Йи","Фовеус":"Фовиус","Сильванна":"Сильвана","Юй Чжун":"Чонг","Жаск":"Заск","Чжусин":"Чжусинь","Аамон":"Эймон"};
+ const normalizeName=value=>aliases[value]||value;
+ enemies=Array.isArray(saved.enemies)?saved.enemies.map(normalizeName).filter(x=>names.has(x)).slice(0,5):[];
+ allies=Array.isArray(saved.allies)?saved.allies.map(normalizeName).filter(x=>names.has(x)).slice(0,5):[];
  if(data.roles.includes(saved.lane))$("lane").value=saved.lane;
- if(names.has(saved.myHero)){$("myHero").value=saved.myHero;$("myHeroChoice").textContent=draftHeroLabel(saved.myHero)}else $("myHeroChoice").textContent="Не выбран";
+ const savedMyHero=normalizeName(saved.myHero);
+ if(names.has(savedMyHero)){$("myHero").value=savedMyHero;$("myHeroChoice").textContent=draftHeroLabel(savedMyHero)}else $("myHeroChoice").textContent="Не выбран";
  const allowed=new Set(threatDefs.map(([id])=>id));
  threats=new Set(Array.isArray(saved.threats)?saved.threats.filter(x=>allowed.has(x)):[]);
  document.querySelectorAll("#threats [data-threat]").forEach(b=>b.classList.toggle("active",threats.has(b.dataset.threat)));
