@@ -4087,7 +4087,6 @@ export const heroProfiles = [
     ],
     "lanes": [
       "Средняя линия",
-      "Роум"
     ],
     "combat": {
       "damage": "magic",
