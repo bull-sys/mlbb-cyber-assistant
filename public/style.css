@@ -895,3 +895,7 @@ details.ency-info-card.visual.emblem[open]{
 .ency-info-tags{display:block;margin-top:7px;color:#bba9c5;font-size:9px;line-height:1.45}
 .ency-info-expanded-meta{margin-top:6px!important}
 @media(prefers-reduced-motion:reduce){.ency-info-card.visual{transition:none}}
+
+/* Details wrapper must stay block; its summary owns the inner grid layout */
+details.ency-info-card.visual{display:block}
+details.ency-info-card.visual>.ency-info-summary{display:grid}
