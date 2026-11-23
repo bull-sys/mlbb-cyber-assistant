@@ -321,7 +321,7 @@ function renderEncy(){
  const talents=talentSource.map(x=>{
   const slug=x.slug||itemAssetSlug(x.name||x.nameEn);
   const fallback=data.talents.find(t=>itemAssetKey(t.name)===itemAssetKey(x.name)||itemAssetKey(t.name)===itemAssetKey(TALENT_LOCAL_NAMES[slug]||""));
-  return {...x,name:TALENT_LOCAL_NAMES[slug]||x.name||fallback?.name||"Талант",description:x.description||x.summary||fallback?.description||"Описание таланта уточняется.",category:"Талант эмблемы",type:"talent",image:x.image||x.icon||null};
+  return {...x,name:TALENT_LOCAL_NAMES[slug]||x.name||fallback?.name||"Талант",description:x.description||x.summary||fallback?.description||"Описание таланта уточняется.",category:"Талант эмблемы",type:"talent",image:x.image||x.icon||(TALENT_LOCAL_NAMES[slug]?"https://mlbbdex.com/visuels/talents/"+slug+".webp":null)};
  });
  const emblemSource=encyRemoteAssets?.emblems?.length?encyRemoteAssets.emblems:data.emblems;
  const emblems=emblemSource.map(x=>{
