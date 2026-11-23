@@ -86,23 +86,18 @@ async function getTalentAssets() {
 }
 
 export async function getGameAssets() {
-  const [emblemsResult, itemsResult, talents] = await Promise.all([
+  const [emblemsResult, talents] = await Promise.all([
     cachedJson("emblems", BASE + "/api/v1/emblems?locale=en").catch(() => null),
-    cachedJson("items", BASE + "/api/v1/items?locale=en").catch(() => null),
     getTalentAssets()
   ]);
-  const normalizeAsset = (item, kind = "generic") => {
+  const normalizeAsset = item => {
     const candidate = item.image || item.icon || item.iconUrl || item.icon_url ||
       item.imageUrl || item.image_url || item.img || item.images?.icon ||
       item.images?.small || item.icon?.url || item.image?.url || item.assets?.icon;
-    const directImage = absoluteImage(candidate);
-    const itemImage = kind === "item"
-      ? absoluteImage("/visuels/objets/" + (item.slug || slugify(item.name)) + ".webp")
-      : null;
-    return { ...item, image: directImage || itemImage };
+    return { ...item, image: absoluteImage(candidate) };
   };
-  const emblems = (Array.isArray(emblemsResult?.data) ? emblemsResult.data : []).map(item => normalizeAsset(item, "emblem"));
-  const items = (Array.isArray(itemsResult?.data) ? itemsResult.data : []).map(item => normalizeAsset(item, "item"));
+  const emblems = (Array.isArray(emblemsResult?.data) ? emblemsResult.data : []).map(normalizeAsset);
+  const items = [];
   return {
     ok: true,
     emblems,
