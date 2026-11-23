@@ -12,7 +12,7 @@ Working branch: assistant/cyber-redesign-2
 | Neutral reference dataset | 133 / 133 | Every catalogue entry has a local reference record with title, role, lane, specialties, release metadata, region/resource labels, source ratings and base statistics. |
 | Role cross-check | 103 / 133 | Role labels have cross-source evidence in the catalogue. |
 | Primary-lane cross-check | 102 / 133 | Primary-lane labels have cross-source evidence in the catalogue. |
-| Extended local profile records | 96 / 133 | 96 heroes have a structured local profile record. 37 still need a local extended record. |
+| Extended local profile records | 102 / 133 | 102 heroes have a structured local profile record. 31 still need a local extended record. |
 | Runtime profile endpoint | 133 / 133 supported by catalogue lookup | The encyclopedia requests the current neutral hero profile from MLBBDex. When that endpoint is unavailable, the new local reference dataset supplies the base passport and statistics. |
 | Local fallback lore and skill text | Not complete | The static fallback intentionally does not invent lore or skill descriptions. Those sections require sourced data and remain marked unavailable if the live source cannot provide them. |
 
@@ -44,9 +44,9 @@ The dataset deliberately excludes authored gameplay analysis and equipment/build
 
 ## Local extended profiles still missing
 
-The following 37 heroes are present in the 133-entry catalogue and the new neutral reference dataset, but do not yet have a local extended profile record:
+The following 31 heroes are present in the 133-entry catalogue and the new neutral reference dataset, but do not yet have a local extended profile record:
 
-Lesley (Лесли), Lolita (Лолита), Luo Yi (Ло Йи), Lylia (Лилия), Martis (Мартис), Mathilda (Матильда), Melissa (Мелисса), Minsitthar (Минситтар), Moskov (Москов), Natalia (Наталья), Natan (Натан), Novaria (Новария), Aamon (Эймон), Alice (Алиса), Angela (Ангела), Odette (Одетта), Phoveus (Фовиус), Popol and Kupa (Пополь и Купа), Ruby (Руби), Saber (Сабер), Selena (Селена), Silvanna (Сильвана), Sora (Сора), Uranus (Уранус), Vale (Вэйл), Valentina (Валентина), Vexana (Вексана), Wanwan (Ванван), X.Borg (Икс.Борг), Yi Sun-shin (Ли Сун-Син), Yin (Инь), Yu Zhong (Чонг), Yve (Ив), Zetian (Цзэтянь), Zhask (Заск), Zhuxin (Чжусинь), Zilong (Зилонг).
+Mathilda (Матильда), Melissa (Мелисса), Minsitthar (Минситтар), Moskov (Москов), Natalia (Наталья), Natan (Натан), Novaria (Новария), Aamon (Эймон), Alice (Алиса), Angela (Ангела), Odette (Одетта), Phoveus (Фовиус), Popol and Kupa (Пополь и Купа), Ruby (Руби), Selena (Селена), Silvanna (Сильвана), Sora (Сора), Uranus (Уранус), Vale (Вэйл), Valentina (Валентина), Vexana (Вексана), Wanwan (Ванван), X.Borg (Икс.Борг), Yi Sun-shin (Ли Сун-Син), Yin (Инь), Yu Zhong (Чонг), Yve (Ив), Zetian (Цзэтянь), Zhask (Заск), Zhuxin (Чжусинь), Zilong (Зилонг).
 
 ## Completion standard for each encyclopedia profile
 
