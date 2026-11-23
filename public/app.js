@@ -6,7 +6,7 @@ const GUEST_DRAFT_STORAGE_KEY="mlbb_draft_state_v1_guest";
 let draftStorageKey=GUEST_DRAFT_STORAGE_KEY;
 try{if(!localStorage.getItem(GUEST_DRAFT_STORAGE_KEY)&&localStorage.getItem(LEGACY_DRAFT_STORAGE_KEY))localStorage.setItem(GUEST_DRAFT_STORAGE_KEY,localStorage.getItem(LEGACY_DRAFT_STORAGE_KEY));localStorage.removeItem(LEGACY_DRAFT_STORAGE_KEY)}catch{}
 let draftSyncTimer=null,draftSyncInFlight=false,draftSyncAgain=false;
-let token="";try{token=localStorage.getItem("mlbb_token")||""}catch{};let activeUserId=null,data={heroes:[],draftHeroOptions:[],heroCatalog:[],heroProfiles:[],items:[],talents:[],emblems:[],roles:[],ranks:[],styles:[]},enemies=[],allies=[],threats=new Set(),encyFilter="all",ocrWorker=null,encyRemoteAssets=null,encyRemoteKnowledge=new Map(),encyKnowledgeRequest=0;
+let token="";try{token=localStorage.getItem("mlbb_token")||""}catch{};let activeUserId=null,data={heroes:[],draftHeroOptions:[],heroCatalog:[],heroProfiles:[],items:[],talents:[],emblems:[],roles:[],ranks:[],styles:[]},enemies=[],allies=[],threats=new Set(),encyFilter="all",ocrWorker=null,encyRemoteAssets=null,encyRemoteKnowledge=new Map(),encyGrowthKnowledge=new Map(),encyKnowledgeRequest=0;
 const threatDefs=[["heal","💚 Отхил / вампиризм"],["magic","🔮 2+ мага / прокаст"],["speed","⚡ Скорость атаки"],["tank","🛡 Жирные танки"],["cc","⛓ Тяжёлый контроль"],["physical","⚔ Много физического урона"],["burst","💥 Взрывной урон"]];
 const $api=async(path,opts={})=>{let r=await fetch("/api"+path,{...opts,headers:{"Content-Type":"application/json",...(token?{Authorization:"Bearer "+token}:{}),...(opts.headers||{})}});let d=await r.json().catch(()=>({error:"Ошибка сервера"}));if(!r.ok){if(r.status===401&&token&&!path.startsWith("/auth/"))logout();throw Error(d.error||"Ошибка")}return d};
 function toast(s){let el=document.createElement("div");el.textContent=s;el.style="position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#18384a;border:1px solid #39e5ff;padding:12px 17px;border-radius:10px;z-index:99;font-size:12px";document.body.append(el);setTimeout(()=>el.remove(),2500)}
@@ -549,9 +549,23 @@ function renderEncyHeroRemoteProfile(remote){
   const growthSource=remote.growthData.source;
   sections.push('<small class="ency-data-credit">Данные роста: <a href="'+esc(growthSource.url)+'" target="_blank" rel="noopener">MLBB.io ↗</a>'+(growthSource.updatedAt?' · обновлено '+esc(growthSource.updatedAt):'')+'. Проверено '+esc(new Date(remote.growthData.checkedAt||Date.now()).toLocaleDateString("ru-RU"))+'.</small>');
  }else{
-  sections.push('<small class="ency-data-credit">Дополнительный источник роста временно недоступен; графики строятся только по опубликованным значениям основного справочника.</small>');
+  sections.push('<small class="ency-data-credit">'+(remote?.growthUnavailable?"Дополнительный источник роста временно недоступен; графики показывают только опубликованные значения основного справочника.":"Проверяем дополнительный источник роста; пока показаны опубликованные значения основного справочника.")+'</small>');
  }
  host.innerHTML=sections.join("")||'<p class="ency-unverified">Характеристики этого персонажа пока не опубликованы в проверенном источнике.</p>';
+}
+async function loadEncyHeroGrowth(id,remote,request){
+ try{
+  let growth=encyGrowthKnowledge.get(id);
+  if(!growth){
+   growth=await $api("/hero-growth/"+encodeURIComponent(id));
+   encyGrowthKnowledge.set(id,growth);
+  }
+  if(request!==encyKnowledgeRequest||!$("encyHeroModal")||$("encyHeroModal").classList.contains("hidden"))return;
+  renderEncyHeroRemoteProfile({...remote,growthData:growth});
+ }catch(error){
+  if(request!==encyKnowledgeRequest||!$("encyHeroModal")||$("encyHeroModal").classList.contains("hidden"))return;
+  renderEncyHeroRemoteProfile({...remote,growthUnavailable:true});
+ }
 }
 async function loadEncyHeroKnowledge(id){
   const request=++encyKnowledgeRequest;
@@ -562,6 +576,7 @@ async function loadEncyHeroKnowledge(id){
    const currentHero=(data.heroCatalog||[]).find(hero=>hero.id===id);
    renderEncyHeroDescription(remote,currentHero);
    renderEncyHeroRemoteProfile(remote);
+   loadEncyHeroGrowth(id,remote,request);
    const badge=$("encyHeroProfileBadge");if(badge&&remote.profile)badge.textContent=remote.fallback?"Резервная база · 20.11.2026":"Справочные данные загружены";
    const portrait=remote.profile?.images?.portrait;
    if(portrait){
