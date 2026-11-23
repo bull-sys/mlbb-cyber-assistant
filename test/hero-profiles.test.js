@@ -933,7 +933,7 @@ test("Uranus, Vale, Valentina, Vexana and Wanwan tactical profiles are sourced a
 });
 
 test("all local tactical profiles contain enough material for a useful hero passport", () => {
-  assert.equal(heroProfiles.length, 119);
+  assert.equal(heroProfiles.length, 124);
   for (const hero of heroProfiles) {
     assert.ok(hero.mechanics.length >= 3, hero.id + " mechanics");
     assert.ok(hero.strengths.length >= 2, hero.id + " strengths");
