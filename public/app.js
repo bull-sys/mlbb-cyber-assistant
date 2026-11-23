@@ -301,6 +301,41 @@ function renderEncy(){
   return '<article class="ency-info-card"><b>'+esc(x.name)+'</b><small>'+esc(x.category)+'</small><p>'+esc(x.description||"Описание уточняется")+'</p></article>';
  }).join("")||"<p>Ничего не найдено</p>";
 }
+let encySkillRequestId=0;
+function encySkillSlotLabel(index){
+ return ["ПАССИВКА","НАВЫК 1","НАВЫК 2","УЛЬТИМЕЙТ"][index]||("ДОПОЛНИТЕЛЬНАЯ СПОСОБНОСТЬ "+(index-3));
+}
+function encySkillRussianDescription(skill,index,mechanics){
+ const keys=["пассив","навык 1","первый навык","навык 2","второй навык","ультимейт","супернавык"];
+ const target=[["пассив"],["навык 1","первый навык"],["навык 2","второй навык"],["ультимейт","супернавык"]][index]||[];
+ const found=mechanics.find(line=>target.some(key=>line.toLowerCase().includes(key)));
+ if(found)return {text:found,language:"ru"};
+ return skill.description?{text:skill.description,language:"en"}:{text:"Описание этого навыка пока не найдено в проверенной базе.",language:"unknown"};
+}
+async function loadEncyHeroSkills(id,profile){
+ const requestId=++encySkillRequestId;
+ const host=$("encyHeroSkills");
+ if(!host)return;
+ try{
+  const result=await $api("/hero-skills/"+encodeURIComponent(id));
+  if(requestId!==encySkillRequestId||!host.isConnected)return;
+  const mechanics=Array.isArray(profile?.mechanics)?profile.mechanics:[];
+  if(!result.skills?.length){
+   host.innerHTML='<p class="ency-unverified">Навыки для этого героя пока не удалось загрузить из источника игрового клиента.</p>';
+   return;
+  }
+  host.innerHTML=result.skills.map((skill,index)=>{
+   const desc=encySkillRussianDescription(skill,index,mechanics);
+   const icon=skill.iconUrl?'<img src="'+esc(skill.iconUrl)+'" alt="" loading="lazy" decoding="async" onerror="this.remove()">':'<span>✦</span>';
+   const meta=skill.cooldownAndCost?'<small class="ency-skill-meta">'+esc(skill.cooldownAndCost)+'</small>':'';
+   const lang=desc.language==="en"?' <span class="ency-skill-language">ОРИГИНАЛ EN</span>':"";
+   return '<article class="ency-skill-row"><div class="ency-skill-icon">'+icon+'</div><div class="ency-skill-content"><div class="ency-skill-heading"><span class="ency-skill-slot">'+encySkillSlotLabel(index)+'</span><b>'+esc(skill.name)+'</b>'+lang+'</div><p>'+esc(desc.text)+'</p>'+meta+'</div></article>';
+  }).join("")+'<p class="ency-skill-credit">Иконки навыков загружены из данных игрового клиента Moonton. Изображения и игровые материалы принадлежат правообладателю.</p>';
+ }catch(error){
+  if(requestId!==encySkillRequestId||!host.isConnected)return;
+  host.innerHTML='<p class="ency-unverified">Не удалось загрузить иконки навыков. Попробуй открыть героя позже.</p>';
+ }
+}
 function renderEncyHeroModal(id){
  const hero=(data.heroCatalog||[]).find(x=>x.id===id);
  if(!hero)return;
@@ -314,7 +349,7 @@ function renderEncyHeroModal(id){
  root.innerHTML='<div class="ency-hero-cover" style="--ency-portrait:url(&quot;'+url+'&quot;)"><img src="'+url+'" alt="'+esc(name)+'" onerror="this.style.display=\'none\'"><div class="ency-hero-heading"><small>HERO DATABASE / '+esc(hero.nameEn)+'</small><h2 id="encyHeroTitle">'+esc(name)+'</h2><p>'+esc(hero.nameEn)+' · '+esc((hero.role?.values||[]).join(", ")||"Роль уточняется")+' · '+esc([hero.lanes?.primary,...(hero.lanes?.flexible||[])].filter(Boolean).join(" / ")||"Линия уточняется")+'</p><span class="ency-profile-badge">'+esc(status)+'</span></div></div>'+
  '<div class="ency-profile-grid">'+
  '<section class="ency-profile-section wide"><h3>Тактика и стиль игры</h3><p>'+esc(p?.teamfight?.preferredPlan||"Рекомендации по стилю игры пока не подтверждены.")+'</p></section>'+
- '<section class="ency-profile-section wide"><h3>Пассивка и навыки</h3>'+list(mechanics)+'</section>'+
+ '<section class="ency-profile-section wide"><h3>Пассивка и навыки</h3><div id="encyHeroSkills" class="ency-skill-list"><p class="ency-unverified">Загружаем изображения навыков и описания...</p></div></section>'+
  '<section class="ency-profile-section"><h3>Сильные стороны</h3>'+list(p?.strengths)+'</section>'+
  '<section class="ency-profile-section"><h3>Слабые стороны</h3>'+list(p?.weaknesses)+'</section>'+
  '<section class="ency-profile-section"><h3>Кого контрит</h3>'+list(p?.matchups?.strongAgainst)+'</section>'+
@@ -325,6 +360,7 @@ function renderEncyHeroModal(id){
  '<section class="ency-profile-section wide"><h3>Проверка данных</h3><p>Статус: '+esc(status)+' · Последняя отметка: '+esc(reviewed)+'. Точные характеристики и рекомендации следует сверять с текущим патчем.</p>'+(sources.length?'<div class="ency-source-list">'+sources.map((s,i)=>'<a href="'+esc(s)+'" target="_blank" rel="noopener">Источник '+(i+1)+' ↗</a>').join("")+'</div>':"")+'</section></div>';
  $("encyHeroModal").classList.remove("hidden");
  document.body.classList.add("ency-modal-open");
+ loadEncyHeroSkills(id,p);
 }
 $("encyList").addEventListener("click",e=>{
  const card=e.target.closest("[data-open-hero]");
