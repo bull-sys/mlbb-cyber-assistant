@@ -4748,7 +4748,6 @@ export const heroProfiles = [
     patch: { version: HERO_DB_PATCH, notes: ["Galactic Power с тремя зарядами, Void Blast, повторное направление Void Crystal и Tap/Swipe режимы Real World Manipulation сверены по Liquipedia, MLBB Analytics и PlayAware.", "Устаревшая страница MLBB.io содержит старое описание пассивного эффекта на 10 зарядов; оно намеренно не использовано.", "Профиль учитывает исключение Suppression из устойчивости ультимейта; рейтинговые синергии и матчапы не объявляются универсальными."], reviewedAt: "2026-11-23" },
     confidence: "partial"
   },
-,
 
   {
     id: "zetian",
