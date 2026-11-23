@@ -401,7 +401,8 @@ function renderEncyHeroModal(id){
   '<section class="ency-profile-section wide"><h3>Проверка данных</h3><p>Статус: '+esc(status)+' · Последняя отметка: '+esc(reviewed)+'. Сведения могут изменяться после обновлений игры.</p>'+(sources.length?'<div class="ency-source-list">'+sources.map((source,i)=>'<a href="'+esc(source)+'" target="_blank" rel="noopener">Источник '+(i+1)+' ↗</a>').join("")+'</div>':"")+'</section></div>';
   $("encyHeroModal").classList.remove("hidden");
  document.body.classList.add("ency-modal-open");
- loadEncyHeroSkills(id);\n  loadEncyHeroKnowledge(id);
+ loadEncyHeroSkills(id);
+  loadEncyHeroKnowledge(id);
 }
 $("encyList").addEventListener("click",e=>{
  const card=e.target.closest("[data-open-hero]");
