@@ -8,10 +8,7 @@
 import { heroReferenceData } from "./hero-reference-data.js";
 
 const referenceById = new Map(heroReferenceData.map(hero => [hero.id, hero]));
-const laneReviewPending = new Set([
-  "julian", "atlas", "akai", "alucard", "arlott", "barats", "edith",
-  "guinevere", "harith", "hylos", "valir", "rafaela", "minotaur"
-]);
+const laneReviewPending = new Set(["badang"]);
 
 const catalogEntry = (id, nameEn, displayNameRu, {
   identityStatus = "pending_review",
@@ -29,9 +26,13 @@ const catalogEntry = (id, nameEn, displayNameRu, {
     ? roleValues
     : (reference?.roles || []).map(value => value.en);
   const sourceLanes = (reference?.lanes || []).map(value => value.en);
-  const resolvedPrimaryLane = primaryLane || sourceLanes[0] || null;
+  const resolvedPrimaryLane = laneReviewPending.has(id)
+    ? primaryLane
+    : (primaryLane || sourceLanes[0] || null);
   const resolvedFlexibleLanes = [...new Set(
-    flexibleLanes.length ? flexibleLanes : (primaryLane ? [] : sourceLanes.slice(1))
+    laneReviewPending.has(id)
+      ? flexibleLanes
+      : (flexibleLanes.length ? flexibleLanes : (primaryLane ? [] : sourceLanes.slice(1)))
   )].filter(lane => lane !== resolvedPrimaryLane);
   return {
     id,
