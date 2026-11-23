@@ -733,7 +733,17 @@ export const heroCatalog = [
   }),
   catalogEntry("melissa", "Melissa", "Мелисса", {
     identityStatus: "pending_review",
-    localizationStatus: "pending_review"
+    localizationStatus: "pending_review",
+    roleValues: ["Marksman"],
+    roleStatus: "verified",
+    primaryLane: "Gold Lane",
+    laneStatus: "verified",
+    tacticalProfileStatus: "partial",
+    research: {
+      roleSources: ["https://mlbb.io/en/hero/melissa"],
+      laneSources: ["https://mlbb.io/en/hero/melissa", "https://mlbbhub.com/heroes/melissa"],
+      mechanicsSources: ["https://liquipedia.net/mobilelegends/Melissa", "https://mlbb.io/en/hero/melissa"]
+    }
   }),
   catalogEntry("minsitthar", "Minsitthar", "Минситтар", {
     identityStatus: "pending_review",
