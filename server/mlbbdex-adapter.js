@@ -1,4 +1,5 @@
 import { heroReferenceData, HERO_REFERENCE_SOURCE } from "./hero-reference-data.js";
+import { heroLoreById, HERO_LORE_SOURCE } from "./hero-lore-data.js";
 
 const BASE = "https://mlbbdex.com";
 const TTL = 6 * 60 * 60 * 1000;
@@ -46,6 +47,7 @@ const heroReferenceBySlug = new Map(heroReferenceData.map(hero => [hero.id, hero
 function staticHeroKnowledge(hero, slug) {
   const reference = heroReferenceBySlug.get(slug);
   if (!reference) return null;
+  const localLore = heroLoreById.get(slug) || null;
   return {
     ok: true,
     fallback: true,
@@ -62,6 +64,8 @@ function staticHeroKnowledge(hero, slug) {
       resource: reference.resource,
       stats: reference.stats,
       ratings: reference.ratings,
+      lore: localLore?.summary || null,
+      loreSource: localLore ? HERO_LORE_SOURCE : null,
       images: {}
     },
     source: HERO_REFERENCE_SOURCE,
@@ -84,6 +88,7 @@ export async function getHeroKnowledge(hero) {
     const images = profile?.images || {};
     const { analysis: _analysis, builds: _builds, ...neutralProfile } = profile;
     const reference = heroReferenceBySlug.get(slug);
+    const localLore = heroLoreById.get(slug) || null;
     const mergedProfile = {
       ...(reference ? {
         id: reference.heroId,
@@ -114,6 +119,8 @@ export async function getHeroKnowledge(hero) {
       resource: neutralProfile.resource || reference?.resource || null,
       stats: { ...(reference?.stats || {}), ...(neutralProfile.stats || {}) },
       ratings: { ...(reference?.ratings || {}), ...(neutralProfile.ratings || {}) },
+      lore: neutralProfile.lore || neutralProfile.story || neutralProfile.bio || localLore?.summary || null,
+      loreSource: localLore ? HERO_LORE_SOURCE : null,
       images: {
         ...images,
         portrait: absoluteImage(images.portrait),
