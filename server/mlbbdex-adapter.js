@@ -111,7 +111,11 @@ export async function getHeroKnowledge(hero) {
       ...build,
       items: (Array.isArray(build.items) ? build.items : []).map(name => ({
         name,
-        image: equipment.get(String(name).toLowerCase()) || null
+        image: BASE + "/visuels/objets/" + slugify(name) + ".webp"
+      })),
+      talents: (Array.isArray(build.talents) ? build.talents : []).map(name => ({
+        name,
+        image: BASE + "/visuels/talents/" + slugify(name) + ".webp"
       }))
     });
     const builds = Object.fromEntries(Object.entries(buildData).map(([lane, ranks]) => [
@@ -166,7 +170,8 @@ export async function getGameAssets() {
   try {
     const [itemsPayload, emblemsPayload, talents] = await Promise.all([
       cachedJson("items", BASE + "/api/v1/items?locale=en"),
-      cachedJson("emblems", BASE + "/api/v1/emblems?locale=en")
+      cachedJson("emblems", BASE + "/api/v1/emblems?locale=en"),
+      getTalentAssets()
     ]);
     const equipment = await getEquipmentMap();
     const items = (Array.isArray(itemsPayload?.data) ? itemsPayload.data : []).filter(item => !item.removed).map(item => ({
@@ -180,6 +185,7 @@ export async function getGameAssets() {
       ok: true,
       items,
       emblems,
+      talents,
       sources: [itemsPayload?.source, emblemsPayload?.source].filter(Boolean),
       updatedAt: new Date().toISOString()
     };
