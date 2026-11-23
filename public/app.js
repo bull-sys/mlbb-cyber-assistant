@@ -308,19 +308,13 @@ let encySkillRequestId=0;
 function encySkillSlotLabel(index){
  return ["ПАССИВКА","НАВЫК 1","НАВЫК 2","УЛЬТИМЕЙТ"][index]||("ДОПОЛНИТЕЛЬНАЯ СПОСОБНОСТЬ "+(index-3));
 }
-function encySkillRussianDescription(skill,index,mechanics){
- const keys=["пассив","навык 1","первый навык","навык 2","второй навык","ультимейт","супернавык"];
- const target=[["пассив"],["навык 1","первый навык"],["навык 2","второй навык"],["ультимейт","супернавык"]][index]||[];
- const found=mechanics.find(line=>target.some(key=>line.toLowerCase().includes(key)));
- if(found)return {text:found,language:"ru"};
- return skill.description?{text:skill.description,language:"en"}:{text:"Описание этого навыка пока не найдено в проверенной базе.",language:"unknown"};
+function encySkillRussianDescription(skill){
+  return skill.description?{text:skill.description,language:"en"}:{text:"Описание навыка пока не опубликовано в проверенном источнике.",language:"unknown"};
 }
-function encySkillFallback(profile){
- const mechanics=Array.isArray(profile?.mechanics)?profile.mechanics:[];
- if(!mechanics.length)return '<p class="ency-unverified">Навыки и их изображения пока не удалось загрузить.</p>';
- return '<p class="ency-unverified">Изображения навыков временно недоступны. Ниже сохранены текстовые описания из профиля героя.</p><ul>'+mechanics.map(line=>'<li>'+esc(line)+'</li>').join("")+'</ul>';
+function encySkillFallback(){
+  return '<p class="ency-unverified">Проверенные описания навыков временно недоступны. Попробуй открыть профиль позже.</p>';
 }
-async function loadEncyHeroSkills(id,profile){
+async function loadEncyHeroSkills(id){
  const requestId=++encySkillRequestId;
  const host=$("encyHeroSkills");
  if(!host)return;
@@ -329,11 +323,11 @@ async function loadEncyHeroSkills(id,profile){
   if(requestId!==encySkillRequestId||!host.isConnected)return;
   const mechanics=Array.isArray(profile?.mechanics)?profile.mechanics:[];
   if(!result.skills?.length){
-   host.innerHTML=encySkillFallback(profile);
+   host.innerHTML=encySkillFallback();
    return;
   }
   host.innerHTML=result.skills.map((skill,index)=>{
-   const desc=encySkillRussianDescription(skill,index,mechanics);
+   const desc=encySkillRussianDescription(skill);
    const icon=skill.iconUrl?'<img src="'+esc(skill.iconUrl)+'" alt="" loading="lazy" decoding="async" onerror="this.remove()">':'<span>✦</span>';
    const meta=skill.cooldownAndCost?'<small class="ency-skill-meta">'+esc(skill.cooldownAndCost)+'</small>':'';
    const lang=desc.language==="en"?' <span class="ency-skill-language">ОРИГИНАЛ EN</span>':"";
@@ -398,27 +392,15 @@ function renderEncyHeroModal(id){
  if(!hero)return;
  const p=(data.heroProfiles||[]).find(x=>x.id===id);
  const root=$("encyHeroModalContent"),name=hero.displayNameRu||hero.nameEn||hero.id,url=encyHeroPortrait(hero);
- const list=(arr)=>Array.isArray(arr)&&arr.length?'<ul>'+arr.map(x=>'<li>'+esc(x)+'</li>').join("")+'</ul>':'<p class="ency-unverified">Данные этого раздела ещё не заполнены проверенными сведениями.</p>';
  const sources=Array.isArray(p?.sources)?p.sources:[];
- const reviewed=p?.patch?.reviewedAt||hero.research?.checkedAt||"Дата проверки не указана";
- const status=p?(p.confidence==="complete"?"Полный профиль":"Частичный профиль"):"Профиль не загружен";
- const mechanics=p?.mechanics||[];
- root.innerHTML='<div class="ency-hero-cover" style="--ency-portrait:url(&quot;'+url+'&quot;)"><img src="'+url+'" alt="'+esc(name)+'" onerror="this.style.display=\'none\'"><div class="ency-hero-heading"><small>HERO DATABASE / '+esc(hero.nameEn)+'</small><h2 id="encyHeroTitle">'+esc(name)+'</h2><p>'+esc(hero.nameEn)+' · '+esc((hero.role?.values||[]).join(", ")||"Роль уточняется")+' · '+esc([hero.lanes?.primary,...(hero.lanes?.flexible||[])].filter(Boolean).join(" / ")||"Линия уточняется")+'</p><span id="encyHeroProfileBadge" class="ency-profile-badge">'+esc(status)+'</span></div></div>'+
- '<div class="ency-profile-grid">'+
- '<section class="ency-profile-section wide"><h3>Тактика и стиль игры</h3><p>'+esc(p?.teamfight?.preferredPlan||"Рекомендации по стилю игры пока не подтверждены.")+'</p></section>'+
- '<section class="ency-profile-section wide"><h3>Пассивка и навыки</h3><div id="encyHeroSkills" class="ency-skill-list"><p class="ency-unverified">Загружаем изображения навыков и описания...</p></div></section>'+
- '<section class="ency-profile-section wide"><h3>Дополнительные данные героя</h3><div id="encyHeroRemoteProfile" class="ency-remote-panel"><p class="ency-unverified">Загружаем характеристики и тактическую сводку...</p></div></section>'+
- '<section class="ency-profile-section"><h3>Сильные стороны</h3>'+list(p?.strengths)+'</section>'+
- '<section class="ency-profile-section"><h3>Слабые стороны</h3>'+list(p?.weaknesses)+'</section>'+
- '<section class="ency-profile-section"><h3>Кого контрит</h3>'+list(p?.matchups?.strongAgainst)+'</section>'+
- '<section class="ency-profile-section"><h3>Кто контрит его</h3>'+list(p?.matchups?.weakAgainst)+'</section>'+
- '<section class="ency-profile-section"><h3>С кем сочетается</h3>'+list(p?.synergies)+'</section>'+
- '<section class="ency-profile-section wide"><h3>План командной драки</h3><p>'+esc(p?.teamfight?.preferredPlan||"План боя ещё не проверен.")+'</p>'+(p?.teamfight?.targetPriority?.length?'<h4>Приоритет целей</h4>'+list(p.teamfight.targetPriority):"")+(p?.teamfight?.avoid?.length?'<h4>Чего избегать</h4>'+list(p.teamfight.avoid):"")+'</section>'+
- '<section class="ency-profile-section wide"><h3>Комбо и когда их применять</h3><div id="encyHeroCombos" class="ency-remote-panel"><p class="ency-unverified">Загружаем проверенные последовательности...</p></div></section>'+
-
- '<section class="ency-profile-section wide"><h3>Заметки по сборке</h3>'+list(p?.itemNotes)+'</section>'+
- '<section class="ency-profile-section wide"><h3>Проверка данных</h3><p>Статус: '+esc(status)+' · Последняя отметка: '+esc(reviewed)+'. Точные характеристики и рекомендации следует сверять с текущим патчем.</p>'+(sources.length?'<div class="ency-source-list">'+sources.map((s,i)=>'<a href="'+esc(s)+'" target="_blank" rel="noopener">Источник '+(i+1)+' ↗</a>').join("")+'</div>':"")+'</section></div>';
- $("encyHeroModal").classList.remove("hidden");
+  const reviewed=p?.patch?.reviewedAt||hero.research?.checkedAt||"Дата проверки не указана";
+  const status=p?(p.confidence==="complete"?"Полный справочный профиль":"Частичный справочный профиль"):"Справочный профиль загружается";
+  root.innerHTML='<div class="ency-hero-cover" style="--ency-portrait:url(&quot;'+url+'&quot;)"><img src="'+url+'" alt="'+esc(name)+'" onerror="this.style.display=\'none\'"><div class="ency-hero-heading"><small>HERO DATABASE / '+esc(hero.nameEn)+'</small><h2 id="encyHeroTitle">'+esc(name)+'</h2><p>'+esc(hero.nameEn)+' · '+esc((hero.role?.values||[]).join(", ")||"Роль уточняется")+' · '+esc([hero.lanes?.primary,...(hero.lanes?.flexible||[])].filter(Boolean).join(" / ")||"Линия уточняется")+'</p><span id="encyHeroProfileBadge" class="ency-profile-badge">'+esc(status)+'</span></div></div>'+
+  '<div class="ency-profile-grid">'+
+  '<section class="ency-profile-section wide"><h3>Пассивка и навыки</h3><div id="encyHeroSkills" class="ency-skill-list"><p class="ency-unverified">Загружаем описания навыков...</p></div></section>'+
+  '<section class="ency-profile-section wide"><h3>Базовые характеристики</h3><div id="encyHeroRemoteProfile" class="ency-remote-panel"><p class="ency-unverified">Загружаем характеристики...</p></div></section>'+
+  '<section class="ency-profile-section wide"><h3>Проверка данных</h3><p>Статус: '+esc(status)+' · Последняя отметка: '+esc(reviewed)+'. Сведения могут изменяться после обновлений игры.</p>'+(sources.length?'<div class="ency-source-list">'+sources.map((source,i)=>'<a href="'+esc(source)+'" target="_blank" rel="noopener">Источник '+(i+1)+' ↗</a>').join("")+'</div>':"")+'</section></div>';
+  $("encyHeroModal").classList.remove("hidden");
  document.body.classList.add("ency-modal-open");
  loadEncyHeroSkills(id,p);\n loadEncyHeroKnowledge(id);
 }
