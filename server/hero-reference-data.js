@@ -621,7 +621,8 @@ export const heroReferenceData = [
       "physical_def15": 83,
       "magic_def1": 15,
       "magic_def15": 50,
-      "movement_spd": 250
+      "movement_spd": 250,
+      "basic_atk_range": "1.9 (Default) / 2.4 (At max Fighting Spirit stacks)"
     }
   },
   {
@@ -851,7 +852,8 @@ export const heroReferenceData = [
       "physical_def15": 84,
       "magic_def1": 15,
       "magic_def15": 50,
-      "movement_spd": 260
+      "movement_spd": 260,
+      "basic_atk_range": "1.8  / 3 (Tidal Energy)"
     }
   },
   {
@@ -1842,7 +1844,8 @@ export const heroReferenceData = [
       "physical_def15": 75,
       "magic_def1": 15,
       "magic_def15": 38,
-      "movement_spd": 265
+      "movement_spd": 265,
+      "basic_atk_range": "1.7, 2 (circle strike)"
     }
   },
   {
@@ -1899,7 +1902,8 @@ export const heroReferenceData = [
       "physical_def15": 71,
       "magic_def1": 15,
       "magic_def15": 50,
-      "movement_spd": 255
+      "movement_spd": 255,
+      "basic_atk_range": "1.8 (Phylax) / 4.5 (Edith)"
     }
   },
   {
@@ -2399,7 +2403,8 @@ export const heroReferenceData = [
       "physical_def15": 83,
       "magic_def1": 15,
       "magic_def15": 50,
-      "movement_spd": 260
+      "movement_spd": 260,
+      "basic_atk_range": "1.5 / 3.5 (Valkyrie State)"
     }
   },
   {
@@ -3190,7 +3195,8 @@ export const heroReferenceData = [
       "physical_def15": 124,
       "magic_def1": 15,
       "magic_def15": 71,
-      "movement_spd": 260
+      "movement_spd": 260,
+      "basic_atk_range": "1.8 / 2.5 (Blessing of Wilderness)"
     }
   },
   {
@@ -4570,7 +4576,8 @@ export const heroReferenceData = [
       "physical_def15": 85,
       "magic_def1": 15,
       "magic_def15": 50,
-      "movement_spd": 260
+      "movement_spd": 260,
+      "basic_atk_range": "1.8  / 2.6 (Flash Strike)"
     }
   },
   {
@@ -5939,7 +5946,8 @@ export const heroReferenceData = [
       "physical_def15": 82,
       "magic_def1": 15,
       "magic_def15": 50,
-      "movement_spd": 240
+      "movement_spd": 240,
+      "basic_atk_range": "4.1 (Human Form) / 1.7 (Wolf Form)"
     }
   },
   {
@@ -6219,7 +6227,8 @@ export const heroReferenceData = [
       "physical_def15": 87,
       "magic_def1": 15,
       "magic_def15": 50,
-      "movement_spd": 252
+      "movement_spd": 252,
+      "basic_atk_range": "1.4 (Default & Thunder) / 1.6 (Torrent)"
     }
   },
   {
@@ -6333,7 +6342,8 @@ export const heroReferenceData = [
       "physical_def15": 72,
       "magic_def1": 15,
       "magic_def15": 56,
-      "movement_spd": 225
+      "movement_spd": 225,
+      "basic_atk_range": "1.7 (Mortal Form) / 2.5 (Immortal Form)"
     }
   },
   {
@@ -6866,7 +6876,8 @@ export const heroReferenceData = [
       "physical_def15": 90,
       "magic_def1": 15,
       "magic_def15": 50,
-      "movement_spd": 260
+      "movement_spd": 260,
+      "basic_atk_range": "1.8 (Armored State) / 4.2 (Armorless State)"
     }
   },
   {
@@ -7362,7 +7373,8 @@ export const heroReferenceData = [
       "physical_def15": 90,
       "magic_def1": 15,
       "magic_def15": 50,
-      "movement_spd": 265
+      "movement_spd": 265,
+      "basic_atk_range": "1.8 / 2.5 (Dragon Flurry)"
     }
   }
 ];

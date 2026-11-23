@@ -526,7 +526,9 @@ function renderEncyHeroRemoteProfile(remote){
  }
  const staticDefs=[["Скорость передвижения","movement_spd","Базовая скорость перемещения персонажа."],["Дальность обычной атаки","basic_atk_range","Дистанция, на которой доступна обычная атака."]];
  for(const [label,key,description] of staticDefs){
-  const value=encyStatNumber(stats[key])??encyStatNumber(growthStats[key]?.level1);
+  const raw=stats[key];
+  const parsed=encyStatNumber(raw);
+  const value=parsed!==null?parsed:(raw!==undefined&&raw!==null&&raw!==""?String(raw):encyStatNumber(growthStats[key]?.level1));
   if(value!==null)base.push(encyStatCard(label,value,"постоянное значение",description));
  }
  const ratingNames={offense:"Атака",durability:"Живучесть",abilityEffects:"Эффекты умений",difficulty:"Сложность освоения"};
