@@ -962,26 +962,11 @@ export const heroCatalog = [
     research: { checkedAt: "2026-11-22", roleAndLaneSources: ["https://mlbb-knowledge.vercel.app/heroes/27", "https://mlbbhub.com/ru/heroes/sun", "https://mlbb.io/en/hero/sun"], mechanicsSources: ["https://liquipedia.net/mobilelegends/Sun", "https://mlbb-knowledge.vercel.app/heroes/27", "https://mlbb.io/en/hero/sun"], rankedMetaSources: ["https://mlbbdex.com/en/statistics", "https://mlbbhub.com/ru/heroes/sun"], competitiveReviewStatus: "pending", method: "Fighter/EXP identity and Jungle flexibility cross-checked across three hero databases. Clone mechanics are compared across Liquipedia, MLBB Knowledge and MLBB.io; ranked aggregates are kept separate from professional evidence and patch-specific pro VOD review remains pending." }
   }),
 
-  catalogEntry("uranus", "Uranus", "Уранус", {
-    identityStatus: "pending_review",
-    localizationStatus: "pending_review"
-  }),
-  catalogEntry("vale", "Vale", "Вэйл", {
-    identityStatus: "pending_review",
-    localizationStatus: "pending_review"
-  }),
-  catalogEntry("valentina", "Valentina", "Валентина", {
-    identityStatus: "pending_review",
-    localizationStatus: "pending_review"
-  }),
-  catalogEntry("vexana", "Vexana", "Вексана", {
-    identityStatus: "pending_review",
-    localizationStatus: "pending_review"
-  }),
-  catalogEntry("wanwan", "Wanwan", "Ванван", {
-    identityStatus: "pending_review",
-    localizationStatus: "pending_review"
-  }),
+  catalogEntry("uranus", "Uranus", "Уранус", { roleValues:["Tank"], roleStatus:"verified", primaryLane:"EXP Lane", flexibleLanes:[], laneStatus:"verified", tacticalProfileStatus:"partial", research:{ checkedAt:"2026-11-23", roleAndLaneSources:["https://www.mlbb.io/en/hero/uranus","https://mlbbhub.com/heroes/uranus"], mechanicsSources:["https://liquipedia.net/mobilelegends/Uranus","https://metammo.com/mobile-legends-guide/heroes/uranus"], rankedMetaSources:["https://mlbb.io/en/hero/uranus"], competitiveReviewStatus:"pending", method:"Tank/EXP classification cross-checked against current hero references; Radiance sustain, Ionic Edge marks, shield dash and Consecration checked against skill references. Professional VOD review remains pending." } })
+  catalogEntry("vale", "Vale", "Вэйл", { roleValues:["Mage"], roleStatus:"verified", primaryLane:"Mid Lane", flexibleLanes:[], laneStatus:"verified", tacticalProfileStatus:"partial", research:{ checkedAt:"2026-11-23", roleAndLaneSources:["https://www.mlbb.io/en/hero/vale","https://mlbb-knowledge.vercel.app/heroes/66"], mechanicsSources:["https://liquipedia.net/mobilelegends/Vale","https://www.mlbb.io/en/hero/vale"], rankedMetaSources:["https://mlbb.io/en/hero/vale"], competitiveReviewStatus:"pending", method:"Mage/Mid classification and current three-skill kit cross-checked across MLBB.io, Liquipedia and MLBB Knowledge. Old skill-upgrade variants are not treated as current. Professional VOD review remains pending." } })
+  catalogEntry("valentina", "Valentina", "Валентина", { roleValues:["Mage"], roleStatus:"verified", primaryLane:"Mid Lane", flexibleLanes:[], laneStatus:"verified", tacticalProfileStatus:"partial", research:{ checkedAt:"2026-11-23", roleAndLaneSources:["https://www.mlbb.io/en/hero/valentina","https://mlbb-knowledge.vercel.app/heroes/110"], mechanicsSources:["https://liquipedia.net/mobilelegends/Valentina","https://mlbbanalytics.com/heroes?search=Valentina"], rankedMetaSources:["https://mlbb.io/en/hero/valentina"], competitiveReviewStatus:"pending", method:"Mage/Mid classification, EXP-on-hit passive, repeat fear, dash-bolts and ultimate theft checked against current skill references. Stolen-ultimate value remains composition-dependent. Professional VOD review remains pending." } })
+  catalogEntry("vexana", "Vexana", "Вексана", { roleValues:["Mage"], roleStatus:"verified", primaryLane:"Mid Lane", flexibleLanes:[], laneStatus:"verified", tacticalProfileStatus:"partial", research:{ checkedAt:"2026-11-23", roleAndLaneSources:["https://www.mlbb.io/en/hero/vexana","https://mlbb-knowledge.vercel.app/heroes/38"], mechanicsSources:["https://liquipedia.net/mobilelegends/Vexana","https://metammo.com/mobile-legends-guide/heroes/vexana"], rankedMetaSources:["https://mlbb.io/en/hero/vexana"], competitiveReviewStatus:"pending", method:"Mage/Mid classification and Nether Curse, Deathly Grasp, Cursed Blast and Eternal Guard checked against current skill references. Statistical synergy aggregates are not treated as verified tactical pairings. Professional VOD review remains pending." } })
+  catalogEntry("wanwan", "Wanwan", "Ванван", { roleValues:["Marksman"], roleStatus:"verified", primaryLane:"Gold Lane", flexibleLanes:[], laneStatus:"verified", tacticalProfileStatus:"partial", research:{ checkedAt:"2026-11-23", roleAndLaneSources:["https://www.mlbb.io/en/hero/wanwan","https://mlbb-knowledge.vercel.app/heroes/89"], mechanicsSources:["https://liquipedia.net/mobilelegends/Wanwan","https://mlbb.tools/heroes/wanwan"], rankedMetaSources:["https://mlbb.io/en/hero/wanwan"], competitiveReviewStatus:"pending", method:"Marksman/Gold classification, Tiger Pace weaknesses, Swallow's Path, Needles in Flowers cleanse and Crossbow of Tang activation conditions cross-checked across current references. The single available community build is not treated as consensus. Professional VOD review remains pending." } })
   catalogEntry("x-borg", "X.Borg", "Икс.Борг", {
     identityStatus: "pending_review",
     localizationStatus: "pending_review"
