@@ -143,16 +143,35 @@ export async function getHeroKnowledge(hero) {
   }
 }
 
+async function getTalentAssets() {
+  try {
+    const response = await fetch(BASE + "/ru/emblems", { headers: { "user-agent": "Mozilla/5.0 MLBB-Cyber-Assistant" }, signal: AbortSignal.timeout(12000) });
+    if (!response.ok) return [];
+    const html = await response.text();
+    const matches = [...html.matchAll(/(?:src|data-src)="([^"]*visuels\\/talents\\/([^"/?]+)\\.webp[^"]*)"/giu)];
+    const unique = new Map();
+    for (const match of matches) {
+      const slug = match[2];
+      if (!unique.has(slug)) unique.set(slug, {
+        slug,
+        name: slug.split("-").map(part => part.charAt(0).toUpperCase() + part.slice(1)).join(" "),
+        image: absoluteImage(match[1])
+      });
+    }
+    return [...unique.values()];
+  } catch { return []; }
+}
+
 export async function getGameAssets() {
   try {
-    const [itemsPayload, emblemsPayload] = await Promise.all([
+    const [itemsPayload, emblemsPayload, talents] = await Promise.all([
       cachedJson("items", BASE + "/api/v1/items?locale=en"),
       cachedJson("emblems", BASE + "/api/v1/emblems?locale=en")
     ]);
     const equipment = await getEquipmentMap();
     const items = (Array.isArray(itemsPayload?.data) ? itemsPayload.data : []).filter(item => !item.removed).map(item => ({
       ...item,
-      image: absoluteImage(item.image) || equipment.get(String(item.name || "").toLowerCase()) || null
+      image: absoluteImage(item.image) || BASE + "/visuels/objets/" + slugify(item.name) + ".webp"
     }));
     const emblems = (Array.isArray(emblemsPayload?.data) ? emblemsPayload.data : []).map(item => ({
       ...item, image: absoluteImage(item.image)
