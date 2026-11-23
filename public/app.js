@@ -327,7 +327,7 @@ function renderEncy(){
  const emblems=emblemSource.map(x=>{
   const slug=typeof x==="string"?(EMBLEM_IMAGE_KEYS[x]||itemAssetSlug(x)):(x.slug||itemAssetSlug(x.role||x.name));
   const image=(typeof x==="object"&&(x.image||x.icon))||(slug&&slug!=="common"?("https://mlbbdex.com/visuels/emblemes/"+slug+"-emblem.webp"):null);
-  return {name:EMBLEM_LOCAL_NAMES[slug]||(typeof x==="string"?"Эмблема "+x:x.name||"Эмблема"),category:"Эмблема",description:(typeof x==="object"&&(x.description||x.bestFor))||EMBLEM_LOCAL_DESCRIPTIONS[slug]||"Описание эмблемы уточняется.",image,type:"emblem"};
+  return {name:EMBLEM_LOCAL_NAMES[slug]||(typeof x==="string"?"Эмблема "+x:x.name||"Эмблема"),category:"Эмблема",description:EMBLEM_LOCAL_DESCRIPTIONS[slug]||(typeof x==="object"&&(x.description||x.bestFor))||"Описание эмблемы уточняется.",image,type:"emblem"};
  });
  const heroEntries=(data.heroCatalog||[]).map(hero=>{
   const profile=(data.heroProfiles||[]).find(entry=>entry.id===hero.id);
@@ -403,13 +403,14 @@ function renderEncyHeroDescription(remote,hero){
  const region=profile.region||"";
  const release=profile.release||"";
  const bio=profile.bio||profile.lore||profile.story||profile.description||"";
+ const damageType=({Physical:"физический",Magic:"магический",Mixed:"смешанный"}[profile.damageType]||profile.damageType||"");
+ const attackType=({Melee:"ближний бой",Ranged:"дальний бой",Hybrid:"гибридный"}[profile.attackType]||profile.attackType||"");
+ const overview=[title?"Титул: "+title:"",roles.length?"Класс: "+roles.join(", "):"",specialties.length?"Особенности: "+specialties.join(", "):"",damageType?"Тип урона: "+damageType:"",attackType?"Тип атаки: "+attackType:""].filter(Boolean).join(". ")+".";
  const facts=[];
- if(roles.length)facts.push("Класс: "+roles.join(", "));
  if(lanes.length)facts.push("Линия: "+lanes.join(", "));
- if(specialties.length)facts.push("Специализация: "+specialties.join(", "));
  if(region)facts.push("Регион: "+region);
  if(release)facts.push("Выход в игре: "+release);
- host.innerHTML=(bio?'<p class="ency-hero-bio">'+esc(String(bio))+'</p>':'<p class="ency-hero-bio">'+esc((hero?.displayNameRu||hero?.nameEn||"Персонаж")+(title?" — «"+title+"».":"." )+' Справочная карточка с основными игровыми характеристиками и принадлежностью.</p>'))+
+ host.innerHTML='<p class="ency-hero-bio">'+esc(String(bio||overview||"Справочные данные персонажа пока уточняются."))+'</p>'+
   (facts.length?'<div class="ency-hero-facts">'+facts.map(fact=>'<span>'+esc(fact)+'</span>').join("")+'</div>':"");
 }
 function renderEncyHeroRemoteProfile(remote){
