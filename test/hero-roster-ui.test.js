@@ -9,18 +9,20 @@ test("encyclopedia exposes the complete hero catalog as a separate filter", () =
   assert.match(html, /data-filter="hero">Герои/);
   assert.match(app, /const heroEntries=\(data\.heroCatalog\|\|\[\]\)\.map\(hero=>/);
   assert.match(app, /type:"hero"/);
-  assert.match(app, /hero\.tacticalProfile\?\.status/);
+  assert.match(app, /hero\.role\?\.values/);
+  assert.match(app, /hero\.lanes\?\.primary/);
 });
 
-test("hero catalog cards expose verification states instead of implying complete tactical data", () => {
-  assert.match(app, /hero\.localization\?\.status/);
-  assert.match(app, /hero\.role\?\.status/);
-  assert.match(app, /hero\.lanes\?\.status/);
-  assert.match(app, /esc\(x\.status\)/);
+test("hero catalog cards show names, role, lane and profile verification", () => {
+  assert.match(app, /hero\.displayNameRu\|\|hero\.nameEn\|\|hero\.id/);
+  assert.match(app, /hero\.role\?\.values/);
+  assert.match(app, /hero\.lanes\?\.flexible/);
+  assert.match(app, /Профиль частичный/);
+  assert.match(app, /Профиль в работе/);
   assert.match(html, /не означает, что его контрпики и тактика уже поддерживаются анализатором драфта/);
 });
 
-test("encyclopedia search includes hero names, roles, lanes, and verification labels", () => {
-  assert.match(app, /x\.name\+" "\+x\.category\+" "\+x\.description\+" "\+\(x\.status\|\|""\)/);
+test("encyclopedia search includes hero names, roles and lanes", () => {
+  assert.match(app, /x\.name\+" "\+x\.category\+" "\+\(x\.description\|\|""\)\+" "\+\(x\.roles\|\|""\)\+" "\+\(x\.lanes\|\|""\)/);
   assert.match(app, /\[\.\.\.items,\.\.\.talents,\.\.\.emblems,\.\.\.heroEntries\]/);
 });
