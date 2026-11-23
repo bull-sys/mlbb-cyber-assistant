@@ -300,6 +300,7 @@ function encyItemImage(item){
 }
 function renderEncy(){
  const q=$("encySearch").value.toLowerCase();
+ const items=data.items.map(x=>({...x,image:encyItemImage(x),type:"item",category:x.category||"Предмет"}));
  const talents=(encyRemoteAssets?.talents?.length?encyRemoteAssets.talents:data.talents).map(x=>({...x,category:"Талант эмблемы",type:"talent",image:x.image||x.icon||null}));
  const emblems=(encyRemoteAssets?.emblems?.length?encyRemoteAssets.emblems:data.emblems).map(x=>{
   if(typeof x==="string"){
