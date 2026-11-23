@@ -86,6 +86,20 @@ test("every hero reference has traceable identity, classification and base stats
 });
 
 test("offline fallback provides lore for every hero in the catalogue", async () => {
+  const originalFetch = globalThis.fetch;
+  globalThis.fetch = async () => { throw new Error("offline test"); };
+  try {
+    for (const hero of heroCatalog) {
+      const result = await getHeroKnowledge(hero);
+      assert.equal(result.ok, true, hero.id + ": offline profile");
+      assert.equal(result.fallback, true, hero.id + ": fallback flag");
+      assert.ok(result.profile.lore?.length >= 100, hero.id + ": offline lore");
+      assert.equal(result.profile.loreSource.revision, HERO_LORE_SOURCE.revision, hero.id + ": lore attribution");
+    }
+  } finally {
+    globalThis.fetch = originalFetch;
+  }
+});
 
 test("reference dataset includes attribution and a dated source snapshot", () => {
   assert.equal(HERO_REFERENCE_SOURCE.name, "MLBBDex / Mobile Legends Wiki");
