@@ -154,6 +154,7 @@ app.get("/api/matches",auth,(req,res)=>{const rows=db.prepare(`SELECT u.id,u.nic
 
 function analyze({lane, enemies = [], allies = [], myHero = ""}) {
   const enemy = heroes.filter(h => enemies.includes(h.name));
+  const profileByName = new Map(heroProfiles.map(profile => [profile.names?.ru, profile]).filter(([name]) => name));
   const team = heroes.filter(h => allies.includes(h.name));
   const selected = heroes.find(h => h.name === myHero);
 
@@ -292,10 +293,17 @@ function analyze({lane, enemies = [], allies = [], myHero = ""}) {
         }
       }
 
+      const profile = profileByName.get(h.name) || null;
       return {
         hero: h,
         score,
-        reason: [...new Set(reasons)].join("; ")
+        reason: [...new Set(reasons)].join("; "),
+        profileEvidence: profile ? {
+          identity: profile.mechanics?.[0] || null,
+          strength: profile.strengths?.[0] || null,
+          caution: profile.weaknesses?.[0] || null,
+          confidence: profile.confidence || "partial"
+        } : null
       };
     })
     .filter(x => x.score > 0)
@@ -446,7 +454,8 @@ function analyze({lane, enemies = [], allies = [], myHero = ""}) {
       name: x.hero.name,
       role: x.hero.role,
       reason: x.reason,
-      score: x.score
+      score: x.score,
+      profileEvidence: x.profileEvidence
     })),
     build: buildDetails.map(x => x.name),
     buildDetails,
