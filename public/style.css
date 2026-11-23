@@ -883,3 +883,15 @@ details.ency-info-card.visual.emblem[open]{
 .ency-current-guide{stroke:#e8a1f1;stroke-width:1;stroke-dasharray:3 3;opacity:.8}
 .ency-current-marker{fill:#fff;stroke:#df76ec;stroke-width:2;filter:drop-shadow(0 0 4px #df76ec)}
 @media(max-width:560px){.ency-level-control{position:sticky;top:0;z-index:3;box-shadow:0 6px 18px #0008}}
+
+
+/* Make every non-hero encyclopedia entry explicitly expandable */
+.ency-info-card.visual.item,
+.ency-info-card.visual.talent,
+.ency-info-card.visual.emblem{cursor:pointer;transition:border-color .16s ease,background .16s ease}
+.ency-info-card.visual.item:focus-within,
+.ency-info-card.visual.talent:focus-within,
+.ency-info-card.visual.emblem:focus-within{outline:2px solid rgba(218,128,226,.5);outline-offset:2px}
+.ency-info-tags{display:block;margin-top:7px;color:#bba9c5;font-size:9px;line-height:1.45}
+.ency-info-expanded-meta{margin-top:6px!important}
+@media(prefers-reduced-motion:reduce){.ency-info-card.visual{transition:none}}
