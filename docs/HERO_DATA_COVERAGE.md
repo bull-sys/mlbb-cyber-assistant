@@ -141,3 +141,11 @@ No missing biography, stat, lane, or localization is to be inferred from another
 - Summaries are original paraphrases, not copied story passages. The encyclopedia now displays source attribution, CC BY-SA license and source-check date beneath each biography.
 - All 133 entries are covered by automated tests, including offline fallback and source attribution.
 - These are concise editorial summaries, not a complete verbatim reproduction of every in-game lore page. Full canonical text and patch-specific changes should be reviewed against the current game client when available.
+
+
+## Profile and skill text availability snapshot — 2026-11-23
+
+- The live MLBBDex hero-profile API returned a usable profile for 90 / 133 heroes in the content audit. The other 43 endpoints were unavailable in that run; the local encyclopedia fallback still returns a dated passport and Russian lore summary for all 133 catalogue entries.
+- The pinned Russian skill dataset contains 528 skill entries across the 133-hero roster. No entry in this snapshot has an empty description.
+- The raw skill source still contains the mistranslated Helcurt state label «Бродяги» in three descriptions. The display normalizer now preserves the source's canonical term «Prowler» for Helcurt instead of showing that misleading translation. The term remains untranslated until a verified official Russian equivalent is found; Moonton's own English hero spotlight uses «Prowler State».
+- The audit checks for suspicious wording; it does not certify every machine-translated sentence as publication-quality Russian. A separate editorial pass is still required for names, grammar, terminology and patch-specific accuracy.
