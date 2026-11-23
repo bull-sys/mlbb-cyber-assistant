@@ -699,6 +699,33 @@ test("Mathilda has a sourced partial tactical profile with distinct support and 
 });
 
 
+
+test("Melissa has a sourced partial tactical profile with doll-link damage and anti-dive zoning", () => {
+  const melissa = heroProfiles.find(hero => hero.id === "melissa");
+  assert.ok(melissa, "Melissa profile exists");
+  assert.equal(melissa.names.ru, "Мелисса");
+  assert.deepEqual(melissa.roles, ["Стрелок"]);
+  assert.deepEqual(melissa.lanes, ["Линия золота"]);
+  assert.equal(melissa.mechanics.length, 4);
+  assert.ok(melissa.mechanics.some(note => note.includes("125%")));
+  assert.ok(melissa.mechanics.some(note => note.includes("Маддлс")));
+  assert.ok(melissa.mechanics.some(note => note.includes("связывает")));
+  assert.ok(melissa.mechanics.some(note => note.includes("отталкиванием")));
+  assert.ok(melissa.strengths.length >= 4);
+  assert.ok(melissa.weaknesses.length >= 4);
+  assert.ok(melissa.itemNotes.length >= 3);
+  assert.ok(melissa.teamfight.preferredPlan);
+  assert.ok(melissa.teamfight.targetPriority.length >= 3);
+  assert.ok(melissa.teamfight.avoid.length >= 4);
+  assert.ok(melissa.sources.includes("https://liquipedia.net/mobilelegends/Melissa"));
+  assert.ok(melissa.sources.includes("https://mlbb.io/en/hero/melissa"));
+  assert.equal(melissa.confidence, "partial");
+  assert.equal(melissa.patch.version, HERO_DB_PATCH);
+  assert.equal(melissa.patch.reviewedAt, "2026-11-23");
+  assert.deepEqual(melissa.matchups.strongAgainst, []);
+  assert.deepEqual(melissa.matchups.weakAgainst, []);
+});
+
 test("all local tactical profiles contain enough material for a useful hero passport", () => {
   assert.equal(heroProfiles.length, 102);
   for (const hero of heroProfiles) {
@@ -719,5 +746,5 @@ test("tactical profile coverage is explicit and does not invent profiles for the
   assert.equal(profileIds.size, heroProfiles.length);
   assert.ok(heroProfiles.every(hero => heroCatalog.some(entry => entry.id === hero.id)));
   const missing = heroCatalog.filter(hero => !profileIds.has(hero.id));
-  assert.equal(missing.length, 30);
+  assert.equal(missing.length, 29);
 });
