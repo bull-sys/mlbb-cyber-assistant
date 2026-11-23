@@ -88,3 +88,43 @@ The encyclopedia now has a second, per-hero source lookup for level growth:
 **Important coverage limit:** adding the adapter does not mean that all 133 external pages have already been independently crawled and audited. Coverage is determined per hero at request time. The page parser has fixture tests for numeric parsing, absent growth values, and missing tables; live-page coverage and visual rendering still require a full preview pass.
 
 **Additional source:** [MLBB.io hero database](https://mlbb.io/en/hero/helcurt). It is an independent community resource, not an official Moonton service. Its page identifies official Mobile Legends hero data as its underlying source. Cross-check conflicting values before treating them as confirmed.
+
+## Full 133-hero source audit — 2026-11-23
+
+An automated audit was run against all 133 catalogue entries. The audit script is `scripts/audit-hero-data.mjs`; it checks the local snapshot against the pinned upstream dataset and requests every matching MLBB.io hero page with bounded concurrency. The full machine-readable per-hero report is uploaded by the `Hero data audit` GitHub Actions workflow as the `hero-data-audit` artifact.
+
+### Roster and reference consistency
+
+- 133 / 133 catalogue IDs have a local reference record.
+- 133 / 133 local records match the pinned upstream records for title, role, lane, specialties, release metadata, region, resource, ratings and supplied numeric statistics.
+- 0 reference-field differences remain after restoring 12 conditional basic-attack-range labels as text rather than dropping them as non-numeric values.
+- 133 / 133 MLBB.io hero pages returned HTTP success and yielded a parseable Base stats table in this run.
+- Basic attack range is a static reference parameter, not a level-growth series. It is present in the reference snapshot for 92 / 133 heroes; 12 of those values describe multiple forms/states and are retained as text. The other 41 are not published in this snapshot and remain unavailable rather than guessed.
+
+### Live level-growth coverage
+
+| Characteristic | Published per-level growth | Endpoints / single value | No source row |
+|---|---:|---:|---:|
+| HP | 133 | 0 | 0 |
+| HP regeneration | 58 | 75 endpoint estimates | 0 |
+| Mana | 81 | 3 | 49 |
+| Mana regeneration | 80 | 4 | 49 |
+| Physical attack | 132 | 0 | 1 |
+| Physical defense | 81 | 52 endpoint estimates | 0 |
+| Magic defense | 96 | 37 endpoint estimates | 0 |
+| Attack speed | 60 | 73 endpoint estimates | 0 |
+| Movement speed | 60 fixed values | 73 single values | 0 |
+
+The one missing physical-attack row is Zetian. Mana and mana-regeneration rows absent from a page are treated as unavailable; the audit does not infer a zero value or assume the hero has no mana. Movement speed is displayed as a static value when the source does not publish a level-15 value. Endpoint estimates are visibly distinguished from published growth.
+
+### Remaining catalogue review
+
+The source-data comparison and stat-page retrieval are complete for this pass, but the whole encyclopedia audit is not complete:
+
+- Identity: 35 source-verified, 2 user-confirmed, 96 still marked pending review.
+- Role: 103 / 133 marked verified; 30 need independent review.
+- Primary lane: 102 / 133 marked verified; 31 need independent review.
+- 31 heroes still lack a local extended profile record, as listed above.
+- The current run verifies source availability and table parsing, not in-game values against a fresh client build. Patch-specific confirmation and visual review in the preview app remain separate tasks.
+
+No missing biography, stat, lane, or localization is to be inferred from another hero. The audit artifact records each hero's page status, available rows, source date, and chart classification.
