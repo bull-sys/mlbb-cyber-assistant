@@ -840,3 +840,6 @@ details.ency-info-card.visual.emblem[open]{
 .ency-graph-note{margin:4px 0 8px!important;color:#988b9d!important;font-size:9px!important;line-height:1.45!important}
 .ency-data-credit a{color:#dca8eb;text-decoration:none;border-bottom:1px dotted rgba(220,168,235,.5)}
 @media(max-width:650px){.ency-stat-graph-grid{grid-template-columns:1fr;gap:7px}.ency-stat-graph{padding:9px}.ency-stat-chart{max-height:132px}}
+
+.ency-stat-graph-desc{margin:4px 0 0!important;color:#a99bad!important;font-size:9px!important;line-height:1.4!important}
+.ency-stat-chip p{margin:4px 0 0;color:#9f93a7;font-size:9px;line-height:1.4}
