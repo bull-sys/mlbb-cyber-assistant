@@ -747,25 +747,75 @@ export const heroCatalog = [
   }),
   catalogEntry("minsitthar", "Minsitthar", "Минситтар", {
     identityStatus: "pending_review",
-    localizationStatus: "pending_review"
-  }),
-  catalogEntry("moskov", "Moskov", "Москов", {
+    localizationStatus: "pending_review",
+    roleValues: ["Fighter"],
+    roleStatus: "verified",
+    primaryLane: "EXP Lane",
+    flexibleLanes: [],
+    laneStatus: "verified",
+    tacticalProfileStatus: "partial",
+    research: {
+      roleSources: ["https://mlbb.io/en/hero/minsitthar"],
+      laneSources: ["https://mlbb.io/en/hero/minsitthar"],
+      mechanicsSources: ["https://liquipedia.net/mobilelegends/Minsitthar","https://mlbb.io/en/hero/minsitthar"]
+    }
+  }),  catalogEntry("moskov", "Moskov", "Москов", {
     identityStatus: "pending_review",
-    localizationStatus: "pending_review"
-  }),
-  catalogEntry("natalia", "Natalia", "Наталья", {
+    localizationStatus: "pending_review",
+    roleValues: ["Marksman"],
+    roleStatus: "verified",
+    primaryLane: "Gold Lane",
+    flexibleLanes: [],
+    laneStatus: "verified",
+    tacticalProfileStatus: "partial",
+    research: {
+      roleSources: ["https://mlbb.io/en/hero/moskov"],
+      laneSources: ["https://mlbb.io/en/hero/moskov"],
+      mechanicsSources: ["https://liquipedia.net/mobilelegends/Moskov","https://mlbb-knowledge.vercel.app/heroes/31"]
+    }
+  }),  catalogEntry("natalia", "Natalia", "Наталья", {
     identityStatus: "pending_review",
-    localizationStatus: "pending_review"
-  }),
-  catalogEntry("natan", "Natan", "Натан", {
+    localizationStatus: "pending_review",
+    roleValues: ["Assassin"],
+    roleStatus: "verified",
+    primaryLane: "Jungle",
+    flexibleLanes: ["Roam"],
+    laneStatus: "verified",
+    tacticalProfileStatus: "partial",
+    research: {
+      roleSources: ["https://mlbb.io/en/hero/natalia"],
+      laneSources: ["https://mlbb.io/en/hero/natalia"],
+      mechanicsSources: ["https://liquipedia.net/mobilelegends/Natalia","https://mlbb.io/en/hero/natalia"]
+    }
+  }),  catalogEntry("natan", "Natan", "Натан", {
     identityStatus: "pending_review",
-    localizationStatus: "pending_review"
-  }),
-  catalogEntry("novaria", "Novaria", "Новария", {
+    localizationStatus: "pending_review",
+    roleValues: ["Marksman"],
+    roleStatus: "verified",
+    primaryLane: "Gold Lane",
+    flexibleLanes: [],
+    laneStatus: "verified",
+    tacticalProfileStatus: "partial",
+    research: {
+      roleSources: ["https://mlbb.io/en/hero/natan"],
+      laneSources: ["https://mlbb.io/en/hero/natan"],
+      mechanicsSources: ["https://mlbb.io/en/hero/natan","https://mlbb-knowledge.vercel.app/heroes/107"]
+    }
+  }),  catalogEntry("novaria", "Novaria", "Новария", {
     identityStatus: "pending_review",
-    localizationStatus: "pending_review"
-  }),
-  catalogEntry("aamon", "Aamon", "Эймон", { localizationStatus:"source_verified",
+    localizationStatus: "pending_review",
+    roleValues: ["Mage"],
+    roleStatus: "verified",
+    primaryLane: "Mid Lane",
+    flexibleLanes: [],
+    laneStatus: "verified",
+    tacticalProfileStatus: "partial",
+    research: {
+      roleSources: ["https://mlbb.io/en/hero/novaria"],
+      laneSources: ["https://mlbb.io/en/hero/novaria"],
+      mechanicsSources: ["https://mlbb-knowledge.vercel.app/heroes/119","https://liquipedia.net/mobilelegends/Novaria"]
+    }
+  }),  catalogEntry("aamon", "Aamon", "Эймон", { localizationStatus:"source_verified",
     roleValues: ["Assassin"],
     roleStatus: "verified",
     primaryLane: "Jungle",
