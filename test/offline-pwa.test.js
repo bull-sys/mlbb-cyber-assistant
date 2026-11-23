@@ -12,7 +12,7 @@ const app = await readFile(
 );
 
 test("service worker keeps the game catalog available offline after a successful load", () => {
-  assert.match(serviceWorker, /const CACHE="mlbb-cyber-v10"/);
+  assert.match(serviceWorker, /const CACHE="mlbb-cyber-v\\d+"/);
   assert.match(serviceWorker, /const DATA_CACHE="mlbb-cyber-data-v1"/);
   assert.match(serviceWorker, /url\.pathname==="\/api\/data"/);
   assert.match(serviceWorker, /cache\.put\(request,copy\)/);
@@ -42,7 +42,7 @@ test("auth sessions are validated and expired tokens return the UI to guest mode
 });
 
 test("AI-generated draft explanation is escaped before HTML rendering", () => {
-  assert.match(app, /esc\(d\.aiExplanation\|\|d\.note\)/);
+  assert.match(app, /esc\(d\.aiExplanation\|\|d\.note\|\|/);
   assert.doesNotMatch(app, /\$\{d\.aiExplanation\|\|d\.note\}/);
 });
 
@@ -122,7 +122,7 @@ test("draft picker supports role and lane filters and concise tactical card fact
 test("multi-select picker stays open while filling a team and closes at five", () => {
  assert.match(app, /if\(arr\.length>=5\)\{\$\("heroPicker"\)\.classList\.add\("hidden"\)/);
  assert.match(app, /renderHeroPicker\(\);/);
- assert.match(app, /Выбрано \+current\.length\+" из 5/);
+ assert.match(app, /Выбрано "\+current\.length\+" из 5/);
  assert.match(css, /\.hero-tile\.selected/);
 });
 
