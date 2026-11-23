@@ -132,3 +132,12 @@ The source-data comparison and stat-page retrieval are complete for this pass, b
 - The current run verifies source availability and table parsing, not in-game values against a fresh client build. Patch-specific confirmation and visual review in the preview app remain separate tasks.
 
 No missing biography, stat, lane, or localization is to be inferred from another hero. The audit artifact records each hero's page status, available rows, source date, chart classification, and catalog-vs-reference role/lane differences.
+
+
+## Local hero biographies — 2026-11-23
+
+- The offline lore dataset now contains concise Russian paraphrase summaries for all 133 catalogue heroes.
+- The 102 newly added entries are based on the pinned French-language lore files in `achedon12/mlbb` revision `92f0fe94e4226ab6057db25711c4d65b3ca12130`; the original 31 entries remain on the same pinned source revision.
+- Summaries are original paraphrases, not copied story passages. The encyclopedia now displays source attribution, CC BY-SA license and source-check date beneath each biography.
+- All 133 entries are covered by automated tests, including offline fallback and source attribution.
+- These are concise editorial summaries, not a complete verbatim reproduction of every in-game lore page. Full canonical text and patch-specific changes should be reviewed against the current game client when available.

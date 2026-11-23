@@ -433,6 +433,10 @@ function renderEncyHeroDescription(remote,hero){
  const releaseDate=releaseRaw?new Date(releaseRaw):null;
  const release=releaseDate&&!Number.isNaN(releaseDate.getTime())?new Intl.DateTimeFormat("ru-RU",{day:"numeric",month:"long",year:"numeric"}).format(releaseDate):encyRussianTextOrNote(releaseRaw,"");
  const lore=encyRussianTextOrNote(profile.lore||profile.story||profile.bio||profile.description,"История персонажа пока не представлена на русском языке в проверенном источнике.");
+ const loreSource=profile.loreSource||null;
+ const loreCredit=loreSource
+  ?"Краткий пересказ · "+(loreSource.name||"источник не указан")+" · "+(loreSource.license||"лицензия не указана")+" · "+(loreSource.checkedAt||"дата проверки не указана")
+  :"";
  const damageType=encyHeroRussianLabel(profile.damageType||"");
  const attackType=encyHeroRussianLabel(profile.attackType||"");
  const resource=encyHeroRussianLabel(profile.resource||"");
@@ -452,7 +456,7 @@ function renderEncyHeroDescription(remote,hero){
  host.innerHTML=
   '<div class="ency-hero-passport">'+passport.map(([label,value])=>'<div class="ency-passport-cell"><small>'+esc(label)+'</small><b>'+esc(value)+'</b></div>').join("")+'</div>'+
   '<div class="ency-hero-identity"><h4>Чем выделяется персонаж</h4><p>'+esc(uniqueness)+'</p></div>'+
-  '<div class="ency-hero-lore"><h4>История персонажа</h4><p>'+esc(lore)+'</p></div>';
+  '<div class="ency-hero-lore"><h4>История персонажа</h4><p>'+esc(lore)+'</p>'+(loreCredit?'<small class="ency-lore-credit">'+esc(loreCredit)+'</small>':"")+'</div>';
 }
 function encyStatNumber(value){
  if(value===undefined||value===null||value==="")return null;
