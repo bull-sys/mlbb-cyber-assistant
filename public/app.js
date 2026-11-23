@@ -1,3 +1,5 @@
+window.__MLBB_APP_DIAGNOSTICS={stage:"script-started",error:null};
+window.addEventListener("error",event=>{if(window.__MLBB_APP_DIAGNOSTICS){window.__MLBB_APP_DIAGNOSTICS.stage="runtime-error";window.__MLBB_APP_DIAGNOSTICS.error=event.message||"Неизвестная ошибка";}});
 const $=id=>document.getElementById(id);
 const LEGACY_DRAFT_STORAGE_KEY="mlbb_draft_state_v1";
 const GUEST_DRAFT_STORAGE_KEY="mlbb_draft_state_v1_guest";
@@ -23,7 +25,7 @@ function draftHeroLabel(value){
  const catalog=(data.draftHeroOptions||[]).find(hero=>hero.id===value);
  return catalog?catalog.name+" ("+catalog.nameEn+")":value;
 }
-async function init(){try{data=await $api("/data")}catch(e){toast(e.message);return}
+async function init(){if(window.__MLBB_APP_DIAGNOSTICS)window.__MLBB_APP_DIAGNOSTICS.stage="loading-data";try{data=await $api("/data")}catch(e){if(window.__MLBB_APP_DIAGNOSTICS){window.__MLBB_APP_DIAGNOSTICS.stage="data-error";window.__MLBB_APP_DIAGNOSTICS.error=e.message}toast(e.message);return}
 for(let id of ["enemyPick","allyPick","myHero"])draftOptions($(id));
 for(let id of ["profileHero","filterHero"])options($(id),data.heroes);
 for(let id of ["lane","profileRole","filterRole"])options($(id),data.roles);
@@ -31,6 +33,7 @@ for(let id of ["profileRank","filterRank"])options($(id),data.ranks);
 for(let id of ["profileStyle","filterStyle"])options($(id),data.styles);
 $("threats").innerHTML=threatDefs.map(([id,name])=>`<button class="chip" data-threat="${id}">${name}</button>`).join("");
 restoreDraft();drawTeams();renderEncy();if(token)await refreshMe();
+ if(window.__MLBB_APP_DIAGNOSTICS)window.__MLBB_APP_DIAGNOSTICS.stage="ready";
 }
 function drawTeams(){for(let [side,arr] of [["enemies",enemies],["allies",allies]])$(side).innerHTML=arr.map((x,i)=>`<button class="chip active" data-side="${side}" data-i="${i}">${esc(draftHeroLabel(x))} ×</button>`).join("")||""}
 function draftSnapshot(){return {version:1,enemies:[...enemies],allies:[...allies],lane:$("lane").value,myHero:$("myHero").value,threats:[...threats],savedAt:Date.now()}}
