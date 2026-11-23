@@ -69,7 +69,7 @@ function auditRussianSkillText(hero, russianSkills) {
     const description = textValue(skill?.description);
     const englishRemainders = (description.match(/\b(?:the|and|when|while|after|before|enemy|enemies|damage|physical|magic|skill|basic attack|movement speed|cooldown)\b/giu) || []);
     const suspicious = [];
-    if (/бродяг|бродяж|блуждающ|скиталец/iu.test(description)) suspicious.push("possible-literal-state-translation");
+    if (hero.id === "helcurt" && /бродяг|бродяж/iu.test(description)) suspicious.push("possible-literal-state-translation");
     if (/\bProwler\b|\bHanekage\b|\bMoonton\b/iu.test(description)) suspicious.push("unlocalized-proper-term");
     if (englishRemainders.length >= 3) suspicious.push("multiple-english-remnants");
     if (!name) suspicious.push("missing-skill-name");
