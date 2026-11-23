@@ -466,35 +466,91 @@ function encyStatCard(label,value,levelLabel){
 function renderEncyHeroRemoteProfile(remote){
  const host=$("encyHeroRemoteProfile");if(!host)return;
  const profile=remote?.profile||{},stats=profile.stats||{},ratings=profile.ratings||{};
+ const growthStats=remote?.growthData?.stats||{};
  const statDefs=[
-  ["hp","Здоровье","hp1","hp15"],["physical_atk","Физическая атака","physical_atk1","physical_atk15"],
-  ["physical_def","Физическая защита","physical_def1","physical_def15"],["magic_def","Магическая защита","magic_def1","magic_def15"],
-  ["hp_regen","Восстановление здоровья","hp_regen1","hp_regen15"],["mana","Запас маны","mana1","mana15"],
-  ["mana_regen","Восстановление маны","mana_regen1","mana_regen15"],["atk_spd","Скорость атаки","atk_spd1","atk_spd15"],
-  ["movement_spd","Скорость передвижения","movement_spd",null],["basic_atk_range","Дальность обычной атаки","basic_atk_range",null]
+  {key:"hp",label:"Здоровье",first:"hp1",last:"hp15"},
+  {key:"hpRegen",label:"Восстановление здоровья",first:"hp_regen1",last:"hp_regen15"},
+  {key:"mana",label:"Запас маны",first:"mana1",last:"mana15"},
+  {key:"manaRegen",label:"Восстановление маны",first:"mana_regen1",last:"mana_regen15"},
+  {key:"physicalAttack",label:"Физическая атака",first:"physical_atk1",last:"physical_atk15"},
+  {key:"physicalDefense",label:"Физическая защита",first:"physical_def1",last:"physical_def15"},
+  {key:"magicDefense",label:"Магическая защита",first:"magic_def1",last:"magic_def15"},
+  {key:"attackSpeed",label:"Скорость атаки",first:"atk_spd1",last:"atk_spd15"}
  ];
- const growth=[],base=[];
- for(const [,label,firstKey,lastKey] of statDefs){
-  const first=encyStatNumber(stats[firstKey]),last=lastKey?encyStatNumber(stats[lastKey]):null;
-  if(first===null&&last===null)continue;
-  if(first!==null&&last!==null&&lastKey!==firstKey){
-   const delta=last-first;
-   growth.push('<div class="ency-growth-card"><div><small>'+esc(label)+'</small><b>'+esc(String(first))+' <span>→</span> '+esc(String(last))+'</b></div><em>'+ (delta>=0?"+":"")+esc(String(Number(delta.toFixed(2))))+'</em></div>');
-  }else{
-   base.push(encyStatCard(label,first!==null?first:last,"базовое значение"));
+ const fmt=value=>Number(value).toLocaleString("ru-RU",{maximumFractionDigits:3});
+ const graphs=[],base=[];
+ const graphFor=(definition)=>{
+  const source=growthStats[definition.key]||{};
+  const first=encyStatNumber(source.level1)??encyStatNumber(stats[definition.first]);
+  const last=encyStatNumber(source.level15)??encyStatNumber(stats[definition.last]);
+  const perLevel=encyStatNumber(source.perLevel);
+  if(first===null&&last===null)return "";
+  if(first===null||last===null||(first===last&&perLevel===null)){
+   return encyStatCard(definition.label,first??last,first!==null?"уровень 1":"уровень 15");
   }
+  let values=[],estimated=false,mode="";
+  if(perLevel!==null&&first!==null){
+   const calculatedLast=first+perLevel*14;
+   const tolerance=Math.max(0.05,Math.abs(last)*0.002);
+   if(Math.abs(calculatedLast-last)<=tolerance){
+    values=Array.from({length:15},(_,index)=>first+perLevel*index);
+    mode="Рост по уровню опубликован источником";
+   }else{
+    values=Array.from({length:15},(_,index)=>first+(last-first)*index/14);
+    estimated=true;
+    mode="Промежуточные значения рассчитаны по уровням 1 и 15";
+   }
+  }else{
+   values=[first,last];
+   estimated=true;
+   mode="Источник публикует только уровни 1 и 15";
+  }
+  const min=Math.min(...values),max=Math.max(...values),span=max-min||1;
+  const x=index=>values.length===2?(index===0?22:278):22+index*(256/14);
+  const y=value=>80-((value-min)/span)*54;
+  const points=values.map((value,index)=>x(index).toFixed(1)+","+y(value).toFixed(1)).join(" ");
+  const markerIndexes=values.length===2?[0,1]:[0,7,14];
+  const markers=markerIndexes.map(index=>'<circle cx="'+x(index).toFixed(1)+'" cy="'+y(values[index]).toFixed(1)+'" r="3.5" fill="#d78cf0"><title>Уровень '+(values.length===2?(index===0?1:15):index+1)+': '+fmt(values[index])+'</title></circle>').join("");
+  const axis=[["1",22],["4",76],["8",149],["12",222],["15",278]].map(([label,pos])=>'<text x="'+pos+'" y="105" text-anchor="middle">'+label+'</text>').join("");
+  const grid=[22,49,76].map(pos=>'<line x1="22" y1="'+pos+'" x2="278" y2="'+pos+'" class="ency-graph-grid"/>').join("");
+  const delta=last-first;
+  return '<article class="ency-stat-graph"><div class="ency-stat-graph-head"><b>'+esc(definition.label)+'</b><span>'+esc(fmt(first))+' → '+esc(fmt(last))+'</span></div>'+
+   '<svg class="ency-stat-chart" viewBox="0 0 300 112" role="img" aria-label="'+esc(definition.label)+': уровень 1 — '+esc(fmt(first))+', уровень 15 — '+esc(fmt(last))+'">'+grid+
+   '<polyline points="'+points+'" class="ency-graph-line '+(estimated?"estimated":"")+'"/>'+markers+axis+'</svg>'+
+   '<div class="ency-stat-graph-foot"><span>Δ '+(delta>=0?"+":"")+esc(fmt(delta))+'</span><small>'+esc(mode)+'</small></div></article>';
+ };
+ for(const definition of statDefs){
+  const result=graphFor(definition);
+  if(result.includes("ency-stat-graph"))graphs.push(result);
+  else if(result)base.push(result);
+ }
+ const staticDefs=[["Скорость передвижения","movement_spd"],["Дальность обычной атаки","basic_atk_range"]];
+ for(const [label,key] of staticDefs){
+  const value=encyStatNumber(stats[key])??encyStatNumber(growthStats[key]?.level1);
+  if(value!==null)base.push(encyStatCard(label,value,"постоянное значение"));
  }
  const ratingNames={offense:"Атака",durability:"Живучесть",abilityEffects:"Эффекты умений",difficulty:"Сложность освоения"};
  const ratingValues=Object.entries(ratingNames).filter(([key])=>Number.isFinite(Number(ratings[key]))).map(([key,label])=>encyStatCard(label,ratings[key]+"/10","оценка справочника"));
  const sections=[];
- if(growth.length)sections.push('<h4>Изменение характеристик · уровень 1 → 15</h4><div class="ency-growth-grid">'+growth.join("")+'</div>');
+ if(graphs.length){
+  sections.push('<h4>Рост характеристик · уровни 1–15</h4><div class="ency-stat-graph-grid">'+graphs.join("")+'</div>');
+  sections.push('<p class="ency-graph-note">Сплошная линия — рост, опубликованный источником. Пунктир — расчётная оценка между крайними уровнями; она не выдаётся за точные игровые значения.</p>');
+ }else{
+  sections.push('<p class="ency-unverified">Подтверждённая таблица роста по уровням пока не найдена. Доступные базовые значения показаны отдельно.</p>');
+ }
  if(base.length)sections.push('<h4>Другие базовые параметры</h4><div class="ency-stat-grid">'+base.join("")+'</div>');
  if(ratingValues.length)sections.push('<h4>Оценки справочника</h4><div class="ency-stat-grid">'+ratingValues.join("")+'</div>');
  const rawLabels={hp1:"Здоровье · уровень 1",hp15:"Здоровье · уровень 15",hp_regen1:"Восстановление здоровья",mana1:"Запас маны",mana_regen1:"Восстановление маны",physical_atk1:"Физическая атака",physical_def1:"Физическая защита",magic_def1:"Магическая защита",atk_spd1:"Скорость атаки",movement_spd:"Скорость передвижения",basic_atk_range:"Дальность обычной атаки"};
  const rawValues=Object.entries(rawLabels).filter(([key])=>stats[key]!==undefined&&stats[key]!==null).map(([key,label])=>encyStatCard(label,stats[key],"из источника"));
  if(rawValues.length)sections.push('<details class="ency-raw-stats"><summary>Все доступные значения характеристик</summary><div class="ency-stat-grid">'+rawValues.join("")+'</div></details>');
  if(profile.patch)sections.push('<small class="ency-data-credit">Версия данных: '+esc(String(profile.patch))+'</small>');
- if(remote?.source?.url)sections.push('<small class="ency-data-credit">Источник характеристик: MLBBDex / Mobile Legends Wiki. Изображения принадлежат правообладателям.</small>');
+ if(remote?.source?.url)sections.push('<small class="ency-data-credit">Базовые характеристики: MLBBDex / Mobile Legends Wiki.</small>');
+ if(remote?.growthData?.source?.url){
+  const growthSource=remote.growthData.source;
+  sections.push('<small class="ency-data-credit">Данные роста: <a href="'+esc(growthSource.url)+'" target="_blank" rel="noopener">MLBB.io ↗</a>'+(growthSource.updatedAt?' · обновлено '+esc(growthSource.updatedAt):'')+'. Проверено '+esc(new Date(remote.growthData.checkedAt||Date.now()).toLocaleDateString("ru-RU"))+'.</small>');
+ }else{
+  sections.push('<small class="ency-data-credit">Дополнительный источник роста временно недоступен; графики строятся только по опубликованным значениям основного справочника.</small>');
+ }
  host.innerHTML=sections.join("")||'<p class="ency-unverified">Характеристики этого персонажа пока не опубликованы в проверенном источнике.</p>';
 }
 async function loadEncyHeroKnowledge(id){
