@@ -57,10 +57,11 @@ async function translateSkillNames(names) {
   return Object.fromEntries(unique.map(name => [name, translatedSkillNames.get(name) || null]));
 }
 
-function russianizeSkillDescription(value, heroNameEn, heroNameRu) {
+export function russianizeSkillDescription(value, heroNameEn, heroNameRu) {
   let text = cleanText(value);
   if (!text) return "";
   if (heroNameEn && heroNameRu) text = text.split(heroNameEn).join(heroNameRu);
+  if (normalizeName(heroNameEn) === "helcurt") text = text.replace(/Бродяги/giu, "Prowler");
   const terms = [
     [/\bBasic Attacks?\b/giu, "базовые атаки"],
     [/\bMovement Speed\b/giu, "скорость передвижения"],

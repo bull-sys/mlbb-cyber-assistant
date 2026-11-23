@@ -5,6 +5,12 @@ import { heroProfiles } from "../server/hero-profiles.js";
 import { HERO_REFERENCE_SOURCE, heroReferenceData } from "../server/hero-reference-data.js";
 import { HERO_LORE_SOURCE, heroLoreData } from "../server/hero-lore-data.js";
 import { getHeroKnowledge } from "../server/mlbbdex-adapter.js";
+import { russianizeSkillDescription } from "../server/hero-skill-assets.js";
+
+test("Helcurt state name keeps its original term until Russian localization is verified", () => {
+  const value = russianizeSkillDescription("Helcurt remains in Prowler state.", "Helcurt", "Хелкарт");
+  assert.equal(value, "Хелкарт remains in Prowler state.");
+});
 
 test("31 previously missing heroes have sourced Russian lore summaries", () => {
   const expectedIds = [
