@@ -119,7 +119,7 @@ test("candidate filtering respects lane, enemy picks, and selected hero", () => 
 });
 
 test("counter-pick scoring adds backline-pressure points and returns ranked results", () => {
-  const result = run({ lane: "Золото", enemies: ["Эудора"] });
+  const result = run({ lane: "Золото", enemies: ["Эйдора"] });
 
   assert.deepEqual(result.counters.map(({ name, score }) => ({ name, score })), [
     { name: "Бруно", score: 4 },
@@ -132,7 +132,7 @@ test("counter-pick scoring adds backline-pressure points and returns ranked resu
 
 test("enemy composition threats reflect the tags and archetypes in the catalogue", () => {
   const result = run({
-    enemies: ["Минотавр", "Эудора", "Нана", "Мия", "Тигрил"]
+    enemies: ["Минотавр", "Эйдора", "Нана", "Мия", "Тигрил"]
   });
 
   assert.deepEqual(result.threats, [
@@ -161,8 +161,8 @@ test("allied engage adds the current +2 synergy to compatible roam candidates", 
 test("items answer sustain and double-mage threats while respecting mage category filtering", () => {
   const result = run({
     lane: "Мид",
-    myHero: "Эудора",
-    enemies: ["Минотавр", "Эудора", "Нана"]
+    myHero: "Эйдора",
+    enemies: ["Минотавр", "Эйдора", "Нана"]
   });
 
   assert.ok(result.build.includes("Щит Афины"));
@@ -178,7 +178,7 @@ test("items answer sustain and double-mage threats while respecting mage categor
 
 test("emblem selection follows selected hero archetype", async t => {
   const cases = [
-    ["Эудора", "Мага"],
+    ["Эйдора", "Мага"],
     ["Кэрри", "Стрелка"],
     ["Тигрил", "Танка"],
     ["Ангела", "Поддержки"],
@@ -201,8 +201,8 @@ test("battle spell is Retribution only for the jungle lane", () => {
 });
 
 test("duplicate enemy names have the same analysis effect as one pick", () => {
-  const once = run({ lane: "Золото", enemies: ["Эудора"] });
-  const repeated = run({ lane: "Золото", enemies: ["Эудора", "Эудора"] });
+  const once = run({ lane: "Золото", enemies: ["Эйдора"] });
+  const repeated = run({ lane: "Золото", enemies: ["Эйдора", "Эйдора"] });
 
   assert.deepEqual(repeated, once);
 });
@@ -215,14 +215,14 @@ test("empty enemy composition yields no threats or counter-picks", () => {
 });
 
 test("unsupported lane yields no candidates and uses the non-jungle spell fallback", () => {
-  const result = run({ lane: "Неизвестная линия", enemies: ["Эудора"] });
+  const result = run({ lane: "Неизвестная линия", enemies: ["Эйдора"] });
 
   assert.deepEqual(result.counters, []);
   assert.equal(result.spell, "Вспышка");
 });
 
 test("equal counter scores retain catalogue order", () => {
-  const result = run({ lane: "Золото", enemies: ["Эудора"] });
+  const result = run({ lane: "Золото", enemies: ["Эйдора"] });
 
   assert.equal(result.counters[0].score, result.counters[1].score);
   assert.deepEqual(result.counters.map(candidate => candidate.name), ["Бруно", "Грейнджер"]);
