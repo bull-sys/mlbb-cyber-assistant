@@ -571,3 +571,20 @@ body.ency-modal-open{overflow:hidden}
 .ency-stat-chip b{display:block;margin-top:4px;color:#f1e7f5;font-size:13px;font-variant-numeric:tabular-nums}
 .ency-remote-panel h4{margin:12px 0 7px;color:#dfb8ed;font-size:12px}
 @media(max-width:380px){.ency-stat-grid{gap:6px}.ency-stat-chip{padding:8px}}
+
+/* 2026-11-23 encyclopedia polish: restrained graphite surfaces and undistorted artwork */
+.ency-hero-card{background:#17151b;border-color:rgba(203,150,224,.22)}
+.ency-hero-card:before{display:none}
+.ency-hero-image{background:#111015;border-color:rgba(203,150,224,.24)}
+.ency-hero-image img{object-fit:contain;object-position:center center;padding:4px}
+.ency-hero-cover{background:#151219}
+.ency-hero-cover:before{opacity:.12;filter:blur(28px) saturate(.8)}
+.ency-hero-cover:after{background:rgba(10,8,13,.54)}
+.ency-hero-cover>img{object-fit:contain;object-position:center bottom;filter:drop-shadow(0 8px 16px rgba(0,0,0,.45))}
+.ency-hero-modal{background:#121015;border-color:rgba(203,150,224,.28);box-shadow:0 24px 90px #000c}
+.ency-profile-section{background:#18151c;border-color:rgba(203,150,224,.16)}
+.ency-skill-row{background:#17141b;border-color:rgba(203,150,224,.16)}
+.ency-skill-icon{background:#121015;border-color:rgba(203,150,224,.24)}
+.ency-info-card{background:#17141b;border-color:rgba(203,150,224,.16)}
+.ency-info-visual{background:#121015;border-color:rgba(203,150,224,.22)}
+.ency-info-icon{object-fit:contain}
