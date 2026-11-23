@@ -820,6 +820,7 @@ export const heroCatalog = [
     roleStatus: "verified",
     primaryLane: "Jungle",
     laneStatus: "verified",
+    tacticalProfileStatus: "partial",
     research: {
       checkedAt: "2026-11-22",
       roleAndLaneSources: ["https://www.mlbbguides.com/heroes/", "https://mlbb-stats.com/heroes", "https://mlbb.io/en/heroes"],
@@ -827,8 +828,16 @@ export const heroCatalog = [
       method: "Role and primary lane cross-checked across three independent hero databases; competitive role review remains separate."
     }
   }),
-  catalogEntry("alice", "Alice", "Алиса"),
-  catalogEntry("angela", "Angela", "Ангела"),
+  catalogEntry("alice", "Alice", "Алиса", {
+    roleValues: ["Tank", "Mage"], roleStatus: "verified", primaryLane: "EXP Lane",
+    laneStatus: "verified", tacticalProfileStatus: "partial",
+    research: { checkedAt: "2026-11-23", roleAndLaneSources: ["https://mlbb.io/en/hero/alice", "https://www.mlbbguides.com/heroes/alice/"], mechanicsSources: ["https://mlbb.io/en/hero/alice", "https://mlbbcore.com/heroes/alice/"], competitiveReviewStatus: "pending", method: "Tank/Mage role and EXP primary lane cross-checked against independent hero references; tactical profile is partial pending professional VOD review." }
+  }),
+  catalogEntry("angela", "Angela", "Ангела", {
+    roleValues: ["Support"], roleStatus: "verified", primaryLane: "Roam",
+    laneStatus: "verified", tacticalProfileStatus: "partial",
+    research: { checkedAt: "2026-11-23", roleAndLaneSources: ["https://www.mlbb.io/en/hero/angela", "https://liquipedia.net/mobilelegends/Angela"], mechanicsSources: ["https://liquipedia.net/mobilelegends/Angela", "https://www.mlbb.io/en/hero/angela"], competitiveReviewStatus: "pending", method: "Support/Roam classification and skill mechanics cross-checked across independent hero references; professional VOD review remains pending." }
+  }),
   catalogEntry("diggie", "Diggie", "Дигги", {
     roleValues: ["Support"], roleStatus: "verified",
     primaryLane: "Roam", laneStatus: "verified", tacticalProfileStatus: "partial",
@@ -855,8 +864,10 @@ export const heroCatalog = [
   }),
 
   catalogEntry("odette", "Odette", "Одетта", {
-    identityStatus: "pending_review",
-    localizationStatus: "pending_review"
+    identityStatus: "pending_review", localizationStatus: "pending_review",
+    roleValues: ["Mage"], roleStatus: "verified", primaryLane: "Mid Lane",
+    laneStatus: "verified", tacticalProfileStatus: "partial",
+    research: { checkedAt: "2026-11-23", roleAndLaneSources: ["https://mlbb.io/en/hero/odette", "https://mlbb-knowledge.vercel.app/heroes/46"], mechanicsSources: ["https://mlbb-knowledge.vercel.app/heroes/46", "https://liquipedia.net/mobilelegends/Odette"], competitiveReviewStatus: "pending", method: "Mage/Mid Lane classification and current skill mechanics cross-checked across independent hero references; professional VOD review remains pending." }
   }),
   catalogEntry("paquito", "Paquito", "Пакито", {
     roleValues: ["Fighter", "Assassin"], roleStatus: "verified", primaryLane: "EXP Lane",
@@ -871,8 +882,10 @@ export const heroCatalog = [
     }
   }),
   catalogEntry("phoveus", "Phoveus", "Фовиус", {
-    identityStatus: "pending_review",
-    localizationStatus: "pending_review"
+    identityStatus: "pending_review", localizationStatus: "pending_review",
+    roleValues: ["Fighter"], roleStatus: "verified", primaryLane: "EXP Lane",
+    laneStatus: "verified", tacticalProfileStatus: "partial",
+    research: { checkedAt: "2026-11-23", roleAndLaneSources: ["https://mlbb.io/en/hero/phoveus", "https://www.mlbbanalytics.com/heroes?hero=Phoveus"], mechanicsSources: ["https://mlbb.io/en/hero/phoveus", "https://www.youtube.com/watch?v=svu4XenVxPs"], competitiveReviewStatus: "pending", method: "Fighter/EXP classification and revamped mark/ultimate mechanics cross-checked against independent references and Moonton Hero Spotlight; professional VOD review remains pending." }
   }),
   catalogEntry("popol-and-kupa", "Popol and Kupa", "Пополь и Купа", {
     identityStatus: "pending_review",
