@@ -12,7 +12,7 @@ Working branch: assistant/cyber-redesign-2
 | Neutral reference dataset | 133 / 133 | Every catalogue entry has a local reference record with title, role, lane, specialties, release metadata, region/resource labels, source ratings and base statistics. |
 | Role cross-check | 133 / 133 | Every role now matches the pinned reference and the matching MLBB.io page. |
 | Primary-lane cross-check | 132 / 133 | 132 entries have a verified primary lane; Badang remains pending because its split-lane record has no settled primary. |
-| Extended local profile records | 103 / 133 | 103 heroes have a structured local profile record. 30 still need a local extended record. |
+| Extended local profile records | 104 / 133 | 103 heroes have a structured local profile record. 29 still need a local extended record. |
 | Runtime profile endpoint | 133 / 133 supported by catalogue lookup | The encyclopedia requests the current neutral hero profile from MLBBDex. When that endpoint is unavailable, the new local reference dataset supplies the base passport and statistics. |
 | Local Russian lore summaries | 31 / 133 | The 31 profiles missing local extended records now have original Russian summaries based on a pinned CC BY-SA lore dataset; other biographies remain in the next audit pass. |
 | Russian skill descriptions | 528 source entries | The pinned Russian skill catalogue has descriptions for 132 heroes; automatic translation quality still requires editorial review. |
@@ -46,9 +46,9 @@ The dataset deliberately excludes authored gameplay analysis and equipment/build
 
 ## Local extended profiles still missing
 
-The following 30 heroes still need a local extended tactical record. Their Russian lore summaries do not count as gameplay profiles:
+The following 29 heroes still need a local extended tactical record. Their Russian lore summaries do not count as gameplay profiles:
 
-Melissa (Мелисса), Minsitthar (Минситтар), Moskov (Москов), Natalia (Наталья), Natan (Натан), Novaria (Новария), Aamon (Эймон), Alice (Алиса), Angela (Ангела), Odette (Одетта), Phoveus (Фовиус), Popol and Kupa (Пополь и Купа), Ruby (Руби), Selena (Селена), Silvanna (Сильвана), Sora (Сора), Uranus (Уранус), Vale (Вэйл), Valentina (Валентина), Vexana (Вексана), Wanwan (Ванван), X.Borg (Икс.Борг), Yi Sun-shin (Ли Сун-Син), Yin (Инь), Yu Zhong (Чонг), Yve (Ив), Zetian (Цзэтянь), Zhask (Заск), Zhuxin (Чжусинь), Zilong (Зилонг).
+Minsitthar (Минситтар), Moskov (Москов), Natalia (Наталья), Natan (Натан), Novaria (Новария), Aamon (Эймон), Alice (Алиса), Angela (Ангела), Odette (Одетта), Phoveus (Фовиус), Popol and Kupa (Пополь и Купа), Ruby (Руби), Selena (Селена), Silvanna (Сильвана), Sora (Сора), Uranus (Уранус), Vale (Вэйл), Valentina (Валентина), Vexana (Вексана), Wanwan (Ванван), X.Borg (Икс.Борг), Yi Sun-shin (Ли Сун-Син), Yin (Инь), Yu Zhong (Чонг), Yve (Ив), Zetian (Цзэтянь), Zhask (Заск), Zhuxin (Чжусинь), Zilong (Зилонг).
 
 ## Completion standard for each encyclopedia profile
 
@@ -128,7 +128,7 @@ The source-data comparison and stat-page retrieval are complete for this pass, b
 - Role: 133 / 133 marked verified after matching the pinned reference and MLBB.io page.
 - Primary lane: 132 / 133 marked verified; Badang remains pending because its EXP/Roam split is deliberately not collapsed into a single primary lane.
 - 13 catalog lane sets contain additional or different flexible-lane assignments compared with the single-lane MLBBDex snapshot: Julian, Atlas, Akai, Alucard, Arlott, Barats, Edith, Guinevere, Harith, Hylos, Valir, Rafaela and Minotaur. These are retained because the catalog has separate multi-source research; they need individual reconciliation rather than automatic deletion.
-- 31 heroes still lack a local extended profile record, as listed above.
+- 29 heroes still lack a local extended profile record, as listed above.
 - The current run verifies source availability and table parsing, not in-game values against a fresh client build. Patch-specific confirmation and visual review in the preview app remain separate tasks.
 
 No missing biography, stat, lane, or localization is to be inferred from another hero. The audit artifact records each hero's page status, available rows, source date, chart classification, and catalog-vs-reference role/lane differences.
@@ -160,6 +160,14 @@ The encyclopedia passport now renders the existing local tactical profile instea
 - The teamfight plan, target priorities, cautions and item notes are visible in the passport.
 - Remaining mechanics are grouped in a collapsible section to keep the mobile layout readable.
 - A hero without a local tactical profile is explicitly marked as not yet profiled. The UI does not invent matchups, synergies or counter-picks.
-- Profile validation now checks the minimum tactical content, source URLs, patch review date and teamfight guidance for each of the 102 existing profiles.
+- Profile validation now checks the minimum tactical content, source URLs, patch review date and teamfight guidance for each of the 104 existing profiles.
 
 The same profile evidence is now attached to supported Draft Assistant counter-pick cards: users can inspect the candidate's key mechanic, a documented strength and a caution alongside the existing composition-based reason. This is explanatory evidence, not a new matchup claim. The ranking algorithm still uses the existing local role/tag heuristics; empty matchup and synergy arrays are not treated as confirmed counters. A later scoring pass can use explicit, reviewed draft-fit fields once that dataset is authored.
+
+
+## Melissa tactical profile — 2026-11-23
+
+- Added a sourced partial tactical profile for Melissa: Doll Buster, Falling!, Eyes on You! and Go Away!, including the Muddles link mechanic and anti-dive spacing.
+- Role and Gold Lane are cross-checked against MLBB.io and MLBBHub.
+- Matchups and synergies remain empty until supported by a reviewed evidence set; current ranking deltas are not treated as universal counter claims.
+- Coverage is now 104 / 133; 29 tactical profiles remain.
