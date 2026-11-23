@@ -460,3 +460,59 @@ input:focus,select:focus,textarea:focus{outline:0;border-color:#d45ad5;box-shado
     line-height:1.15!important;
   }
 }
+
+/* Hero encyclopedia v1 — portrait cards and readable hero dossiers */
+.ency{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.ency-hero-card{position:relative;display:grid;grid-template-columns:104px minmax(0,1fr);gap:12px;width:100%;min-width:0;min-height:146px;padding:9px;text-align:left;color:#f5eff8;background:#130e19;border:1px solid rgba(188,126,221,.24);border-radius:15px;overflow:hidden;isolation:isolate}
+.ency-hero-card:before{content:"";position:absolute;z-index:-1;inset:-24px;background-image:var(--ency-portrait);background-size:cover;background-position:center 20%;filter:blur(24px) saturate(1.7);opacity:.14}
+.ency-hero-image{display:block;position:relative;width:104px;height:126px;overflow:hidden;border-radius:10px;background:#21152b;border:1px solid rgba(221,151,244,.25)}
+.ency-hero-image img{width:100%;height:100%;object-fit:cover;object-position:center 18%}
+.ency-hero-image.missing:after{content:"✦";display:grid;place-items:center;height:100%;color:#d88bea;font-size:28px}
+.ency-hero-copy{display:flex;min-width:0;flex-direction:column;align-items:flex-start;gap:5px}
+.ency-hero-copy>b{font-size:15px;line-height:1.15}
+.ency-hero-copy>small{color:#d7a3e8;font-size:10px;letter-spacing:.06em}
+.ency-hero-meta,.ency-hero-status,.ency-hero-fact{font-size:9px;line-height:1.35;color:#bdaec7}
+.ency-hero-status{color:#e7a9e6}
+.ency-hero-fact{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.ency-hero-open{margin-top:auto;color:#ef9de8;font-size:10px;font-weight:800}
+.ency-info-card{min-width:0;background:#120e19;border:1px solid rgba(188,126,221,.2);border-radius:12px;padding:13px}
+.ency-info-card>b{font-size:13px}.ency-info-card>small{display:block;margin-top:5px;color:#d99be8;font-size:10px}.ency-info-card p{font-size:11px;color:#b9adbf;line-height:1.5}
+.ency-hero-backdrop{position:fixed;inset:0;z-index:120;background:rgba(3,2,8,.88);backdrop-filter:blur(12px);display:flex;align-items:center;justify-content:center;padding:16px}
+.ency-hero-backdrop.hidden{display:none!important}
+.ency-hero-modal{position:relative;width:min(900px,100%);max-height:92dvh;overflow:auto;background:#100b17;border:1px solid rgba(220,104,235,.58);border-radius:20px;box-shadow:0 0 0 1px rgba(218,110,238,.12),0 0 32px rgba(192,64,220,.24),0 24px 90px #000c}
+.ency-hero-close{position:sticky;top:10px;float:right;z-index:8;margin:10px 10px -48px 0;width:38px;height:38px;border-radius:50%;border:1px solid rgba(242,172,245,.5);background:#21142b;color:#fff;font-size:25px}
+.ency-hero-cover{position:relative;min-height:240px;display:flex;align-items:flex-end;overflow:hidden;padding:24px;background:#160d20;isolation:isolate}
+.ency-hero-cover:before{content:"";position:absolute;z-index:-1;inset:-30px;background-image:var(--ency-portrait);background-size:cover;background-position:center 18%;filter:blur(24px) saturate(1.8);opacity:.48}
+.ency-hero-cover:after{content:"";position:absolute;z-index:-1;inset:0;background:linear-gradient(90deg,rgba(10,6,15,.96),rgba(10,6,15,.72) 55%,rgba(10,6,15,.25))}
+.ency-hero-cover>img{position:absolute;right:6%;top:10px;height:95%;max-width:40%;object-fit:contain;object-position:center bottom;filter:drop-shadow(0 0 18px rgba(225,111,239,.35))}
+.ency-hero-heading{position:relative;max-width:66%;text-shadow:0 2px 12px #000}
+.ency-hero-heading>small{font-size:9px;letter-spacing:.16em;color:#e9a5f0}
+.ency-hero-heading h2{margin:8px 0;font-size:clamp(25px,5vw,40px)}
+.ency-hero-heading p{font-size:11px;color:#eadced}
+.ency-profile-badge{display:inline-block;padding:6px 9px;border:1px solid rgba(231,139,234,.42);border-radius:20px;color:#f0b4ef;font-size:9px}
+.ency-profile-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;padding:14px}
+.ency-profile-section{min-width:0;padding:13px;border:1px solid rgba(184,127,207,.19);border-radius:12px;background:#171020}
+.ency-profile-section.wide{grid-column:1/-1}
+.ency-profile-section h3{margin:0 0 9px;color:#f0b0ec;font-size:13px}
+.ency-profile-section h4{margin:12px 0 5px;font-size:11px;color:#d9b3e7}
+.ency-profile-section p,.ency-profile-section li{font-size:11px;line-height:1.55;color:#cbbfd1}
+.ency-profile-section ul{padding-left:17px;margin:0}
+.ency-profile-section li+li{margin-top:7px}
+.ency-unverified{margin:0;color:#887c91;font-size:10px;line-height:1.45}
+.ency-source-list{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.ency-source-list a{color:#e7a0ec;font-size:10px;text-decoration:none;border:1px solid rgba(218,128,226,.25);padding:6px 8px;border-radius:8px}
+body.ency-modal-open{overflow:hidden}
+@media(max-width:650px){
+ .ency{grid-template-columns:1fr}
+ .ency-hero-backdrop{padding:0;align-items:flex-end}
+ .ency-hero-modal{max-height:95dvh;border-radius:19px 19px 0 0;padding-bottom:env(safe-area-inset-bottom)}
+ .ency-hero-cover{min-height:205px;padding:17px}
+ .ency-hero-cover>img{right:1%;max-width:46%;opacity:.9}
+ .ency-hero-heading{max-width:72%}
+ .ency-hero-heading h2{font-size:26px}
+ .ency-profile-grid{gap:7px;padding:9px}
+ .ency-profile-section{padding:10px}
+ .ency-profile-section h3{font-size:12px}
+ .ency-profile-section p,.ency-profile-section li{font-size:10px}
+}
+@media(max-width:380px){.ency-hero-card{grid-template-columns:86px minmax(0,1fr)}.ency-hero-image{width:86px;height:116px}}
