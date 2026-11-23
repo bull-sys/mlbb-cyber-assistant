@@ -647,3 +647,22 @@ body.ency-modal-open{overflow:hidden}
  .ency-info-copy p{font-size:7.5px;-webkit-line-clamp:3}
  .ency-hero-bio{font-size:11px}
 }
+
+
+/* Expandable encyclopedia reference cards: emblems and talents */
+.ency-info-card details{}
+details.ency-info-card{display:block;min-width:0}
+.ency-info-summary{display:grid;grid-template-columns:54px minmax(0,1fr);align-items:center;gap:10px;list-style:none;cursor:pointer}
+.ency-info-summary::-webkit-details-marker{display:none}
+.ency-info-summary .ency-info-copy p{display:none}
+.ency-expand-hint{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:3px;color:#c69bda;font-size:8px;letter-spacing:.02em}
+.ency-expand-hint i{font-style:normal;font-size:13px;line-height:1}
+.ency-info-card[open] .ency-expand-hint i{transform:rotate(45deg)}
+.ency-info-expanded{margin:10px 0 0 64px;padding:9px 10px;border-left:2px solid rgba(194,126,220,.45);background:#151219;border-radius:0 7px 7px 0}
+.ency-info-expanded p{margin:0;color:#d4c9da;font-size:10px;line-height:1.5;white-space:normal}
+@media(max-width:650px){
+ .ency-info-summary{grid-template-columns:48px minmax(0,1fr);gap:7px}
+ .ency-info-expanded{margin-left:55px}
+ .ency-info-expanded p{font-size:8px}
+ .ency-expand-hint{font-size:7px}
+}
