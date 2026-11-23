@@ -192,7 +192,7 @@ test("draft HTTP analysis still receives legacy catalog inputs and returns exist
   const response = await request("/api/ai/draft", {
     method: "POST",
     token: createToken(1),
-    body: { lane: "Золото", enemies: ["Эудора"] }
+    body: { lane: "Золото", enemies: ["Эйдора"] }
   });
   assert.equal(response.status, 200);
   const result = await response.json();
