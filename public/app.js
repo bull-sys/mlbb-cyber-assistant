@@ -335,7 +335,7 @@ async function loadEncyHeroSkills(id){
   }).join("")+'<p class="ency-skill-credit">Иконки навыков загружены из данных игрового клиента Moonton. Изображения и игровые материалы принадлежат правообладателю.</p>';
  }catch(error){
   if(requestId!==encySkillRequestId||!host.isConnected)return;
-  host.innerHTML=encySkillFallback(profile);
+  host.innerHTML=encySkillFallback();
  }
 }
 function encySlug(value){
