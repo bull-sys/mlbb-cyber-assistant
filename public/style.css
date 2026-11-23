@@ -871,3 +871,15 @@ details.ency-info-card.visual.emblem[open]{
 .counter-profile-status{padding-top:4px;color:#988ba2;font-weight:600;letter-spacing:0}
 .counter-profile-missing{display:block;margin-top:8px;color:#a99daf;font-size:10px;line-height:1.45}
 @media(max-width:600px){.counter-profile-evidence{padding:8px}.counter-profile-evidence p{font-size:10px}}
+
+
+/* Interactive hero level graphs */
+.ency-level-control{display:grid;grid-template-columns:1fr auto;gap:8px 12px;align-items:center;margin:12px 0 16px;padding:12px 13px;border:1px solid rgba(218,128,226,.28);border-radius:12px;background:#120d19}
+.ency-level-control label{font-size:12px;color:#e8d7ef}
+.ency-level-control label b{display:inline-grid;place-items:center;min-width:28px;margin-left:6px;padding:4px 7px;border-radius:7px;background:#3b1c48;color:#ffd5ff;font-variant-numeric:tabular-nums}
+.ency-level-control input[type=range]{grid-column:1/-1;width:100%;margin:2px 0;accent-color:#d66be7;cursor:pointer;touch-action:pan-y}
+.ency-level-ticks{grid-column:1/-1;display:flex;justify-content:space-between;color:#9f8ca8;font-size:10px}
+.ency-stat-current-value{color:#ffd1ff!important;font-variant-numeric:tabular-nums}
+.ency-current-guide{stroke:#e8a1f1;stroke-width:1;stroke-dasharray:3 3;opacity:.8}
+.ency-current-marker{fill:#fff;stroke:#df76ec;stroke-width:2;filter:drop-shadow(0 0 4px #df76ec)}
+@media(max-width:560px){.ency-level-control{position:sticky;top:0;z-index:3;box-shadow:0 6px 18px #0008}}
