@@ -9,6 +9,7 @@ on:
       - "server/hero-catalog.js"
       - "server/hero-growth-adapter.js"
       - "scripts/audit-hero-data.mjs"
+      - "scripts/audit-hero-content.mjs"
       - ".github/workflows/hero-data-audit.yml"
   workflow_dispatch:
 
