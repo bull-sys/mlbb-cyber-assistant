@@ -3,6 +3,7 @@ import test from "node:test";
 import { heroCatalog } from "../server/hero-catalog.js";
 import { heroProfiles } from "../server/hero-profiles.js";
 import { HERO_REFERENCE_SOURCE, heroReferenceData } from "../server/hero-reference-data.js";
+import { getHeroKnowledge } from "../server/mlbbdex-adapter.js";
 
 test("neutral reference dataset covers the full 133-hero working catalogue", () => {
   assert.equal(heroCatalog.length, 133);
@@ -47,5 +48,23 @@ test("legacy detailed profiles remain linked to known catalogue entries", () => 
   assert.equal(heroProfiles.length, 102);
   for (const profile of heroProfiles) {
     assert.ok(catalogIds.has(profile.id), "profile without catalogue entry: " + profile.id);
+  }
+});
+
+test("encyclopedia returns dated local passport data when the live source is unavailable", async () => {
+  const originalFetch = globalThis.fetch;
+  globalThis.fetch = async () => { throw new Error("offline test"); };
+  try {
+    const hero = heroCatalog.find(entry => entry.id === "chang-e");
+    const result = await getHeroKnowledge(hero);
+    assert.equal(result.ok, true);
+    assert.equal(result.fallback, true);
+    assert.equal(result.profile.name, "Chang'e");
+    assert.equal(result.profile.roles[0], "Маг");
+    assert.ok(result.profile.stats.hp1 > 0);
+    assert.equal(result.source.license, "CC BY-SA");
+    assert.equal(result.updatedAt, "2026-11-20");
+  } finally {
+    globalThis.fetch = originalFetch;
   }
 });
