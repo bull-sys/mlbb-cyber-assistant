@@ -553,7 +553,7 @@ test("Hayabusa, Hylos, Irithel, Ixia and Johnson have sourced partial tactical p
 });
 
 test("hero profile coverage count and unique IDs stay aligned with the audited baseline", () => {
-  assert.equal(heroProfiles.length, 102);
+  assert.equal(heroProfiles.length, 103);
   assert.equal(new Set(heroProfiles.map(hero => hero.id)).size, 102);
   const saber = heroProfiles.find(hero => hero.id === "saber");
   assert.ok(saber);
@@ -670,6 +670,35 @@ test("Saber has a complete researched tactical profile instead of a placeholder"
   assert.deepEqual(saber.matchups.weakAgainst, []);
 });
 
+test("Mathilda has a sourced partial tactical profile with distinct support and engage mechanics", () => {
+  const mathilda = heroProfiles.find(hero => hero.id === "mathilda");
+  assert.ok(mathilda, "Mathilda profile exists");
+  assert.equal(mathilda.names.ru, "Матильда");
+  assert.equal(mathilda.names.en, "Mathilda");
+  assert.deepEqual(mathilda.roles, ["Поддержка", "Убийца"]);
+  assert.deepEqual(mathilda.lanes, ["Роум"]);
+  assert.equal(mathilda.mechanics.length, 4);
+  assert.ok(mathilda.mechanics.some(note => note.includes("Родовое наставление")));
+  assert.ok(mathilda.mechanics.some(note => note.includes("до шести")));
+  assert.ok(mathilda.mechanics.some(note => note.includes("переместиться к Матильде")));
+  assert.ok(mathilda.mechanics.some(note => note.includes("иммунитет к контролю")));
+  assert.ok(mathilda.strengths.length >= 4);
+  assert.ok(mathilda.weaknesses.length >= 4);
+  assert.ok(mathilda.itemNotes.length >= 2);
+  assert.ok(mathilda.teamfight.preferredPlan);
+  assert.ok(mathilda.teamfight.targetPriority.length >= 3);
+  assert.ok(mathilda.teamfight.avoid.length >= 4);
+  assert.ok(mathilda.sources.includes("https://liquipedia.net/mobilelegends/Mathilda"));
+  assert.ok(mathilda.sources.includes("https://mlbb.io/en/hero/mathilda"));
+  assert.ok(mathilda.sources.includes("https://mlbb-knowledge.vercel.app/heroes/102"));
+  assert.equal(mathilda.confidence, "partial");
+  assert.equal(mathilda.patch.version, HERO_DB_PATCH);
+  assert.equal(mathilda.patch.reviewedAt, "2026-11-23");
+  assert.deepEqual(mathilda.matchups.strongAgainst, []);
+  assert.deepEqual(mathilda.matchups.weakAgainst, []);
+});
+
+
 test("all local tactical profiles contain enough material for a useful hero passport", () => {
   assert.equal(heroProfiles.length, 102);
   for (const hero of heroProfiles) {
@@ -690,5 +719,5 @@ test("tactical profile coverage is explicit and does not invent profiles for the
   assert.equal(profileIds.size, heroProfiles.length);
   assert.ok(heroProfiles.every(hero => heroCatalog.some(entry => entry.id === hero.id)));
   const missing = heroCatalog.filter(hero => !profileIds.has(hero.id));
-  assert.equal(missing.length, 31);
+  assert.equal(missing.length, 30);
 });
