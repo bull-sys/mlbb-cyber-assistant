@@ -41,7 +41,7 @@ function stripHtml(value) {
     .replace(/\s+/gu, " ").trim();
 }
 
-const heroReferenceBySlug = new Map(heroReferenceData.map(hero => [hero.slug, hero]));
+const heroReferenceBySlug = new Map(heroReferenceData.map(hero => [hero.id, hero]));
 
 function staticHeroKnowledge(hero, slug) {
   const reference = heroReferenceBySlug.get(slug);
@@ -72,7 +72,7 @@ function staticHeroKnowledge(hero, slug) {
 }
 
 export async function getHeroKnowledge(hero) {
-  const slug = slugify(hero?.nameEn || hero?.id);
+  const slug = slugify(hero?.id || hero?.nameEn);
   if (!slug) return { ok: false, error: "Неизвестный герой" };
   try {
     const profilePayload = await cachedJson("hero:" + slug, BASE + "/api/v1/heroes/" + encodeURIComponent(slug));
