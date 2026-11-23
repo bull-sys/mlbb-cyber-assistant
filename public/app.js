@@ -196,7 +196,7 @@ $("pickerRoles").onclick=e=>{const b=e.target.closest("[data-picker-role]");if(!
 
 document.addEventListener("click",e=>{let b=e.target.closest("[data-side]");if(b){(b.dataset.side==="enemies"?enemies:allies).splice(+b.dataset.i,1);drawTeams();saveDraft()}});
 document.addEventListener("click",e=>{const b=e.target.closest("[data-page]");if(!b)return;const page=b.dataset.page;if(!document.getElementById("page-"+page))return;document.querySelectorAll("#nav [data-page]").forEach(x=>x.classList.toggle("active",x.dataset.page===page));document.querySelectorAll(".page").forEach(x=>x.classList.toggle("hidden",x.id!=="page-"+page));window.scrollTo({top:0,behavior:"smooth"})});
-$("testDraft").onclick=()=>{enemies=["Тигрил","Эудора","Кэрри","Диррот","Атлас"];allies=["Ангела","Линг","Теризла"];$("lane").value="Лес";$("myHero").value="Хелкарт";drawTeams();saveDraft();runDraft()};
+$("testDraft").onclick=()=>{enemies=["Тигрил","Эйдора","Кэрри","Дариус","Атлас"];allies=["Ангела","Линг","Теризла"];$("lane").value="Лес";$("myHero").value="Хелкарт";drawTeams();saveDraft();runDraft()};
 $("analyze").onclick=runDraft;$("lane").addEventListener("change",saveDraft);$("myHero").addEventListener("change",()=>{$("myHeroChoice").textContent=$("myHero").value?draftHeroLabel($("myHero").value):"Не выбран";saveDraft()});
 async function runDraft(){
  if(!enemies.length)return toast("Добавь врагов");
@@ -412,7 +412,7 @@ function renderEncyHeroDescription(remote,hero){
 function renderEncyHeroRemoteProfile(remote){
   const host=$("encyHeroRemoteProfile");if(!host)return;
   const profile=remote?.profile||{},stats=profile.stats||{},ratings=profile.ratings||{};
-  const labels={hp:"Здоровье",hpRegen:"Восстановление здоровья",mana:"Мана",manaRegen:"Восстановление маны",physicalAttack:"Физическая атака",magicPower:"Магическая сила",physicalDefense:"Физическая защита",magicDefense:"Магическая защита",attackSpeed:"Скорость атаки",movementSpeed:"Скорость передвижения",attackRange:"Дальность атаки"};
+  const labels={hp1:"Здоровье · ур. 1",hp15:"Здоровье · ур. 15",hp_regen1:"Регенерация HP",mana1:"Мана",mana_regen1:"Регенерация маны",physical_atk1:"Физическая атака",physical_def1:"Физическая защита",magic_def1:"Магическая защита",atk_spd1:"Скорость атаки",movement_spd:"Скорость передвижения",basic_atk_range:"Дальность базовой атаки"};
   const values=Object.entries(labels).filter(([key])=>stats[key]!==undefined&&stats[key]!==null).map(([key,label])=>'<div class="ency-stat-chip"><small>'+esc(label)+'</small><b>'+esc(String(stats[key]))+'</b></div>');
   const ratingNames={offense:"Атака",durability:"Живучесть",abilityEffects:"Эффекты навыков",difficulty:"Сложность"};
   const ratingValues=Object.entries(ratingNames).filter(([key])=>Number.isFinite(Number(ratings[key]))).map(([key,label])=>'<div class="ency-stat-chip"><small>'+esc(label)+'</small><b>'+esc(String(ratings[key]))+'/10</b></div>');
@@ -420,7 +420,8 @@ function renderEncyHeroRemoteProfile(remote){
   if(values.length)sections.push('<h4>Базовые характеристики</h4><div class="ency-stat-grid">'+values.join("")+'</div>');
   if(ratingValues.length)sections.push('<h4>Оценки из справочника</h4><div class="ency-stat-grid">'+ratingValues.join("")+'</div>');
   if(profile.resource)sections.push('<p><b>Ресурс:</b> '+esc(String(profile.resource))+'</p>');
-  if(profile.range)sections.push('<p><b>Тип атаки:</b> '+esc(String(profile.range))+'</p>');
+  if(profile.attackType)sections.push('<p><b>Тип базовой атаки:</b> '+esc(String(profile.attackType))+'</p>');
+  if(profile.damageType)sections.push('<p><b>Тип урона:</b> '+esc(String(profile.damageType))+'</p>');
   if(profile.patch)sections.push('<small class="ency-data-credit">Версия данных источника: '+esc(String(profile.patch))+'</small>');
   if(remote?.source?.url)sections.push('<small class="ency-data-credit">Источник: MLBBDex / Mobile Legends Wiki. Изображения принадлежат правообладателям.</small>');
   host.innerHTML=sections.join("")||'<p class="ency-unverified">Дополнительные базовые характеристики пока не опубликованы.</p>';
