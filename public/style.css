@@ -294,3 +294,165 @@ body{background:radial-gradient(ellipse at 48% -18%,rgba(33,77,104,.24),transpar
 }
 @media(max-width:360px){.dashboard-microstats{gap:12px}.module-card{padding:10px}.module-card>small{font-size:8px}}
 @media(prefers-reduced-motion:reduce){.module-card{transition:none}}
+
+
+/* CYBER REDESIGN 2.1 — Obsidian / Violet / Fuchsia
+   Visual direction informed by MLBB.io draft-slot hierarchy, MLBB Nexus lane/data
+   grouping, and MLBB Draft's clear tool entry points. Original styling; no copied UI. */
+:root{
+  --bg:#08060d;
+  --surface:#100c18;
+  --surface-2:#171020;
+  --line:rgba(177,105,255,.20);
+  --muted:#a49aaf;
+  --text:#f7f0fb;
+  --cyan:#d56aff;
+  --violet:#a76bff;
+  --green:#a5e6c3;
+  --cyber-fuchsia:#f04fc8;
+  --cyber-purple:#9b5cff;
+  --cyber-glow:rgba(203,65,255,.24);
+}
+body{
+  color:var(--text);
+  background:
+    radial-gradient(ellipse at 12% 0%,rgba(147,52,205,.19),transparent 34%),
+    radial-gradient(ellipse at 92% 18%,rgba(237,53,174,.10),transparent 30%),
+    radial-gradient(ellipse at 50% 100%,rgba(91,43,147,.12),transparent 45%),
+    #08060d;
+}
+.app-header{border-bottom-color:rgba(192,116,255,.18)}
+.brand b,.dashboard-hero h1 em{color:#ed70dc}
+.brand-lockup small,.eyebrow{color:#c58aff}
+.badge{border-color:rgba(190,105,255,.28)}
+.auth-details>summary{
+  color:#d8c5e8;border-color:rgba(185,105,255,.24);
+  background:linear-gradient(135deg,#171020,#110c18);
+}
+.auth-details[open]>summary{border-color:#d65adf;color:#ffe7fb;box-shadow:0 0 18px rgba(207,70,220,.13)}
+#nav button{
+  border:1px solid rgba(177,105,255,.10);
+  background:linear-gradient(145deg,#171020,#100c18);
+  color:#b9aabe;
+}
+#nav button.active{
+  color:#fff0ff;
+  border-color:rgba(232,86,218,.60);
+  background:linear-gradient(120deg,rgba(122,55,174,.42),rgba(204,53,155,.20));
+  box-shadow:0 0 22px rgba(198,63,225,.16),inset 0 0 18px rgba(191,79,225,.08);
+}
+.dashboard-hero{
+  border-color:rgba(192,105,255,.32);
+  background:
+    radial-gradient(ellipse at 78% 48%,rgba(178,70,220,.24),transparent 42%),
+    radial-gradient(ellipse at 15% 100%,rgba(104,52,165,.20),transparent 48%),
+    linear-gradient(120deg,#1a1024 0%,#100b18 58%,#1b0e1d 100%);
+  box-shadow:0 24px 75px rgba(0,0,0,.38),0 0 34px rgba(165,65,220,.08);
+}
+.dashboard-hero:before{
+  background:linear-gradient(115deg,transparent 25%,rgba(241,113,224,.045) 50%,transparent 72%);
+}
+.dashboard-version{color:#d1a8df}
+.dashboard-version i{background:#e56ad4;box-shadow:0 0 12px #e56ad4}
+.dashboard-primary,.btn:not(.secondary){
+  border-color:rgba(255,144,235,.40);
+  background:linear-gradient(105deg,#a33fe0 0%,#e64dbb 100%);
+  color:#fff;
+  box-shadow:0 8px 28px rgba(215,61,190,.24),inset 0 1px 0 rgba(255,255,255,.18);
+}
+.dashboard-primary:hover,.btn:not(.secondary):hover{
+  filter:brightness(1.10);
+  box-shadow:0 10px 34px rgba(221,65,198,.34);
+}
+.btn.secondary{
+  border-color:rgba(180,112,255,.25);
+  background:linear-gradient(145deg,#21152e,#171020);
+  color:#e4c8f5;
+}
+.art-ring{
+  border-color:rgba(211,105,255,.42);
+  box-shadow:0 0 48px rgba(192,73,255,.16),inset 0 0 38px rgba(192,73,255,.10);
+}
+.ring-two{border-color:rgba(245,93,203,.50)}
+.art-core{
+  border-color:rgba(236,108,227,.70);
+  background:linear-gradient(145deg,rgba(119,49,151,.88),rgba(29,15,43,.98));
+  box-shadow:0 0 48px rgba(210,63,216,.30),inset 0 0 25px rgba(231,111,228,.18);
+}
+.art-core span{color:#fff0ff}
+.art-core small,.art-crosshair{color:#f28add}
+.art-coordinate{color:#bd83d9}
+.dashboard-section-heading h2{color:#f9efff}
+.module-card{
+  border-color:rgba(177,105,255,.19);
+  background:linear-gradient(145deg,rgba(28,18,39,.96),rgba(15,10,22,.98));
+  box-shadow:0 12px 30px rgba(0,0,0,.18);
+}
+.module-card:hover{
+  transform:translateY(-3px);
+  border-color:rgba(230,89,216,.56);
+  background:linear-gradient(145deg,#281735,#171020);
+  box-shadow:0 12px 34px rgba(180,57,202,.15);
+}
+.module-featured{
+  border-color:rgba(231,84,204,.42);
+  background:
+    radial-gradient(ellipse at 100% 0%,rgba(223,66,197,.20),transparent 52%),
+    linear-gradient(145deg,#25132f,#130d1b);
+  box-shadow:0 0 28px rgba(203,62,198,.08);
+}
+.module-icon{
+  border-color:rgba(204,105,242,.34);
+  background:linear-gradient(145deg,#321a43,#21122d);
+  color:#f18be5;
+  box-shadow:0 0 18px rgba(210,80,221,.10);
+}
+.module-link{color:#ed8be0}
+.dashboard-note{
+  border-color:rgba(174,112,225,.20);
+  background:rgba(25,15,34,.70);
+}
+.note-mark{background:#321d42;color:#f1a0e8}
+.card,.picker-panel,.modal,.report-block{
+  border-color:rgba(180,111,235,.20);
+}
+.card{
+  background:linear-gradient(150deg,rgba(23,15,32,.97),rgba(14,10,20,.98));
+  box-shadow:0 14px 38px rgba(0,0,0,.20);
+}
+input,select,textarea{
+  border-color:rgba(174,119,215,.22);
+  background:#100b17;
+  color:#f6eefa;
+}
+input:focus,select:focus,textarea:focus{
+  outline:0;border-color:#d45ad5;
+  box-shadow:0 0 0 3px rgba(211,78,206,.13),0 0 18px rgba(211,78,206,.10);
+}
+.chip,.picker-open,.picker-close{
+  border-color:rgba(180,111,235,.24);
+  background:#1b1225;color:#e7d5f1;
+}
+.chip.active,.picker-open:hover{
+  border-color:rgba(239,91,209,.62);
+  background:linear-gradient(110deg,rgba(133,62,177,.42),rgba(204,59,162,.22));
+  color:#fff;
+  box-shadow:0 0 16px rgba(207,65,196,.12);
+}
+.hero-tile,.hero-picker-item,.counter-card,.loadout-card{
+  border-color:rgba(180,111,235,.18);
+  background:linear-gradient(145deg,#1a1124,#100b17);
+}
+.hero-tile.selected,.hero-picker-item.selected{
+  border-color:#e45bd2;
+  box-shadow:0 0 0 1px rgba(228,91,210,.28),0 0 22px rgba(210,62,194,.16);
+}
+.report-status,.counter-score{color:#ed8be0}
+@media(max-width:650px){
+  #nav{border-top-color:rgba(187,104,232,.24);background:rgba(11,7,16,.94);box-shadow:0 -8px 28px rgba(0,0,0,.24)}
+  #nav button.active{box-shadow:0 0 16px rgba(210,65,203,.14),inset 0 0 14px rgba(191,79,225,.08)}
+  .dashboard-hero{border-color:rgba(196,104,240,.34)}
+}
+@media(prefers-reduced-motion:reduce){
+  .module-card{transition:none}
+}
