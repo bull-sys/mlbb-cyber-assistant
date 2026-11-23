@@ -6,7 +6,7 @@ const GUEST_DRAFT_STORAGE_KEY="mlbb_draft_state_v1_guest";
 let draftStorageKey=GUEST_DRAFT_STORAGE_KEY;
 try{if(!localStorage.getItem(GUEST_DRAFT_STORAGE_KEY)&&localStorage.getItem(LEGACY_DRAFT_STORAGE_KEY))localStorage.setItem(GUEST_DRAFT_STORAGE_KEY,localStorage.getItem(LEGACY_DRAFT_STORAGE_KEY));localStorage.removeItem(LEGACY_DRAFT_STORAGE_KEY)}catch{}
 let draftSyncTimer=null,draftSyncInFlight=false,draftSyncAgain=false;
-let token="";try{token=localStorage.getItem("mlbb_token")||""}catch{};let activeUserId=null,data={heroes:[],draftHeroOptions:[],heroCatalog:[],heroProfiles:[],items:[],talents:[],emblems:[],roles:[],ranks:[],styles:[]},enemies=[],allies=[],threats=new Set(),encyFilter="all",ocrWorker=null;
+let token="";try{token=localStorage.getItem("mlbb_token")||""}catch{};let activeUserId=null,data={heroes:[],draftHeroOptions:[],heroCatalog:[],heroProfiles:[],items:[],talents:[],emblems:[],roles:[],ranks:[],styles:[]},enemies=[],allies=[],threats=new Set(),encyFilter="all",ocrWorker=null,encyRemoteAssets=null,encyRemoteKnowledge=new Map(),encyKnowledgeRequest=0;
 const threatDefs=[["heal","💚 Отхил / вампиризм"],["magic","🔮 2+ мага / прокаст"],["speed","⚡ Скорость атаки"],["tank","🛡 Жирные танки"],["cc","⛓ Тяжёлый контроль"],["physical","⚔ Много физического урона"],["burst","💥 Взрывной урон"]];
 const $api=async(path,opts={})=>{let r=await fetch("/api"+path,{...opts,headers:{"Content-Type":"application/json",...(token?{Authorization:"Bearer "+token}:{}),...(opts.headers||{})}});let d=await r.json().catch(()=>({error:"Ошибка сервера"}));if(!r.ok){if(r.status===401&&token&&!path.startsWith("/auth/"))logout();throw Error(d.error||"Ошибка")}return d};
 function toast(s){let el=document.createElement("div");el.textContent=s;el.style="position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#18384a;border:1px solid #39e5ff;padding:12px 17px;border-radius:10px;z-index:99;font-size:12px";document.body.append(el);setTimeout(()=>el.remove(),2500)}
@@ -32,7 +32,7 @@ for(let id of ["lane","profileRole","filterRole"])options($(id),data.roles);
 for(let id of ["profileRank","filterRank"])options($(id),data.ranks);
 for(let id of ["profileStyle","filterStyle"])options($(id),data.styles);
 $("threats").innerHTML=threatDefs.map(([id,name])=>`<button class="chip" data-threat="${id}">${name}</button>`).join("");
-restoreDraft();drawTeams();renderEncy();if(token)await refreshMe();
+restoreDraft();drawTeams();renderEncy();$api("/game-assets").then(result=>{if(result?.ok){encyRemoteAssets=result;renderEncy()}}).catch(()=>{});if(token)await refreshMe();
  if(window.__MLBB_APP_DIAGNOSTICS)window.__MLBB_APP_DIAGNOSTICS.stage="ready";
 }
 function drawTeams(){for(let [side,arr] of [["enemies",enemies],["allies",allies]])$(side).innerHTML=arr.map((x,i)=>`<button class="chip active" data-side="${side}" data-i="${i}">${esc(draftHeroLabel(x))} ×</button>`).join("")||""}
@@ -279,9 +279,9 @@ function encyHeroPortrait(hero){
 }
 function renderEncy(){
  const q=$("encySearch").value.toLowerCase();
- const items=data.items.map(x=>({...x,type:"item"}));
- const talents=data.talents.map(x=>({...x,category:"Тир "+x.tier,type:"talent"}));
- const emblems=data.emblems.map(x=>({name:"Эмблема "+x,category:"Эмблема",description:"Система характеристик и трёх тиров талантов для соответствующего архетипа.",type:"emblem"}));
+ const items=(encyRemoteAssets?.items?.length?encyRemoteAssets.items:data.items).map(x=>({...x,type:"item",category:x.category||"Предмет"}));
+ const talents=(encyRemoteAssets?.talents?.length?encyRemoteAssets.talents:data.talents).map(x=>({...x,category:"Талант эмблемы",type:"talent",image:x.image||null}));
+ const emblems=(encyRemoteAssets?.emblems?.length?encyRemoteAssets.emblems:data.emblems).map(x=>typeof x==="string"?({name:"Эмблема "+x,category:"Эмблема",description:"Описание эмблемы уточняется.",type:"emblem"}):({...x,name:x.name||("Эмблема "+x.role),category:"Эмблема",description:x.description||x.bestFor||"",type:"emblem"}));
  const heroEntries=(data.heroCatalog||[]).map(hero=>{
   const profile=(data.heroProfiles||[]).find(entry=>entry.id===hero.id);
   const name=hero.displayNameRu||hero.nameEn||hero.id;
@@ -298,7 +298,10 @@ function renderEncy(){
    const fact=p?.strengths?.[0]||"Тактические данные пополняются";
    return '<button class="ency-hero-card" type="button" data-open-hero="'+esc(x.hero.id)+'" style="--ency-portrait:url(&quot;'+url+'&quot;)"><span class="ency-hero-image"><img src="'+url+'" alt="" loading="lazy" onerror="this.parentElement.classList.add(\'missing\');this.remove()"></span><span class="ency-hero-copy"><b>'+esc(x.name)+'</b><small>'+esc(x.category)+'</small><span class="ency-hero-meta">'+esc(x.roles)+' · '+esc(x.lanes)+'</span><span class="ency-hero-status">'+esc(status)+'</span><span class="ency-hero-fact">'+esc(fact)+'</span><span class="ency-hero-open">Открыть профиль ↗</span></span></button>';
   }
-  return '<article class="ency-info-card"><b>'+esc(x.name)+'</b><small>'+esc(x.category)+'</small><p>'+esc(x.description||"Описание уточняется")+'</p></article>';
+  const visual=x.image?'<img class="ency-info-icon" src="'+esc(x.image)+'" alt="" loading="lazy" decoding="async" onerror="this.remove()">':'<span class="ency-info-icon placeholder">✦</span>';
+  const details=x.description||x.summary||x.bonus||"Описание уточняется";
+  const meta=x.price?'<small class="ency-item-price">'+esc(String(x.price))+' золота</small>':"";
+  return '<article class="ency-info-card visual"><div class="ency-info-visual">'+visual+'</div><div class="ency-info-copy"><b>'+esc(x.name)+'</b><small>'+esc(x.category||"")+'</small><p>'+esc(details)+'</p>'+meta+'</div></article>';
  }).join("")||"<p>Ничего не найдено</p>";
 }
 let encySkillRequestId=0;
