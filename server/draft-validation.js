@@ -6,7 +6,7 @@ export function isValidDraftRequest(body, roles, isHeroName, isCatalogHeroId = (
 
   if (!Array.isArray(roles) || !roles.includes(lane)) return false;
   if (!Array.isArray(enemies) || enemies.length > 5) return false;
-  if (!Array.isArray(allies) || allies.length > 5) return false;
+  if (!Array.isArray(allies) || allies.length > 4) return false;
   if (typeof isHeroName !== "function" || typeof isCatalogHeroId !== "function") return false;
 
   const isValidHero = value =>
