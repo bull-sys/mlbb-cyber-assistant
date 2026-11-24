@@ -14,7 +14,7 @@ Working branch: assistant/cyber-redesign-2
 | Primary-lane cross-check | 132 / 133 | 132 entries have a verified primary lane; Badang remains pending because its split-lane record has no settled primary. |
 | Extended local profile records | 133 / 133 | All 133 heroes have a structured local profile record. |
 | Runtime profile endpoint | 133 / 133 supported by catalogue lookup | The encyclopedia requests the current neutral hero profile from MLBBDex. When that endpoint is unavailable, the new local reference dataset supplies the base passport and statistics. |
-| Local Russian lore summaries | 31 / 133 | The 31 profiles missing local extended records now have original Russian summaries based on a pinned CC BY-SA lore dataset; other biographies remain in the next audit pass. |
+| Local Russian lore summaries | 133 / 133 | Every catalogue hero has an original Russian summary based on the pinned CC BY-SA lore dataset, with source revision and attribution retained. |
 | Russian skill descriptions | 528 source entries | The pinned Russian skill catalogue has descriptions for 132 heroes; automatic translation quality still requires editorial review. |
 
 ## New neutral reference dataset
