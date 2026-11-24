@@ -1,6 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { items, emblems, talents } from "../server/data.js";
+import { getGameAssets } from "../server/mlbbdex-adapter.js";
 import { readFile } from "node:fs/promises";
 
 const appSource = await readFile(new URL("../public/app.js", import.meta.url), "utf8");
@@ -181,4 +182,39 @@ test("encyclopedia resolves item artwork from MLBBDex slugs", () => {
   assert.match(assetAdapterSource, /visuels\\/objets\\//);
   assert.match(appSource, /encyItemImage\(x\)/);
   assert.match(appSource, /onerror=.*ency-info-icon placeholder/s);
+});
+
+test("game asset adapter returns verified MLBBDex item image URLs", async () => {
+  const originalFetch = globalThis.fetch;
+  globalThis.fetch = async url => {
+    const value = String(url);
+    if (value.includes("/api/v1/items?")) {
+      return { ok: true, json: async () => ({
+        data: [
+          { slug: "antique-cuirass", name: "Antique Cuirass", category: "Defense" },
+          { slug: "berserkers-fury", name: "Berserker's Fury", category: "Attack" },
+          { slug: "../bad", name: "Bad item" }
+        ],
+        source: { name: "Mobile Legends Wiki", url: "https://mobilelegends.fandom.com" }
+      }) };
+    }
+    if (value.includes("/api/v1/emblems?")) {
+      return { ok: true, json: async () => ({ data: [], source: null }) };
+    }
+    if (value.endsWith("/ru/emblems")) {
+      return { ok: true, text: async () => "" };
+    }
+    throw new Error("Unexpected asset URL: " + value);
+  };
+  try {
+    const result = await getGameAssets();
+    assert.equal(result.items.length, 2);
+    assert.deepEqual(result.items.map(item => item.image), [
+      "https://mlbbdex.com/visuels/objets/antique-cuirass.webp",
+      "https://mlbbdex.com/visuels/objets/berserkers-fury.webp"
+    ]);
+    assert.equal(result.items[0].slug, "antique-cuirass");
+  } finally {
+    globalThis.fetch = originalFetch;
+  }
 });
