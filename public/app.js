@@ -359,7 +359,7 @@ function renderEncy(){
     const factsMarkup=facts.length?'<ul class="ency-info-facts">'+facts.map(value=>'<li>'+esc(String(value))+'</li>').join("")+'</ul>':"";
     const passive=x.passive?'<div class="ency-info-effect"><b>'+esc(x.passiveName||"Эффект")+'</b><p>'+esc(x.passive)+'</p></div>':"";
     const effect=x.effect?'<div class="ency-info-effect"><b>Точный эффект</b><p>'+esc(x.effect)+'</p></div>':"";
-    const source=x.source?'<a class="ency-info-source" href="'+esc(x.source)+'" target="_blank" rel="noopener">Источник и дата проверки ↗</a>':"";
+    const source=x.source?'<div class="ency-info-source-wrap"><a class="ency-info-source" href="'+esc(x.source)+'" target="_blank" rel="noopener">Источник ↗</a>'+(x.checkedAt?'<small class="ency-info-checked">Проверено: '+esc(x.checkedAt)+'</small>':"")+'</div>':"";
     const verification=x.verification==="partial"?'<small class="ency-info-verification">Требуется дополнительная сверка с текущей версией игры</small>':"";
     return '<details class="ency-info-card visual '+x.type+'"><summary class="ency-info-summary"><div class="ency-info-visual">'+visual+'</div><div class="ency-info-copy"><b>'+esc(x.name)+'</b><small>'+esc(x.category||"")+'</small><span class="ency-expand-hint">Нажми, чтобы открыть сведения <i>＋</i></span></div></summary><div class="ency-info-expanded"><p>'+esc(details)+'</p>'+factsMarkup+passive+effect+tags+expandedMeta+verification+source+'</div></details>';
    }
