@@ -58,6 +58,10 @@ test("item encyclopedia records have descriptions and the six shop categories", 
   assert.ok(items.find(item => item.englishName === "Expert Gloves").stats.includes("+30 адаптивной атаки"));
   const itemById = id => items.find(item => item.englishName === id);
   assert.match(itemById("Dominance Ice").passive, /Lifebane/);
+  assert.match(itemById("Athena's Shield").passive, /25%.*3 секунды/);
+  assert.match(itemById("Radiant Armor").passive, /0,4 секунды/);
+  assert.match(itemById("Genius Wand").passive, /2,5.*3 раз/);
+  assert.match(itemById("Blade of Despair").passive, /ниже 50%.*25%/);
   assert.match(itemById("Antique Cuirass").passive, /8%/);
   assert.match(itemById("Immortality").passive, /210 секунд/);
   assert.match(itemById("Sea Halberd").passive, /Punish/);
@@ -74,7 +78,7 @@ test("item encyclopedia records have descriptions and the six shop categories", 
   assert.match(itemById("Malefic Roar").passive, /30% физического пробивания/);
   assert.match(itemById("Golden Staff").passive, /Endless Strike/);
   assert.match(itemById("Lightning Truncheon").passive, /Каждые 6 секунд/);
-  assert.equal(items.filter(item => item.verification === "checked against item detail page").length, 24);
+  assert.equal(items.filter(item => item.verification === "checked against item detail page").length, 28);
   for (const item of items) {
     assert.ok(item.name, "item name is required");
     assert.ok(item.description?.length > 15, item.name + " needs a description");
