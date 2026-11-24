@@ -94,7 +94,7 @@ test("item encyclopedia records have descriptions and the six shop categories", 
   assert.match(itemById("Power Potion").passive, /120 секунд.*30 физической атаки.*15% физического вампиризма/);
   assert.match(itemById("Rock Potion").passive, /120 секунд.*500 к максимальному здоровью.*5%/);
   assert.equal(itemById("Ares Belt").passive, undefined);
-  assert.match(itemById("Black Ice Shield").passive, /радиусе 5 единиц.*на 4.*до 20/);
+  assert.match(itemById("Black Ice Shield").passive, /радиусе 5 единиц.*на 4.*максимум на 20/);
   assert.match(itemById("Dreadnaught Armor").passive, /4%.*2 секунды.*3 раз/);
   assert.match(itemById("Molten Essence").passive, /0,6%.*каждую секунду.*125/);
   assert.equal(itemById("Silence Robe").passive, undefined);
