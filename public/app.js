@@ -264,7 +264,7 @@ function animateDraftReport(){
  void report.offsetWidth;
  report.classList.add("arena-report-enter");
 }
-$("analyze").onclick=runDraft;$("lane").addEventListener("change",()=>{$("myHero").value="";$("myHeroChoice").textContent="Не выбран";draftRecommendations=[];drawTeams();saveDraft();if(enemies.length)runDraft()});$("myHero").addEventListener("change",()=>{$("myHeroChoice").textContent=$("myHero").value?draftHeroLabel($("myHero").value):"Не выбран";drawTeams();saveDraft()});
+$("analyze").onclick=runDraft;$("lane").addEventListener("change",()=>{$("myHero").value="";$("myHeroChoice").textContent="Не выбран";draftRecommendations=[];drawTeams();saveDraft();runDraft()});$("myHero").addEventListener("change",()=>{$("myHeroChoice").textContent=$("myHero").value?draftHeroLabel($("myHero").value):"Не выбран";drawTeams();saveDraft()});
 async function runDraft(){
  if(!$("lane").value)return toast("Выбери свою линию");
  saveDraft();
@@ -282,7 +282,7 @@ async function runDraft(){
    animateDraftReport();
    return;
   }
-  const threats=(d.threats||[]).map(item=>'<span class="threat-tag">'+esc(item)+'</span>').join("")||'<span class="report-muted">Явные угрозы по базе не определены</span>';
+  const threats=(d.threats||[]).map(item=>'<span class="threat-tag">'+esc(item)+'</span>').join("")||(d.draftMode==="first-pick"?'<span class="report-muted">Вражеский пик ещё неизвестен. Угрозы будут рассчитаны после появления противников.</span>':'<span class="report-muted">Явные угрозы по базе не определены</span>');
   const matchupCards=(d.enemyMatchups||[]).map(item=>{
    const verified=item.confidence==="complete"?"ПОЛНЫЙ ПРОФИЛЬ":item.confidence==="partial"?"ЧАСТИЧНЫЙ ПРОФИЛЬ":"НЕТ ПРОВЕРЕННОГО ПРОФИЛЯ";
    const mechanics=(item.mechanics||[]).map(text=>'<li>'+esc(text)+'</li>').join("");
@@ -322,7 +322,7 @@ async function runDraft(){
     :'<small class="counter-profile-missing">Тактический паспорт этого героя пока не проверен; дополнительная оценка не приводится.</small>';
    return '<article class="counter-card"><div class="counter-rank">'+String(index+1).padStart(2,"0")+'</div><div class="counter-copy"><div class="counter-title"><b>'+esc(item.name)+'</b><span>'+esc(item.role||"Роль не указана")+'</span></div><small class="counter-kind">'+kindLabel+'</small><p>'+esc(item.reason)+'</p>'+matched+risky+rankedDetails+(d.draftMode==="first-pick"?'<small class="counter-method-note">Слепой выбор по профилю и характеристикам. Это не контрпик и не оценка актуальной меты.</small>':'<small class="counter-method-note">Статистический сигнал не гарантирует победу. Он не доказывает преимущество именно на выбранной линии.</small>')+profileDetails+'</div></article>';
   }).join("")||'<div class="report-empty">Для этого состава не удалось построить рекомендации. Проверь выбранных героев и линию.</div>';
-  const build=(d.buildDetails||[]).map((item,index)=>'<article class="build-card"><span class="build-number">'+(index+1)+'</span><div><b>'+esc(item.name)+'</b><small>'+esc(item.priority||"Ситуативный выбор")+(item.category?' · '+esc(item.category):"")+'</small><p>'+esc((item.reasons||[]).join(" · ")||"Подбор по угрозам состава")+'</p>'+(item.against?.length?'<p class="build-targets">Против: '+esc(item.against.join(", "))+'</p>':"")+(item.timing?'<p class="build-timing">'+esc(item.timing)+'</p>':"")+'</div></article>').join("")||'<div class="report-empty">Для выбранного героя и текущего состава контрпредметы не определены. Выбери своего героя и добавь противников.</div>';
+  const build=(d.buildDetails||[]).map((item,index)=>'<article class="build-card"><span class="build-number">'+(index+1)+'</span><div><b>'+esc(item.name)+'</b><small>'+esc(item.priority||"Ситуативный выбор")+(item.category?' · '+esc(item.category):"")+'</small><p>'+esc((item.reasons||[]).join(" · ")||"Подбор по угрозам состава")+'</p>'+(item.against?.length?'<p class="build-targets">Против: '+esc(item.against.join(", "))+'</p>':"")+(item.timing?'<p class="build-timing">'+esc(item.timing)+'</p>':"")+'</div></article>').join("")||(d.draftMode==="first-pick"?'<div class="report-empty">Сначала выбери одного из трёх героев — после этого можно уточнить его сборку.</div>':'<div class="report-empty">Для выбранного героя и текущего состава контрпредметы не определены. Выбери своего героя и добавь противников.</div>');
   const boot=d.bootRecommendation?'<article class="utility-pick"><small>ОБУВЬ</small><b>'+esc(d.bootRecommendation.name)+'</b><p>'+esc(d.bootRecommendation.reason)+'</p>'+(d.bootRecommendation.against?.length?'<small>Учитывает: '+esc(d.bootRecommendation.against.join(", "))+'</small>':"")+'</article>':"";
   const roam=d.roamRecommendation?'<article class="utility-pick"><small>РОУМ-ЭФФЕКТ</small><b>'+esc(d.roamRecommendation.name)+'</b><p>'+esc(d.roamRecommendation.reason)+'</p>'+(d.roamRecommendation.passive?'<small>'+esc(d.roamRecommendation.passive)+'</small>':"")+'</article>':"";
   const timing=d.timing||{};
