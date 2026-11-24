@@ -121,6 +121,8 @@ test("counter recommendations distinguish direct matchup evidence from situation
   const app = await readFile(new URL("../public/app.js", import.meta.url), "utf8");
   const css = await readFile(new URL("../public/style.css", import.meta.url), "utf8");
   assert.match(app, /item\.matchupType==="direct-counter"/);
+  assert.match(app, /item\.matchupType==="mixed-matchup"/);
+  assert.match(app, /СМЕШАННЫЙ МАТЧАП/);
   assert.match(app, /item\.matchedEnemies/);
   assert.match(app, /counter-matchup-signal/);
   assert.match(app, /counter-matchup-risk/);
