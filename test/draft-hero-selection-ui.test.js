@@ -124,6 +124,9 @@ test("counter recommendations distinguish direct matchup evidence from situation
   assert.match(app, /item\.matchedEnemies/);
   assert.match(app, /counter-matchup-signal/);
   assert.match(app, /counter-matchup-risk/);
+  assert.match(app, /counter-method-note/);
+  assert.match(app, /не гарантия победы/);
   assert.doesNotMatch(app, /counter-score/);
   assert.match(css, /\.counter-kind/);
+  assert.match(css, /\.counter-method-note/);
 });
