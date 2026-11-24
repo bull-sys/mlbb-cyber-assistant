@@ -152,7 +152,11 @@ test("canonical Russian hero names match across catalog, reference data and deta
     baxia: "Баксий",
     aldous: "Алдос",
     pharsa: "Фаша",
-    dyrroth: "Дариус"
+    dyrroth: "Дариус",
+    bane: "Бэйн",
+    barats: "Бартс",
+    irithel: "Иритель",
+    silvanna: "Сильвана"
   };
   for (const [id, name] of Object.entries(expected)) {
     assert.equal(heroCatalog.find(hero => hero.id === id)?.displayNameRu, name, id + ": catalog name");
