@@ -423,16 +423,31 @@ function analyze({lane, enemies = [], allies = [], myHero = ""}) {
     const antiHealTargets = enemy.filter(hero => (hero.tags || []).some(tag => ["heal","sustain"].includes(tag))).map(hero => hero.name);
     if (tags.has("anti-heal") && antiHealTargets.length) add(10, "Снижает эффективность лечения и восстановления здоровья", antiHealTargets);
 
-    const magicTargets = enemy.filter(hero => {
+    const magicDamageTargets = enemy.filter(hero => {
       const profile = enemyProfileByName.get(hero.name);
-      return (profile?.combat?.damage === "magic" || hero.type === "mage") &&
-        (profile?.combat?.burst === "high" || (hero.tags || []).includes("burst"));
+      return profile?.combat?.damage === "magic" || hero.type === "mage" ||
+        (hero.tags || []).includes("magic");
     }).map(hero => hero.name);
-    if (tags.has("magic-burst") && magicTargets.length) add(9, "Защищает от сильного магического взрывного урона", magicTargets);
+
+    const magicBurstTargets = enemy.filter(hero => {
+      const profile = enemyProfileByName.get(hero.name);
+      const burst = profile?.combat?.burst;
+      return (profile?.combat?.damage === "magic" || hero.type === "mage" ||
+        (hero.tags || []).includes("magic")) &&
+        (burst === "high" || burst === "very_high" || (hero.tags || []).includes("burst"));
+    }).map(hero => hero.name);
+    if ((tags.has("magic-burst") || tags.has("anti-magic-burst")) && magicBurstTargets.length) {
+      add(9, "Защищает от сильного магического взрывного урона", magicBurstTargets);
+    }
+    if (tags.has("magic-defense") && magicDamageTargets.length) {
+      add(7, "Добавляет магическую защиту против магических героев", magicDamageTargets);
+    }
 
     const magicDpsTargets = enemy.filter(hero => {
       const profile = enemyProfileByName.get(hero.name);
-      return (profile?.combat?.damage === "magic" || hero.type === "mage") && profile?.combat?.burst !== "high";
+      const burst = profile?.combat?.burst;
+      return (profile?.combat?.damage === "magic" || hero.type === "mage") &&
+        burst !== "high" && burst !== "very_high" && !(hero.tags || []).includes("burst");
     }).map(hero => hero.name);
     if (tags.has("magic-dps") && magicDpsTargets.length) add(7, "Полезен против повторяющегося магического урона", magicDpsTargets);
 
