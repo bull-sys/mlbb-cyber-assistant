@@ -172,3 +172,12 @@ test("encyclopedia groups equipment cards under their shop category headings", (
   assert.match(appSource, /group\.type==="item"\)list\.sort/);
   assert.match(appSource, /ency-subgroup-heading/);
 });
+
+test("encyclopedia resolves item artwork from MLBBDex slugs", () => {
+  assert.match(appSource, /function encyItemImage\(item\)/);
+  assert.match(appSource, /encyRemoteAssets\?\.items\|\|\[\]/);
+  assert.match(appSource, /entry\?\.slug===slug/);
+  assert.match(appSource, /visuels\\/objets\\//);
+  assert.match(appSource, /encyItemImage\(x\)/);
+  assert.match(appSource, /onerror=.*ency-info-icon placeholder/s);
+});
