@@ -560,15 +560,32 @@ function showHeroDetails(name) {
   state.currentHero = name;
 
   const profile = (state.data.heroProfiles || []).find(item =>
-    item.name === name || item.hero === name || item.id === hero.id
+    item.name === name ||
+    item.names?.ru === name ||
+    item.hero === name ||
+    item.id === hero.id
   );
 
   const tags = Array.isArray(hero.tags) ? hero.tags : [];
   const strengths = profile?.strengths || hero.strengths || [];
   const weaknesses = profile?.weaknesses || hero.weaknesses || [];
+  const mechanics = profile?.mechanics || [];
+  const combatLabels = {
+    damage: { physical: "Физический урон", magic: "Магический урон", mixed: "Смешанный урон" },
+    range: { melee: "Ближний бой", ranged: "Дальний бой" },
+    mobility: { low: "Низкая мобильность", medium: "Средняя мобильность", high: "Высокая мобильность" },
+    burst: { low: "Низкий взрывной урон", medium: "Средний взрывной урон", high: "Высокий взрывной урон" },
+    durability: { low: "Низкая стойкость", medium: "Средняя стойкость", high: "Высокая стойкость" },
+    control: { displacement: "Перемещение противника", single_target: "Контроль одной цели", area: "Массовый контроль", none: "Нет выраженного контроля" }
+  };
+  const combat = profile?.combat || {};
+  const combatRows = Object.entries(combat).map(([key, value]) =>
+    combatLabels[key]?.[value] || ""
+  ).filter(Boolean);
+  const matchup = profile?.matchups || {};
+  const teamfight = profile?.teamfight || {};
 
   container.classList.remove("hidden");
-
   container.innerHTML = `
     <div class="card">
       <h2>${escapeHTML(hero.name)}</h2>
@@ -576,10 +593,20 @@ function showHeroDetails(name) {
       <p>Тип: ${escapeHTML(hero.type || "Не указан")}</p>
       <h3>Особенности</h3>
       <p>${tags.map(escapeHTML).join(" · ") || "Нет описания тегов"}</p>
+      ${mechanics.length ? `<h3>Механики</h3><ul>${mechanics.map(item => `<li>${escapeHTML(item)}</li>`).join("")}</ul>` : ""}
+      ${combatRows.length ? `<h3>Боевой профиль</h3><p>${combatRows.map(escapeHTML).join(" · ")}</p>` : ""}
       <h3>Сильные стороны</h3>
-      <p>${Array.isArray(strengths) ? strengths.map(escapeHTML).join(" · ") : escapeHTML(strengths || "Нет данных")}</p>
+      <ul>${(Array.isArray(strengths) ? strengths : [strengths]).map(item => `<li>${escapeHTML(item)}</li>`).join("") || "<li>Нет данных</li>"}</ul>
       <h3>Слабые стороны</h3>
-      <p>${Array.isArray(weaknesses) ? weaknesses.map(escapeHTML).join(" · ") : escapeHTML(weaknesses || "Нет данных")}</p>
+      <ul>${(Array.isArray(weaknesses) ? weaknesses : [weaknesses]).map(item => `<li>${escapeHTML(item)}</li>`).join("") || "<li>Нет данных</li>"}</ul>
+      ${matchup.strongAgainst?.length ? `<h3>Удобные матчапы</h3><p>${matchup.strongAgainst.map(escapeHTML).join(" · ")}</p>` : ""}
+      ${matchup.weakAgainst?.length ? `<h3>Сложные матчапы</h3><p>${matchup.weakAgainst.map(escapeHTML).join(" · ")}</p>` : ""}
+      ${profile?.synergies?.length ? `<h3>Хорошо сочетается</h3><p>${profile.synergies.map(escapeHTML).join(" · ")}</p>` : ""}
+      ${profile?.itemNotes?.length ? `<h3>Заметки по экипировке</h3><ul>${profile.itemNotes.map(item => `<li>${escapeHTML(item)}</li>`).join("")}</ul>` : ""}
+      ${teamfight.preferredPlan ? `<h3>План на командную драку</h3><p>${escapeHTML(teamfight.preferredPlan)}</p>` : ""}
+      ${teamfight.targetPriority?.length ? `<h3>Приоритет целей</h3><ol>${teamfight.targetPriority.map(item => `<li>${escapeHTML(item)}</li>`).join("")}</ol>` : ""}
+      ${teamfight.avoid?.length ? `<h3>Чего избегать</h3><ul>${teamfight.avoid.map(item => `<li>${escapeHTML(item)}</li>`).join("")}</ul>` : ""}
+      <small>Профиль: ${escapeHTML(profile?.patch?.version || "нет версии")} · Проверено: ${escapeHTML(profile?.patch?.reviewedAt || "не проверено")}</small>
       <button type="button" id="heroUseInDraft">Выбрать для драфта</button>
     </div>
   `;
