@@ -25,7 +25,7 @@ function draftHeroLabel(value){
  const catalog=(data.draftHeroOptions||[]).find(hero=>hero.id===value);
  return catalog?catalog.name+" ("+catalog.nameEn+")":value;
 }
-async function init(){if(window.__MLBB_APP_DIAGNOSTICS)window.__MLBB_APP_DIAGNOSTICS.stage="loading-data";try{data=await $api("/data")}catch(e){if(window.__MLBB_APP_DIAGNOSTICS){window.__MLBB_APP_DIAGNOSTICS.stage="data-error";window.__MLBB_APP_DIAGNOSTICS.error=e.message}toast(e.message);return}
+async function init(){if(window.__MLBB_APP_DIAGNOSTICS)window.__MLBB_APP_DIAGNOSTICS.stage="loading-data";try{data=await $api("/data");for(const key of ["heroCatalog","heroProfiles","items","talents","emblems"])data[key]=Array.isArray(data[key])?data[key].filter(entry=>entry&&typeof entry==="object"):[]}catch(e){if(window.__MLBB_APP_DIAGNOSTICS){window.__MLBB_APP_DIAGNOSTICS.stage="data-error";window.__MLBB_APP_DIAGNOSTICS.error=e.message}toast(e.message);return}
 for(let id of ["enemyPick","allyPick","myHero"])draftOptions($(id));
 for(let id of ["profileHero","filterHero"])options($(id),data.heroes);
 for(let id of ["lane","profileRole","filterRole"])options($(id),data.roles);
@@ -323,8 +323,8 @@ function renderEncy(){
   const image=(typeof x==="object"&&(x.image||x.icon))||(slug&&slug!=="common"?("https://mlbbdex.com/visuels/emblemes/"+slug+"-emblem.webp"):null);
   return {name:EMBLEM_LOCAL_NAMES[slug]||(typeof x==="string"?"Эмблема "+x:x.name||"Эмблема"),category:"Эмблема",description:EMBLEM_LOCAL_DESCRIPTIONS[slug]||(typeof x==="object"&&(x.description||x.bestFor))||"Описание эмблемы уточняется.",image,type:"emblem"};
  });
- const heroEntries=(data.heroCatalog||[]).map(hero=>{
-  const profile=(data.heroProfiles||[]).find(entry=>entry.id===hero.id);
+ const heroEntries=(data.heroCatalog||[]).filter(hero=>hero&&typeof hero==="object").map(hero=>{
+  const profile=(data.heroProfiles||[]).find(entry=>entry?.id===hero.id);
   const name=hero.displayNameRu||hero.nameEn||hero.id;
   const roles=Array.isArray(hero.role?.values)?hero.role.values.join(", "):"Роль уточняется";
   const lanes=[hero.lanes?.primary,...(hero.lanes?.flexible||[])].filter(Boolean).join(", ")||"Линия уточняется";
@@ -431,7 +431,7 @@ function encyRussianTextOrNote(value,note){
 function renderEncyHeroDescription(remote,hero,tacticalProfile=null){
  const host=$("encyHeroDescription");if(!host)return;
  const profile=remote?.profile||{};
- const tactical=tacticalProfile||(data.heroProfiles||[]).find(entry=>entry.id===hero?.id)||null;
+ const tactical=tacticalProfile||(data.heroProfiles||[]).find(entry=>entry?.id===hero?.id)||null;
  const roles=(profile.roles||hero?.role?.values||[]).map(encyHeroRussianLabel);
  const lanes=(profile.lanes||[hero?.lanes?.primary,...(hero?.lanes?.flexible||[])].filter(Boolean)).map(encyHeroRussianLabel);
  const specialties=(profile.specialties||[]).map(encyHeroRussianLabel);
@@ -629,7 +629,7 @@ async function loadEncyHeroKnowledge(id){
    if(!remote){remote=await $api("/hero-knowledge/"+encodeURIComponent(id));encyRemoteKnowledge.set(id,remote)}
    if(request!==encyKnowledgeRequest||!$("encyHeroModal")||$("encyHeroModal").classList.contains("hidden"))return;
    const currentHero=(data.heroCatalog||[]).find(hero=>hero.id===id);
-   renderEncyHeroDescription(remote,currentHero,(data.heroProfiles||[]).find(entry=>entry.id===id)||null);
+   renderEncyHeroDescription(remote,currentHero,(data.heroProfiles||[]).find(entry=>entry?.id===id)||null);
    renderEncyHeroRemoteProfile(remote);
    loadEncyHeroGrowth(id,remote,request);
    const badge=$("encyHeroProfileBadge");if(badge&&remote.profile)badge.textContent=remote.fallback?"Резервная база · 20.11.2026":"Справочные данные загружены";
