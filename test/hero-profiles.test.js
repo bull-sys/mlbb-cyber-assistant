@@ -3,7 +3,7 @@ import test from "node:test";
 import { heroProfiles, validateHeroProfiles, HERO_DB_PATCH } from "../server/hero-profiles.js";
 import { heroCatalog } from "../server/hero-catalog.js";
 
-const MATCHUP_REVIEWED_IDS = new Set(["helcurt", "hanzo", "roger", "ling", "badang"]);
+const MATCHUP_REVIEWED_IDS = new Set(["helcurt", "hanzo", "roger", "ling", "badang", "nolan", "fanny", "jawhead", "suyou", "karrie"]);
 
 test("hero profile database remains structurally valid", () => {
   const result = validateHeroProfiles();
@@ -129,8 +129,8 @@ test("Nolan has a cross-checked Assassin/Jungle profile with explicit uncertaint
   assert.equal(nolan.confidence, "partial");
   assert.equal(nolan.patch.version, HERO_DB_PATCH);
   assert.equal(nolan.patch.reviewedAt, "2026-11-22");
-  assert.deepEqual(nolan.matchups.strongAgainst, []);
-  assert.deepEqual(nolan.matchups.weakAgainst, []);
+  assert.ok(nolan.matchups.strongAgainst.length > 0);
+  assert.ok(nolan.matchups.weakAgainst.length > 0);
   const notes = nolan.patch.notes.join(" ");
   assert.match(notes, /Рейтинговая статистика/);
   assert.match(notes, /Профессиональная выборка/);
@@ -155,8 +155,8 @@ test("Fanny has a cross-checked Assassin/Jungle profile with explicit ranked and
   assert.equal(fanny.confidence, "partial");
   assert.equal(fanny.patch.version, HERO_DB_PATCH);
   assert.equal(fanny.patch.reviewedAt, "2026-11-22");
-  assert.deepEqual(fanny.matchups.strongAgainst, []);
-  assert.deepEqual(fanny.matchups.weakAgainst, []);
+  assert.ok(fanny.matchups.strongAgainst.length > 0);
+  assert.ok(fanny.matchups.weakAgainst.length > 0);
   const notes = fanny.patch.notes.join(" ");
   assert.match(notes, /Рейтинговая статистика/);
   assert.match(notes, /Профессиональные турниры/);
