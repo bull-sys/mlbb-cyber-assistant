@@ -128,7 +128,7 @@ test("item encyclopedia records have descriptions and the six shop categories", 
   assert.equal(itemById("Power Crystal").stats[0], "+280 маны");
   assert.equal(itemById("Vampire Mallet").stats[1], "+8% физического вампиризма");
   assert.match(itemById("Conceal").passive, /40%.*5 секунд.*60 секунд.*1000 золота/);
-  assert.match(itemById("Dire Hit").passive, /20 зарядов.*чистый урон.*15 секунд/);
+  assert.match(itemById("Dire Hit").passive, /При 20 зарядах.*чистый урон.*Перезарядка — 15 секунд/);
   assert.match(itemById("Encourage").passive, /20 дополнительной гибридной защиты.*1000 золота/);
   assert.match(itemById("Favor").passive, /каждые 15 секунд.*400 здоровья.*5 единиц/);
   assert.match(itemById("Bloody Retribution").passive, /40.*3 × уровень героя.*1%.*3 секунд/);
