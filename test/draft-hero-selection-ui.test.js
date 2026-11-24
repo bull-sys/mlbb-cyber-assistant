@@ -84,8 +84,8 @@ test("manual draft selection animates only the chosen slot and marks both full t
   assert.match(app, /let draftEntrance=null/);
   assert.match(app, /draftEntrance=\{side:pickerTarget,value\}/);
   assert.match(app, /arena-slot-enter/);
-  assert.match(app, /enemyCount===5&&allyCount===5/);
-  assert.match(app, /СОСТАВЫ ЗАПОЛНЕНЫ/);
+  assert.match(app, /enemyCount===5&&allyCount===4/);
+  assert.match(app, /ПИК СОБРАН/);
   assert.match(html, /data-arena-completion/);
 });
 
