@@ -36,7 +36,11 @@ test("encyclopedia has all 26 emblem talents split into 8/8/10 tiers", () => {
 });
 
 test("item encyclopedia records have descriptions and the six shop categories", () => {
-  assert.ok(items.length >= 54);
+  assert.equal(items.length, 104);
+  assert.ok(items.every(item => typeof item.englishName === "string" && item.englishName.length > 0));
+  assert.equal(new Set(items.map(item => item.englishName)).size, 104);
+  assert.ok(items.every(item => [1, 2, 3].includes(item.tier)));
+  assert.ok(items.every(item => Number.isFinite(item.priceGold) && item.priceGold >= 0));
   const categories = new Set(items.map(item => item.category));
   assert.deepEqual(
     [...categories].sort(),
@@ -48,6 +52,8 @@ test("item encyclopedia records have descriptions and the six shop categories", 
     assert.ok(item.name, "item name is required");
     assert.ok(item.description?.length > 15, item.name + " needs a description");
     assert.ok(categories.has(item.category), item.name + " needs a valid shop category");
+    assert.ok(item.source?.startsWith("https://"), item.name + " needs provenance");
+    assert.ok(item.checkedAt, item.name + " needs a verification date");
   }
 });
 
