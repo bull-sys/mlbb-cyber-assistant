@@ -8,6 +8,19 @@ const MATCHUP_REVIEWED_IDS = new Set([
   ...heroProfiles.filter(hero => hero.matchupEvidence).map(hero => hero.id)
 ]);
 
+test("Badang has both EXP and Roam lanes and a sourced Fighter profile", () => {
+  const badang = heroProfiles.find(hero => hero.id === "badang");
+  assert.ok(badang);
+  assert.deepEqual(badang.roles, ["Боец"]);
+  assert.deepEqual(badang.lanes, ["Опыт", "Роум"]);
+  assert.ok(badang.mechanics.length >= 4);
+  assert.ok(badang.strengths.length >= 2);
+  assert.ok(badang.weaknesses.length >= 2);
+  assert.ok(badang.itemNotes.length >= 3);
+  assert.ok(badang.sources.some(source => source.includes("mlbb.io")));
+  assert.equal(badang.patch.reviewedAt, "2026-11-24");
+});
+
 test("hero profile database remains structurally valid", () => {
   const result = validateHeroProfiles();
   assert.equal(result.ok, true, JSON.stringify(result.errors));
