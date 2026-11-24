@@ -1432,3 +1432,6 @@ details.ency-info-card.visual>.ency-info-summary{display:grid}
 @media(prefers-reduced-motion:reduce){.own-recommendation{transition:none}}
 
 .ally-slots{grid-template-columns:repeat(4,minmax(0,1fr))}
+
+.own-pick-reset{justify-self:start;padding:5px 8px;border:1px solid rgba(167,137,255,.4);border-radius:7px;background:rgba(130,92,230,.1);color:#c4b5fd;font-size:7px;font-weight:900;cursor:pointer}
+.own-pick-reset:hover{border-color:#c4b5fd;background:rgba(130,92,230,.2)}
