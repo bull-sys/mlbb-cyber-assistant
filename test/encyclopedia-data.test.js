@@ -93,6 +93,23 @@ test("item encyclopedia records have descriptions and the six shop categories", 
   assert.match(itemById("Magic Potion").passive, /120 секунд.*30 магической силы.*10%/);
   assert.match(itemById("Power Potion").passive, /120 секунд.*30 физической атаки.*15% физического вампиризма/);
   assert.match(itemById("Rock Potion").passive, /120 секунд.*500 к максимальному здоровью.*5%/);
+  assert.equal(itemById("Ares Belt").passive, undefined);
+  assert.match(itemById("Black Ice Shield").passive, /радиусе 5 единиц.*на 4.*до 20/);
+  assert.match(itemById("Dreadnaught Armor").passive, /4%.*2 секунды.*3 раз/);
+  assert.match(itemById("Molten Essence").passive, /0,6%.*каждую секунду.*125/);
+  assert.equal(itemById("Silence Robe").passive, undefined);
+  assert.equal(itemById("Steel Legplates").passive, undefined);
+  assert.match(itemById("Azure Blade").passive, /50 чистого урона.*3 секунд.*1,5 секунды/);
+  assert.match(itemById("Elegant Gem").passive, /ниже 50%.*15% здоровья.*15% маны.*60 секунд/);
+  assert.equal(itemById("Exotic Veil").passive, undefined);
+  assert.equal(itemById("Fury Hammer").passive, undefined);
+  assert.equal(itemById("Legion Sword").passive, undefined);
+  assert.match(itemById("Magic Blade").passive, /ниже 30%.*60 × уровень героя.*60 секунд/);
+  assert.equal(itemById("Mystic Container").passive, undefined);
+  assert.equal(itemById("Ogre Tomahawk").passive, undefined);
+  assert.equal(itemById("Regular Spear").passive, undefined);
+  assert.equal(itemById("Rogue Meteor").passive, undefined);
+  assert.equal(itemById("Tome of Evil").passive, undefined);
   assert.match(itemById("Antique Cuirass").passive, /8%/);
   assert.match(itemById("Immortality").passive, /210 секунд/);
   assert.match(itemById("Sea Halberd").passive, /Punish/);
@@ -109,7 +126,7 @@ test("item encyclopedia records have descriptions and the six shop categories", 
   assert.match(itemById("Malefic Roar").passive, /30% физического пробивания/);
   assert.match(itemById("Golden Staff").passive, /Endless Strike/);
   assert.match(itemById("Lightning Truncheon").passive, /Каждые 6 секунд/);
-  assert.equal(items.filter(item => item.verification === "checked against item detail page").length, 58);
+  assert.equal(items.filter(item => item.verification === "checked against item detail page").length, 75);
   for (const item of items) {
     assert.ok(item.name, "item name is required");
     assert.ok(item.description?.length > 15, item.name + " needs a description");
