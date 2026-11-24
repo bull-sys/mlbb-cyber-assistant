@@ -17,6 +17,7 @@ import { heroCatalog } from "./hero-catalog.js";
 import { getHeroSkillAssets } from "./hero-skill-assets.js";
 import { getHeroKnowledge, getGameAssets } from "./mlbbdex-adapter.js";
 import { getHeroGrowthData } from "./hero-growth-adapter.js";
+import { getRankedMatchupEvidence, normalizeRankedMatchupRank } from "./ranked-matchup-adapter.js";
 import { getDraftHeroOptions, isCatalogHeroId, resolveDraftHeroSelection } from "./draft-hero-selection.js";
 import { heroProfiles, validateHeroProfiles } from "./hero-profiles.js";
 import { normalizeRegistration } from "./registration.js";
@@ -152,7 +153,7 @@ app.get("/api/players",auth,(req,res)=>{
 app.post("/api/players/:id/like",auth,(req,res)=>{const target=Number(req.params.id);if(!Number.isInteger(target)||target===req.user.id||!safeUser(target))return res.status(400).json({error:"Некорректный игрок"});db.prepare("INSERT OR IGNORE INTO likes(from_user,to_user) VALUES(?,?)").run(req.user.id,target);const mutual=!!db.prepare("SELECT 1 FROM likes WHERE from_user=? AND to_user=?").get(target,req.user.id);res.json({liked:true,mutual})});
 app.get("/api/matches",auth,(req,res)=>{const rows=db.prepare(`SELECT u.id,u.nickname,p.hero,p.role,p.rank,p.style,p.game_id FROM likes l JOIN users u ON u.id=l.to_user JOIN profiles p ON p.user_id=u.id WHERE l.from_user=? AND EXISTS(SELECT 1 FROM likes x WHERE x.from_user=l.to_user AND x.to_user=l.from_user)`).all(req.user.id);res.json({matches:rows})});
 
-function analyze({lane, enemies = [], allies = [], myHero = ""}) {
+function analyze({lane, enemies = [], allies = [], myHero = "", rankedMatchups = {}, rankedMatchupMeta = null}) {
   const normalizeLane = value => ({
     "Лес": "Лес", "Jungle": "Лес",
     "Роум": "Роум", "Roam": "Роум",
@@ -323,6 +324,8 @@ function analyze({lane, enemies = [], allies = [], myHero = ""}) {
       const reasons = [];
       const matchedEnemies = [];
       const riskyEnemies = [];
+      const staticMatchedEnemies = [];
+      const rankedEvidenceList = [];
       const synergies = [];
       const add = (points, reason) => {
         rawScore += points;
@@ -331,27 +334,53 @@ function analyze({lane, enemies = [], allies = [], myHero = ""}) {
 
       for (const opponent of enemy) {
         const enemyProfile = opponent.profile;
-        const ownStrongRank = (profile.matchups?.strongAgainst || []).indexOf(enemyProfile.id);
-        const enemyWeakRank = (enemyProfile.matchups?.weakAgainst || []).indexOf(profile.id);
-        const ownWeakRank = (profile.matchups?.weakAgainst || []).indexOf(enemyProfile.id);
-        const enemyStrongRank = (enemyProfile.matchups?.strongAgainst || []).indexOf(profile.id);
-        const positiveRanks = [ownStrongRank, enemyWeakRank].filter(rank => rank >= 0);
-        const negativeRanks = [ownWeakRank, enemyStrongRank].filter(rank => rank >= 0);
+        const rankedEvidence = rankedMatchups?.[enemyProfile.id]?.[profile.id] || null;
 
-        if (positiveRanks.length) {
-          const rank = Math.min(...positiveRanks);
-          const points = Math.max(2, 6 - rank);
-          add(points, "Статистическое преимущество по матчапу против " + opponent.name);
-          matchedEnemies.push(opponent.name);
-          if (positiveRanks.length > 1) {
-            add(2, "Преимущество подтверждается данными обеих сторон матчапа");
+        if (rankedEvidence && Number.isFinite(Number(rankedEvidence.advantagePp))) {
+          const advantagePp = Number(rankedEvidence.advantagePp);
+          const points = Math.max(-5, Math.min(5, advantagePp));
+          rankedEvidenceList.push({
+            opponent: opponent.name,
+            advantagePp,
+            rankBracket: rankedEvidence.rankBracket || rankedMatchupMeta?.rankBracket || "all",
+            windowDays: rankedEvidence.windowDays || rankedMatchupMeta?.windowDays || null,
+            lane: null,
+            sampleSize: null,
+            source: rankedEvidence.source || "Rone Arena API",
+            sourceUrl: rankedEvidence.sourceUrl || null,
+            observedAt: rankedEvidence.observedAt || rankedMatchupMeta?.observedAt || null
+          });
+          if (advantagePp > 0) {
+            add(points, "Ранговое преимущество против " + opponent.name + ": +" + advantagePp.toFixed(1) + " п.п.");
+            matchedEnemies.push(opponent.name);
+          } else if (advantagePp < 0) {
+            add(points, "Ранговый риск против " + opponent.name + ": " + advantagePp.toFixed(1) + " п.п.");
+            riskyEnemies.push(opponent.name);
           }
-        }
-        if (negativeRanks.length) {
-          const rank = Math.min(...negativeRanks);
-          const points = Math.max(2, 6 - rank);
-          add(-points, "Есть статистический риск в матчапе против " + opponent.name);
-          riskyEnemies.push(opponent.name);
+        } else {
+          const ownStrongRank = (profile.matchups?.strongAgainst || []).indexOf(enemyProfile.id);
+          const enemyWeakRank = (enemyProfile.matchups?.weakAgainst || []).indexOf(profile.id);
+          const ownWeakRank = (profile.matchups?.weakAgainst || []).indexOf(enemyProfile.id);
+          const enemyStrongRank = (enemyProfile.matchups?.strongAgainst || []).indexOf(profile.id);
+          const positiveRanks = [ownStrongRank, enemyWeakRank].filter(rank => rank >= 0);
+          const negativeRanks = [ownWeakRank, enemyStrongRank].filter(rank => rank >= 0);
+
+          if (positiveRanks.length) {
+            const rank = Math.min(...positiveRanks);
+            const points = Math.max(2, 6 - rank);
+            add(points, "Статистический сигнал матчапа из тактической базы против " + opponent.name);
+            matchedEnemies.push(opponent.name);
+            staticMatchedEnemies.push(opponent.name);
+            if (positiveRanks.length > 1) {
+              add(2, "Преимущество подтверждается данными обеих сторон матчапа");
+            }
+          }
+          if (negativeRanks.length) {
+            const rank = Math.min(...negativeRanks);
+            const points = Math.max(2, 6 - rank);
+            add(-points, "Есть статистический риск в матчапе против " + opponent.name);
+            riskyEnemies.push(opponent.name);
+          }
         }
       }
 
@@ -420,21 +449,29 @@ function analyze({lane, enemies = [], allies = [], myHero = ""}) {
           "Синергия с союзниками и ситуационное соответствие учитываются как вторичные сигналы");
       }
 
-      const hasDirectMatchup = matchedEnemies.length > 0;
+      const hasPositiveMatchup = matchedEnemies.length > 0;
       const hasRisk = riskyEnemies.length > 0;
-      const matchupType = hasDirectMatchup && hasRisk
+      const hasRankedPositive = rankedEvidenceList.some(entry => entry.advantagePp > 0);
+      const hasRankedNegative = rankedEvidenceList.some(entry => entry.advantagePp < 0);
+      const matchupType = hasPositiveMatchup && hasRisk
         ? "mixed-matchup"
-        : hasDirectMatchup
-          ? "direct-counter"
-          : synergies.length
-            ? "team-synergy"
-            : "situational";
+        : hasRankedPositive
+          ? "ranked-advantage"
+          : hasRankedNegative
+            ? "ranked-risk"
+            : staticMatchedEnemies.length
+              ? "direct-counter"
+              : synergies.length
+                ? "team-synergy"
+                : "situational";
       if (!reasons.length) {
-        reasons.push("Подходит для выбранной линии; подтверждённого прямого преимущества против введённых героев в матчап-таблицах не найдено.");
-      } else if (!hasDirectMatchup) {
+        reasons.push("Подходит для выбранной линии; подтверждённого преимущества против введённых героев в доступных матчап-данных не найдено.");
+      } else if (!hasPositiveMatchup && !hasRisk) {
         reasons.push("Это ситуационная альтернатива, а не подтверждённая прямая контра.");
-      } else if (hasRisk) {
+      } else if (hasPositiveMatchup && hasRisk) {
         reasons.push("Матчап неоднозначный: есть и положительные, и отрицательные статистические сигналы.");
+      } else if (hasRisk) {
+        reasons.push("В ранговых или профильных данных обнаружен неблагоприятный сигнал; учитывай риск этого матчапа.");
       }
 
       const matchupEvidence = profile.matchupEvidence || null;
@@ -455,12 +492,13 @@ function analyze({lane, enemies = [], allies = [], myHero = ""}) {
           confidence: profile.confidence || "partial",
           matchupSource: evidenceSource,
           matchupCheckedAt: matchupEvidence?.checkedAt || profile.matchupsReviewedAt || null,
-          matchupMethod: matchupEvidence?.method || profile.matchupsMethod || null
+          matchupMethod: matchupEvidence?.method || profile.matchupsMethod || null,
+          rankedMatchups: rankedEvidenceList
         }
       };
     })
     .sort((a, b) => {
-      const priority = { "direct-counter": 3, "mixed-matchup": 2, "team-synergy": 1, "situational": 0 };
+      const priority = { "ranked-advantage": 4, "mixed-matchup": 3, "direct-counter": 2, "ranked-risk": 1, "team-synergy": 1, "situational": 0 };
       return b.rawScore - a.rawScore ||
         priority[b.matchupType] - priority[a.matchupType] ||
         a.hero.name.localeCompare(b.hero.name, "ru");
@@ -674,6 +712,7 @@ function analyze({lane, enemies = [], allies = [], myHero = ""}) {
       riskyEnemies: x.riskyEnemies,
       profileEvidence: x.profileEvidence
     })),
+    rankedMatchupMeta,
     build: buildDetails.map(x => x.name),
     buildDetails,
     itemCatalogCount: items.length,
@@ -725,7 +764,18 @@ app.post("/api/ai/draft",guestDraftRateLimit,optionalAuth,async(req,res)=>{
   allies:(b.allies||[]).map(legacyName),
   myHero:b.myHero?legacyName(b.myHero):""
  };
- const result=analyze(resolvedDraft);
+ const requestedRank = normalizeRankedMatchupRank(b.rank) ||
+  normalizeRankedMatchupRank(req.user ? safeUser(req.user.id)?.rank : null) || "all";
+ const enemyProfilesForStats = b.enemies
+  .map(value => resolveDraftHeroSelection(value))
+  .map(selection => heroProfiles.find(profile => profile.id === selection?.id))
+  .filter(Boolean);
+ const rankedEvidence = await getRankedMatchupEvidence(enemyProfilesForStats, requestedRank, heroProfiles);
+ const result=analyze({
+  ...resolvedDraft,
+  rankedMatchups: rankedEvidence.byOpponent,
+  rankedMatchupMeta: rankedEvidence.metadata
+ });
  result.analysisStatus="complete";
  if(openai&&req.user){try{const response=await openai.chat.completions.create({model:process.env.OPENAI_MODEL||"gpt-4.1-mini",messages:[{role:"system",content:"Ты тактический помощник MLBB. Не выдумывай live статистику и точные параметры патча. Используй только переданные варианты. Кратко объясни тактику на русском."},{role:"user",content:JSON.stringify({lane:b.lane,enemies:b.enemies,allies:b.allies||[],myHero:b.myHero||"",rulesResult:result})}],max_tokens:450,temperature:.3});result.aiExplanation=response.choices[0]?.message?.content||""}catch{result.aiExplanation="AI-сервис временно недоступен; показан базовый анализ."}}
  res.json(result);
