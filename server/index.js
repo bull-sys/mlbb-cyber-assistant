@@ -375,135 +375,113 @@ function analyze({lane, enemies = [], allies = [], myHero = ""}) {
     .slice(0, 3);
 
 
-  // Подбор предметов
-  const physicalAssassin = selected?.type === "assassin";
-  const physicalFighter = selected?.type === "fighter";
-  const magicMage = selected?.type === "mage";
-  const marksman = selected?.type === "marksman";
+  // Контрсборка: совместимость с выбранным героем + подтверждённые угрозы врагов.
+  const selectedProfile = profileByName.get(myHero) || null;
+  const enemyProfileByName = new Map(enemy.map(hero => [hero.name, profileByName.get(hero.name)]));
+  let hasMagicBurst = false, hasPhysicalBurst = false, hasBurstThreat = false;
+  for (const hero of enemy) {
+    const profile = enemyProfileByName.get(hero.name);
+    const damage = profile?.combat?.damage || (hero.type === "mage" ? "magic" : ["assassin","fighter","marksman"].includes(hero.type) ? "physical" : "unknown");
+    const burst = profile?.combat?.burst || ((hero.tags || []).includes("burst") ? "high" : "unknown");
+    if (damage === "magic" && burst === "high") hasMagicBurst = true;
+    if (damage === "physical" && burst === "high") hasPhysicalBurst = true;
+    if (burst === "high") hasBurstThreat = true;
+  }
+
+  const physicalBuild = ["assassin","fighter","marksman"].includes(selected?.type);
+  const magicBuild = selected?.type === "mage" || selectedProfile?.combat?.damage === "magic";
+  const canUseItem = item => {
+    if (item.category === "Защита") return true;
+    if (item.category === "Атака") return physicalBuild;
+    if (item.category === "Магия" || item.category === "Магия / защита") return magicBuild || selected?.type === "support";
+    return false;
+  };
 
   const itemScores = items.map(item => {
     const tags = new Set(item.tags || []);
     let score = 0;
     const reasons = [];
-
-    // Совместимость с выбранным героем
-    if (physicalAssassin && item.category === "Атака" &&
-        (tags.has("burst") || tags.has("penetration"))) {
-      score += 4;
-      reasons.push("Подходит физическому убийце");
-    }
-
-    if (physicalFighter && tags.has("fighter")) {
-      score += 4;
-      reasons.push("Подходит бойцу");
-    }
-
-    if (magicMage && tags.has("magic")) {
-      score += 4;
-      reasons.push("Усиливает магический урон");
-    }
-
-    if (marksman && tags.has("marksman")) {
-      score += 4;
-      reasons.push("Подходит стрелку");
-    }
-
-    // Ответы на угрозы
-    if ((has("heal") || has("sustain")) &&
-        tags.has("anti-heal")) {
-      score += 6;
-      reasons.push("Снижает эффективность восстановления здоровья");
-    }
-
-    if (enemyTypes.filter(t => t === "mage").length >= 2 &&
-        tags.has("magic-burst")) {
-      score += 5;
-      reasons.push("Защищает от магического взрывного урона");
-    }
-
-    if (has("attack-speed") &&
-        tags.has("anti-attack-speed")) {
-      score += 5;
-      reasons.push("Ослабляет героев с частыми автоатаками");
-    }
-
-    if (enemyHas("tank") && tags.has("penetration")) {
-      score += 4;
-      reasons.push("Помогает пробивать защиту противников");
-    }
-
-    if (has("burst") && tags.has("survival")) {
-      score += 3;
-      reasons.push("Повышает шансы пережить взрывной урон");
-    }
-
-    if (has("attack-speed") && tags.has("attack-speed")) {
-      score += 3;
-      reasons.push("Даёт дополнительную защиту от физических атак");
-    }
-
-    return {
-      name: item.name,
-      score,
-      reasons,
-      category: item.category,
-      tags: [...tags]
+    const targets = [];
+    const add = (points, reason, against = []) => {
+      score += points;
+      reasons.push(reason);
+      for (const name of against) if (!targets.includes(name)) targets.push(name);
     };
-  });
+    if (physicalBuild && item.category === "Атака" &&
+        (tags.has("burst") || tags.has("physical") || tags.has("penetration") ||
+         (selected?.type === "marksman" && (tags.has("marksman") || tags.has("critical")))) {
+      add(3, "Совместим с физической сборкой выбранного героя");
+    }
+    if (magicBuild && item.category === "Магия" && tags.has("magic")) {
+      add(3, "Совместим с магической сборкой выбранного героя");
+    }
+    if (selected?.type === "fighter" && tags.has("fighter")) add(3, "Подходит бойцу для продолжительных разменов");
+    if (selected?.type === "marksman" && tags.has("marksman")) add(3, "Подходит стрелку");
 
-  const compatible = itemScores.filter(item => {
-    if (item.score <= 0) return false;
+    const antiHealTargets = enemy.filter(hero => (hero.tags || []).some(tag => ["heal","sustain"].includes(tag))).map(hero => hero.name);
+    if (tags.has("anti-heal") && antiHealTargets.length) add(10, "Снижает эффективность лечения и восстановления здоровья", antiHealTargets);
 
-    if (physicalAssassin &&
-        (item.category === "Магия" ||
-         item.category === "Магия / защита")) return false;
+    const magicTargets = enemy.filter(hero => {
+      const profile = enemyProfileByName.get(hero.name);
+      return (profile?.combat?.damage === "magic" || hero.type === "mage") &&
+        (profile?.combat?.burst === "high" || (hero.tags || []).includes("burst"));
+    }).map(hero => hero.name);
+    if (tags.has("magic-burst") && magicTargets.length) add(9, "Защищает от сильного магического взрывного урона", magicTargets);
 
-    if (magicMage && item.category === "Атака") return false;
+    const magicDpsTargets = enemy.filter(hero => {
+      const profile = enemyProfileByName.get(hero.name);
+      return profile?.combat?.damage === "magic" || hero.type === "mage";
+    }).map(hero => hero.name);
+    if (tags.has("magic-dps") && magicDpsTargets.length) add(7, "Полезен против повторяющегося магического урона", magicDpsTargets);
 
-    return true;
-  });
+    const speedTargets = enemy.filter(hero => (hero.tags || []).includes("attack-speed")).map(hero => hero.name);
+    if (tags.has("anti-attack-speed") && speedTargets.length) add(9, "Ослабляет героев, зависящих от частых базовых атак", speedTargets);
+    if (tags.has("attack-speed") && speedTargets.length && item.name === "Шипованная броня") add(7, "Даёт защитный ответ против частых физических атак", speedTargets);
 
-  // Не более одного предмета с антихилом
-  const buildDetails = [];
-  const usedTags = new Set();
+    const physicalTargets = enemy.filter(hero => {
+      const profile = enemyProfileByName.get(hero.name);
+      return profile?.combat?.damage === "physical" || ["assassin","fighter","marksman"].includes(hero.type);
+    }).map(hero => hero.name);
+    if (tags.has("physical") && physicalTargets.length) add(5, "Добавляет защиту против физического урона", physicalTargets);
 
-  compatible.sort((a, b) => b.score - a.score);
-
-  for (const item of compatible) {
-    if (buildDetails.length >= 6) break;
-
-    if (item.tags.includes("anti-heal")) {
-      if (usedTags.has("anti-heal")) continue;
-      usedTags.add("anti-heal");
+    const tankTargets = enemy.filter(hero => hero.type === "tank").map(hero => hero.name);
+    if (tags.has("penetration") && tankTargets.length &&
+        ((physicalBuild && item.category === "Атака") || (magicBuild && item.category === "Магия"))) {
+      add(8, "Помогает пробивать защиту плотной передней линии", tankTargets);
     }
 
-    buildDetails.push({
-      name: item.name,
-      reasons: item.reasons
-    });
-  }
+    if (tags.has("survival") && hasBurstThreat) {
+      const burstTargets = enemy.filter(hero => {
+        const profile = enemyProfileByName.get(hero.name);
+        return profile?.combat?.burst === "high" || (hero.tags || []).includes("burst");
+      }).map(hero => hero.name);
+      add(5, "Повышает шанс пережить вражеский взрывной урон", burstTargets);
+    }
 
-  // Заполняем оставшиеся слоты подходящими защитными предметами
-  const fallbacks = items.filter(item => {
-    if (buildDetails.some(x => x.name === item.name)) return false;
-
-    if (physicalAssassin &&
-        (item.category === "Магия" ||
-         item.category === "Магия / защита")) return false;
-
-    if (magicMage && item.category === "Атака") return false;
-
-    return item.tags.includes("survival");
+    return {name:item.name,category:item.category,description:item.description,tags:[...tags],score,reasons:[...new Set(reasons)],targets};
   });
 
-  for (const item of fallbacks) {
-    if (buildDetails.length >= 6) break;
+  const buildDetails = itemScores
+    .filter(item => item.score > 0 && canUseItem(items.find(source => source.name === item.name)))
+    .sort((a,b) => b.score - a.score)
+    .filter((item,index,array) => !item.tags.includes("anti-heal") || array.findIndex(candidate => candidate.tags.includes("anti-heal")) === index)
+    .slice(0,5)
+    .map((item,index) => ({
+      name:item.name,category:item.category,description:item.description,reasons:item.reasons,against:item.targets,
+      priority:index===0?"Высокий приоритет":item.score>=8?"Ключевой контрпредмет":"Ситуативный выбор",
+      timing:item.tags.includes("anti-heal")?"Покупай, когда противники начинают активно восстанавливать здоровье"
+        :item.tags.includes("magic-burst")?"Рассмотри до крупных командных боёв против магического прокаста"
+        :item.tags.includes("anti-attack-speed")?"Покупай по мере усиления вражеского стрелка или бойца"
+        :item.tags.includes("penetration")?"Добавляй, когда передняя линия противника набирает защиту"
+        :item.tags.includes("survival")?"Ситуативно, если регулярно погибаешь от взрывного урона"
+        :"Подбирай под фактическую угрозу в матче"
+    }));
 
-    buildDetails.push({
-      name: item.name,
-      reasons: ["Дополнительная выживаемость"]
-    });
-  }
+  const enemyMatchupsWithItems = enemyMatchups.map(matchup => ({
+    ...matchup,
+    counterItems:buildDetails.filter(item=>item.against.includes(matchup.name))
+      .map(item=>({name:item.name,reason:item.reasons.join("; "),priority:item.priority}))
+  }));
 
   const emblem = selected?.type === "mage" ? "Мага"
     : selected?.type === "marksman" ? "Стрелка"
@@ -514,7 +492,7 @@ function analyze({lane, enemies = [], allies = [], myHero = ""}) {
 
   return {
     threats,
-    enemyMatchups,
+    enemyMatchups: enemyMatchupsWithItems,
     teamPlan,
     counters: candidates.map(x => ({
       name: x.hero.name,
