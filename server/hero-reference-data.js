@@ -1580,7 +1580,7 @@ export const heroReferenceData = [
     "id": "claude",
     "heroId": "651",
     "nameEn": "Claude",
-    "displayNameRu": "Клод",
+    "displayNameRu": "Клауд",
     "titleEn": "Master Thief",
     "roles": [
       {
