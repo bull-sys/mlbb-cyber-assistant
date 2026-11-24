@@ -373,8 +373,8 @@ function renderEncy(){
    const visual=x.image?'<img class="ency-info-icon" src="'+esc(x.image)+'" alt="" loading="lazy" decoding="async" onerror="this.outerHTML=\'<span class=&quot;ency-info-icon placeholder&quot;>✦</span>\'">':'<span class="ency-info-icon placeholder">✦</span>';
    const details=x.description||x.summary||x.bonus||"Описание уточняется";
    const metaParts=[];
-   if(x.price)metaParts.push(esc(String(x.price))+" золота");
-   if(x.tier)metaParts.push("Уровень "+esc(String(x.tier)));
+   if(x.priceGold!==undefined||x.price!==undefined)metaParts.push(esc(String(x.priceGold??x.price))+" золота");
+   if(x.tier)metaParts.push("Тир T"+esc(String(x.tier)));
    const expandedMeta=metaParts.length?'<p class="ency-info-expanded-meta">'+metaParts.join(" · ")+'</p>':"";
    if(x.type==="emblem"||x.type==="talent"||x.type==="item"){
     const tags=Array.isArray(x.tags)&&x.tags.length?'<small class="ency-info-tags">Метки: '+x.tags.map(tag=>esc(String(tag).replace(/-/g," "))).join(" · ")+'</small>':"";
