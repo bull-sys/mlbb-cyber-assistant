@@ -167,6 +167,14 @@ test("items answer sustain and double-mage threats while respecting mage categor
   });
 
   assert.ok(result.build.includes("Щит Афины"));
+  const athena = items.find(item => item.name === "Щит Афины");
+  assert.ok(athena.tags.includes("magic-defense"));
+  assert.ok(athena.tags.includes("anti-magic-burst"));
+  assert.equal(items.filter(item => item.name === "Щит Афины").length, 1);
+  const athenaRecommendation = result.buildDetails.find(item => item.name === "Щит Афины");
+  assert.ok(athenaRecommendation);
+  assert.ok(athenaRecommendation.against.includes("Эйдора"));
+  assert.ok(athenaRecommendation.against.includes("Нана"));
   assert.ok(result.build.includes("Господство льда"));
   const antiHealCount = result.build.filter(name =>
     items.find(item => item.name === name)?.tags.includes("anti-heal")
