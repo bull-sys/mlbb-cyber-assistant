@@ -5,7 +5,7 @@ import { heroCatalog } from "../server/hero-catalog.js";
 import { validateHeroCatalog } from "../server/hero-catalog-validation.js";
 import { heroLegacyBaseline } from "./fixtures/hero-legacy-baseline.js";
 
-const legacyToCatalogName = name => name === "Эудора" ? "Эйдора" : name;
+const legacyToCatalogName = name => ({ "Эудора": "Эйдора", "Диррот": "Дариус", "Фарса": "Фаша" }[name] || name);
 
 test("legacy baseline exactly matches the current 32 heroes and their order", () => {
   assert.equal(heroes.length, 32);
