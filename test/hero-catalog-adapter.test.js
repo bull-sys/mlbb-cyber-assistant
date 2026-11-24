@@ -118,11 +118,11 @@ test("next ten researched heroes include cross-source role and lane evidence", (
   );
 });
 
-test("Badang's EXP/Roam split remains flagged instead of claiming a single settled primary lane", () => {
+test("Badang's EXP/Roam split is verified without forcing a primary lane", () => {
   const badang = heroCatalog.find(entry => entry.id === "badang");
   assert.equal(badang.lanes.primary, null);
   assert.deepEqual(badang.lanes.flexible, ["EXP Lane", "Roam"]);
-  assert.equal(badang.lanes.status, "pending_review");
+  assert.equal(badang.lanes.status, "verified");
 });
 
 
