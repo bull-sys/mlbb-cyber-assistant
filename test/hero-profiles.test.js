@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import { heroProfiles, validateHeroProfiles, HERO_DB_PATCH } from "../server/hero-profiles.js";
 import { heroCatalog } from "../server/hero-catalog.js";
+import { emblems, talents } from "../server/data.js";
 
 const MATCHUP_REVIEWED_IDS = new Set([
   "helcurt", "hanzo", "roger", "ling", "badang", "nolan", "fanny", "jawhead", "suyou", "karrie", "cyclops", "gusion", "alpha", "eudora", "guinevere", "harith", "harley", "hilda", "ixia", "johnson", "dyrroth", "chou", "franco", "akai", "aurora", "bruno", "terizla", "masha", "marcel", "argus", "khufra", "diggie", "sun", "belerick", "hanabi",
@@ -1007,6 +1008,22 @@ test("Zetian, Zhask, Zhuxin and Zilong tactical profiles are sourced and structu
     if (!MATCHUP_REVIEWED_IDS.has(hero.id)) assert.deepEqual(hero.matchups.weakAgainst, []);
     if (!MATCHUP_REVIEWED_IDS.has(hero.id)) assert.deepEqual(hero.synergies, []);
   }
+});
+
+
+test("all 133 hero profiles have structured emblem and talent starting points", () => {
+ const emblemIds=new Set(emblems.map(entry=>entry.id)), talentIds=new Set(talents.map(entry=>entry.id));
+ assert.equal(heroProfiles.length,133);
+ for(const hero of heroProfiles){
+  assert.ok(hero.emblemProfile,hero.id+" emblem profile");
+  assert.ok(emblemIds.has(hero.emblemProfile.emblemId),hero.id+" known emblem ID");
+  assert.equal(hero.emblemProfile.talentIds.length,3,hero.id+" one talent per tier");
+  for(const id of hero.emblemProfile.talentIds)assert.ok(talentIds.has(id),hero.id+" known talent "+id);
+  assert.ok(hero.emblemNotes?.length>=1,hero.id+" emblem notes");
+  assert.ok(hero.talentNotes?.length>=1,hero.id+" talent notes");
+  assert.match(hero.emblemProfile.method,/не персональный статистический пресет/i);
+  assert.equal(hero.emblemProfile.checkedAt,"2026-11-24");
+ }
 });
 
 test("all local tactical profiles contain enough material for a useful hero passport", () => {
