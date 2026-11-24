@@ -554,7 +554,7 @@ test("ranked matchup risk is retained and mixed with positive signals without cl
     },
     rankedMatchupMeta: { rankBracket: "legend", laneScoped: false }
   });
-  const recommendation = result.counters.find(item => item.name === "Кэрри");
+  const recommendation = result.counters.find(item => item.name === candidate.names.ru);
   assert.ok(recommendation);
   assert.ok(["ranked-risk", "mixed-matchup"].includes(recommendation.matchupType));
   assert.ok(recommendation.riskyEnemies.includes("Эйдора"));
