@@ -248,6 +248,32 @@ test("team plan adapts to enemy composition threats", () => {
   assert.ok(titles.includes("Срежь восстановление и фокусируйте одну цель"));
 });
 
+test("counter build adapts to Roger versus Helcurt without suggesting mage or marksman-only items", () => {
+  const result = run({ myHero: "Роджер", enemies: ["Хелкарт"] });
+  const names = result.buildDetails.map(item => item.name);
+  assert.ok(names.includes("Древняя кираса"));
+  assert.ok(names.includes("Бессмертие"));
+  assert.ok(!names.includes("Щит Афины"));
+  assert.ok(!names.includes("Ветер природы"));
+  assert.ok(result.buildDetails.every(item => item.against.includes("Хелкарт")));
+  assert.ok(result.enemyMatchups.find(item => item.name === "Хелкарт").counterItems.length > 0);
+});
+
+test("counter build responds separately to healing, attack speed, and magic burst in a full enemy team", () => {
+  const result = run({ lane: "Золото", myHero: "Мия", enemies: ["Эйдора", "Минотавр", "Мия"] });
+  const names = result.buildDetails.map(item => item.name);
+  assert.ok(names.includes("Господство льда"));
+  assert.ok(names.includes("Щит Афины"));
+  assert.ok(names.includes("Шипованная броня"));
+  assert.ok(result.enemyMatchups.find(item => item.name === "Эйдора").counterItems.some(item => item.name === "Щит Афины"));
+  assert.ok(result.enemyMatchups.find(item => item.name === "Минотавр").counterItems.some(item => item.name === "Господство льда"));
+});
+
+test("without a selected hero the counter build does not guess offensive item compatibility", () => {
+  const result = run({ enemies: ["Хелкарт", "Эйдора"] });
+  assert.ok(result.buildDetails.every(item => item.category === "Защита"));
+});
+
 test("counter-picks include profile-specific identity, strength, and caution", () => {
   const result = run({ lane: "Золото", enemies: ["Эйдора"] });
   assert.ok(result.counters.length > 0);
