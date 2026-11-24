@@ -6,7 +6,7 @@
 export const HERO_DB_VERSION = "0.1.0";
 export const HERO_DB_PATCH = "2.2.23";
 
-export const heroProfiles = [
+const rawHeroProfiles = [
   {
     id: "helcurt",
     names: {
@@ -5251,7 +5251,61 @@ export const heroProfiles = [
     confidence: "partial"
   },
 
+
 ];
+
+const EMBLEM_ARCHETYPES = {
+  "Убийца": { emblemId:"assassin", emblemName:"Эмблема убийцы", tier1:["rupture","thrill"], tier2:["seasoned-hunter","master-assassin"], core:["lethal-ignition","killing-spree"] },
+  "Боец": { emblemId:"fighter", emblemName:"Эмблема бойца", tier1:["thrill","firmness"], tier2:["festival-of-blood","tenacity"], core:["brave-smite","war-cry"] },
+  "Стрелок": { emblemId:"marksman", emblemName:"Эмблема стрелка", tier1:["swift","fatal"], tier2:["weapon-master","bargain-hunter"], core:["quantum-charge","weakness-finder"] },
+  "Танк": { emblemId:"tank", emblemName:"Эмблема танка", tier1:["vitality","firmness"], tier2:["tenacity","wilderness-blessing"], core:["concussive-blast","focusing-mark"] },
+  "Маг": { emblemId:"mage", emblemName:"Эмблема мага", tier1:["inspire","rupture"], tier2:["bargain-hunter","festival-of-blood"], core:["impure-rage","lethal-ignition"] },
+  "Поддержка": { emblemId:"support", emblemName:"Эмблема поддержки", tier1:["agility","inspire"], tier2:["wilderness-blessing","pull-yourself-together"], core:["focusing-mark","quantum-charge"] }
+};
+const EMBLEM_TALENT_NAMES = {
+ "agility":"Ловкость","fatal":"Роковой удар","firmness":"Твёрдость","inspire":"Вдохновение","rupture":"Разлом","swift":"Стремительность","thrill":"Воодушевление атаки","vitality":"Живучесть",
+ "bargain-hunter":"Охотник за скидками","festival-of-blood":"Фестиваль крови","master-assassin":"Мастер-убийца","pull-yourself-together":"Соберись с силами","seasoned-hunter":"Опытный охотник","tenacity":"Упорство","weapon-master":"Мастер оружия","wilderness-blessing":"Благословение дикой природы",
+ "brave-smite":"Храбрый удар","concussive-blast":"Сокрушительный взрыв","focusing-mark":"Метка концентрации","impure-rage":"Нечистая ярость","killing-spree":"Серия убийств","lethal-ignition":"Смертельное воспламенение","quantum-charge":"Квантовый заряд","temporal-reign":"Временное господство","war-cry":"Боевой клич","weakness-finder":"Поиск слабости"
+};
+function buildHeroEmblemProfile(hero) {
+ const role=hero.roles?.[0]||"Боец", archetype=EMBLEM_ARCHETYPES[role]||EMBLEM_ARCHETYPES["Боец"];
+ const lanes=hero.lanes||[], combat=hero.combat||{};
+ let tier2=archetype.tier2[0], core=archetype.core[0];
+ if(lanes.includes("Лес"))tier2="seasoned-hunter";
+ else if(lanes.includes("Роум")&&["Танк","Поддержка"].includes(role))tier2="wilderness-blessing";
+ else if(role==="Убийца"&&combat.burst==="very_high")tier2="master-assassin";
+ else if(role==="Маг"&&["high","very_high"].includes(combat.sustain))tier2="festival-of-blood";
+ else if(role==="Стрелок"&&combat.dps==="high")tier2="weapon-master";
+ if(role==="Убийца")core=combat.sustain==="high"||combat.sustain==="very_high"?"killing-spree":"lethal-ignition";
+ else if(role==="Боец")core=["high","very_high"].includes(combat.sustain)?"brave-smite":"war-cry";
+ else if(role==="Стрелок")core="weakness-finder";
+ else if(role==="Танк")core=lanes.includes("Роум")?"focusing-mark":"concussive-blast";
+ else if(role==="Маг")core=combat.burst==="very_high"?"lethal-ignition":"impure-rage";
+ else if(role==="Поддержка")core="focusing-mark";
+ const talentIds=[archetype.tier1[0],tier2,core], talentNames=talentIds.map(id=>EMBLEM_TALENT_NAMES[id]||id);
+ return {
+  emblemId:archetype.emblemId,talentIds,
+  method:"Стартовый ориентир по основному классу, линии и профилю боя; это не персональный статистический пресет.",
+  source:"https://www.mlbbcore.com/emblems/",checkedAt:"2026-11-24",
+  emblemNotes:[
+   archetype.emblemName+" выбрана как отправная точка для основного класса «"+role.toLocaleLowerCase("ru")+"». Позиции профиля: "+(lanes.join(" / ")||"не указаны")+".",
+   "Это классовая рекомендация, а не утверждение о самом популярном пресете именно этого героя. Учитывайте роль в составе, линию и требуемые характеристики."
+  ],
+  talentNotes:[
+   "Стартовая связка по уровням талантов: "+talentNames.join(" → ")+".",
+   "Выбор сформирован по основному классу и игровому профилю. Альтернативы для других линий и составов допустимы; статистику конкретного героя нужно сверять отдельно."
+  ]
+ };
+}
+export const heroProfiles = rawHeroProfiles.map(hero => {
+ const generated=buildHeroEmblemProfile(hero);
+ return {
+  ...hero,
+  emblemProfile:hero.emblemProfile||{emblemId:generated.emblemId,talentIds:generated.talentIds,method:generated.method,source:generated.source,checkedAt:generated.checkedAt},
+  emblemNotes:Array.isArray(hero.emblemNotes)&&hero.emblemNotes.length?hero.emblemNotes:generated.emblemNotes,
+  talentNotes:Array.isArray(hero.talentNotes)&&hero.talentNotes.length?hero.talentNotes:generated.talentNotes
+ };
+});
 
 export function validateHeroProfiles(profiles = heroProfiles) {
   const errors = [];
