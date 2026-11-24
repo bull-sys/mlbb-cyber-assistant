@@ -59,7 +59,7 @@ const names = (archetype, threats) =>
 test("mage counter-build selects magic defense and anti-heal without physical attack items", () => {
   const result = names("Маг / взрывной урон", ["heal", "magic"]);
   assert.ok(result.includes("Щит Афины"));
-  assert.ok(result.includes("Ожерелье заточения"));
+  assert.ok(result.includes("Пылающий жезл"));
   assert.ok(!result.includes("Трезубец"));
   assert.ok(!result.includes("Злобный рык"));
 });
