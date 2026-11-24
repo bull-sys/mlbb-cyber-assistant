@@ -99,7 +99,7 @@ test("item encyclopedia records have descriptions and the six shop categories", 
   assert.match(itemById("Molten Essence").passive, /0,6%.*каждую секунду.*125/);
   assert.equal(itemById("Silence Robe").passive, undefined);
   assert.equal(itemById("Steel Legplates").passive, undefined);
-  assert.match(itemById("Azure Blade").passive, /50 чистого урона.*3 секунд.*1,5 секунды/);
+  assert.match(itemById("Azure Blade").passive, /в течение 3 секунд.*50 чистого урона.*1,5 секунды/);
   assert.match(itemById("Elegant Gem").passive, /ниже 50%.*15% здоровья.*15% маны.*60 секунд/);
   assert.equal(itemById("Exotic Veil").passive, undefined);
   assert.equal(itemById("Fury Hammer").passive, undefined);
