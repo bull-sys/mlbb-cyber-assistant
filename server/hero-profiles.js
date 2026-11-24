@@ -2842,11 +2842,13 @@ export const heroProfiles = [
     ],
     strengths: ["Сочетает дистанционное давление в обычной стойке и сильное сближение в стойке Большого меча.","Пассивный щит повышает устойчивость во время размена.","Ультимейт даёт сильный инструмент входа в командный бой и дополнительный контроль."],
     weaknesses: ["До накопления пассивного заряда и перехода в стойку Большого меча его угроза ниже.","Нуждается в грамотном выборе момента ультимейта: после входа важно реализовать усиленные навыки.","Мобильные противники могут разорвать дистанцию до завершения комбинации."],
-    matchups: { strongAgainst: [], weakAgainst: [] },
-    synergies: [],
+    matchups: { strongAgainst: ["silvanna", "hanabi", "argus"], weakAgainst: ["esmeralda", "claude", "cici"] },
+    matchupEvidence: { source: "https://mlbbcore.com/heroes/lapu-lapu/counters/", method: "Measured all-rank ranked matchup and ally win-rate shifts", patch: HERO_DB_PATCH, checkedAt: "2026-11-24" },
+    synergies: ["lunox", "suyou", "floryn"],
     itemNotes: ["Текущие справочники предлагают бойцовскую сборку для линии опыта с сочетанием урона и выживаемости; точные слоты адаптировать под контроль и тип входящего урона."],
     teamfight: { preferredPlan: "До входа накапливать Благословение храбрости безопасным уроном. Начинать бой после того, как команда готова поддержать сближение; переходить в стойку Большого меча для контроля и взрывного урона по сгруппированным целям.", targetPriority: ["Сгруппированные герои задней линии, до которых можно безопасно добраться", "Несколько противников рядом, чтобы реализовать усиленные навыки по области"], avoid: ["Не тратить ультимейт без возможности продолжить атаку.", "Не считать щит пассивного эффекта заменой полноценной защите.", "Не преследовать мобильную цель в одиночку после окончания усиленной стойки."] },
-    sources: ["https://mlbb.io/en/hero/lapu-lapu", "https://mlbbhub.com/heroes/lapu-lapu", "https://www.mlbbguides.com/heroes/lapu-lapu/", "https://metammo.com/mobile-legends-guide/heroes/lapu-lapu"],
+    sources: [
+      "https://mlbbcore.com/heroes/lapu-lapu/counters/","https://mlbb.io/en/hero/lapu-lapu", "https://mlbbhub.com/heroes/lapu-lapu", "https://www.mlbbguides.com/heroes/lapu-lapu/", "https://metammo.com/mobile-legends-guide/heroes/lapu-lapu"],
     patch: { version: HERO_DB_PATCH, notes: ["Роль Боец/линия опыта, пассивное Благословение храбрости и смена стойки Большого меча сверены по MLBB.io, MLBBHub и MLBBGuides.", "Справочники обновлены в пределах патча 2.2.23, однако отдельные числовые параметры различаются; профиль сохраняет общую механику.", "Профессиональный VOD-разбор текущего патча не выполнен."], reviewedAt: "2026-11-22" },
     confidence: "partial"
   },
@@ -3286,8 +3288,9 @@ export const heroProfiles = [
       "Ультимейт требует аккуратного выбора цели и траектории: неудачный вход может привести Матильду в неудобную позицию после завершения рывка.",
       "Несмотря на щиты и временный иммунитет к контролю во время ультимейта, Матильда не заменяет полноценного фронтлайнера и не должна долго принимать весь урон команды противника."
     ],
-    matchups: { strongAgainst: [], weakAgainst: [] },
-    synergies: [],
+    matchups: { strongAgainst: ["natalia", "x-borg", "valir"], weakAgainst: ["esmeralda", "odette", "alucard"] },
+    matchupEvidence: { source: "https://mlbbcore.com/heroes/mathilda/counters/", method: "Measured all-rank ranked matchup and ally win-rate shifts", patch: HERO_DB_PATCH, checkedAt: "2026-11-24", caution: "Small sample: Mathilda is picked in under 0.2% of all-rank games; treat matchup shifts as low-confidence." },
+    synergies: ["kaja", "akai", "gatotkaca"],
     itemNotes: [
       "Для роум-профиля важны командная полезность, перезарядка навыков и достаточная выживаемость. В сборке MLBBHub для патча 2.2.23 показаны Tough Boots с благословением Favor, Flask of the Oasis и Enchanted Talisman; это ориентир конкретной сборки, а не обязательный набор для каждого матча.",
       "Flask of the Oasis тематически поддерживает защитную роль Матильды и ценность щитов для команды. Дальнейшие защитные предметы стоит подбирать по реальному типу угрозы и составу противника, а не копировать фиксированный порядок."
@@ -3307,6 +3310,7 @@ export const heroProfiles = [
       ]
     },
     sources: [
+      "https://mlbbcore.com/heroes/mathilda/counters/",
       "https://liquipedia.net/mobilelegends/Mathilda",
       "https://mlbb.io/en/hero/mathilda",
       "https://mlbb-knowledge.vercel.app/heroes/102",
@@ -3353,8 +3357,9 @@ export const heroProfiles = [
       "Ультимейт ограничивает вход противников в область, но не заменяет полноценное перемещение: дальнобойные атаки и эффекты, не требующие входа в поле, всё ещё опасны.",
       "Для максимального урона ей нужно непрерывно атаковать и сохранять удобный угол; вынужденное отступление резко снижает давление."
     ],
-    matchups: { strongAgainst: [], weakAgainst: [] },
-    synergies: [],
+    matchups: { strongAgainst: ["popol-and-kupa", "leomord", "ling"], weakAgainst: ["harley", "belerick", "vale"] },
+    matchupEvidence: { source: "https://mlbbcore.com/heroes/melissa/counters/", method: "Measured all-rank ranked matchup and ally win-rate shifts", patch: HERO_DB_PATCH, checkedAt: "2026-11-24" },
+    synergies: ["fanny", "lunox", "kagura"],
     itemNotes: [
       "Вариант через скорость атаки и эффекты базовых атак поддерживает длительное нанесение урона через Маддлс. В подборке MLBBHub для патча 2.2.23 показаны Swift Boots, Corrosion Scythe, Haas's Claws, Berserker's Fury, Malefic Gun и Windtalker; это конкретный опубликованный вариант, а не обязательная последовательность для каждого матча.",
       "Против физического взрывного урона рассматривай Wind of Nature, а против опасного контроля — Purify или защитные предметы по ситуации. Выбор зависит от того, может ли противник добраться до Мелиссы до установки поля.",
@@ -3375,6 +3380,7 @@ export const heroProfiles = [
       ]
     },
     sources: [
+      "https://mlbbcore.com/heroes/melissa/counters/",
       "https://liquipedia.net/mobilelegends/Melissa",
       "https://mlbb.io/en/hero/melissa",
       "https://mlbbhub.com/heroes/melissa",
@@ -3416,8 +3422,9 @@ export const heroProfiles = [
           "Защита второго навыка направлена вперёд, поэтому обход с фланга опасен.",
           "Точность первого навыка и накопление меток требуют времени; промах ухудшает возможность начать бой."
     ],
-    matchups: { strongAgainst: [], weakAgainst: [] },
-    synergies: [],
+    matchups: { strongAgainst: ["freya", "phoveus", "karrie"], weakAgainst: ["natalia", "yin", "aulus"] },
+    matchupEvidence: { source: "https://mlbbcore.com/heroes/minsitthar/counters/", method: "Measured all-rank ranked matchup and ally win-rate shifts", patch: HERO_DB_PATCH, checkedAt: "2026-11-24" },
+    synergies: ["hilda", "minotaur", "estes"],
     itemNotes: [
           "Для линии опыта обычно полезны выживаемость, сокращение перезарядки и предметы, позволяющие дольше удерживать противников в зоне контроля. Не превращай рекомендованный набор в жёсткую последовательность.",
           "Если команда нуждается в дополнительном фронтлайне, выбирай защитные предметы под фактический тип урона соперника; если Минситтару позволяют долго атаковать, можно добавить урон бойца.",
@@ -3428,7 +3435,8 @@ export const heroProfiles = [
       targetPriority: ["Герой с навыком перемещения, которого можно удержать внутри поля ультимейта","Уязвимый противник, которого можно подтянуть первым навыком к союзникам","Ближайшая угроза на фронте, если она уже вошла в радиус второго навыка"],
       avoid: ["Не ставить ультимейт слишком рано, пока противники могут просто выйти из его зоны.","Не разворачивать спину к главной угрозе во время защитной стойки второго навыка.","Не преследовать мобильную цель без готового первого навыка или поддержки команды."]
     },
-    sources: ["https://liquipedia.net/mobilelegends/Minsitthar","https://mlbb.io/en/hero/minsitthar"],
+    sources: [
+      "https://mlbbcore.com/heroes/minsitthar/counters/","https://liquipedia.net/mobilelegends/Minsitthar","https://mlbb.io/en/hero/minsitthar"],
     patch: {
       version: HERO_DB_PATCH,
       notes: [
@@ -3465,8 +3473,9 @@ export const heroProfiles = [
           "Для максимального урона ему нужно непрерывно атаковать, а контроль и дальний взрывной урон мешают этому.",
           "Ультимейт требует предсказания направления и времени полёта; промах лишает дополнительного окна перемещения."
     ],
-    matchups: { strongAgainst: [], weakAgainst: [] },
-    synergies: [],
+    matchups: { strongAgainst: ["gloo", "fanny", "beatrix"], weakAgainst: ["miya", "hanabi", "dyrroth"] },
+    matchupEvidence: { source: "https://mlbbcore.com/heroes/moskov/counters/", method: "Measured all-rank ranked matchup and ally win-rate shifts", patch: HERO_DB_PATCH, checkedAt: "2026-11-24" },
+    synergies: ["popol-and-kupa", "roger", "lapu-lapu"],
     itemNotes: [
           "Скорость атаки и эффекты базовых атак хорошо сочетаются с пассивным пробиванием и сокращением перезарядок. В качестве основы рассматривай предметы на скорость атаки и физический урон, затем адаптируй защитный слот.",
           "Против сильного физического взрывного урона полезно заранее оценить защитный активный предмет; против контроля важнее безопасная позиция и своевременный Purify, если он выбран.",
@@ -3477,7 +3486,8 @@ export const heroProfiles = [
       targetPriority: ["Противники, стоящие на одной линии за основной целью","Герой, которого можно отбросить к стене или другому противнику","Уязвимая цель, по которой можно безопасно попасть дальним ультимейтом"],
       avoid: ["Не тратить первый навык на агрессивный прыжок, если после него не останется безопасной позиции.","Не рассчитывать на оглушение второго навыка без стены или второго героя на линии отталкивания.","Не стоять неподвижно за миньоном, если пробивающие атаки могут раскрыть твою позицию и направление."]
     },
-    sources: ["https://liquipedia.net/mobilelegends/Moskov","https://mlbb-knowledge.vercel.app/heroes/31","https://mlbbguides.com/heroes/moskov/"],
+    sources: [
+      "https://mlbbcore.com/heroes/moskov/counters/","https://liquipedia.net/mobilelegends/Moskov","https://mlbb-knowledge.vercel.app/heroes/31","https://mlbbguides.com/heroes/moskov/"],
     patch: {
       version: HERO_DB_PATCH,
       notes: [
@@ -3514,8 +3524,9 @@ export const heroProfiles = [
           "Если противники держатся вместе и проверяют кусты, найти изолированную цель сложнее.",
           "Для эффективного давления нужно читать карту и маршруты соперника; случайные заходы часто заканчиваются потерей темпа."
     ],
-    matchups: { strongAgainst: [], weakAgainst: [] },
-    synergies: [],
+    matchups: { strongAgainst: ["ling", "hanzo", "xavier"], weakAgainst: ["cyclops", "karina", "saber"] },
+    matchupEvidence: { source: "https://mlbbcore.com/heroes/natalia/counters/", method: "Measured all-rank ranked matchup and ally win-rate shifts", patch: HERO_DB_PATCH, checkedAt: "2026-11-24" },
+    synergies: ["alice", "barats", "valir"],
     itemNotes: [
           "Для роли убийцы обычно выбирают физический взрывной урон и пробивание, чтобы быстро наказывать одиночные уязвимые цели. Если Наталья играет роум, полезность и темп перемещений могут быть важнее полного набора дорогих предметов урона.",
           "Execute встречается в небольшом опубликованном образце сборок MLBB.io; это не универсальный выбор для каждой игры. Flicker или другой вариант стоит оценивать по плану выхода из боя и составу соперника.",
@@ -3526,7 +3537,8 @@ export const heroProfiles = [
       targetPriority: ["Изолированный герой задней линии без готового контроля","Уязвимый маг или стрелок, который покинул защиту команды","Противник, чьи важные базовые атаки можно нейтрализовать дымовой бомбой"],
       avoid: ["Не входить в открытую группу противников без подготовленного выхода.","Не считать дымовую бомбу защитой от всех навыков и магического урона.","Не раскрывать маскировку ранним применением навыка, если усиленная атака ещё не использована."]
     },
-    sources: ["https://liquipedia.net/mobilelegends/Natalia","https://mlbb.io/en/hero/natalia","https://mlbb-knowledge.vercel.app/heroes/24"],
+    sources: [
+      "https://mlbbcore.com/heroes/natalia/counters/","https://liquipedia.net/mobilelegends/Natalia","https://mlbb.io/en/hero/natalia","https://mlbb-knowledge.vercel.app/heroes/24"],
     patch: {
       version: HERO_DB_PATCH,
       notes: [
@@ -3563,8 +3575,9 @@ export const heroProfiles = [
           "Клон требует контроля дистанции: слишком далёкое перемещение обрывает его существование.",
           "Второй навык не заменяет надёжный длительный контроль, а его траекторию можно прочитать и обойти."
     ],
-    matchups: { strongAgainst: [], weakAgainst: [] },
-    synergies: [],
+    matchups: { strongAgainst: ["sun", "gloo", "zhask"], weakAgainst: ["arlott", "nolan", "brody"] },
+    matchupEvidence: { source: "https://mlbbcore.com/heroes/natan/counters/", method: "Measured all-rank ranked matchup and ally win-rate shifts", patch: HERO_DB_PATCH, checkedAt: "2026-11-24" },
+    synergies: ["sora", "uranus", "fanny"],
     itemNotes: [
           "Натан масштабируется от магической силы и физических характеристик, а его сборка часто строится вокруг скорости атаки и магического урона базовых атак. Не смешивай его с обычной физической сборкой стрелка без проверки коэффициентов навыков.",
           "В опубликованной MLBB.io выборке сборок встречаются Feather of Heaven, Arcane Boots, Windtalker, Divine Glaive и Holy Crystal; сама выборка небольшая, поэтому порядок нужно подстраивать под защиту противника.",
@@ -3575,7 +3588,8 @@ export const heroProfiles = [
       targetPriority: ["Сгруппированные враги, которых можно задеть прямыми навыками и возвращающимися снарядами","Цель, по которой клон может атаковать с противоположной стороны","Ближайший противник, пытающийся войти в личную зону Натана"],
       avoid: ["Не отдаляться от клона настолько, чтобы потерять его до окончания командного боя.","Не ставить клона в точку, откуда повторение атак не создаёт полезного угла.","Не пытаться стоять на передней линии: Натан нуждается в пространстве для непрерывных атак."]
     },
-    sources: ["https://mlbb.io/en/hero/natan","https://mlbb-knowledge.vercel.app/heroes/107","https://mlbbanalytics.com/heroes?hero=Natan"],
+    sources: [
+      "https://mlbbcore.com/heroes/natan/counters/","https://mlbb.io/en/hero/natan","https://mlbb-knowledge.vercel.app/heroes/107","https://mlbbanalytics.com/heroes?hero=Natan"],
     patch: {
       version: HERO_DB_PATCH,
       notes: [
@@ -3612,8 +3626,9 @@ export const heroProfiles = [
           "Первый навык имеет задержку до взрыва, поэтому мобильные противники могут покинуть область.",
           "У неё меньше пользы в затяжном ближнем бою, чем у магов с устойчивым уроном и самозащитой."
     ],
-    matchups: { strongAgainst: [], weakAgainst: [] },
-    synergies: [],
+    matchups: { strongAgainst: ["diggie", "valir", "phoveus"], weakAgainst: ["natalia", "ling", "gloo"] },
+    matchupEvidence: { source: "https://mlbbcore.com/heroes/novaria/counters/", method: "Measured all-rank ranked matchup and ally win-rate shifts", patch: HERO_DB_PATCH, checkedAt: "2026-11-24" },
+    synergies: ["cyclops", "lunox", "eudora"],
     itemNotes: [
           "Сборка Новарии ориентирована на магическую силу, пробивание и перезарядку, чтобы чаще проверять карту и наносить дальний урон. В MLBB Knowledge для текущей страницы показан вариант с Magic Boots, Enchanted Talisman, Ice Queen Wand, Glowing Wand, Wishing Lantern и Divine Glaive.",
           "Ice Queen Wand усиливает замедление и помогает удерживать цели в зоне, а предметы на магическое пробивание полезны против соперников с магической защитой.",
@@ -3624,7 +3639,8 @@ export const heroProfiles = [
       targetPriority: ["Раскрытые ультимейтом противники, по которым команда может продолжить атаку","Цель на дальней дистанции, по которой можно подготовить длинную траекторию сферы","Группа врагов, которую можно замедлить первым навыком перед началом командного контроля"],
       avoid: ["Не запускать сферу второго навыка с короткой траекторией, если можно безопасно увеличить путь.","Не оставаться без обзора флангов после применения ультимейта.","Не тратить все инструменты на дальний урон, если враг уже начал сближение."]
     },
-    sources: ["https://mlbb-knowledge.vercel.app/heroes/119","https://liquipedia.net/mobilelegends/Novaria","https://metammo.com/mobile-legends-guide/heroes/novaria"],
+    sources: [
+      "https://mlbbcore.com/heroes/novaria/counters/","https://mlbb-knowledge.vercel.app/heroes/119","https://liquipedia.net/mobilelegends/Novaria","https://metammo.com/mobile-legends-guide/heroes/novaria"],
     patch: {
       version: HERO_DB_PATCH,
       notes: [
@@ -4529,8 +4545,9 @@ export const heroProfiles = [
       "Снижение восстановления здоровья и эффекты контроля могут заметно уменьшить его выживаемость.",
       "Если команда не может продолжить давление за ним, глубокий вход превращается в изоляцию от союзников."
     ],
-    matchups: { strongAgainst: [], weakAgainst: [] },
-    synergies: [],
+    matchups: { strongAgainst: ["yin", "zhask", "granger"], weakAgainst: ["aldous", "karrie", "angela"] },
+    matchupEvidence: { source: "https://mlbbcore.com/heroes/uranus/counters/", method: "Measured all-rank ranked matchup and ally win-rate shifts", patch: HERO_DB_PATCH, checkedAt: "2026-11-24" },
+    synergies: ["angela", "bane", "natan"],
     itemNotes: [
       "Основной принцип сборки — сочетать здоровье, защиту и восстановление, подстраивая физическую или магическую защиту под главные источники урона соперника.",
       "Предметы с эффектами против лечения уместны против составов с сильным восстановлением; защитные предметы срабатывания выбирай по тому, какой тип урона чаще достигает Урануса.",
@@ -4541,7 +4558,8 @@ export const heroProfiles = [
       targetPriority: ["Передняя линия, через которую можно безопасно накопить заряды", "Противник, мешающий союзникам пройти к основной цели", "Уязвимая цель, если команда уже ограничила ей путь отхода"],
       avoid: ["Не начинать бой без союзников на дистанции продолжения атаки.", "Не тратить ультимейт только ради небольшого ускорения, если скоро потребуется снять замедление.", "Не считать накопленные заряды гарантией выживания против взрывного урона и контроля."]
     },
-    sources: ["https://www.mlbb.io/en/hero/uranus", "https://liquipedia.net/mobilelegends/Uranus", "https://metammo.com/mobile-legends-guide/heroes/uranus"],
+    sources: [
+      "https://mlbbcore.com/heroes/uranus/counters/","https://www.mlbb.io/en/hero/uranus", "https://liquipedia.net/mobilelegends/Uranus", "https://metammo.com/mobile-legends-guide/heroes/uranus"],
     patch: { version: HERO_DB_PATCH, notes: ["Пассивный эффект, вращающиеся клинки, щитовой рывок и ультимейт сопоставлены по текущим описаниям навыков MLBB.io, Liquipedia и METAMMO.", "Числовые коэффициенты не закреплены как постоянные: балансные значения могут изменяться между обновлениями.", "Рейтинговые контрпики и синергии не перенесены в профиль; профессиональный VOD-разбор отдельно не выполнен."], reviewedAt: "2026-11-23" },
     confidence: "partial"
   },
@@ -4569,8 +4587,9 @@ export const heroProfiles = [
       "Ультимейт имеет задержку до взрыва, поэтому мобильные противники могут выйти из области.",
       "После расходования ключевых навыков Вэйл ограничен в возможностях остановить быстрое сближение."
     ],
-    matchups: { strongAgainst: [], weakAgainst: [] },
-    synergies: [],
+    matchups: { strongAgainst: ["estes", "odette", "rafaela"], weakAgainst: ["gloo", "atlas", "hylos"] },
+    matchupEvidence: { source: "https://mlbbcore.com/heroes/vale/counters/", method: "Measured all-rank ranked matchup and ally win-rate shifts", patch: HERO_DB_PATCH, checkedAt: "2026-11-24" },
+    synergies: ["cyclops", "hilda", "balmond"],
     itemNotes: [
       "Сборку строить вокруг магической силы, пробивания и перезарядки, чтобы усилить взрывной урон и чаще создавать угрозу в командных боях.",
       "Защитный или утилитарный предмет можно добавить, если противник регулярно добирается до Вэйла; приоритет выживания выше небольшого прироста урона, если маг не успевает применить комбинацию.",
@@ -4581,7 +4600,8 @@ export const heroProfiles = [
       targetPriority: ["Группа противников, уже попавшая под контроль союзника", "Уязвимые герои, вынужденные стоять в узком проходе", "Цель, которая не может быстро покинуть область будущего взрыва"],
       avoid: ["Не открывать бой ультимейтом по свободно перемещающимся целям.", "Не подходить к передней линии ради попадания первым навыком.", "Не расходовать второй навык на волну миньонов непосредственно перед ожидаемым командным боем."]
     },
-    sources: ["https://www.mlbb.io/en/hero/vale", "https://liquipedia.net/mobilelegends/Vale", "https://mlbb-knowledge.vercel.app/heroes/66"],
+    sources: [
+      "https://mlbbcore.com/heroes/vale/counters/","https://www.mlbb.io/en/hero/vale", "https://liquipedia.net/mobilelegends/Vale", "https://mlbb-knowledge.vercel.app/heroes/66"],
     patch: { version: HERO_DB_PATCH, notes: ["Пассивный эффект и три активных навыка сопоставлены по MLBB.io, Liquipedia и MLBB Knowledge.", "Профиль описывает текущую последовательность навыков и не использует старые руководства с удалёнными вариантами улучшения навыков.", "Сборки и рейтинговые показатели не трактуются как доказательство универсальных матчапов; VOD-разбор не выполнен."], reviewedAt: "2026-11-23" },
     confidence: "partial"
   },
