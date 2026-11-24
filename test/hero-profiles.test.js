@@ -247,7 +247,7 @@ test("Cyclops, Julian, Tigreal, Chou and Dyrroth have sourced partial tactical p
 });
 
 
-test("Alpha, Freya, Edith, Barats and Hilda have sourced partial tactical profiles",()=>{const expected=[["alpha","Альфа","https://mlbb.io/en/hero/alpha"],["freya","Фрея","https://mlbb-knowledge.vercel.app/heroes/22"],["edith","Эдит","https://liquipedia.net/mobilelegends/Edith"],["barats","Баратс","https://liquipedia.net/mobilelegends/Barats"],["hilda","Хильда","https://liquipedia.net/mobilelegends/Hilda"]];for(const [id,name,source] of expected){const h=heroProfiles.find(x=>x.id===id);assert.ok(h,id);assert.equal(h.names.ru,name);assert.ok(h.mechanics.length>=4);assert.ok(h.strengths.length>=2);assert.ok(h.weaknesses.length>=2);assert.ok(h.sources.includes(source));assert.equal(h.confidence,"partial");assert.equal(h.patch.version,HERO_DB_PATCH);assert.equal(h.patch.reviewedAt,"2026-11-22");}});
+test("Alpha, Freya, Edith, Barats and Hilda have sourced partial tactical profiles",()=>{const expected=[["alpha","Альфа","https://mlbb.io/en/hero/alpha"],["freya","Фрея","https://mlbb-knowledge.vercel.app/heroes/22"],["edith","Эдит","https://liquipedia.net/mobilelegends/Edith"],["barats","Бартс","https://liquipedia.net/mobilelegends/Barats"],["hilda","Хильда","https://liquipedia.net/mobilelegends/Hilda"]];for(const [id,name,source] of expected){const h=heroProfiles.find(x=>x.id===id);assert.ok(h,id);assert.equal(h.names.ru,name);assert.ok(h.mechanics.length>=4);assert.ok(h.strengths.length>=2);assert.ok(h.weaknesses.length>=2);assert.ok(h.sources.includes(source));assert.equal(h.confidence,"partial");assert.equal(h.patch.version,HERO_DB_PATCH);assert.equal(h.patch.reviewedAt,"2026-11-22");}});
 
 
 test("Kaja, Valir, Paquito, Aulus and Rafaela have sourced partial tactical profiles", () => {
@@ -344,7 +344,7 @@ test("Lukas, Thamuz, Eudora, Pharsa and Nana have sourced partial tactical profi
 test("Franco, Akai, Alucard, Arlott and Aurora have sourced partial tactical profiles",()=>{const expected=[["franco","Франко","https://liquipedia.net/mobilelegends/Franco"],["akai","Акай","https://liquipedia.net/mobilelegends/Akai"],["alucard","Алукард","https://liquipedia.net/mobilelegends/Alucard"],["arlott","Арлотт","https://liquipedia.net/mobilelegends/Arlott"],["aurora","Аврора","https://liquipedia.net/mobilelegends/Aurora"]];for(const [id,name,source] of expected){const h=heroProfiles.find(x=>x.id===id);assert.ok(h,id);assert.equal(h.names.ru,name);assert.ok(h.mechanics.length>=4);assert.ok(h.strengths.length>=3);assert.ok(h.weaknesses.length>=3);assert.ok(h.sources.includes(source));assert.equal(h.confidence,"partial");assert.equal(h.patch.version,HERO_DB_PATCH);assert.equal(h.patch.reviewedAt,"2026-11-22");if(!MATCHUP_REVIEWED_IDS.has(id)){assert.deepEqual(h.matchups.strongAgainst,[]);assert.deepEqual(h.matchups.weakAgainst,[]);}}});
 
 
-test("Badang, Balmond, Bane, Baxia and Beatrix have sourced partial tactical profiles",()=>{const expected=[["badang","Баданг","https://liquipedia.net/mobilelegends/Badang"],["balmond","Бальмонд","https://liquipedia.net/mobilelegends/Balmond"],["bane","Бейн","https://liquipedia.net/mobilelegends/Bane"],["baxia","Баксий","https://liquipedia.net/mobilelegends/Baxia"],["beatrix","Беатрис","https://liquipedia.net/mobilelegends/Beatrix"]];for(const [id,name,source] of expected){const h=heroProfiles.find(x=>x.id===id);assert.ok(h,id);assert.equal(h.names.ru,name);assert.ok(h.mechanics.length>=4);assert.ok(h.strengths.length>=3);assert.ok(h.weaknesses.length>=3);assert.ok(h.sources.includes(source));assert.equal(h.confidence,"partial");assert.equal(h.patch.version,HERO_DB_PATCH);assert.equal(h.patch.reviewedAt,"2026-11-22");if(id==="badang"){assert.ok(h.emblemNotes?.length>0);assert.ok(h.talentNotes?.length>0);assert.deepEqual(h.lanes,["Линия опыта","Роум"]);assert.deepEqual(h.matchups.strongAgainst,["fanny"]);assert.deepEqual(h.matchups.weakAgainst,["karina","esmeralda","lolita","alice","khufra","phoveus"]);assert.deepEqual(h.synergies,["aldous","natalia","silvanna","saber","zilong","phoveus"]);assert.ok(h.sources.includes("https://www.mlbb.io/en/hero/badang"));assert.equal(h.matchupsReviewedAt,"2026-11-24");}else if(!MATCHUP_REVIEWED_IDS.has(id)){assert.deepEqual(h.matchups.strongAgainst,[]);assert.deepEqual(h.matchups.weakAgainst,[]);}}});
+test("Badang, Balmond, Bane, Baxia and Beatrix have sourced partial tactical profiles",()=>{const expected=[["badang","Баданг","https://liquipedia.net/mobilelegends/Badang"],["balmond","Бальмонд","https://liquipedia.net/mobilelegends/Balmond"],["bane","Бэйн","https://liquipedia.net/mobilelegends/Bane"],["baxia","Баксий","https://liquipedia.net/mobilelegends/Baxia"],["beatrix","Беатрис","https://liquipedia.net/mobilelegends/Beatrix"]];for(const [id,name,source] of expected){const h=heroProfiles.find(x=>x.id===id);assert.ok(h,id);assert.equal(h.names.ru,name);assert.ok(h.mechanics.length>=4);assert.ok(h.strengths.length>=3);assert.ok(h.weaknesses.length>=3);assert.ok(h.sources.includes(source));assert.equal(h.confidence,"partial");assert.equal(h.patch.version,HERO_DB_PATCH);assert.equal(h.patch.reviewedAt,"2026-11-22");if(id==="badang"){assert.ok(h.emblemNotes?.length>0);assert.ok(h.talentNotes?.length>0);assert.deepEqual(h.lanes,["Линия опыта","Роум"]);assert.deepEqual(h.matchups.strongAgainst,["fanny"]);assert.deepEqual(h.matchups.weakAgainst,["karina","esmeralda","lolita","alice","khufra","phoveus"]);assert.deepEqual(h.synergies,["aldous","natalia","silvanna","saber","zilong","phoveus"]);assert.ok(h.sources.includes("https://www.mlbb.io/en/hero/badang"));assert.equal(h.matchupsReviewedAt,"2026-11-24");}else if(!MATCHUP_REVIEWED_IDS.has(id)){assert.deepEqual(h.matchups.strongAgainst,[]);assert.deepEqual(h.matchups.weakAgainst,[]);}}});
 
 
 test("Benedetta, Brody, Carmilla, Cecilion and Chang'e have sourced partial tactical profiles", () => {
@@ -493,7 +493,7 @@ test("Hayabusa, Hylos, Irithel, Ixia and Johnson have sourced partial tactical p
   const expected = [
     ["hayabusa", "Хаябуса", "https://mlbb-knowledge.vercel.app/heroes/21"],
     ["hylos", "Хилос", "https://mlbb-knowledge.vercel.app/heroes/49"],
-    ["irithel", "Иритэль", "https://mlbb-knowledge.vercel.app/heroes/43"],
+    ["irithel", "Иритель", "https://mlbb-knowledge.vercel.app/heroes/43"],
     ["ixia", "Иксия", "https://mlbbhub.com/ru/heroes/ixia"],
     ["johnson", "Джонсон", "https://mlbb-knowledge.vercel.app/heroes/32"]
   ];
@@ -528,7 +528,7 @@ test("Hayabusa, Hylos, Irithel, Ixia and Johnson have sourced partial tactical p
   const expected = [
     ["hayabusa", "Хаябуса", "https://mlbb-knowledge.vercel.app/heroes/21"],
     ["hylos", "Хилос", "https://mlbb-knowledge.vercel.app/heroes/49"],
-    ["irithel", "Иритэль", "https://mlbb-knowledge.vercel.app/heroes/43"],
+    ["irithel", "Иритель", "https://mlbb-knowledge.vercel.app/heroes/43"],
     ["ixia", "Иксия", "https://mlbbhub.com/ru/heroes/ixia"],
     ["johnson", "Джонсон", "https://mlbb-knowledge.vercel.app/heroes/32"]
   ];
