@@ -261,7 +261,7 @@ function recommendBuild({items,archetype,threats=[]}){
  };
  const threatRules={
   heal:{tags:["anti-heal"],reason:"Ответ на восстановление здоровья"},
-  magic:{tags:["magic-burst","magic-dps"],reason:"Защита от магического урона"},
+  magic:{tags:["magic-burst","magic-dps","anti-magic-burst","magic-defense"],reason:"Защита от магического урона"},
   speed:{tags:["anti-attack-speed"],reason:"Снижает эффективность быстрых базовых атак"},
   tank:{tags:["penetration","tank-shred","armor-break"],reason:"Помогает пробивать плотных противников"},
   cc:{tags:["survival"],reason:"Дополнительная выживаемость под контроль"},
