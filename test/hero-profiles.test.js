@@ -17,6 +17,8 @@ test("Badang has both EXP and Roam lanes and a sourced Fighter profile", () => {
   assert.ok(badang.strengths.length >= 2);
   assert.ok(badang.weaknesses.length >= 2);
   assert.ok(badang.itemNotes.length >= 3);
+  assert.ok(badang.emblemNotes.length >= 1);
+  assert.ok(badang.talentNotes.length >= 1);
   assert.ok(badang.sources.some(source => source.includes("mlbb.io")));
   assert.equal(badang.patch.reviewedAt, "2026-11-24");
 });
