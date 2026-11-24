@@ -112,7 +112,7 @@ test("reference dataset includes attribution and a dated source snapshot", () =>
 
 test("legacy detailed profiles remain linked to known catalogue entries", () => {
   const catalogIds = new Set(heroCatalog.map(hero => hero.id));
-  assert.equal(heroProfiles.length, 102);
+  assert.equal(heroProfiles.length, 133);
   for (const profile of heroProfiles) {
     assert.ok(catalogIds.has(profile.id), "profile without catalogue entry: " + profile.id);
   }
@@ -140,7 +140,7 @@ test("encyclopedia returns dated local passport data when the live source is una
 
 test("legacy detailed profiles remain linked to known catalogue entries", () => {
   const catalogIds = new Set(heroCatalog.map(hero => hero.id));
-  assert.equal(heroProfiles.length, 102);
+  assert.equal(heroProfiles.length, 133);
   for (const profile of heroProfiles) {
     assert.ok(catalogIds.has(profile.id), "profile without catalogue entry: " + profile.id);
   }
