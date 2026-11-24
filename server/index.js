@@ -366,23 +366,50 @@ function analyze({lane, enemies = [], allies = [], myHero = ""}) {
       }
 
       const combat = profile.combat || {};
-      const enemyHasMobile = enemy.some(opponent =>
-        ["high", "very_high"].includes(opponent.profile.combat?.mobility)
+      const enemyCombat = enemy.map(opponent => opponent.profile.combat || {});
+      const enemyHasMobile = enemyCombat.some(value =>
+        ["high", "very_high"].includes(value.mobility)
+      );
+      const enemyHasBurst = enemyCombat.some(value =>
+        ["high", "very_high"].includes(value.burst)
+      );
+      const enemyHasLowDurability = enemyCombat.some(value =>
+        ["low"].includes(value.durability)
       );
       const enemyHasDurableFrontline = enemy.filter(opponent =>
         ["high", "very_high"].includes(opponent.profile.combat?.durability) ||
         opponent.type === "tank"
       ).length >= 2;
+
       if (enemyHasMobile && combat.control && !["none", "low", "unknown"].includes(combat.control)) {
-        add(1, "Набор контроля полезен против мобильных противников");
+        add(2, "Контроль помогает останавливать мобильных противников");
       }
-      if (enemyHasDurableFrontline &&
-          (["high", "very_high"].includes(combat.dps) || ["high", "very_high"].includes(combat.sustain))) {
-        add(1, "Профиль боя подходит для затяжного давления на плотную переднюю линию");
+      if (enemyHasDurableFrontline && ["high", "very_high"].includes(combat.dps)) {
+        add(2, "Высокий постоянный урон полезен против плотной передней линии");
+      }
+      if (enemyHasBurst) {
+        if (combat.disengage === "high" || combat.disengage === "very_high") {
+          add(3, "Есть надёжные инструменты выхода из опасного взрывного урона");
+        } else if (combat.disengage === "medium") {
+          add(1, "Есть ограниченные инструменты для выхода из взрывного урона");
+        }
+        if (combat.durability === "high" || combat.durability === "very_high") {
+          add(2, "Повышенная устойчивость помогает переживать вражеский прокаст");
+        }
+        if (combat.sustain === "high" || combat.sustain === "very_high") {
+          add(1, "Восстановление помогает переживать повторные размены");
+        }
+      }
+      if (enemyHasLowDurability && ["high", "very_high"].includes(combat.burst)) {
+        add(2, "Взрывной урон может наказывать уязвимых противников");
+      }
+      if (enemy.some(opponent => opponent.type === "mage") &&
+          combat.range === "ranged" &&
+          ["high", "very_high"].includes(combat.dps)) {
+        add(1, "Дальняя атака и постоянный урон дают возможность безопаснее отвечать на мага");
       }
 
       const hasDirectMatchup = matchedEnemies.length > 0;
-      const hasRisk = riskyEnemies.length > 0;
       const matchupType = hasDirectMatchup
         ? "direct-counter"
         : synergies.length
@@ -390,7 +417,7 @@ function analyze({lane, enemies = [], allies = [], myHero = ""}) {
           : "situational";
       if (!reasons.length) {
         reasons.push("Подходит для выбранной линии; подтверждённого прямого преимущества против введённых героев в матчап-таблицах не найдено.");
-      } else if (!hasDirectMatchup && !synergies.length) {
+      } else if (!hasDirectMatchup) {
         reasons.push("Это ситуационная альтернатива, а не подтверждённая прямая контра.");
       }
 
@@ -621,6 +648,9 @@ function analyze({lane, enemies = [], allies = [], myHero = ""}) {
       role: lane,
       reason: x.reason,
       score: x.score,
+      matchupType: x.matchupType,
+      matchedEnemies: x.matchedEnemies,
+      riskyEnemies: x.riskyEnemies,
       profileEvidence: x.profileEvidence
     })),
     build: buildDetails.map(x => x.name),
