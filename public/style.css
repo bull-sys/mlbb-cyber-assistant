@@ -1404,3 +1404,11 @@ details.ency-info-card.visual>.ency-info-summary{display:grid}
   font-size: 10px;
   line-height: 1.45;
 }
+
+.counter-ranked-evidence {
+  display: block;
+  margin: 5px 0;
+  color: #b8d8ff;
+  font-size: 10px;
+  line-height: 1.45;
+}
