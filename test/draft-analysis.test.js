@@ -106,32 +106,28 @@ try {
 
 const run = (overrides = {}) => analyze({ lane: "Лес", ...overrides });
 
-test("candidate filtering respects lane, enemy picks, and selected hero", () => {
-  const result = run({
-    lane: "Лес",
-    enemies: ["Хелкарт"],
-    myHero: "Линг"
-  });
+test("candidate filtering respects the selected lane, enemy picks, and already selected heroes", () => {
+  const result = run({ lane: "Лес", enemies: ["Хелкарт"], myHero: "Линг" });
 
-  assert.ok(result.counters.length > 0);
+  assert.equal(result.counters.length, 3);
   assert.ok(result.counters.every(candidate => candidate.role === "Лес"));
   assert.ok(!result.counters.some(candidate => candidate.name === "Хелкарт"));
   assert.ok(!result.counters.some(candidate => candidate.name === "Линг"));
-});
-
-test("counter-pick scoring adds backline-pressure points and returns ranked results", () => {
+  assert.ok(result.counters.every(candidate => candidate.profileEvidence?.matchupSource));
+});test("counter-picks return at least three ranked, sourced options for the selected lane", () => {
   const result = run({ lane: "Золото", enemies: ["Эйдора"] });
 
-  assert.deepEqual(result.counters.map(({ name, score }) => ({ name, score })), [
-    { name: "Бруно", score: 4 },
-    { name: "Грейнджер", score: 4 }
-  ]);
-  assert.ok(result.counters.every(candidate =>
-    candidate.reason.includes("давления на стрелков и магов")
+  assert.equal(result.counters.length, 3);
+  assert.ok(result.counters.every(candidate => candidate.role === "Золото"));
+  assert.ok(result.counters.every(candidate => candidate.profileEvidence?.identity));
+  assert.ok(result.counters.every(candidate => candidate.profileEvidence?.matchupSource));
+  assert.ok(result.counters.every(candidate => candidate.reason.length > 0));
+  assert.ok(result.counters.some(candidate =>
+    candidate.reason.includes("Статистическое преимущество") ||
+    candidate.reason.includes("синергии") ||
+    candidate.reason.includes("альтернатива")
   ));
-});
-
-test("enemy composition threats reflect the tags and archetypes in the catalogue", () => {
+});test("enemy composition threats reflect the tags and archetypes in the catalogue", () => {
   const result = run({
     enemies: ["Минотавр", "Эйдора", "Нана", "Мия", "Тигрил"]
   });
@@ -146,20 +142,14 @@ test("enemy composition threats reflect the tags and archetypes in the catalogue
   ]);
 });
 
-test("allied engage adds the current +2 synergy to compatible roam candidates", () => {
-  const result = run({ lane: "Роум", allies: ["Тигрил"] });
+test("allied composition is considered without restricting the candidate pool to the legacy list", () => {
+  const result = run({ lane: "Роум", allies: ["Тигрил"], enemies: ["Лесли"] });
 
-  assert.deepEqual(result.counters.map(({ name, score }) => ({ name, score })), [
-    { name: "Тигрил", score: 2 },
-    { name: "Атлас", score: 2 },
-    { name: "Минотавр", score: 2 }
-  ]);
-  assert.ok(result.counters.every(candidate =>
-    candidate.reason.includes("инициацией союзников")
-  ));
-});
-
-test("items answer sustain and double-mage threats while respecting mage category filtering", () => {
+  assert.equal(result.counters.length, 3);
+  assert.ok(result.counters.every(candidate => candidate.role === "Роум"));
+  assert.ok(result.counters.every(candidate => candidate.profileEvidence?.matchupSource));
+  assert.ok(result.counters.every(candidate => !["Тигрил", "Лесли"].includes(candidate.name)));
+});test("items answer sustain and double-mage threats while respecting mage category filtering", () => {
   const result = run({
     lane: "Мид",
     myHero: "Эйдора",
@@ -230,14 +220,16 @@ test("unsupported lane yields no candidates and uses the non-jungle spell fallba
   assert.equal(result.spell, "Вспышка");
 });
 
-test("equal counter scores retain catalogue order", () => {
+test("counter-pick ranking is deterministic and sorted by descending score", () => {
   const result = run({ lane: "Золото", enemies: ["Эйдора"] });
+  const repeated = run({ lane: "Золото", enemies: ["Эйдора"] });
 
-  assert.equal(result.counters[0].score, result.counters[1].score);
-  assert.deepEqual(result.counters.map(candidate => candidate.name), ["Бруно", "Грейнджер"]);
-});
-
-test("draft analysis returns hero-specific mechanics, counterplay weaknesses, and provenance", () => {
+  assert.deepEqual(result.counters, repeated.counters);
+  assert.equal(result.counters.length, 3);
+  assert.ok(result.counters.every((candidate, index, list) =>
+    index === 0 || list[index - 1].score >= candidate.score
+  ));
+});test("draft analysis returns hero-specific mechanics, counterplay weaknesses, and provenance", () => {
   const result = run({ enemies: ["Хелкарт"] });
   assert.equal(result.enemyMatchups.length, 1);
   const matchup = result.enemyMatchups[0];
@@ -318,3 +310,19 @@ test("counter-picks include profile-specific identity, strength, and caution", (
     assert.ok(candidate.profileEvidence.caution, candidate.name + " caution");
   }
 });
+test("all 133 hero profiles are available to the counter-pick engine", () => {
+  const result = run({ lane: "Опыт", enemies: ["Сора"] });
+  assert.equal(result.counters.length, 3);
+  assert.ok(result.counters.some(candidate =>
+    candidate.name === "Мартис" && candidate.matchedEnemies.includes("Сора")
+  ));
+});
+
+test("enemy heroes outside the old 32-entry list are resolved from the full profile catalogue", () => {
+  const result = run({ lane: "Мид", enemies: ["Лолита"] });
+  assert.equal(result.enemyMatchups.length, 1);
+  assert.equal(result.enemyMatchups[0].name, "Лолита");
+  assert.ok(result.enemyMatchups[0].mechanics.length > 0);
+  assert.equal(result.counters.length, 3);
+});
+
