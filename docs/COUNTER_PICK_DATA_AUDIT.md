@@ -60,3 +60,19 @@ The current MLBB.io matchup tables are aggregated ranked statistical signals. Th
 ## Automated checks
 
 `server/counter-pick-data-audit.js` exposes the current coverage metrics. Regression tests assert catalogue/profile completeness, matchup reference integrity, provenance coverage, the 16 newly sourced matchup records, lane filtering, full-catalogue candidate selection, and the three-option minimum.
+
+## Scenario matrix validation
+
+On 2026-11-24, the automated scenario matrix exercised every one of the 133 catalogue heroes as an enemy against each of the five selectable lanes: 665 single-enemy scenarios. Every case resolved the enemy profile and returned exactly three candidates, all on the selected lane, excluding the enemy and carrying explanation/provenance.
+
+Five additional multi-enemy scenarios covered 3- and 5-hero enemy drafts with allied picks present.
+
+The scoring model was then tightened:
+- Direct ranked matchup evidence is the primary scoring signal.
+- Allied synergy and general composition-fit bonuses are combined and capped at +2 total, so they cannot accumulate across allies and overwhelm matchup evidence.
+- Direct matchup candidates win score ties against secondary-only options.
+- A candidate with both positive and negative matchup signals is labelled `mixed-matchup`, not as an unqualified direct counter; the report exposes both the advantage and risk.
+- A scenario-matrix regression test searches the actual profile data for a returned candidate with simultaneous positive and negative signals.
+
+The matrix is automated regression coverage, not a claim that 665 picks were independently validated against match outcome data. The latter requires lane-specific ranked samples or reviewed match/VOD evidence.
+
