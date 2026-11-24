@@ -140,7 +140,7 @@ function pickerEntries(){
   const linked=catalogFor(h.name),profile=profileFor(linked?.id,h.name);
   const roles=profile?.roles||linked?.role?.values||[];
   const lanes=profile?.lanes||[linked?.lanes?.primary,...(linked?.lanes?.flexible||[])].filter(Boolean);
-  return {value:h.name,name:h.name,nameEn:linked?.nameEn||"",supported:true,catalog:false,roles,lanes,profile};
+  return {value:h.name,name:h.name,nameEn:linked?.nameEn||"",supported:true,analysisDepth:profile?"detailed":"baseline",catalog:false,roles,lanes,profile};
  });
  const options=(data.draftHeroOptions||[]).map(h=>{
   const linked=catalog.find(x=>x.id===h.id),profile=profileFor(h.id,h.name);
