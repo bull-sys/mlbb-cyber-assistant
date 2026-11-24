@@ -996,3 +996,5 @@ details.ency-info-card.visual>.ency-info-summary{display:grid}
 .build-timing{font-size:10px!important;color:#d5bd8b!important;margin-top:4px!important}
 
 .build-catalog-note{margin:9px 0 0;padding:8px 10px;border-left:2px solid rgba(255,211,110,.45);background:rgba(255,190,85,.045);color:#b8b4a8;font-size:10px;line-height:1.5}
+
+.ency-subgroup-heading{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;margin:13px 0 2px;padding:9px 11px;border:1px solid #30445e;border-radius:10px;background:linear-gradient(100deg,#17283b,#121d2d);color:#dceaff}.ency-subgroup-heading b{font-size:12px;letter-spacing:.02em}.ency-subgroup-heading small{font-size:9px;color:#8fa7c0}
