@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import {
+  getDraftHeroAnalysisProfiles,
   getDraftHeroOptions,
   isCatalogHeroId,
   resolveDraftHeroSelection
@@ -16,6 +17,14 @@ test("all 133 catalog heroes are accepted with detailed or baseline analysis", (
   assert.equal(options.find(hero => hero.id === "jawhead").analysisDepth, "detailed");
   assert.equal(options.find(hero => hero.id === "helcurt").analysisDepth, "detailed");
   assert.ok(options.some(hero => hero.analysisDepth === "baseline"));
+  const profiles = getDraftHeroAnalysisProfiles();
+  assert.equal(profiles.length, 133);
+  assert.equal(new Set(profiles.map(profile => profile.id)).size, 133);
+  assert.ok(profiles.every(profile => profile.names?.ru && profile.lanes.length > 0));
+  const baseline = profiles.find(profile => profile.analysisDepth === "baseline");
+  assert.equal(baseline.confidence, "unverified");
+  assert.deepEqual(baseline.matchups, { strongAgainst: [], weakAgainst: [] });
+  assert.equal(baseline.combat.damage, "unknown");
 });
 
 test("legacy draft names remain compatible and resolve to canonical tactical profile names", () => {
