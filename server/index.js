@@ -257,6 +257,7 @@ function analyze({lane, enemies = [], allies = [], myHero = "", rankedMatchups =
       name: hero.name,
       role: profile.roles?.[0] || hero.role,
       confidence: profile.confidence || "partial",
+      note: profile.analysisDepth === "baseline" ? "Есть базовые сведения о роли и линии; механики и матчапы ещё не подтверждены." : null,
       damage: profile.combat?.damage || "unknown",
       burst: profile.combat?.burst || "unknown",
       mobility: profile.combat?.mobility || "unknown",
@@ -311,7 +312,7 @@ function analyze({lane, enemies = [], allies = [], myHero = "", rankedMatchups =
 
   // Контрпики строятся по всем 133 профилям, а не по старому списку из 32 героев.
   // Статистический матчап — сигнал для ранжирования, а не гарантия победы.
-  const candidates = !enemy.length ? [] : draftAnalysisProfiles
+  const candidates = !enemy.length ? [] : heroProfiles
     .filter(profile => {
       const hero = heroByName.get(profile.names?.ru);
       return hero &&
