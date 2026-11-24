@@ -248,6 +248,27 @@ test("team plan adapts to enemy composition threats", () => {
   assert.ok(titles.includes("Срежь восстановление и фокусируйте одну цель"));
 });
 
+test("defensive, movement, and jungle utility catalogue entries have source and structured metadata", () => {
+  const required = [
+    "Antique Cuirass", "Athena's Shield", "Black Ice Shield",
+    "Dreadnaught Armor", "Healing Necklace", "Hero's Ring",
+    "Leather Jerkin", "Magic Resist Cloak", "Molten Essence",
+    "Silence Robe", "Steel Legplates", "Vitality Crystal",
+    "Arcane Boots", "Swift Boots",
+    "Bloody Retribution", "Flame Retribution", "Ice Retribution"
+  ];
+  for (const englishName of required) {
+    const item = items.find(entry => entry.englishName === englishName);
+    assert.ok(item, `missing catalogue entry: ${englishName}`);
+    assert.ok(item.name, `${englishName} Russian label`);
+    assert.ok(item.category, `${englishName} category`);
+    assert.ok(item.source, `${englishName} source`);
+    assert.ok(item.checkedAt, `${englishName} verification date`);
+  }
+  assert.equal(items.find(entry => entry.englishName === "Arcane Boots").category, "Передвижение");
+  assert.equal(items.find(entry => entry.englishName === "Bloody Retribution").category, "Лес");
+});
+
 test("draft analysis reports the size of its current counter-item catalogue", () => {
   const result = run({ myHero: "Роджер", enemies: ["Хелкарт"] });
   assert.equal(result.itemCatalogCount, items.length);
