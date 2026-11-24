@@ -1,6 +1,9 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { emblems, talents } from "../server/data.js";
+import { items, emblems, talents } from "../server/data.js";
+import { readFile } from "node:fs/promises";
+
+const appSource = await readFile(new URL("../public/app.js", import.meta.url), "utf8");
 
 test("encyclopedia has all seven emblem sets with visible factual attributes", () => {
   assert.equal(emblems.length, 7);
@@ -30,4 +33,23 @@ test("encyclopedia has all 26 emblem talents split into 8/8/10 tiers", () => {
     assert.ok(talent.source?.startsWith("https://"), talent.name + " needs provenance");
     assert.ok(talent.checkedAt, talent.name + " needs a verification date");
   }
+});
+
+test("item encyclopedia records have descriptions and the six shop categories", () => {
+  assert.ok(items.length >= 50);
+  const categories = new Set(items.map(item => item.category));
+  assert.deepEqual(
+    [...categories].sort(),
+    ["Атака", "Защита", "Лес", "Магия", "Передвижение", "Роум"].sort()
+  );
+  for (const item of items) {
+    assert.ok(item.name, "item name is required");
+    assert.ok(item.description?.length > 15, item.name + " needs a description");
+    assert.ok(categories.has(item.category), item.name + " needs a valid shop category");
+  }
+});
+
+test("encyclopedia groups equipment cards under their shop category headings", () => {
+  assert.match(appSource, /group\.type==="item"\)list\.sort/);
+  assert.match(appSource, /ency-subgroup-heading/);
 });
