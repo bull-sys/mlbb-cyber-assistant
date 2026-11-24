@@ -1343,3 +1343,29 @@ details.ency-info-card.visual>.ency-info-summary{display:grid}
 @keyframes arena-report-arrive{0%{opacity:0;transform:translateY(15px);filter:blur(5px)}100%{opacity:1;transform:translateY(0);filter:none}}
 @media(max-width:650px){.arena-completion{font-size:7px;padding:9px 7px;letter-spacing:.08em}}
 @media(prefers-reduced-motion:reduce){.arena-slot-enter,.arena-own-enter,.arena-report-enter{animation:none!important}.arena-completion{transition:none!important}}
+
+/* CYBER ARENA · scan-first tactical report overview */
+.report-overview{margin:2px 0 18px;padding:15px;border:1px solid #344b67;border-radius:16px;background:radial-gradient(ellipse at 50% -35%,rgba(83,112,171,.2),transparent 65%),linear-gradient(145deg,#17263a,#101a2a);box-shadow:inset 0 1px rgba(255,255,255,.035)}
+.report-overview-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:12px}
+.report-overview-head small{color:#7ddce8;font-size:8px;font-weight:900;letter-spacing:.16em}
+.report-overview-head h3{margin:4px 0 0;font-size:16px;letter-spacing:-.025em}
+.report-overview-head>span{color:#839ab5;font-size:7px;font-weight:850;letter-spacing:.1em;text-align:right}
+.report-rosters{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.report-roster-card{min-width:0;padding:10px;border:1px solid #35475e;border-radius:12px;background:rgba(9,17,29,.62)}
+.report-roster-card>div:first-child{display:flex;justify-content:space-between;align-items:center;gap:6px;margin-bottom:9px}
+.report-roster-card>div:first-child small{font-size:7px;font-weight:900;letter-spacing:.1em;color:#8ea5c0}
+.report-roster-card>div:first-child b{font-size:10px}
+.report-roster-card.enemy{border-top:2px solid #ff65b5}.report-roster-card.ally{border-top:2px solid #57e8ef}.report-roster-card.signature{grid-column:1/-1;border-top:2px solid #a995ff}
+.report-roster-list{display:flex;flex-wrap:wrap;gap:7px}
+.report-roster-hero{display:flex;align-items:center;gap:6px;min-width:0;max-width:100%;padding:4px 7px 4px 4px;border:1px solid #30435a;border-radius:999px;background:#17263a}
+.report-roster-hero img,.report-roster-fallback{width:28px;height:28px;flex:none;object-fit:cover;border-radius:50%;border:1px solid #7892ae;background:#24354a}
+.report-roster-fallback{display:grid;place-items:center;color:#c6d6ea;font-size:12px;font-weight:900}
+.report-roster-hero b{max-width:125px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:9px}
+.report-roster-hero.enemy{border-color:rgba(255,101,181,.25)}.report-roster-hero.ally{border-color:rgba(87,232,239,.25)}.report-roster-hero.signature{border-color:rgba(169,149,255,.35)}
+.report-roster-empty{margin:0;color:#8298b2;font-size:9px}
+.report-decision-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:10px}
+.report-decision{min-width:0;padding:11px;border:1px solid #35475e;border-radius:12px;background:linear-gradient(140deg,#1b2b40,#121e2e)}
+.report-decision.counter{border-left:2px solid #ffb36c}.report-decision.plan{border-left:2px solid #7ce4c1}
+.report-decision>small{display:block;margin-bottom:7px;color:#91a8c2;font-size:7px;font-weight:900;letter-spacing:.1em}
+.report-decision>b{display:block;font-size:13px}.report-decision p{margin:5px 0 0;color:#b2c1d3;font-size:9px;line-height:1.45}.report-decision>span{display:inline-block;margin-top:7px;color:#9ce7ce;font-size:8px;font-weight:800}
+@media(max-width:650px){.report-overview{padding:11px}.report-overview-head h3{font-size:14px}.report-rosters{grid-template-columns:1fr}.report-roster-card.signature{grid-column:auto}.report-roster-card>div:first-child{margin-bottom:7px}.report-decision-grid{grid-template-columns:1fr}.report-roster-hero b{max-width:calc(100vw - 115px)}}
