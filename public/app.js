@@ -285,6 +285,7 @@ async function runDraft(){
   const counters=(d.counters||[]).map((item,index)=>{
    const profile=item.profileEvidence;
    const kindLabel=item.matchupType==="direct-counter"?"ЕСТЬ СТАТИСТИЧЕСКИЙ МАТЧАП"
+    :item.matchupType==="mixed-matchup"?"СМЕШАННЫЙ МАТЧАП · ЕСТЬ РИСК"
     :item.matchupType==="team-synergy"?"СИНЕРГИЯ С СОЮЗНИКАМИ":"СИТУАЦИОННЫЙ ВАРИАНТ";
    const matched=(item.matchedEnemies||[]).length
     ?'<small class="counter-matchup-signal">Матчап-сигнал против: '+esc(item.matchedEnemies.join(", "))+'</small>'
