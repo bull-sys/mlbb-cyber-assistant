@@ -554,7 +554,7 @@ test("Hayabusa, Hylos, Irithel, Ixia and Johnson have sourced partial tactical p
 
 test("hero profile coverage count and unique IDs stay aligned with the audited baseline", () => {
   assert.equal(heroProfiles.length, 133);
-  assert.equal(new Set(heroProfiles.map(hero => hero.id)).size, 119);
+  assert.equal(new Set(heroProfiles.map(hero => hero.id)).size, 133);
   const saber = heroProfiles.find(hero => hero.id === "saber");
   assert.ok(saber);
   assert.ok(Array.isArray(saber.mechanics));
