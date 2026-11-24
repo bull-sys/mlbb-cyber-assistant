@@ -16,7 +16,7 @@ test("draft UI restores catalog IDs and renders their visible names", async () =
   const source = await readFile(new URL("../public/app.js", import.meta.url), "utf8");
   assert.match(source, /data\.draftHeroOptions\|\|\[\]\)\.map\(h=>h\.id\)/);
   assert.match(source, /function draftHeroLabel\(value\)/);
-  assert.match(source, /esc\(draftHeroLabel\(value\)\)/);
+  assert.match(source, /const name=draftHeroLabel\(value\)/);\n  assert.match(source, /esc\(name\)/);
 });
 
 test("limited analysis never renders empty or fabricated counter recommendations", async () => {
@@ -70,7 +70,7 @@ test("CYBER ARENA draft stage renders ten interactive team slots and a separate 
   assert.match(html, /id="allies" class="arena-slots ally-slots"/);
   assert.match(html, /id="arenaMyHeroPortrait"/);
   assert.match(app, /function drawTeams\(\)[\s\S]*?Array\.from\(\{length:5\}/);
-  assert.match(app, /data-side="\+side\+" data-i="\+slot\+"/);
+  assert.ok(app.includes(`data-side="'+side+'" data-i="'+slot+'"`));
   assert.match(app, /arenaMyHeroName/);
   assert.match(css, /\.arena-slots\{display:grid;grid-template-columns:repeat\(5/);
   assert.match(css, /\.enemy-team\{--arena-accent:#ff5eae/);
