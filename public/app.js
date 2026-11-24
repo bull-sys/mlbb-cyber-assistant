@@ -247,7 +247,7 @@ document.addEventListener("click",e=>{const b=e.target.closest("[data-page]");if
 const backButton=$("appBackButton");if(backButton)backButton.addEventListener("click",()=>{if(history.state?.mlbbPrevious)history.back();else showAppPage("home",{push:false})});
 window.addEventListener("popstate",event=>{const page=event.state?.mlbbPage||location.hash.replace(/^#/,"")||"home";showAppPage(page,{push:false,scroll:false});if(!$("encyHeroModal").classList.contains("hidden")){ $("encyHeroModal").classList.add("hidden");document.body.classList.remove("ency-modal-open");}});
 history.replaceState({...(history.state||{}),mlbbPage:document.querySelector(".page:not(.hidden)")?.id?.replace("page-","")||"home",mlbbPrevious:null},"",location.href);
-$("testDraft").onclick=()=>{enemies=["Тигрил","Эйдора","Кэрри","Дариус","Атлас"];allies=["Ангела","Линг","Теризла"];$("lane").value="Лес";$("myHero").value="Хелкарт";drawTeams();saveDraft();runDraft()};
+$("testDraft").onclick=()=>{enemies=["Тигрил","Эйдора","Кэрри","dyrroth","Атлас"];allies=["Ангела","Линг","Теризла"];$("lane").value="Лес";$("myHero").value="Хелкарт";drawTeams();saveDraft();runDraft()};
 function animateDraftReport(){
  const report=$("draftResult");
  report.classList.remove("arena-report-enter");
