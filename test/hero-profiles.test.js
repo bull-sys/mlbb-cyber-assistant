@@ -3,7 +3,7 @@ import test from "node:test";
 import { heroProfiles, validateHeroProfiles, HERO_DB_PATCH } from "../server/hero-profiles.js";
 import { heroCatalog } from "../server/hero-catalog.js";
 
-const MATCHUP_REVIEWED_IDS = new Set(["helcurt", "hanzo", "roger", "ling", "badang", "nolan", "fanny", "jawhead", "suyou", "karrie", "cyclops", "gusion", "alpha", "eudora", "guinevere", "harith", "harley", "hilda", "ixia"]);
+const MATCHUP_REVIEWED_IDS = new Set(["helcurt", "hanzo", "roger", "ling", "badang", "nolan", "fanny", "jawhead", "suyou", "karrie", "cyclops", "gusion", "alpha", "eudora", "guinevere", "harith", "harley", "hilda", "ixia", "johnson"]);
 
 test("hero profile database remains structurally valid", () => {
   const result = validateHeroProfiles();
