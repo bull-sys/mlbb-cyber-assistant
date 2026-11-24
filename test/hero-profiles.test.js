@@ -3,6 +3,8 @@ import test from "node:test";
 import { heroProfiles, validateHeroProfiles, HERO_DB_PATCH } from "../server/hero-profiles.js";
 import { heroCatalog } from "../server/hero-catalog.js";
 
+const MATCHUP_REVIEWED_IDS = new Set(["helcurt", "hanzo", "roger", "ling", "badang"]);
+
 test("hero profile database remains structurally valid", () => {
   const result = validateHeroProfiles();
   assert.equal(result.ok, true, JSON.stringify(result.errors));
@@ -23,8 +25,8 @@ test("Helcurt profile contains sourced mechanics and explicit uncertainty", () =
   assert.equal(helcurt.confidence, "partial");
   assert.equal(helcurt.patch.version, HERO_DB_PATCH);
   assert.equal(helcurt.patch.reviewedAt, "2026-11-22");
-  assert.deepEqual(helcurt.matchups.strongAgainst, []);
-  assert.deepEqual(helcurt.matchups.weakAgainst, []);
+  assert.ok(helcurt.matchups.strongAgainst.length > 0);
+  assert.ok(helcurt.matchups.weakAgainst.length > 0);
 });
 
 test("Helcurt patch notes keep ranked and professional evidence separate", () => {
@@ -52,8 +54,8 @@ test("Hanzo profile records the current reworked mechanics and separates evidenc
   assert.equal(hanzo.confidence, "partial");
   assert.equal(hanzo.patch.version, HERO_DB_PATCH);
   assert.equal(hanzo.patch.reviewedAt, "2026-11-22");
-  assert.deepEqual(hanzo.matchups.strongAgainst, []);
-  assert.deepEqual(hanzo.matchups.weakAgainst, []);
+  assert.ok(hanzo.matchups.strongAgainst.length > 0);
+  assert.ok(hanzo.matchups.weakAgainst.length > 0);
   const notes = hanzo.patch.notes.join(" ");
   assert.match(notes, /Рейтинговая статистика/);
   assert.match(notes, /Профессиональные данные/);
@@ -76,8 +78,8 @@ test("Roger has a cross-checked Fighter/Marksman Jungle profile with explicit un
   assert.equal(roger.confidence, "partial");
   assert.equal(roger.patch.version, HERO_DB_PATCH);
   assert.equal(roger.patch.reviewedAt, "2026-11-22");
-  assert.deepEqual(roger.matchups.strongAgainst, []);
-  assert.deepEqual(roger.matchups.weakAgainst, []);
+  assert.ok(roger.matchups.strongAgainst.length > 0);
+  assert.ok(roger.matchups.weakAgainst.length > 0);
   const notes = roger.patch.notes.join(" ");
   assert.match(notes, /Рейтинговая статистика/);
   assert.match(notes, /Профессиональные данные/);
@@ -102,8 +104,8 @@ test("Ling has a cross-checked Assassin/Jungle profile with explicit uncertainty
   assert.equal(ling.confidence, "partial");
   assert.equal(ling.patch.version, HERO_DB_PATCH);
   assert.equal(ling.patch.reviewedAt, "2026-11-22");
-  assert.deepEqual(ling.matchups.strongAgainst, []);
-  assert.deepEqual(ling.matchups.weakAgainst, []);
+  assert.ok(ling.matchups.strongAgainst.length > 0);
+  assert.ok(ling.matchups.weakAgainst.length > 0);
   const notes = ling.patch.notes.join(" ");
   assert.match(notes, /Рейтинговая статистика/);
   assert.match(notes, /Профессиональные данные/);
@@ -292,8 +294,8 @@ test("Atlas, Kagura, Layla, Miya and Granger have sourced partial tactical profi
     assert.equal(hero.confidence, "partial");
     assert.equal(hero.patch.version, HERO_DB_PATCH);
     assert.equal(hero.patch.reviewedAt, "2026-11-22");
-    assert.deepEqual(hero.matchups.strongAgainst, []);
-    assert.deepEqual(hero.matchups.weakAgainst, []);
+    if (!MATCHUP_REVIEWED_IDS.has(hero.id)) assert.deepEqual(hero.matchups.strongAgainst, []);
+    if (!MATCHUP_REVIEWED_IDS.has(hero.id)) assert.deepEqual(hero.matchups.weakAgainst, []);
   }
   const atlas = heroProfiles.find(item => item.id === "atlas");
   assert.ok(atlas.patch.notes.some(note => note.includes("66 выборов")));
@@ -323,8 +325,8 @@ test("Lukas, Thamuz, Eudora, Pharsa and Nana have sourced partial tactical profi
     assert.equal(hero.confidence, "partial");
     assert.equal(hero.patch.version, HERO_DB_PATCH);
     assert.equal(hero.patch.reviewedAt, "2026-11-22");
-    assert.deepEqual(hero.matchups.strongAgainst, []);
-    assert.deepEqual(hero.matchups.weakAgainst, []);
+    if (!MATCHUP_REVIEWED_IDS.has(hero.id)) assert.deepEqual(hero.matchups.strongAgainst, []);
+    if (!MATCHUP_REVIEWED_IDS.has(hero.id)) assert.deepEqual(hero.matchups.weakAgainst, []);
   }
   const lukas = heroProfiles.find(item => item.id === "lukas");
   assert.ok(lukas.mechanics.some(note => note.includes("Resolve")));
@@ -335,7 +337,7 @@ test("Lukas, Thamuz, Eudora, Pharsa and Nana have sourced partial tactical profi
 });
 
 
-test("Franco, Akai, Alucard, Arlott and Aurora have sourced partial tactical profiles",()=>{const expected=[["franco","Франко","https://liquipedia.net/mobilelegends/Franco"],["akai","Акай","https://liquipedia.net/mobilelegends/Akai"],["alucard","Алукард","https://liquipedia.net/mobilelegends/Alucard"],["arlott","Арлотт","https://liquipedia.net/mobilelegends/Arlott"],["aurora","Аврора","https://liquipedia.net/mobilelegends/Aurora"]];for(const [id,name,source] of expected){const h=heroProfiles.find(x=>x.id===id);assert.ok(h,id);assert.equal(h.names.ru,name);assert.ok(h.mechanics.length>=4);assert.ok(h.strengths.length>=3);assert.ok(h.weaknesses.length>=3);assert.ok(h.sources.includes(source));assert.equal(h.confidence,"partial");assert.equal(h.patch.version,HERO_DB_PATCH);assert.equal(h.patch.reviewedAt,"2026-11-22");assert.deepEqual(h.matchups.strongAgainst,[]);assert.deepEqual(h.matchups.weakAgainst,[]);}});
+test("Franco, Akai, Alucard, Arlott and Aurora have sourced partial tactical profiles",()=>{const expected=[["franco","Франко","https://liquipedia.net/mobilelegends/Franco"],["akai","Акай","https://liquipedia.net/mobilelegends/Akai"],["alucard","Алукард","https://liquipedia.net/mobilelegends/Alucard"],["arlott","Арлотт","https://liquipedia.net/mobilelegends/Arlott"],["aurora","Аврора","https://liquipedia.net/mobilelegends/Aurora"]];for(const [id,name,source] of expected){const h=heroProfiles.find(x=>x.id===id);assert.ok(h,id);assert.equal(h.names.ru,name);assert.ok(h.mechanics.length>=4);assert.ok(h.strengths.length>=3);assert.ok(h.weaknesses.length>=3);assert.ok(h.sources.includes(source));assert.equal(h.confidence,"partial");assert.equal(h.patch.version,HERO_DB_PATCH);assert.equal(h.patch.reviewedAt,"2026-11-22");if(id!=="badang"){assert.deepEqual(h.matchups.strongAgainst,[]);assert.deepEqual(h.matchups.weakAgainst,[]);}}});
 
 
 test("Badang, Balmond, Bane, Baxia and Beatrix have sourced partial tactical profiles",()=>{const expected=[["badang","Баданг","https://liquipedia.net/mobilelegends/Badang"],["balmond","Бальмонд","https://liquipedia.net/mobilelegends/Balmond"],["bane","Бейн","https://liquipedia.net/mobilelegends/Bane"],["baxia","Баксия","https://liquipedia.net/mobilelegends/Baxia"],["beatrix","Беатрис","https://liquipedia.net/mobilelegends/Beatrix"]];for(const [id,name,source] of expected){const h=heroProfiles.find(x=>x.id===id);assert.ok(h,id);assert.equal(h.names.ru,name);assert.ok(h.mechanics.length>=4);assert.ok(h.strengths.length>=3);assert.ok(h.weaknesses.length>=3);assert.ok(h.sources.includes(source));assert.equal(h.confidence,"partial");assert.equal(h.patch.version,HERO_DB_PATCH);assert.equal(h.patch.reviewedAt,"2026-11-22");assert.deepEqual(h.matchups.strongAgainst,[]);assert.deepEqual(h.matchups.weakAgainst,[]);}});
@@ -360,8 +362,8 @@ test("Benedetta, Brody, Carmilla, Cecilion and Chang'e have sourced partial tact
     assert.equal(hero.confidence, "partial");
     assert.equal(hero.patch.version, HERO_DB_PATCH);
     assert.equal(hero.patch.reviewedAt, "2026-11-22");
-    assert.deepEqual(hero.matchups.strongAgainst, []);
-    assert.deepEqual(hero.matchups.weakAgainst, []);
+    if (!MATCHUP_REVIEWED_IDS.has(hero.id)) assert.deepEqual(hero.matchups.strongAgainst, []);
+    if (!MATCHUP_REVIEWED_IDS.has(hero.id)) assert.deepEqual(hero.matchups.weakAgainst, []);
   }
 });
 
@@ -400,8 +402,8 @@ test("Chip, Cici, Claude, Clint and Esmeralda have sourced partial tactical prof
     assert.equal(hero.confidence, "partial");
     assert.equal(hero.patch.version, HERO_DB_PATCH);
     assert.equal(hero.patch.reviewedAt, "2026-11-22");
-    assert.deepEqual(hero.matchups.strongAgainst, []);
-    assert.deepEqual(hero.matchups.weakAgainst, []);
+    if (!MATCHUP_REVIEWED_IDS.has(hero.id)) assert.deepEqual(hero.matchups.strongAgainst, []);
+    if (!MATCHUP_REVIEWED_IDS.has(hero.id)) assert.deepEqual(hero.matchups.weakAgainst, []);
   }
   const chip = heroProfiles.find(item => item.id === "chip");
   assert.ok(chip.mechanics.some(note => note.includes("портал")));
@@ -436,8 +438,8 @@ test("Faramis, Fredrinn, Gatotkaca, Gloo and Gord have sourced partial tactical 
     assert.equal(hero.confidence, "partial");
     assert.equal(hero.patch.version, HERO_DB_PATCH);
     assert.equal(hero.patch.reviewedAt, "2026-11-22");
-    assert.deepEqual(hero.matchups.strongAgainst, []);
-    assert.deepEqual(hero.matchups.weakAgainst, []);
+    if (!MATCHUP_REVIEWED_IDS.has(hero.id)) assert.deepEqual(hero.matchups.strongAgainst, []);
+    if (!MATCHUP_REVIEWED_IDS.has(hero.id)) assert.deepEqual(hero.matchups.weakAgainst, []);
   }
   const gloo = heroProfiles.find(item => item.id === "gloo");
   assert.ok(gloo.patch.notes.some(note => note.includes("2.2.23")));
@@ -467,8 +469,8 @@ test("Grock, Guinevere, Gusion, Harith and Harley have sourced partial tactical 
     assert.equal(hero.confidence, "partial");
     assert.equal(hero.patch.version, HERO_DB_PATCH);
     assert.equal(hero.patch.reviewedAt, "2026-11-22");
-    assert.deepEqual(hero.matchups.strongAgainst, []);
-    assert.deepEqual(hero.matchups.weakAgainst, []);
+    if (!MATCHUP_REVIEWED_IDS.has(hero.id)) assert.deepEqual(hero.matchups.strongAgainst, []);
+    if (!MATCHUP_REVIEWED_IDS.has(hero.id)) assert.deepEqual(hero.matchups.weakAgainst, []);
   }
   const grock = heroProfiles.find(item => item.id === "grock");
   assert.ok(grock.mechanics.some(note => note.includes("препятств")));
@@ -502,8 +504,8 @@ test("Hayabusa, Hylos, Irithel, Ixia and Johnson have sourced partial tactical p
     assert.equal(hero.confidence, "partial");
     assert.equal(hero.patch.version, HERO_DB_PATCH);
     assert.equal(hero.patch.reviewedAt, "2026-11-22");
-    assert.deepEqual(hero.matchups.strongAgainst, []);
-    assert.deepEqual(hero.matchups.weakAgainst, []);
+    if (!MATCHUP_REVIEWED_IDS.has(hero.id)) assert.deepEqual(hero.matchups.strongAgainst, []);
+    if (!MATCHUP_REVIEWED_IDS.has(hero.id)) assert.deepEqual(hero.matchups.weakAgainst, []);
   }
   const hayabusa = heroProfiles.find(item => item.id === "hayabusa");
   assert.ok(hayabusa.mechanics.some(note => note.includes("фантом")));
@@ -537,8 +539,8 @@ test("Hayabusa, Hylos, Irithel, Ixia and Johnson have sourced partial tactical p
     assert.equal(hero.confidence, "partial");
     assert.equal(hero.patch.version, HERO_DB_PATCH);
     assert.equal(hero.patch.reviewedAt, "2026-11-22");
-    assert.deepEqual(hero.matchups.strongAgainst, []);
-    assert.deepEqual(hero.matchups.weakAgainst, []);
+    if (!MATCHUP_REVIEWED_IDS.has(hero.id)) assert.deepEqual(hero.matchups.strongAgainst, []);
+    if (!MATCHUP_REVIEWED_IDS.has(hero.id)) assert.deepEqual(hero.matchups.weakAgainst, []);
   }
   const hayabusa = heroProfiles.find(item => item.id === "hayabusa");
   assert.ok(hayabusa.mechanics.some(note => note.includes("тени")));
@@ -581,8 +583,8 @@ test("Joy, Kadita, Karina, Lancelot and Leomord have sourced partial tactical pr
     assert.equal(hero.confidence, "partial");
     assert.equal(hero.patch.version, HERO_DB_PATCH);
     assert.equal(hero.patch.reviewedAt, "2026-11-22");
-    assert.deepEqual(hero.matchups.strongAgainst, []);
-    assert.deepEqual(hero.matchups.weakAgainst, []);
+    if (!MATCHUP_REVIEWED_IDS.has(hero.id)) assert.deepEqual(hero.matchups.strongAgainst, []);
+    if (!MATCHUP_REVIEWED_IDS.has(hero.id)) assert.deepEqual(hero.matchups.weakAgainst, []);
   }
 });
 
@@ -606,8 +608,8 @@ test("Hirara, Kalea, Khaleed, Kimmy and Lapu-Lapu have sourced partial tactical 
     assert.equal(hero.confidence, "partial");
     assert.equal(hero.patch.version, HERO_DB_PATCH);
     assert.equal(hero.patch.reviewedAt, "2026-11-22");
-    assert.deepEqual(hero.matchups.strongAgainst, []);
-    assert.deepEqual(hero.matchups.weakAgainst, []);
+    if (!MATCHUP_REVIEWED_IDS.has(hero.id)) assert.deepEqual(hero.matchups.strongAgainst, []);
+    if (!MATCHUP_REVIEWED_IDS.has(hero.id)) assert.deepEqual(hero.matchups.weakAgainst, []);
   }
 });
 
@@ -631,8 +633,8 @@ test("Lesley, Lolita, Luo Yi, Lylia and Martis have sourced partial tactical pro
     assert.equal(hero.confidence, "partial");
     assert.equal(hero.patch.version, HERO_DB_PATCH);
     assert.equal(hero.patch.reviewedAt, "2026-11-22");
-    assert.deepEqual(hero.matchups.strongAgainst, []);
-    assert.deepEqual(hero.matchups.weakAgainst, []);
+    if (!MATCHUP_REVIEWED_IDS.has(hero.id)) assert.deepEqual(hero.matchups.strongAgainst, []);
+    if (!MATCHUP_REVIEWED_IDS.has(hero.id)) assert.deepEqual(hero.matchups.weakAgainst, []);
   }
   assert.ok(heroProfiles.find(item => item.id === "lesley").mechanics.some(note => note.includes("перехвачены")));
   assert.ok(heroProfiles.find(item => item.id === "lolita").mechanics.some(note => note.includes("отражает")));
@@ -744,8 +746,8 @@ test("Minsitthar tactical profile contains sourced hero-specific mechanics", () 
   assert.equal(hero.confidence, "partial");
   assert.equal(hero.patch.version, HERO_DB_PATCH);
   assert.equal(hero.patch.reviewedAt, "2026-11-23");
-  assert.deepEqual(hero.matchups.strongAgainst, []);
-  assert.deepEqual(hero.matchups.weakAgainst, []);
+  if (!MATCHUP_REVIEWED_IDS.has(hero.id)) assert.deepEqual(hero.matchups.strongAgainst, []);
+  if (!MATCHUP_REVIEWED_IDS.has(hero.id)) assert.deepEqual(hero.matchups.weakAgainst, []);
 });
 
 
@@ -766,8 +768,8 @@ test("Moskov tactical profile contains sourced hero-specific mechanics", () => {
   assert.equal(hero.confidence, "partial");
   assert.equal(hero.patch.version, HERO_DB_PATCH);
   assert.equal(hero.patch.reviewedAt, "2026-11-23");
-  assert.deepEqual(hero.matchups.strongAgainst, []);
-  assert.deepEqual(hero.matchups.weakAgainst, []);
+  if (!MATCHUP_REVIEWED_IDS.has(hero.id)) assert.deepEqual(hero.matchups.strongAgainst, []);
+  if (!MATCHUP_REVIEWED_IDS.has(hero.id)) assert.deepEqual(hero.matchups.weakAgainst, []);
 });
 
 
@@ -788,8 +790,8 @@ test("Natalia tactical profile contains sourced hero-specific mechanics", () => 
   assert.equal(hero.confidence, "partial");
   assert.equal(hero.patch.version, HERO_DB_PATCH);
   assert.equal(hero.patch.reviewedAt, "2026-11-23");
-  assert.deepEqual(hero.matchups.strongAgainst, []);
-  assert.deepEqual(hero.matchups.weakAgainst, []);
+  if (!MATCHUP_REVIEWED_IDS.has(hero.id)) assert.deepEqual(hero.matchups.strongAgainst, []);
+  if (!MATCHUP_REVIEWED_IDS.has(hero.id)) assert.deepEqual(hero.matchups.weakAgainst, []);
 });
 
 
@@ -810,8 +812,8 @@ test("Natan tactical profile contains sourced hero-specific mechanics", () => {
   assert.equal(hero.confidence, "partial");
   assert.equal(hero.patch.version, HERO_DB_PATCH);
   assert.equal(hero.patch.reviewedAt, "2026-11-23");
-  assert.deepEqual(hero.matchups.strongAgainst, []);
-  assert.deepEqual(hero.matchups.weakAgainst, []);
+  if (!MATCHUP_REVIEWED_IDS.has(hero.id)) assert.deepEqual(hero.matchups.strongAgainst, []);
+  if (!MATCHUP_REVIEWED_IDS.has(hero.id)) assert.deepEqual(hero.matchups.weakAgainst, []);
 });
 
 
@@ -832,8 +834,8 @@ test("Novaria tactical profile contains sourced hero-specific mechanics", () => 
   assert.equal(hero.confidence, "partial");
   assert.equal(hero.patch.version, HERO_DB_PATCH);
   assert.equal(hero.patch.reviewedAt, "2026-11-23");
-  assert.deepEqual(hero.matchups.strongAgainst, []);
-  assert.deepEqual(hero.matchups.weakAgainst, []);
+  if (!MATCHUP_REVIEWED_IDS.has(hero.id)) assert.deepEqual(hero.matchups.strongAgainst, []);
+  if (!MATCHUP_REVIEWED_IDS.has(hero.id)) assert.deepEqual(hero.matchups.weakAgainst, []);
 });
 
 
@@ -862,9 +864,9 @@ test("Aamon, Alice, Angela, Odette and Phoveus tactical profiles are sourced and
     assert.equal(hero.confidence, "partial");
     assert.equal(hero.patch.version, HERO_DB_PATCH);
     assert.equal(hero.patch.reviewedAt, "2026-11-23");
-    assert.deepEqual(hero.matchups.strongAgainst, []);
-    assert.deepEqual(hero.matchups.weakAgainst, []);
-    assert.deepEqual(hero.synergies, []);
+    if (!MATCHUP_REVIEWED_IDS.has(hero.id)) assert.deepEqual(hero.matchups.strongAgainst, []);
+    if (!MATCHUP_REVIEWED_IDS.has(hero.id)) assert.deepEqual(hero.matchups.weakAgainst, []);
+    if (!MATCHUP_REVIEWED_IDS.has(hero.id)) assert.deepEqual(hero.synergies, []);
   }
 });
 
@@ -894,9 +896,9 @@ test("Popol and Kupa, Ruby, Selena, Silvanna and Sora tactical profiles are sour
     assert.equal(hero.confidence, "partial");
     assert.equal(hero.patch.version, HERO_DB_PATCH);
     assert.equal(hero.patch.reviewedAt, "2026-11-23");
-    assert.deepEqual(hero.matchups.strongAgainst, []);
-    assert.deepEqual(hero.matchups.weakAgainst, []);
-    assert.deepEqual(hero.synergies, []);
+    if (!MATCHUP_REVIEWED_IDS.has(hero.id)) assert.deepEqual(hero.matchups.strongAgainst, []);
+    if (!MATCHUP_REVIEWED_IDS.has(hero.id)) assert.deepEqual(hero.matchups.weakAgainst, []);
+    if (!MATCHUP_REVIEWED_IDS.has(hero.id)) assert.deepEqual(hero.synergies, []);
   }
 });
 
@@ -926,9 +928,9 @@ test("Uranus, Vale, Valentina, Vexana and Wanwan tactical profiles are sourced a
     assert.equal(hero.confidence, "partial");
     assert.equal(hero.patch.version, HERO_DB_PATCH);
     assert.equal(hero.patch.reviewedAt, "2026-11-23");
-    assert.deepEqual(hero.matchups.strongAgainst, []);
-    assert.deepEqual(hero.matchups.weakAgainst, []);
-    assert.deepEqual(hero.synergies, []);
+    if (!MATCHUP_REVIEWED_IDS.has(hero.id)) assert.deepEqual(hero.matchups.strongAgainst, []);
+    if (!MATCHUP_REVIEWED_IDS.has(hero.id)) assert.deepEqual(hero.matchups.weakAgainst, []);
+    if (!MATCHUP_REVIEWED_IDS.has(hero.id)) assert.deepEqual(hero.synergies, []);
   }
 });
 
@@ -958,9 +960,9 @@ test("X.Borg, Yi Sun-shin, Yin, Yu Zhong and Yve tactical profiles are sourced a
     assert.equal(hero.confidence, "partial");
     assert.equal(hero.patch.version, HERO_DB_PATCH);
     assert.equal(hero.patch.reviewedAt, "2026-11-23");
-    assert.deepEqual(hero.matchups.strongAgainst, []);
-    assert.deepEqual(hero.matchups.weakAgainst, []);
-    assert.deepEqual(hero.synergies, []);
+    if (!MATCHUP_REVIEWED_IDS.has(hero.id)) assert.deepEqual(hero.matchups.strongAgainst, []);
+    if (!MATCHUP_REVIEWED_IDS.has(hero.id)) assert.deepEqual(hero.matchups.weakAgainst, []);
+    if (!MATCHUP_REVIEWED_IDS.has(hero.id)) assert.deepEqual(hero.synergies, []);
   }
 });
 
@@ -989,9 +991,9 @@ test("Zetian, Zhask, Zhuxin and Zilong tactical profiles are sourced and structu
     assert.equal(hero.confidence, "partial");
     assert.equal(hero.patch.version, HERO_DB_PATCH);
     assert.equal(hero.patch.reviewedAt, "2026-11-23");
-    assert.deepEqual(hero.matchups.strongAgainst, []);
-    assert.deepEqual(hero.matchups.weakAgainst, []);
-    assert.deepEqual(hero.synergies, []);
+    if (!MATCHUP_REVIEWED_IDS.has(hero.id)) assert.deepEqual(hero.matchups.strongAgainst, []);
+    if (!MATCHUP_REVIEWED_IDS.has(hero.id)) assert.deepEqual(hero.matchups.weakAgainst, []);
+    if (!MATCHUP_REVIEWED_IDS.has(hero.id)) assert.deepEqual(hero.synergies, []);
   }
 });
 
@@ -1016,4 +1018,17 @@ test("tactical profile coverage is explicit and does not invent profiles for the
   assert.ok(heroProfiles.every(hero => heroCatalog.some(entry => entry.id === hero.id)));
   const missing = heroCatalog.filter(hero => !profileIds.has(hero.id));
   assert.equal(missing.length, 0);
+});
+
+test("five hero profiles contain dated, source-backed matchup and synergy IDs", () => {
+  for (const id of MATCHUP_REVIEWED_IDS) {
+    const hero = heroProfiles.find(entry => entry.id === id);
+    assert.ok(hero, id + " profile exists");
+    assert.ok(hero.matchups.strongAgainst.length > 0, id + " strong matchups");
+    assert.ok(hero.matchups.weakAgainst.length > 0, id + " weak matchups");
+    assert.ok(hero.synergies.length > 0, id + " synergies");
+    assert.equal(hero.matchupsReviewedAt, "2026-11-24");
+    assert.match(hero.matchupsMethod, /ranked matchup deltas/i);
+    assert.ok(hero.sources.some(source => source.includes("mlbb.io")));
+  }
 });
