@@ -747,8 +747,8 @@ export const heroProfiles = [
       "Для максимального урона нужно поддерживать темп попаданий и подбирать мяч.",
       "Не любит ситуации, где соперник может свободно навязать бой на короткой дистанции."
     ],
-    matchups: { strongAgainst: [], weakAgainst: [] },
-    synergies: [],
+    matchups: { strongAgainst: ["fanny","masha","joy","wanwan","irithel","hirara"], weakAgainst: ["lolita","lesley","aamon","karina","ixia","layla"] },
+    synergies: ["fanny","gatotkaca","zhuxin","yve","kalea","baxia"],
     itemNotes: [
       "MLBBHub для патча 2.2.23 предлагает критическую сборку Gold Lane: Swift Boots, Haas's Claws, Berserker's Fury, Malefic Gun, Windtalker и Blade of Despair.",
       "MLBBdex на 22 ноября фиксирует Haas' Claws, Berserker's Fury и Malefic Gun среди часто используемых предметов. Эмблемы и боевое заклинание различаются по выборкам."
@@ -762,8 +762,10 @@ export const heroProfiles = [
       "https://mlbbhub.com/heroes/bruno",
       "https://www.mlbbanalytics.com/heroes?hero=Bruno",
       "https://mlbbdex.com/en/heroes/bruno",
-      "https://mlbb.tools/patch-notes/2.2.16"
+      "https://mlbb.tools/patch-notes/2.2.16",
+      "https://mlbb.io/en/hero/bruno",
     ],
+    matchupsReviewedAt: "2026-11-24", matchupsMethod: "Ranked matchup deltas from MLBB.io, data updated 2026-11-24; win-rate shifts are statistical signals, not guaranteed outcomes.",
     patch: {
       version: HERO_DB_PATCH,
       notes: [
@@ -802,8 +804,8 @@ export const heroProfiles = [
       "Урон серии второго навыка можно избежать, если соперник вовремя меняет позицию.",
       "Сильно зависит от удачного угла ультимейта и продолжения команды."
     ],
-    matchups: { strongAgainst: [], weakAgainst: [] },
-    synergies: [],
+    matchups: { strongAgainst: ["argus","melissa","khufra","leomord","popol-and-kupa","minotaur"], weakAgainst: ["x-borg","valir","angela","alpha","yve","karrie"] },
+    synergies: ["sun","angela","floryn","bane","thamuz","alpha"],
     itemNotes: [
       "MLBBHub для патча 2.2.23 показывает вариант EXP/Flicker через Rapid Boots, War Axe, Queen's Wings, Dominance Ice, Oracle и Guardian Helmet.",
       "MLBB.io community builds чаще используют War Axe, Queen's Wings и защитные предметы. Выбор защиты должен учитывать тип основного урона соперника."
@@ -816,8 +818,9 @@ export const heroProfiles = [
     sources: [
       "https://liquipedia.net/mobilelegends/Terizla",
       "https://mlbbhub.com/ru/heroes/terizla",
-      "https://mlbb.io/en/hero/terizla/build"
+      "https://mlbb.io/en/hero/terizla/build",
     ],
+    matchupsReviewedAt: "2026-11-24", matchupsMethod: "Ranked matchup deltas from MLBB.io, data updated 2026-11-23; win-rate shifts are statistical signals, not guaranteed outcomes.",
     patch: {
       version: HERO_DB_PATCH,
       notes: [
@@ -856,8 +859,8 @@ export const heroProfiles = [
       "Контроль и замедления могут мешать Маше добраться до цели и реализовать Feral.",
       "Высокий рейтинг статистики не означает универсальность: дальнее давление и грамотное отступление противника снижают её ценность."
     ],
-    matchups: { strongAgainst: [], weakAgainst: [] },
-    synergies: [],
+    matchups: { strongAgainst: ["eudora","lesley","yu-zhong","brody","dyrroth","pharsa"], weakAgainst: ["estes","freya","bruno","floryn","rafaela","ruby"] },
+    synergies: ["bane","alice","gord","hanzo","joy","julian"],
     itemNotes: [
       "MLBBHub для EXP Bruiser показывает Rapid Boots, Corrosion Scythe, Thunder Belt, Guardian Helmet, Demon Hunter Sword и Golden Staff; эмблема Tank и Petrify указаны как основной вариант.",
       "Не переносить старый образ Маши как исключительно сплит-пуш-ассасина: переработка 2.2.16 сместила её к продолжительному бою и вскрытию ран."
@@ -871,8 +874,10 @@ export const heroProfiles = [
       "https://www.mobilelegends.com/en/hero",
       "https://www.youtube.com/watch?v=glz0ubRP59g",
       "https://mlbbhub.com/ru/heroes/masha",
-      "https://liquipedia.net/mobilelegends/Patch_2.2.16"
+      "https://liquipedia.net/mobilelegends/Patch_2.2.16",
+      "https://mlbb.io/en/hero/masha",
     ],
+    matchupsReviewedAt: "2026-11-24", matchupsMethod: "Ranked matchup deltas from MLBB.io, data updated 2026-11-24; win-rate shifts are statistical signals, not guaranteed outcomes.",
     patch: {
       version: HERO_DB_PATCH,
       notes: [
@@ -911,8 +916,8 @@ export const heroProfiles = [
       "Сила ультимейта зависит от точного выбора области и момента: неправильная зона может разделить собственную команду.",
       "Не получает обычной выгоды от скорости атаки; сборки через стандартные предметы стрелка не подходят."
     ],
-    matchups: { strongAgainst: [], weakAgainst: [] },
-    synergies: [],
+    matchups: { strongAgainst: ["atlas","akai","kadita","martis","joy","vexana"], weakAgainst: ["angela","floryn","esmeralda","cyclops","lesley","karina"] },
+    synergies: ["saber","natalia","yve","zhuxin","jawhead","valentina"],
     itemNotes: [
       "MLBBHub для Roam Encourage рекомендует Rapid Boots, Thunder Belt, Dominance Ice, Flask of the Oasis, Oracle и Immortality; эмблема Support и Revitalize указаны как базовое направление.",
       "Защитные характеристики важны не только для выживания: они участвуют в коэффициентах урона навыков и базовых атак Марселя. Это не обычный танк с универсальной сборкой."
@@ -926,8 +931,9 @@ export const heroProfiles = [
       "https://www.mobilelegends.com/en/hero/28",
       "https://liquipedia.net/mobilelegends/Marcel",
       "https://mlbb.io/en/hero/marcel",
-      "https://mlbbhub.com/ru/heroes/marcel"
+      "https://mlbbhub.com/ru/heroes/marcel",
     ],
+    matchupsReviewedAt: "2026-11-24", matchupsMethod: "Ranked matchup deltas from MLBB.io, data updated 2026-11-24; win-rate shifts are statistical signals, not guaranteed outcomes.",
     patch: {
       version: HERO_DB_PATCH,
       notes: [
@@ -965,8 +971,8 @@ export const heroProfiles = [
       "Если противники просто отходят на время ультимейта, Аргус теряет возможность превратить его в урон и восстановление.",
       "Без подходящего темпа атак и доступа к линии фронта ему трудно реализовать сильные стороны."
     ],
-    matchups: { strongAgainst: [], weakAgainst: [] },
-    synergies: [],
+    matchups: { strongAgainst: ["karrie","helcurt","dyrroth","lunox","arlott","guinevere"], weakAgainst: ["barats","uranus","terizla","baxia","fredrinn","ruby"] },
+    synergies: ["alice","balmond","gloo","chip","badang","khaleed"],
     itemNotes: [
       "MLBBHub для EXP Attack-Effect предлагает Swift Boots, Corrosion Scythe, Demon Hunter Sword, Golden Staff, Haas's Claws и Malefic Roar; эмблема Marksman и Flicker — опубликованный вариант, а не единственный.",
       "Сборку нужно адаптировать под защиту соперника и доступ к цели. Скорость атаки усиливает темп накопления и реализации пассивного эффекта."
@@ -980,8 +986,10 @@ export const heroProfiles = [
       "https://liquipedia.net/mobilelegends/Argus",
       "https://mlbb-knowledge.vercel.app/heroes/45",
       "https://mlbbhub.com/ru/heroes/argus",
-      "https://mlbbhub.com/patch-notes/original/2.2.16"
+      "https://mlbbhub.com/patch-notes/original/2.2.16",
+      "https://mlbb.io/en/hero/argus",
     ],
+    matchupsReviewedAt: "2026-11-24", matchupsMethod: "Ranked matchup deltas from MLBB.io, data updated 2026-11-24; win-rate shifts are statistical signals, not guaranteed outcomes.",
     patch: {
       version: HERO_DB_PATCH,
       notes: [
