@@ -2465,10 +2465,12 @@ export const heroProfiles = [
     ],
     strengths:["Ультимейт позволяет быстро перемещаться по карте вместе с союзником и создавать внезапную инициацию.","Сочетает щит, оглушение и замедление, поэтому способен защищать союзную заднюю линию.","Может менять направление атаки и помогать союзникам быстро подключаться к столкновению."],
     weaknesses:["Маршрут автомобиля можно предугадать, а место запуска ультимейта раскрывается противнику.","Если Джонсон не попадает по цели, команда теряет часть темпа и время перезарядки.","Без союзника рядом и без подходящего маршрута его ультимейт теряет часть командной ценности."],
-    matchups:{strongAgainst:[],weakAgainst:[]},synergies:[],
+    matchups: { strongAgainst: ["layla","franco","valentina","yi-sun-shin","arlott","selena"], weakAgainst: ["gloo","alpha","marcel","kadita","balmond","alice"] }, synergies: ["natalia","lunox","gusion","aldous","silvanna","minsitthar"],
     itemNotes:["В патче 2.2.23 MLBBHub показывает роум-сборку через Magic Boots, Fleeting Time, Dominance Ice, Blade Armor, Athena's Shield и Immortality.","Предметы подбираются под вражеский физический или магический урон; в первую очередь Джонсону нужна стойкость для безопасного начала боя."],
     teamfight:{preferredPlan:"Перед активацией ультимейта согласовать с союзником посадку и выбрать маршрут, который не раскрывает намерение слишком рано. После столкновения использовать второй навык для давления по области, а первый — для дополнительного оглушения ключевой цели.",targetPriority:["Группировка противников, которую можно задеть взрывом автомобиля","Уязвимая цель, по которой союзник-пассажир может продолжить контроль и урон"],avoid:["Не выбирать очевидный маршрут, если противник видит начало ультимейта.","Не начинать поездку без союзника, если команда рассчитывает на усиленную инициацию.","Не тратить первый навык до столкновения, если он нужен для продолжения контроля после взрыва."]},
-    sources:["https://mlbb-knowledge.vercel.app/heroes/32","https://mlbbhub.com/ru/heroes/johnson","https://mlbb.io/en/hero/johnson","https://liquipedia.net/mobilelegends/Johnson"],
+    sources: ["https://mlbb-knowledge.vercel.app/heroes/32","https://mlbbhub.com/ru/heroes/johnson","https://mlbb.io/en/hero/johnson","https://liquipedia.net/mobilelegends/Johnson",
+    ],
+    matchupsReviewedAt: "2026-11-24", matchupsMethod: "Ranked matchup deltas from MLBB.io, data updated 2026-11-24; statistical signal, not a guaranteed counter or synergy.",
     patch:{version:HERO_DB_PATCH,notes:["Electro Airbag, Impact Wrench, Electromagnetic Waves и Full Throttle сверены по MLBB Knowledge, MLBBHub и Liquipedia на 2026-11-22.","Ультимейт раскрывает местоположение Джонсона во время подготовки; это учитывается в рекомендациях по маршруту.","Рейтинговые показатели отделены от профессиональных выборок; индивидуальный VOD-разбор текущего патча pending."],reviewedAt:"2026-11-22"},confidence:"partial"
   },
 
