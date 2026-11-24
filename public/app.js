@@ -35,7 +35,34 @@ $("threats").innerHTML=threatDefs.map(([id,name])=>`<button class="chip" data-th
 restoreDraft();drawTeams();renderEncy();$api("/game-assets").then(result=>{if(result?.ok){encyRemoteAssets=result;renderEncy()}}).catch(()=>{});if(token)await refreshMe();
  if(window.__MLBB_APP_DIAGNOSTICS)window.__MLBB_APP_DIAGNOSTICS.stage="ready";
 }
-function drawTeams(){for(let [side,arr] of [["enemies",enemies],["allies",allies]])$(side).innerHTML=arr.map((x,i)=>`<button class="chip active" data-side="${side}" data-i="${i}">${esc(draftHeroLabel(x))} ×</button>`).join("")||""}
+function drawTeams(){
+ const entries=pickerEntries();
+ for(const [side,arr] of [["enemies",enemies],["allies",allies]]){
+  const host=$(side);
+  if(!host)continue;
+  host.innerHTML=Array.from({length:5},(_,slot)=>{
+   const value=arr[slot];
+   if(!value)return '<div class="arena-slot empty" aria-label="Свободный слот '+(slot+1)+' из 5"><span class="arena-slot-number">0'+(slot+1)+'</span><span class="arena-slot-plus">＋</span><small>ОЖИДАНИЕ ПИКА</small></div>';
+   const hero=entries.find(item=>item.value===value);
+   const name=draftHeroLabel(value);
+   const portrait=hero?heroPortraitUrl(hero):"";
+   return '<button type="button" class="arena-slot filled" data-side="'+side+'" data-i="'+slot+'" aria-label="Удалить '+esc(name)+' из состава"><span class="arena-slot-number">0'+(slot+1)+'</span>'+(portrait?'<img class="arena-slot-portrait" src="'+portrait+'" alt="" loading="lazy">':'<span class="arena-slot-fallback">'+esc(name.slice(0,1))+'</span>')+'<b>'+esc(name)+'</b><small>ЗАКРЕПЛЁН</small><i aria-hidden="true">×</i></button>';
+  }).join("");
+  host.setAttribute("aria-label",(side==="enemies"?"Вражеская":"Союзная")+" команда: "+arr.length+" из 5");
+ }
+ const count=arr=>arr.length;
+ const enemyCount=$("enemies")?enemies.length:0,allyCount=$("allies")?allies.length:0;
+ const enemyLabel=document.querySelector('[data-arena-count="enemies"]'),allyLabel=document.querySelector('[data-arena-count="allies"]');
+ if(enemyLabel)enemyLabel.textContent=enemyCount+" / 5";
+ if(allyLabel)allyLabel.textContent=allyCount+" / 5";
+ const own=$("arenaMyHeroPortrait"),ownName=$("arenaMyHeroName");
+ if(own&&ownName){
+  const selected=$("myHero").value,hero=entries.find(item=>item.value===selected);
+  ownName.textContent=selected?draftHeroLabel(selected):"ГЕРОЙ НЕ ВЫБРАН";
+  own.innerHTML=hero?'<img src="'+heroPortraitUrl(hero)+'" alt="" class="arena-own-portrait">':'<span class="arena-own-empty">＋</span>';
+  own.classList.toggle("is-selected",!!hero);
+ }
+}
 function draftSnapshot(){return {version:1,enemies:[...enemies],allies:[...allies],lane:$("lane").value,myHero:$("myHero").value,threats:[...threats],savedAt:Date.now()}}
 function setDraftStatus(message){const el=$("draftSaveStatus");if(el)el.textContent=message}
 function saveDraft(){
