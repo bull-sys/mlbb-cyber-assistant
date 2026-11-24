@@ -130,7 +130,7 @@ test("item encyclopedia records have descriptions and the six shop categories", 
   assert.match(itemById("Conceal").passive, /40%.*5 секунд.*60 секунд.*1000 золота/);
   assert.match(itemById("Dire Hit").passive, /При 20 зарядах.*чистый урон.*Перезарядка — 15 секунд/);
   assert.match(itemById("Encourage").passive, /20 дополнительной гибридной защиты.*1000 золота/);
-  assert.match(itemById("Favor").passive, /каждые 15 секунд.*400 здоровья.*5 единиц/);
+  assert.match(itemById("Favor").passive, /Каждые 15 секунд.*400 здоровья.*5 единиц/);
   assert.match(itemById("Bloody Retribution").passive, /40.*3 × уровень героя.*1%.*3 секунд/);
   assert.match(itemById("Bloody Retribution").effect, /100 чистого урона.*24% дополнительного здоровья.*35 секунд/);
   assert.match(itemById("Flame Retribution").effect, /71–120 физической атаки.*35 секунд/);
