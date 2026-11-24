@@ -6,7 +6,8 @@ export const heroes = [
   {name:"Линг",role:"Лес",type:"assassin",tags:["mobility","burst","pickoff"],style:["roam","hunt"],strengths:["backline","isolated-targets"]},
   {name:"Нолан",role:"Лес",type:"assassin",tags:["burst","mobility","pickoff"],style:["combo","hunt"],strengths:["squishy-targets","isolated-targets"]},
   {name:"Су Ё",role:"Лес",type:"fighter",tags:["burst","control","sustain"],style:["duel","engage"],strengths:["extended-fight","mobile-targets"]},
-  {name:"Кусака",role:"Лес",type:"assassin",tags:["burst","pickoff"],style:["hunt","ambush"],strengths:["squishy-targets","isolated-targets"]},
+  {name:"Кусака",role:"Опыт",type:"fighter",tags:["burst","pickoff","control","displacement"],style:["engage","pickoff"],strengths:["squishy-targets","isolated-targets"]},
+  {name:"Сабер",role:"Лес",type:"assassin",tags:["burst","pickoff","armor-reduction","control"],style:["hunt","finisher"],strengths:["squishy-targets","mobile-targets"]},
 
   {name:"Кэрри",role:"Золото",type:"marksman",tags:["tank-shred","true-damage"],style:["anti-tank","dps"],strengths:["frontline","extended-fight"]},
   {name:"Бруно",role:"Золото",type:"marksman",tags:["crit","burst"],style:["poke","burst"],strengths:["squishy-targets"]},
