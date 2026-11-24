@@ -343,11 +343,7 @@ export const heroProfiles = [
       "Низкая надёжность в руках игрока без стабильного контроля тросов: высокая мобильность сама по себе не гарантирует урон или победу.",
       "В командном бою опасно входить первой: без информации о контроле противника Фанни может потерять возможность безопасно выйти."
     ],
-    matchups: {
-      strongAgainst: [],
-      weakAgainst: []
-    },
-    synergies: [],
+    matchups: { strongAgainst: ["granger","clint","yve","kimmy","gord"], weakAgainst: ["franco","moskov","bruno","badang","phoveus"] }, synergies: ["natan","khufra","edith","bruno","faramis","masha"],
     itemNotes: [
       "Основной лесной набор по агрегированным сборкам ноября 2026: Assassin Emblem, Retribution, Tough Boots, Blade of the Heptaseas, Hunter Strike, Malefic Roar, War Axe и Queen's Wings. Порядок предметов в источниках отличается.",
       "MLBB.io агрегирует 11 пользовательских сборок: Assassin Emblem встречается в 7 из 11; Rupture — 10 из 11; Festival of Blood — 8 из 11; Killing Spree — 4 из 11. Это частота выбора в небольшом наборе, а не доказательство превосходства.",
@@ -374,7 +370,9 @@ export const heroProfiles = [
       "https://mlbb.io/en/hero/fanny/build",
       "https://mlbb-knowledge.vercel.app/heroes/17",
       "https://www.mlbbanalytics.com/heroes?hero=Fanny"
+    
     ],
+    matchupsReviewedAt: "2026-11-24", matchupsMethod: "Ranked matchup deltas from MLBB.io; statistical signal, not a guaranteed counter or synergy.",
     patch: {
       version: HERO_DB_PATCH,
       notes: [
@@ -417,11 +415,7 @@ export const heroProfiles = [
       "Уязвим после потраченных рывков и ультимейта: если цель пережила комбинацию, Нолан может оказаться рядом с противниками без надёжного выхода.",
       "В затяжных командных боях ему сложнее повторно находить безопасный угол входа; его преимущество чаще проявляется в коротких взрывных разменах."
     ],
-    matchups: {
-      strongAgainst: [],
-      weakAgainst: []
-    },
-    synergies: [],
+    matchups: { strongAgainst: ["estes","baxia","natan","zhuxin","bane"], weakAgainst: ["natalia","saber","hayabusa","jawhead","helcurt"] }, synergies: ["yve","esmeralda","zhuxin","valentina","freya","floryn"],
     itemNotes: [
       "Основа лесной сборки на патче 2.2.23: Assassin Emblem, Retribution, Blade of the Heptaseas, Hunter Strike и Malefic Roar. По источникам расходится порядок первых предметов и выбор ботинок.",
       "Один распространённый вариант: Magic Boots, Blade of the Heptaseas, Hunter Strike, Malefic Roar, Blade of Despair и Endless Battle. В обновлённых сборках также встречается Sky Piercer вместо раннего Heptaseas.",
@@ -449,7 +443,9 @@ export const heroProfiles = [
       "https://metammo.com/mobile-legends-guide/heroes/nolan",
       "https://www.mlbbanalytics.com/esports?tab=matches&tournament=msc-2026",
       "https://mldb.gg/id/hero/nolan"
+    
     ],
+    matchupsReviewedAt: "2026-11-24", matchupsMethod: "Ranked matchup deltas from MLBB.io; statistical signal, not a guaranteed counter or synergy.",
     patch: {
       version: HERO_DB_PATCH,
       notes: [
@@ -490,8 +486,7 @@ export const heroProfiles = [
       "После потраченного второго навыка становится сложнее угрожать повторным перемещением цели.",
       "Без команды, готовой продолжить контроль, одиночный вход часто не конвертируется в устранение."
     ],
-    matchups: { strongAgainst: [], weakAgainst: [] },
-    synergies: [],
+    matchups: { strongAgainst: ["nolan","arlott","zilong"], weakAgainst: ["sun","esmeralda","gloo","lolita","popol-and-kupa"] }, synergies: ["estes","marcel","bane","lolita","sun","chang-e"],
     itemNotes: [
       "Для роум-инициации MLBBHub показывает защитное направление: Rapid Boots, Dominance Ice, Antique Cuirass, Chastise Pauldron, Guardian Helmet и Immortality; это один вариант, а не обязательный набор.",
       "Выбор предметов должен учитывать, нужен ли команде дополнительный фронтлайн или более частые попытки пик-оффа. Подтверждённые матчапы и синергии пока не добавлены."
@@ -505,7 +500,10 @@ export const heroProfiles = [
       "https://liquipedia.net/mobilelegends/Jawhead",
       "https://mlbb-knowledge.vercel.app/heroes/54",
       "https://mlbbhub.com/ru/heroes/jawhead"
+    
+      "https://mlbb.io/en/hero/jawhead",
     ],
+    matchupsReviewedAt: "2026-11-24", matchupsMethod: "Ranked matchup deltas from MLBB.io; statistical signal, not a guaranteed counter or synergy.",
     patch: {
       version: HERO_DB_PATCH,
       notes: [
@@ -634,8 +632,7 @@ export const heroProfiles = [
       "Для стабильного урона требуется понимать дистанцию, направление и длительность удержания каждого навыка.",
       "Не следует считать бессмертную форму полной неуязвимостью: снижение физического урона не защищает от всех типов угроз."
     ],
-    matchups: { strongAgainst: [], weakAgainst: [] },
-    synergies: [],
+    matchups: { strongAgainst: ["natalia","atlas","karina","x-borg","floryn","bane","popol-and-kupa","ixia"], weakAgainst: ["harith","silvanna","harley","gusion","joy"] }, synergies: ["harith","barats","esmeralda","valentina","sora","odette"],
     itemNotes: [
       "MLBBHub для патча 2.2.23 показывает лесной вариант через Magic Boots, Hunter Strike, War Axe, Queen's Wings, Malefic Roar и Blade of Despair; MLBB.io также часто фиксирует Hunter Strike и War Axe.",
       "Assassin Emblem и Retribution — распространённое лесное направление в источниках. Выбор Ice Retribution и защитных предметов зависит от того, нужно ли догонять цель или переживать ответный урон."
@@ -650,7 +647,10 @@ export const heroProfiles = [
       "https://mlbbhub.com/ru/heroes/suyou",
       "https://mlbb.io/en/hero/suyou/build",
       "https://mlbbdex.com/en/heroes/suyou"
+    
+      "https://www.mlbbcore.com/heroes/suyou/counters/",
     ],
+    matchupsReviewedAt: "2026-11-24", matchupsMethod: "Ranked matchup deltas from MLBB.io and MLBBcore; sources differ in coverage, so values are statistical signals rather than guaranteed counters or synergies.",
     patch: {
       version: HERO_DB_PATCH,
       notes: [
@@ -688,8 +688,7 @@ export const heroProfiles = [
       "Для раскрытия пассивного эффекта нужно поддерживать контакт с целью и накапливать метки.",
       "Сильный контроль и дальнее давление могут не дать ей безопасно реализовать серию атак."
     ],
-    matchups: { strongAgainst: [], weakAgainst: [] },
-    synergies: [],
+    matchups: { strongAgainst: ["esmeralda","baxia","leomord","hilda","alice","thamuz"], weakAgainst: ["lolita","argus","minsitthar","sun","natalia"] }, synergies: ["x-borg","hanzo","gord","valir","baxia","alice"],
     itemNotes: [
       "MLBBHub для патча 2.2.23 предлагает вариант через Tough Boots, Demon Hunter Sword, Corrosion Scythe, Golden Staff, Malefic Gun и Rose Gold Meteor.",
       "Вариант предметов нужно адаптировать под защиту соперника и угрозу контроля; не считать один порядок универсальным."
@@ -703,7 +702,9 @@ export const heroProfiles = [
       "https://liquipedia.net/mobilelegends/Karrie",
       "https://www.mlbb.io/en/hero/karrie",
       "https://mlbbhub.com/ru/heroes/karrie"
+    
     ],
+    matchupsReviewedAt: "2026-11-24", matchupsMethod: "Ranked matchup deltas from MLBB.io; statistical signal, not a guaranteed counter or synergy.",
     patch: {
       version: HERO_DB_PATCH,
       notes: [
