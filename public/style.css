@@ -945,3 +945,20 @@ details.ency-info-card.visual>.ency-info-summary{display:grid}
 .ency-info-source-wrap{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:8px}
 .ency-info-source-wrap .ency-info-source{margin-top:0}
 .ency-info-checked{font-size:9px;color:#a997b2}
+
+
+/* 2026-11-24: portrait-accent neon treatment for encyclopedia hero cards and dossiers */
+.ency-catalog-counts{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:7px;margin:0 0 4px}
+.ency-catalog-counts span{padding:6px 9px;border:1px solid rgba(182,140,255,.25);border-radius:999px;background:rgba(22,18,34,.88);color:#c7b8dc;font-size:10px}
+.ency-catalog-counts b{color:#f0d7ff;margin-right:3px}
+.ency-hero-card{--hero-accent:#dc91ff;border-color:color-mix(in srgb,var(--hero-accent) 56%,transparent);box-shadow:0 0 0 1px color-mix(in srgb,var(--hero-accent) 12%,transparent),0 0 14px color-mix(in srgb,var(--hero-accent) 15%,transparent);transition:border-color .18s ease,box-shadow .18s ease,transform .18s ease}
+.ency-hero-card:focus-visible,.ency-hero-card:active{outline:2px solid var(--hero-accent);outline-offset:2px;box-shadow:0 0 0 1px var(--hero-accent),0 0 22px color-mix(in srgb,var(--hero-accent) 36%,transparent)}
+.ency-hero-image{border-color:color-mix(in srgb,var(--hero-accent) 72%,transparent);box-shadow:0 0 12px color-mix(in srgb,var(--hero-accent) 18%,transparent)}
+.ency-hero-copy>b{color:var(--hero-accent);text-shadow:0 0 12px color-mix(in srgb,var(--hero-accent) 40%,transparent)}
+.ency-hero-open{color:var(--hero-accent)}
+.ency-hero-modal{--hero-accent:#dc91ff;border-color:color-mix(in srgb,var(--hero-accent) 78%,#ffffff 8%);box-shadow:0 0 0 1px color-mix(in srgb,var(--hero-accent) 24%,transparent),0 0 34px color-mix(in srgb,var(--hero-accent) 28%,transparent),0 24px 90px #000c}
+.ency-hero-cover{border-bottom:1px solid color-mix(in srgb,var(--hero-accent) 54%,transparent)}
+.ency-hero-cover>img{filter:drop-shadow(0 0 18px color-mix(in srgb,var(--hero-accent) 48%,transparent)) drop-shadow(0 8px 16px rgba(0,0,0,.45))}
+.ency-hero-heading h2{color:var(--hero-accent);text-shadow:0 0 8px color-mix(in srgb,var(--hero-accent) 35%,transparent),0 2px 12px #000}
+.ency-hero-heading>small,.ency-profile-badge{color:var(--hero-accent);border-color:color-mix(in srgb,var(--hero-accent) 50%,transparent)}
+@media(hover:hover){.ency-hero-card:hover{transform:translateY(-2px);border-color:var(--hero-accent);box-shadow:0 0 0 1px color-mix(in srgb,var(--hero-accent) 28%,transparent),0 0 24px color-mix(in srgb,var(--hero-accent) 25%,transparent)}}
