@@ -1082,13 +1082,9 @@ test("counter-pick data audit exposes coverage and evidence gaps without guessin
   assert.equal(audit.matchup.weakMatchupCount, 488);
   assert.equal(audit.matchup.uniqueTargets, 130);
   assert.deepEqual(audit.matchup.targetsWithoutProfile, []);
-  assert.equal(audit.matchup.profilesWithRankedEvidence, 82);
+  assert.equal(audit.matchup.profilesWithRankedEvidence, 98);
   assert.equal(audit.matchup.profilesWithDatedMethodReview, 35);
-  assert.deepEqual(audit.matchup.profilesWithoutEvidence, [
-    "saber", "lesley", "lolita", "luo-yi", "lylia", "martis", "aamon",
-    "alice", "angela", "odette", "phoveus", "popol-and-kupa", "ruby",
-    "selena", "silvanna", "sora"
-  ]);
+  assert.deepEqual(audit.matchup.profilesWithoutEvidence, []);
 
   assert.deepEqual(audit.incompleteCombatProfiles, []);
   assert.deepEqual(audit.laneCoverage, {
@@ -1099,4 +1095,37 @@ test("counter-pick data audit exposes coverage and evidence gaps without guessin
     "Мид": 30
   });
   assert.equal(audit.legacyDraftCandidateCount, 32);
+});
+
+
+test("the final 16 matchup records are source-backed and match the current ranked tables", () => {
+  const expected = {
+    saber: [["nolan", "lunox", "ling"], ["leomord", "baxia", "miya"]],
+    lesley: [["claude", "bruno", "gatotkaca"], ["masha", "estes", "gloo"]],
+    lolita: [["cyclops", "edith", "harley"], ["aurora", "esmeralda", "zhuxin"]],
+    "luo-yi": [["estes", "faramis", "chip"], ["helcurt", "joy", "novaria"]],
+    lylia: [["johnson"], ["joy", "natalia", "chou"]],
+    martis: [["chip", "sora", "moskov"], ["x-borg", "minsitthar", "marcel"]],
+    aamon: [["cici", "claude", "hilda"], ["gloo", "lolita", "hayabusa"]],
+    alice: [["chip", "tigreal", "barats"], ["angela", "floryn", "valir"]],
+    angela: [["alice", "marcel", "balmond"], ["lolita", "franco", "zilong"]],
+    odette: [["kaja", "rafaela", "mathilda"], ["vale", "nana", "alpha"]],
+    phoveus: [["wanwan", "harith", "freya"], ["minsitthar", "x-borg", "alpha"]],
+    "popol-and-kupa": [["selena", "harley", "jawhead"], ["hanabi", "melissa", "atlas"]],
+    ruby: [["lunox", "sun", "joy"], ["x-borg", "phoveus", "gord"]],
+    selena: [["vale"], ["popol-and-kupa", "gloo", "chip"]],
+    silvanna: [["aamon", "floryn", "rafaela"], ["barats", "edith", "khufra"]],
+    sora: [["estes", "rafaela", "guinevere"], ["phoveus", "khufra", "alice"]]
+  };
+
+  for (const [id, [strongAgainst, weakAgainst]] of Object.entries(expected)) {
+    const hero = heroProfiles.find(entry => entry.id === id);
+    assert.ok(hero, id + " profile exists");
+    assert.deepEqual(hero.matchups.strongAgainst, strongAgainst, id + " strong matchups");
+    assert.deepEqual(hero.matchups.weakAgainst, weakAgainst, id + " weak matchups");
+    assert.ok(hero.matchupEvidence, id + " matchup evidence");
+    assert.equal(hero.matchupEvidence.checkedAt, "2026-11-24");
+    assert.match(hero.matchupEvidence.method, /measured all-rank ranked matchup/i);
+    assert.ok(hero.sources.includes(hero.matchupEvidence.source), id + " evidence source");
+  }
 });
