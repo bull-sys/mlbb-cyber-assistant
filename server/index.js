@@ -391,8 +391,12 @@ function analyze({lane, enemies = [], allies = [], myHero = ""}) {
   const physicalBuild = ["assassin","fighter","marksman"].includes(selected?.type);
   const magicBuild = selected?.type === "mage" || selectedProfile?.combat?.damage === "magic";
   const canUseItem = item => {
+    const tags = new Set(item.tags || []);
     if (item.category === "Защита") return true;
-    if (item.category === "Атака") return physicalBuild;
+    if (item.category === "Атака") {
+      if (tags.has("marksman") && selected?.type !== "marksman") return false;
+      return physicalBuild;
+    }
     if (item.category === "Магия" || item.category === "Магия / защита") return magicBuild || selected?.type === "support";
     return false;
   };
@@ -442,11 +446,15 @@ function analyze({lane, enemies = [], allies = [], myHero = ""}) {
       const profile = enemyProfileByName.get(hero.name);
       return profile?.combat?.damage === "physical" || ["assassin","fighter","marksman"].includes(hero.type);
     }).map(hero => hero.name);
-    if (tags.has("physical") && physicalTargets.length) add(5, "Добавляет защиту против физического урона", physicalTargets);
+    if (tags.has("physical") && item.category === "Защита" &&
+        (!tags.has("attack-speed") || speedTargets.length) && physicalTargets.length) {
+      add(5, "Добавляет защиту против физического урона", physicalTargets);
+    }
 
     const tankTargets = enemy.filter(hero => hero.type === "tank").map(hero => hero.name);
     if (tags.has("penetration") && tankTargets.length &&
-        ((physicalBuild && item.category === "Атака") || (magicBuild && item.category === "Магия"))) {
+        ((physicalBuild && item.category === "Атака" && item.name === "Злобный рык") ||
+         (magicBuild && item.category === "Магия" && item.name === "Божественный меч"))) {
       add(8, "Помогает пробивать защиту плотной передней линии", tankTargets);
     }
 
@@ -462,13 +470,13 @@ function analyze({lane, enemies = [], allies = [], myHero = ""}) {
   });
 
   const buildDetails = itemScores
-    .filter(item => item.score > 0 && canUseItem(items.find(source => source.name === item.name)))
+    .filter(item => item.score > 0 && item.targets.length > 0 && canUseItem(items.find(source => source.name === item.name)))
     .sort((a,b) => b.score - a.score)
     .filter((item,index,array) => !item.tags.includes("anti-heal") || array.findIndex(candidate => candidate.tags.includes("anti-heal")) === index)
     .slice(0,5)
     .map((item,index) => ({
       name:item.name,category:item.category,description:item.description,reasons:item.reasons,against:item.targets,
-      priority:index===0?"Высокий приоритет":item.score>=8?"Ключевой контрпредмет":"Ситуативный выбор",
+      priority:item.score>=10?"Высокий приоритет":item.score>=8?"Ключевой контрпредмет":"Ситуативный выбор",
       timing:item.tags.includes("anti-heal")?"Покупай, когда противники начинают активно восстанавливать здоровье"
         :item.tags.includes("magic-burst")?"Рассмотри до крупных командных боёв против магического прокаста"
         :item.tags.includes("anti-attack-speed")?"Покупай по мере усиления вражеского стрелка или бойца"
