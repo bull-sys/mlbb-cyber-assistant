@@ -227,3 +227,46 @@ test("equal counter scores retain catalogue order", () => {
   assert.equal(result.counters[0].score, result.counters[1].score);
   assert.deepEqual(result.counters.map(candidate => candidate.name), ["Бруно", "Грейнджер"]);
 });
+
+
+test("mage equipment fallback never inserts attack-category items", () => {
+  const result = run({
+    lane: "Мид",
+    myHero: "Эудора",
+    enemies: []
+  });
+
+  assert.ok(result.build.length > 0);
+  assert.ok(result.build.every(name =>
+    items.find(item => item.name === name)?.category !== "Атака"
+  ));
+});
+
+test("physical assassin equipment fallback never inserts magic-category items", () => {
+  const result = run({
+    lane: "Лес",
+    myHero: "Хелкарт",
+    enemies: []
+  });
+
+  assert.ok(result.build.length > 0);
+  assert.ok(result.build.every(name => {
+    const category = items.find(item => item.name === name)?.category;
+    return category !== "Магия" && category !== "Магия / защита";
+  }));
+});
+
+test("equipment recommendations contain no duplicate items and never exceed six slots", () => {
+  for (const myHero of ["Эудора", "Хелкарт", "Роджер", "Кэрри", "Тигрил"]) {
+    const result = run({
+      lane: myHero === "Эудора" ? "Мид"
+        : myHero === "Кэрри" ? "Золото"
+        : myHero === "Тигрил" ? "Роум" : "Лес",
+      myHero,
+      enemies: ["Минотавр", "Эудора", "Мия"]
+    });
+
+    assert.ok(result.build.length <= 6, myHero);
+    assert.equal(new Set(result.build).size, result.build.length, myHero);
+  }
+});
