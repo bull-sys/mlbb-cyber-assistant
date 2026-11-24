@@ -42,7 +42,12 @@ test("rejects malformed payloads, lanes, and unknown hero names", () => {
   }
 });
 
-test("rejects more than five picks and duplicate picks", () => {
+test("limits ally entries to four because the fifth allied slot is the player pick", () => {
+  assert.equal(isValidDraftRequest({ ...valid, allies: ["Ангела", "Линг", "Тигрил", "Хелкарт"] }, roles, isHeroName), true);
+  assert.equal(isValidDraftRequest({ ...valid, allies: ["Ангела", "Линг", "Тигрил", "Хелкарт", "Эудора"] }, roles, isHeroName), false);
+});
+
+test("rejects more than five enemy picks and duplicate picks", () => {
   assert.equal(isValidDraftRequest({ ...valid, enemies: Array(6).fill("Эудора") }, roles, isHeroName), false);
   assert.equal(isValidDraftRequest({ ...valid, enemies: ["Эудора", "Эудора"] }, roles, isHeroName), false);
   assert.equal(isValidDraftRequest({ ...valid, allies: ["Ангела", "Ангела"] }, roles, isHeroName), false);
