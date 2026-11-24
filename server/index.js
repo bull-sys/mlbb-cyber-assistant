@@ -153,10 +153,61 @@ app.post("/api/players/:id/like",auth,(req,res)=>{const target=Number(req.params
 app.get("/api/matches",auth,(req,res)=>{const rows=db.prepare(`SELECT u.id,u.nickname,p.hero,p.role,p.rank,p.style,p.game_id FROM likes l JOIN users u ON u.id=l.to_user JOIN profiles p ON p.user_id=u.id WHERE l.from_user=? AND EXISTS(SELECT 1 FROM likes x WHERE x.from_user=l.to_user AND x.to_user=l.from_user)`).all(req.user.id);res.json({matches:rows})});
 
 function analyze({lane, enemies = [], allies = [], myHero = ""}) {
-  const enemy = heroes.filter(h => enemies.includes(h.name));
+  const normalizeLane = value => ({
+    "Лес": "Лес", "Jungle": "Лес",
+    "Роум": "Роум", "Roam": "Роум",
+    "Опыт": "Опыт", "EXP": "Опыт", "EXP Lane": "Опыт",
+    "Линия опыта": "Опыт", "EXP-линия": "Опыт",
+    "Золото": "Золото", "Gold Lane": "Золото",
+    "Золотая линия": "Золото", "Линия золота": "Золото",
+    "Мид": "Мид", "Mid Lane": "Мид", "Центр": "Мид",
+    "Средняя линия": "Мид"
+  })[value] || null;
+  const laneTypes = {
+    "Убийца": "assassin", "Боец": "fighter", "Стрелок": "marksman",
+    "Маг": "mage", "Танк": "tank", "Поддержка": "support"
+  };
+  const legacyByName = new Map(heroes.map(hero => [hero.name, hero]));
   const profileByName = new Map(heroProfiles.map(profile => [profile.names?.ru, profile]).filter(([name]) => name));
-  const team = heroes.filter(h => allies.includes(h.name));
-  const selected = heroes.find(h => h.name === myHero);
+  const profileById = new Map(heroProfiles.map(profile => [profile.id, profile]));
+  const heroByName = new Map(heroProfiles.map(profile => {
+    const legacy = legacyByName.get(profile.names?.ru);
+    const combat = profile.combat || {};
+    const tags = new Set(legacy?.tags || []);
+    const type = legacy?.type || (profile.roles || []).map(role => laneTypes[role]).find(Boolean) || "fighter";
+    if (["high", "very_high"].includes(combat.burst)) tags.add("burst");
+    if (["high", "very_high"].includes(combat.mobility)) tags.add("mobility");
+    if (["high", "very_high"].includes(combat.sustain)) tags.add("sustain");
+    if (["high", "very_high"].includes(combat.engage)) tags.add("engage");
+    if (combat.control && !["none", "low", "unknown"].includes(combat.control)) tags.add("control");
+    if (combat.damage === "magic" || type === "mage") tags.add("magic");
+    if (type === "marksman") tags.add("marksman");
+    if (type === "tank") tags.add("frontline");
+    const profileText = [
+      ...(profile.strengths || []),
+      ...(profile.mechanics || [])
+    ].join(" ").toLocaleLowerCase("ru");
+    if (/лечени|восстановлени|вампир/.test(profileText)) tags.add("heal");
+    if (/задн.{0,12}лини|уязвим.{0,12}цели/.test(profileText)) tags.add("backline");
+    if (/изолированн.{0,12}цел/.test(profileText)) tags.add("isolated-targets");
+    if (/мобильн.{0,12}противник/.test(profileText)) tags.add("mobile-targets");
+    if (/передн.{0,12}лини|плотн.{0,12}противник/.test(profileText)) tags.add("frontline");
+    const lanes = new Set((profile.lanes || []).map(normalizeLane).filter(Boolean));
+    return [profile.names.ru, {
+      name: profile.names.ru,
+      role: legacy?.role || normalizeLane(profile.lanes?.[0]) || "",
+      type,
+      tags: [...tags],
+      style: legacy?.style || [],
+      strengths: legacy?.strengths || [],
+      lanes,
+      profile
+    }];
+  }));
+  const uniqueNames = values => [...new Set((Array.isArray(values) ? values : []).filter(Boolean))];
+  const enemy = uniqueNames(enemies).map(name => heroByName.get(name)).filter(Boolean);
+  const team = uniqueNames(allies).map(name => heroByName.get(name)).filter(Boolean);
+  const selected = heroByName.get(myHero) || null;
 
   const enemyTags = new Set(enemy.flatMap(h => h.tags || []));
   const allyTags = new Set(team.flatMap(h => h.tags || []));
@@ -257,123 +308,117 @@ function analyze({lane, enemies = [], allies = [], myHero = ""}) {
     });
   }
 
-  // Подбор контрпиков с учётом состава
-  const candidates = heroes
-    .filter(h =>
-      h.role === lane &&
-      !enemies.includes(h.name) &&
-      h.name !== myHero
-    )
-    .map(h => {
-      const tags = new Set(h.tags || []);
-      const strengths = new Set(h.strengths || []);
-      const style = new Set(h.style || []);
-      let score = 0;
+  // Контрпики строятся по всем 133 профилям, а не по старому списку из 32 героев.
+  // Статистический матчап — сигнал для ранжирования, а не гарантия победы.
+  const candidates = !enemy.length ? [] : heroProfiles
+    .filter(profile => {
+      const hero = heroByName.get(profile.names?.ru);
+      return hero &&
+        hero.lanes.has(normalizeLane(lane)) &&
+        !enemy.some(opponent => opponent.profile.id === profile.id) &&
+        !team.some(ally => ally.profile.id === profile.id) &&
+        profile.id !== selected?.profile.id;
+    })
+    .map(profile => {
+      let rawScore = 0;
       const reasons = [];
-
+      const matchedEnemies = [];
+      const riskyEnemies = [];
+      const synergies = [];
       const add = (points, reason) => {
-        score += points;
-        reasons.push(reason);
+        rawScore += points;
+        if (reason && !reasons.includes(reason)) reasons.push(reason);
       };
 
-      // Давление на стрелков и магов
-      if (
-        (enemyHas("marksman") || enemyHas("mage")) &&
-        (strengths.has("backline") ||
-         strengths.has("squishy-targets"))
-      ) {
-        add(4, "Имеет инструменты для давления на стрелков и магов");
-      }
+      for (const opponent of enemy) {
+        const enemyProfile = opponent.profile;
+        const ownStrongRank = (profile.matchups?.strongAgainst || []).indexOf(enemyProfile.id);
+        const enemyWeakRank = (enemyProfile.matchups?.weakAgainst || []).indexOf(profile.id);
+        const ownWeakRank = (profile.matchups?.weakAgainst || []).indexOf(enemyProfile.id);
+        const enemyStrongRank = (enemyProfile.matchups?.strongAgainst || []).indexOf(profile.id);
+        const positiveRanks = [ownStrongRank, enemyWeakRank].filter(rank => rank >= 0);
+        const negativeRanks = [ownWeakRank, enemyStrongRank].filter(rank => rank >= 0);
 
-      // Охота на одиночные цели
-      if (
-        strengths.has("isolated-targets") &&
-        (has("burst") || has("mobility"))
-      ) {
-        add(4, "Эффективен против изолированных противников");
-      }
-
-      // Ответ на мобильных героев
-      if (
-        has("mobility") &&
-        (tags.has("control") ||
-         strengths.has("mobile-targets"))
-      ) {
-        add(4, "Может сдерживать мобильных противников");
-      }
-
-      // Ответ на плотную переднюю линию
-      if (
-        enemyHas("tank") &&
-        (tags.has("tank-shred") ||
-         tags.has("armor-break") ||
-         strengths.has("frontline"))
-      ) {
-        add(4, "Полезен против плотной передней линии");
-      }
-
-      // Контроль и защита от инициации
-      if (
-        has("control") &&
-        (tags.has("anti-control") ||
-         style.has("counter-engage") ||
-         style.has("anti-dive"))
-      ) {
-        add(4, "Помогает переживать вражескую инициацию");
-      }
-
-      // Ответ на затяжные сражения
-      if (
-        (has("heal") || has("sustain")) &&
-        (tags.has("anti-heal") ||
-         strengths.has("extended-fight"))
-      ) {
-        add(3, "Полезен в затяжных боях против устойчивых целей");
-      }
-
-      // Командная синергия
-      if (
-        allyTags.has("engage") &&
-        (style.has("teamfight") ||
-         style.has("burst") ||
-         tags.has("burst"))
-      ) {
-        add(2, "Хорошо сочетается с инициацией союзников");
-      }
-
-      // Недостаток передней линии
-      if (!hasFrontline && tags.has("frontline")) {
-        add(3, "Укрепляет переднюю линию команды");
-      }
-
-      // Специализация на подборе целей
-      if (
-        style.has("pickoff") ||
-        style.has("hunt") ||
-        style.has("catch")
-      ) {
-        if (enemyHas("marksman") || enemyHas("mage")) {
-          add(2, "Может создавать давление на ключевые цели");
+        if (positiveRanks.length) {
+          const rank = Math.min(...positiveRanks);
+          const points = Math.max(2, 6 - rank);
+          add(points, "Статистическое преимущество по матчапу против " + opponent.name);
+          matchedEnemies.push(opponent.name);
+          if (positiveRanks.length > 1) {
+            add(2, "Преимущество подтверждается данными обеих сторон матчапа");
+          }
+        }
+        if (negativeRanks.length) {
+          const rank = Math.min(...negativeRanks);
+          const points = Math.max(2, 6 - rank);
+          add(-points, "Есть статистический риск в матчапе против " + opponent.name);
+          riskyEnemies.push(opponent.name);
         }
       }
 
-      const profile = profileByName.get(h.name) || null;
+      for (const ally of team) {
+        const candidateSynergy = (profile.synergies || []).includes(ally.profile.id);
+        const allySynergy = (ally.profile.synergies || []).includes(profile.id);
+        if (candidateSynergy || allySynergy) {
+          add(candidateSynergy && allySynergy ? 3 : 2,
+            "Есть статистический сигнал синергии с союзником " + ally.name);
+          synergies.push(ally.name);
+        }
+      }
+
+      const combat = profile.combat || {};
+      const enemyHasMobile = enemy.some(opponent =>
+        ["high", "very_high"].includes(opponent.profile.combat?.mobility)
+      );
+      const enemyHasDurableFrontline = enemy.filter(opponent =>
+        ["high", "very_high"].includes(opponent.profile.combat?.durability) ||
+        opponent.type === "tank"
+      ).length >= 2;
+      if (enemyHasMobile && combat.control && !["none", "low", "unknown"].includes(combat.control)) {
+        add(1, "Набор контроля полезен против мобильных противников");
+      }
+      if (enemyHasDurableFrontline &&
+          (["high", "very_high"].includes(combat.dps) || ["high", "very_high"].includes(combat.sustain))) {
+        add(1, "Профиль боя подходит для затяжного давления на плотную переднюю линию");
+      }
+
+      const hasDirectMatchup = matchedEnemies.length > 0;
+      const hasRisk = riskyEnemies.length > 0;
+      const matchupType = hasDirectMatchup
+        ? "direct-counter"
+        : synergies.length
+          ? "team-synergy"
+          : "situational";
+      if (!reasons.length) {
+        reasons.push("Подходит для выбранной линии; подтверждённого прямого преимущества против введённых героев в матчап-таблицах не найдено.");
+      } else if (!hasDirectMatchup && !synergies.length) {
+        reasons.push("Это ситуационная альтернатива, а не подтверждённая прямая контра.");
+      }
+
+      const matchupEvidence = profile.matchupEvidence || null;
+      const evidenceSource = matchupEvidence?.source ||
+        profile.sources?.find(source => source.includes("mlbb.io")) || null;
       return {
-        hero: h,
-        score,
+        hero: heroByName.get(profile.names.ru),
+        score: Math.max(0, rawScore),
+        rawScore,
         reason: [...new Set(reasons)].join("; "),
-        profileEvidence: profile ? {
+        matchupType,
+        matchedEnemies: uniqueNames(matchedEnemies),
+        riskyEnemies: uniqueNames(riskyEnemies),
+        profileEvidence: {
           identity: profile.mechanics?.[0] || null,
           strength: profile.strengths?.[0] || null,
           caution: profile.weaknesses?.[0] || null,
-          confidence: profile.confidence || "partial"
-        } : null
+          confidence: profile.confidence || "partial",
+          matchupSource: evidenceSource,
+          matchupCheckedAt: matchupEvidence?.checkedAt || profile.matchupsReviewedAt || null,
+          matchupMethod: matchupEvidence?.method || profile.matchupsMethod || null
+        }
       };
     })
-    .filter(x => x.score > 0)
-    .sort((a, b) => b.score - a.score)
+    .sort((a, b) => b.rawScore - a.rawScore || a.hero.name.localeCompare(b.hero.name, "ru"))
     .slice(0, 3);
-
 
   // Контрсборка: совместимость с выбранным героем + подтверждённые угрозы врагов.
   const selectedProfile = profileByName.get(myHero) || null;
