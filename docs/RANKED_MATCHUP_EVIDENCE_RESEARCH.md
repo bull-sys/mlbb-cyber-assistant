@@ -43,6 +43,13 @@ The matrix describes measured matchup edges from Moonton's GMS statistics and di
 
 The site supports lane/role filters for browsing eligible heroes. That filtering must not be interpreted as proof that the underlying pair statistic was collected only from games on that lane.
 
+### MLBB Core matchup and draft methodology
+
+- Matchup pages: https://mlbbcore.com/counters/
+- Draft tool: https://mlbbcore.com/draft/
+
+MLBB Core describes its pair-impact source as Moonton's GMS matchup feed, with a 15-day pair window and selectable rank. Its published methodology explicitly says Moonton does not publish per-pair game counts, and that the pair figures are read as team-level signals rather than lane duels because the source does not document lane scope. It also excludes heroes picked in under 0.2% of games from some matchup views due to noise. The lane selector organizes eligible heroes; it does not transform the underlying pair signal into lane-only outcomes.
+
 ## Evidence semantics to preserve in the product
 
 A future normalized record should keep these fields separate:
@@ -80,6 +87,7 @@ Never synthesize a sample size, absolute head-to-head win rate, or lane-specific
 
 - Rank-specific matchup evidence is available and suitable for improving the ranking signal.
 - Pair-level sample sizes are not published by the inspected public interfaces.
+- MLBB Core's documented GMS pair data is rank-selectable and uses a 15-day window, but is explicitly treated as a team-level signal, not a lane duel.
 - Lane-specific hero-vs-hero outcome evidence was **not** established by these sources.
 - Lane-specific hero win/pick rates and lane assignments can support lane-fit/meta context, but cannot replace a lane-scoped matchup sample.
 - A genuine lane-specific gold set still requires reviewed match/VOD evidence or a source that explicitly provides pair outcomes filtered by both heroes' lane in the same match.
