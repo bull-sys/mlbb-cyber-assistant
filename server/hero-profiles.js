@@ -4629,8 +4629,9 @@ export const heroProfiles = [
       "Низкая базовая устойчивость делает опасным прямое сближение с бойцами и убийцами.",
       "Для повторного контроля первым навыком требуется попасть дважды по одной цели в ограниченное время."
     ],
-    matchups: { strongAgainst: [], weakAgainst: [] },
-    synergies: [],
+    matchups: { strongAgainst: ["kadita", "hirara", "fanny"], weakAgainst: ["odette", "saber", "marcel"] },
+    matchupEvidence: { source: "https://www.mlbbcore.com/heroes/valentina/counters/", method: "Measured all-rank ranked matchup and ally win-rate shifts", patch: HERO_DB_PATCH, checkedAt: "2026-11-24" },
+    synergies: ["floryn", "lunox", "harley"],
     itemNotes: [
       "Основу сборки составляют магическая сила, пробивание и перезарядка; соотношение этих характеристик зависит от того, нужен ли команде частый контроль или более сильный разовый урон.",
       "Защитный предмет стоит рассмотреть против надёжного взрывного входа, поскольку Валентине важно пережить первый контакт и успеть применить скопированный ультимейт.",
@@ -4641,7 +4642,8 @@ export const heroProfiles = [
       targetPriority: ["Герой с ультимейтом, который даёт команде нужный контроль или начало боя", "Уязвимый противник, по которому можно безопасно реализовать метку и повторный страх", "Цель, чья позиция позволяет Валентине использовать скопированный ультимейт без опасного сближения"],
       avoid: ["Не копировать ультимейт автоматически по перезарядке.", "Не входить первой в бой ради нанесения урона пассивным эффектом.", "Не тратить второй навык вперёд, если после рывка не останется безопасного пути отхода."]
     },
-    sources: ["https://www.mlbb.io/en/hero/valentina", "https://liquipedia.net/mobilelegends/Valentina", "https://mlbbanalytics.com/heroes?search=Valentina"],
+    sources: [
+      "https://www.mlbbcore.com/heroes/valentina/counters/","https://www.mlbb.io/en/hero/valentina", "https://liquipedia.net/mobilelegends/Valentina", "https://mlbbanalytics.com/heroes?search=Valentina"],
     patch: { version: HERO_DB_PATCH, notes: ["Пассивный эффект, метка и повторный страх первого навыка, повторное применение второго навыка и копирование ультимейта сопоставлены по MLBB.io, Liquipedia и MLBB Analytics.", "Механика украденного ультимейта зависит от конкретного героя; профиль не объявляет один выбор универсально лучшим.", "Профессиональные проценты и статистические matchup-таблицы не используются как универсальные контрпики; VOD-разбор отдельно не выполнен."], reviewedAt: "2026-11-23" },
     confidence: "partial"
   },
@@ -4669,8 +4671,9 @@ export const heroProfiles = [
       "Если первый навык промахнулся, Вексане сложнее остановить бойца или убийцу, который уже добрался до неё.",
       "Часть ценности пассивного эффекта раскрывается только после смерти отмеченного врага рядом с другими целями."
     ],
-    matchups: { strongAgainst: [], weakAgainst: [] },
-    synergies: [],
+    matchups: { strongAgainst: ["gloo", "zhask", "sun"], weakAgainst: ["alice", "marcel", "benedetta"] },
+    matchupEvidence: { source: "https://www.mlbbcore.com/heroes/vexana/counters/", method: "Measured all-rank ranked matchup and ally win-rate shifts", patch: HERO_DB_PATCH, checkedAt: "2026-11-24" },
+    synergies: ["cyclops", "harley", "atlas"],
     itemNotes: [
       "Приоритет — магическая сила и пробивание для усиления взрывного урона, с перезарядкой для более частого контроля и использования ультимейта.",
       "Предметы с замедлением могут помочь удерживать противников в области второго навыка и рядом с Вечным стражем; защитный слот важен против мобильного входа.",
@@ -4681,7 +4684,8 @@ export const heroProfiles = [
       targetPriority: ["Противник, который начинает сближение с задней линией", "Сгруппированные цели, которых команда уже удерживает контролем", "Уязвимый герой, вынужденный проходить через узкий участок карты"],
       avoid: ["Не тратить первый навык без необходимости, если вражеский убийца ещё не показался.", "Не ставить второй навык на свободную цель без контроля или ограничения пути.", "Не выходить вперёд вслед за Вечным стражем, забывая о собственной безопасной позиции."]
     },
-    sources: ["https://www.mlbb.io/en/hero/vexana", "https://liquipedia.net/mobilelegends/Vexana", "https://metammo.com/mobile-legends-guide/heroes/vexana"],
+    sources: [
+      "https://www.mlbbcore.com/heroes/vexana/counters/","https://www.mlbb.io/en/hero/vexana", "https://liquipedia.net/mobilelegends/Vexana", "https://metammo.com/mobile-legends-guide/heroes/vexana"],
     patch: { version: HERO_DB_PATCH, notes: ["Пассивное проклятие, страх от первого навыка, задержка второго навыка и призыв Вечного стража сопоставлены по MLBB.io, Liquipedia и METAMMO.", "Числовые значения урона и длительности не закреплены, чтобы не переносить балансные коэффициенты между патчами.", "Рейтинговые синергии не превращены в подтверждённые тактические связки; профессиональный VOD-разбор не выполнен."], reviewedAt: "2026-11-23" },
     confidence: "partial"
   },
@@ -4709,8 +4713,9 @@ export const heroProfiles = [
       "Польза ультимейта ограничена, если команда не помогает удержать цель или рядом нет безопасной следующей цели.",
       "Рывки после атак требуют пространства и точного контроля дистанции; в тесной зоне можно случайно сместиться в опасное положение."
     ],
-    matchups: { strongAgainst: [], weakAgainst: [] },
-    synergies: [],
+    matchups: { strongAgainst: ["yin", "atlas", "kadita"], weakAgainst: ["phoveus", "cyclops", "lunox"] },
+    matchupEvidence: { source: "https://www.mlbbcore.com/heroes/wanwan/counters/", method: "Measured all-rank ranked matchup and ally win-rate shifts", patch: HERO_DB_PATCH, checkedAt: "2026-11-24" },
+    synergies: ["bruno", "roger", "ling"],
     itemNotes: [
       "Сборка обычно опирается на скорость атаки и эффекты базовых атак, поскольку они усиливают темп открытия слабых мест и мобильность пассивного эффекта.",
       "Физическое пробивание помогает против защищённых целей, а защитный предмет на короткое окно выживания стоит рассмотреть, если вражеская команда угрожает взрывным уроном.",
@@ -4721,7 +4726,8 @@ export const heroProfiles = [
       targetPriority: ["Цель, на которой уже открыты все слабые места", "Уязвимый герой, которого команда удерживает контролем", "Следующая доступная цель в радиусе перенаправления ультимейта после устранения первой"],
       avoid: ["Не тратить второй навык на незначительный эффект, если ожидается вражеский контроль.", "Не пытаться открыть все слабые места, находясь под угрозой немедленного взрывного урона.", "Не использовать ультимейт по цели, если после его завершения Ванван окажется без безопасной позиции."]
     },
-    sources: ["https://www.mlbb.io/en/hero/wanwan", "https://liquipedia.net/mobilelegends/Wanwan", "https://mlbb-knowledge.vercel.app/heroes/89"],
+    sources: [
+      "https://www.mlbbcore.com/heroes/wanwan/counters/","https://www.mlbb.io/en/hero/wanwan", "https://liquipedia.net/mobilelegends/Wanwan", "https://mlbb-knowledge.vercel.app/heroes/89"],
     patch: { version: HERO_DB_PATCH, notes: ["Пассивный эффект со слабыми местами, возвратные кинжалы, снятие контроля и условия ультимейта сопоставлены по MLBB.io, Liquipedia и MLBB Knowledge.", "Условия доступности ультимейта и продолжения серии описаны без закрепления числовых значений, которые могут измениться в балансе.", "Публичная выборка пользовательских сборок MLBB.io составляет один билд и не считается консенсусом; matchup-данные не превращены в универсальные контрпики."], reviewedAt: "2026-11-23" },
     confidence: "partial"
   },
@@ -4753,8 +4759,9 @@ export const heroProfiles = [
       "После взрыва ультимейта Икс.Борг остаётся без брони; неверный тайминг может превратить атаку в опасный размен.",
       "Ему сложнее быстро устранить одиночную мобильную цель, если та выходит из линии огня."
     ],
-    matchups: { strongAgainst: [], weakAgainst: [] },
-    synergies: [],
+    matchups: { strongAgainst: ["barats", "hylos", "terizla"], weakAgainst: ["benedetta", "floryn", "helcurt"] },
+    matchupEvidence: { source: "https://www.mlbbcore.com/heroes/xborg/counters/", method: "Measured all-rank ranked matchup and ally win-rate shifts", patch: HERO_DB_PATCH, checkedAt: "2026-11-24" },
+    synergies: ["sun", "hilda", "lukas"],
     itemNotes: [
       "Сборка обычно сочетает физическую силу и выживаемость: Икс.Боргу нужно достаточно урона для давления огнем и достаточно защиты, чтобы оставаться в контакте.",
       "Предметы на здоровье дополнительно влияют на запас брони в соответствии с текущим описанием пассивного эффекта; защиту выбирай под основной тип входящего урона.",
@@ -4765,7 +4772,8 @@ export const heroProfiles = [
       targetPriority: ["Сгруппированные герои, которых можно удерживать в потоке огня", "Передняя линия, на которой удобно накапливать перегрев и чистый урон", "Уязвимая цель, оказавшаяся на траектории безопасного ультимейта"],
       avoid: ["Не активировать ультимейт, если после взрыва команда не сможет прикрыть бездоспешное состояние.", "Не уходить далеко за припасами, если это отделяет героя от команды.", "Не пытаться вести огнемёт вслед за мобильной целью, теряя позицию передней линии."]
     },
-    sources: ["https://liquipedia.net/mobilelegends/X.Borg", "https://mlbb-knowledge.vercel.app/heroes/83", "https://mlbbhub.com/heroes/x-borg"],
+    sources: [
+      "https://www.mlbbcore.com/heroes/xborg/counters/","https://liquipedia.net/mobilelegends/X.Borg", "https://mlbb-knowledge.vercel.app/heroes/83", "https://mlbbhub.com/heroes/x-borg"],
     patch: { version: HERO_DB_PATCH, notes: ["Броня Фираги, перегрев и припасы, различия навыков в двух состояниях и самоуничтожение ультимейта сопоставлены по Liquipedia, MLBB Knowledge и MLBBHub.", "Числовые коэффициенты не зафиксированы как неизменные; учитывается текущая логика двух состояний.", "Статистические контрпики не перенесены в универсальные matchup-утверждения; профессиональный VOD-разбор остаётся отдельной задачей."], reviewedAt: "2026-11-23" },
     confidence: "partial"
   },
@@ -4795,8 +4803,9 @@ export const heroProfiles = [
       "Глобальный ультимейт раскрывает информацию, но сам по себе не гарантирует выигранную стычку или захват объекта.",
       "Если лес отстаёт по экономике, ему сложнее реализовать урон до того, как соперники соберут защиту."
     ],
-    matchups: { strongAgainst: [], weakAgainst: [] },
-    synergies: [],
+    matchups: { strongAgainst: ["khufra"], weakAgainst: ["uranus", "karina", "xavier"] },
+    matchupEvidence: { source: "https://www.mlbbcore.com/heroes/yi-sun-shin/counters/", method: "Measured all-rank ranked matchup and ally win-rate shifts", patch: HERO_DB_PATCH, checkedAt: "2026-11-24" },
+    synergies: ["floryn", "kagura"],
     itemNotes: [
       "Для лесной роли важны физический урон, критические эффекты и скорость атаки; конкретный баланс зависит от текущих предметов и выбранной эмблемы.",
       "Пробивание помогает против бронированных целей, а защитный слот может быть необходим, если вражеская команда легко добирается до стрелка.",
@@ -4807,7 +4816,8 @@ export const heroProfiles = [
       targetPriority: ["Цель, которую команда уже ограничила контролем", "Уязвимый герой на дистанции безопасного выстрела", "Герой, чьё положение важно раскрыть ультимейтом перед спором за объект"],
       avoid: ["Не входить в ближнюю дистанцию без готового пути отхода.", "Не тратить первый навык вперёд, если вражеский контроль ещё не использован.", "Не считать раскрытие карты ультимейтом заменой визуального контроля и своевременной ротации."]
     },
-    sources: ["https://liquipedia.net/mobilelegends/Yi_Sun-shin", "https://www.mlbb.io/en/hero/yi-sun-shin", "https://mlbbanalytics.com/heroes?hero=Yi+Sun-shin"],
+    sources: [
+      "https://www.mlbbcore.com/heroes/yi-sun-shin/counters/","https://liquipedia.net/mobilelegends/Yi_Sun-shin", "https://www.mlbb.io/en/hero/yi-sun-shin", "https://mlbbanalytics.com/heroes?hero=Yi+Sun-shin"],
     patch: { version: HERO_DB_PATCH, notes: ["Текущие Heavenly Vow, Traceless, Blood Floods и Mountain Shocker сопоставлены по Liquipedia, MLBB.io и MLBB Analytics.", "Учитывается актуальная механика переключения глефы и лука, усиленных атак после переключения и повторного управления кораблём.", "Профессиональные и рейтинговые показатели не используются как универсальные контрпики; VOD-разбор не выполнен."], reviewedAt: "2026-11-23" },
     confidence: "partial"
   },
@@ -4837,8 +4847,9 @@ export const heroProfiles = [
       "Вне ультимейта ему требуется правильно попасть вторым навыком и приблизиться к цели.",
       "Пассивный бонус слабее раскрывается рядом с союзниками, поэтому групповой бой не всегда даёт идеальные условия для нанесения максимального урона."
     ],
-    matchups: { strongAgainst: [], weakAgainst: [] },
-    synergies: [],
+    matchups: { strongAgainst: ["minsitthar", "diggie", "estes"], weakAgainst: ["esmeralda", "hilda", "gloo"] },
+    matchupEvidence: { source: "https://www.mlbbcore.com/heroes/yin/counters/", method: "Measured all-rank ranked matchup and ally win-rate shifts", patch: HERO_DB_PATCH, checkedAt: "2026-11-24" },
+    synergies: ["argus", "sun", "hilda"],
     itemNotes: [
       "Для взрывной дуэли важны физическая сила и пробивание; в лесу сборка должна учитывать обязательный темп зачистки и требования текущего патча.",
       "Если цель может пережить первую комбинацию, часть защиты и перезарядки может быть полезнее чрезмерного набора урона.",
@@ -4849,7 +4860,8 @@ export const heroProfiles = [
       targetPriority: ["Уязвимый маг или стрелок без готового защитного инструмента", "Герой, чьё временное отсутствие даёт союзникам численное преимущество", "Изолированная цель, против которой Инь имеет подтверждённое преимущество по ресурсам"],
       avoid: ["Не тратить ультимейт на наиболее защищённого героя только потому, что он ближе.", "Не уходить в измерение, если союзники уже начинают решающий бой без возможности дождаться возвращения.", "Не преследовать цель за пределами безопасной зоны после неудачной попытки дуэли."]
     },
-    sources: ["https://www.mlbb.io/en/hero/yin", "https://liquipedia.net/mobilelegends/Yin", "https://mlbb-knowledge.vercel.app/heroes/"],
+    sources: [
+      "https://www.mlbbcore.com/heroes/yin/counters/","https://www.mlbb.io/en/hero/yin", "https://liquipedia.net/mobilelegends/Yin", "https://mlbb-knowledge.vercel.app/heroes/"],
     patch: { version: HERO_DB_PATCH, notes: ["Пассивный бонус в одиночестве, Charged Punch, Instant Blast и изолирующий My Turn с формой Lieh сопоставлены по MLBB.io и текущим справочным описаниям.", "Профиль разделяет базовую форму и изменённые навыки Lieh; старые советы по предыдущим версиям навыков не используются как универсальные.", "Matchup и synergy массивы остаются пустыми до отдельной доказательной проверки; профессиональный VOD-разбор не выполнен."], reviewedAt: "2026-11-23" },
     confidence: "partial"
   },
@@ -4880,8 +4892,9 @@ export const heroProfiles = [
       "Если драконья форма проходит мимо ключевых целей, часть ценности ультимейта теряется.",
       "Снижение восстановления и эффекты, мешающие длительному контакту, уменьшают его устойчивость."
     ],
-    matchups: { strongAgainst: [], weakAgainst: [] },
-    synergies: [],
+    matchups: { strongAgainst: ["gloo", "minsitthar", "silvanna"], weakAgainst: ["masha", "lunox", "cici"] },
+    matchupEvidence: { source: "https://www.mlbbcore.com/heroes/yu-zhong/counters/", method: "Measured all-rank ranked matchup and ally win-rate shifts", patch: HERO_DB_PATCH, checkedAt: "2026-11-24" },
+    synergies: ["angela", "floryn", "thamuz"],
     itemNotes: [
       "Сборка обычно сочетает физическую силу, сокращение перезарядки и устойчивость, чтобы Чонг мог регулярно использовать навыки и оставаться в бою.",
       "Предметы на восстановление и защиту помогают дольше поддерживать контакт; при наличии у соперника сильного лечения учитывать предметы против восстановления.",
@@ -4892,7 +4905,8 @@ export const heroProfiles = [
       targetPriority: ["Задний ряд, который можно безопасно обойти формой дракона", "Сгруппированные цели для накопления зарядов пассивного эффекта", "Противник, чьё отталкивание нарушит защиту союзной команды"],
       avoid: ["Не запускать ультимейт без понимания, где находятся ключевые цели.", "Не расходовать все перемещения третьего навыка ради входа, если нужно сохранить возможность продолжить атаку.", "Не оставаться в глубине вражеской команды после окончания формы дракона без поддержки."]
     },
-    sources: ["https://liquipedia.net/mobilelegends/Yu_Zhong", "https://www.mlbb.io/en/hero/yu-zhong", "https://mlbb-knowledge.vercel.app/heroes/95"],
+    sources: [
+      "https://www.mlbbcore.com/heroes/yu-zhong/counters/","https://liquipedia.net/mobilelegends/Yu_Zhong", "https://www.mlbb.io/en/hero/yu-zhong", "https://mlbb-knowledge.vercel.app/heroes/95"],
     patch: { version: HERO_DB_PATCH, notes: ["Cursing Touch, Dragon Tail, Soul Grip, Furious Dive, Black Dragon Form и переход в Dragonoid Form сопоставлены по Liquipedia, MLBB.io и MLBB Knowledge.", "Профиль отдельно учитывает подготовку ультимейта, контроль-иммунитет формы дракона и увеличение дальности навыков после неё.", "Статистические matchup-дельты не превращены в универсальные контрпики; профессиональный VOD-разбор остаётся отдельной задачей."], reviewedAt: "2026-11-23" },
     confidence: "partial"
   },
@@ -4922,8 +4936,9 @@ export const heroProfiles = [
       "Если соперники не вынуждены проходить через звёздное поле, им проще отказаться от прямого столкновения.",
       "Второй навык требует правильного направления потока, иначе противник может выйти из линии повторных попаданий."
     ],
-    matchups: { strongAgainst: [], weakAgainst: [] },
-    synergies: [],
+    matchups: { strongAgainst: ["roger", "hylos"], weakAgainst: ["fanny", "saber", "freya"] },
+    matchupEvidence: { source: "https://www.mlbbcore.com/heroes/yve/counters/", method: "Measured all-rank ranked matchup and ally win-rate shifts", patch: HERO_DB_PATCH, checkedAt: "2026-11-24" },
+    synergies: ["carmilla", "hirara", "beatrix"],
     itemNotes: [
       "Приоритет — магическая сила, пробивание и перезарядка, чтобы поддерживать урон и чаще использовать контроль пространства.",
       "Предметы на замедление могут усилить удержание целей в потоке второго навыка; защитный слот полезен против угрозы внезапного сближения.",
@@ -4934,7 +4949,8 @@ export const heroProfiles = [
       targetPriority: ["Группа противников, вынужденная пройти через звёздное поле", "Уязвимые цели, которые уже замедлены кристаллом", "Противники, пытающиеся войти в зону объекта через узкий проход"],
       avoid: ["Не ставить ультимейт до того, как команда заняла позицию и может защитить Ив.", "Не считать устойчивость к отбрасыванию абсолютной защитой от подавления.", "Не оставаться на открытой линии после окончания поля, если вражеские мобильные герои ещё не показались."]
     },
-    sources: ["https://liquipedia.net/mobilelegends/Yve", "https://mlbbanalytics.com/heroes?hero=Yve", "https://playaware.gg/games/mlbb/wiki/hero/yve"],
+    sources: [
+      "https://www.mlbbcore.com/heroes/yve/counters/","https://liquipedia.net/mobilelegends/Yve", "https://mlbbanalytics.com/heroes?hero=Yve", "https://playaware.gg/games/mlbb/wiki/hero/yve"],
     patch: { version: HERO_DB_PATCH, notes: ["Galactic Power с тремя зарядами, Void Blast, повторное направление Void Crystal и Tap/Swipe режимы Real World Manipulation сверены по Liquipedia, MLBB Analytics и PlayAware.", "Устаревшая страница MLBB.io содержит старое описание пассивного эффекта на 10 зарядов; оно намеренно не использовано.", "Профиль учитывает исключение Suppression из устойчивости ультимейта; рейтинговые синергии и матчапы не объявляются универсальными."], reviewedAt: "2026-11-23" },
     confidence: "partial"
   },
@@ -4965,8 +4981,9 @@ export const heroProfiles = [
       "Автоматическая защита пассивного эффекта имеет длительную перезарядку и не заменяет постоянную защиту.",
       "Глобальный ультимейт не гарантирует победу в столкновении, если союзники не могут воспользоваться оглушением и ускорением."
     ],
-    matchups: { strongAgainst: [], weakAgainst: [] },
-    synergies: [],
+    matchups: { strongAgainst: ["natalia", "tigreal", "atlas"], weakAgainst: ["gloo", "floryn", "yu-zhong"] },
+    matchupEvidence: { source: "https://www.mlbbcore.com/heroes/zetian/counters/", method: "Measured all-rank ranked matchup and ally win-rate shifts", patch: HERO_DB_PATCH, checkedAt: "2026-11-24" },
+    synergies: ["lunox", "harley", "natalia"],
     itemNotes: [
       "Основу составляют магическая сила, пробивание и перезарядка, чтобы усилить волны феникса и чаще создавать глобальную угрозу.",
       "Поскольку Цзэтянь уязвима к сближению, защитный предмет может быть важнее небольшого дополнительного прироста урона против мобильного состава.",
@@ -4977,7 +4994,8 @@ export const heroProfiles = [
       targetPriority: ["Сгруппированные противники, которых можно задеть третьей волной", "Цели, проходящие через зону духа феникса", "Глобальное столкновение союзников, где оглушение и ускорение дадут немедленную пользу"],
       avoid: ["Не выходить вперёд ради попадания первой волной.", "Не тратить глобальный ультимейт только ради небольшого урона, если команда не может продолжить атаку.", "Не полагаться на автоматическую защиту пассивного эффекта, если её перезарядка ещё не завершилась."]
     },
-    sources: ["https://www.mobilelegends.com/en/help", "https://liquipedia.net/mobilelegends/Zetian", "https://metammo.com/mobile-legends-guide/heroes/zetian"],
+    sources: [
+      "https://www.mlbbcore.com/heroes/zetian/counters/","https://www.mobilelegends.com/en/help", "https://liquipedia.net/mobilelegends/Zetian", "https://metammo.com/mobile-legends-guide/heroes/zetian"],
     patch: { version: HERO_DB_PATCH, notes: ["Celestial Armament, три последовательные волны Phoenix Strike, повторное перемещение Phoenix Descent и глобальный Fury of the Phoenix сверены с официальным справочником Moonton, Liquipedia и METAMMO.", "Числовые коэффициенты оставлены в описаниях механики без закрепления как неизменные; значения могут меняться патчами.", "Рейтинговые статистические контрпики не превращены в универсальные matchup-утверждения; профессиональный VOD-разбор pending."], reviewedAt: "2026-11-23" },
     confidence: "partial"
   },
@@ -5008,8 +5026,9 @@ export const heroProfiles = [
       "Часть контроля зависит от попадания психического луча и последующей атаки порождения.",
       "Мобильные противники могут покинуть область постоянного урона и вынудить Заска менять позицию."
     ],
-    matchups: { strongAgainst: [], weakAgainst: [] },
-    synergies: [],
+    matchups: { strongAgainst: ["diggie", "kaja", "arlott"], weakAgainst: ["natan", "alice", "belerick"] },
+    matchupEvidence: { source: "https://www.mlbbcore.com/heroes/zhask/counters/", method: "Measured all-rank ranked matchup and ally win-rate shifts", patch: HERO_DB_PATCH, checkedAt: "2026-11-24" },
+    synergies: ["harley", "kagura", "lunox"],
     itemNotes: [
       "Урон порождения масштабируется от характеристик Заска, поэтому магическая сила и подходящие эффекты атаки усиливают его давление; проверяй актуальные взаимодействия предметов с атакой призыва.",
       "Сокращение перезарядки помогает чаще переставлять порождение и использовать контроль, а защитный предмет важен против обхода задней линии.",
@@ -5020,7 +5039,8 @@ export const heroProfiles = [
       targetPriority: ["Противник, проходящий через зону действия порождения", "Цель, которую можно одновременно задеть лучом и атакой существа", "Группа, вынужденная пересечь зону роя клонов"],
       avoid: ["Не оставлять порождение далеко позади себя.", "Не активировать слияние в точке, где враги могут обойти существо и атаковать самого Заска.", "Не рассчитывать на посмертное порождение как на замену выживанию и командной позиции."]
     },
-    sources: ["https://liquipedia.net/mobilelegends/Zhask", "https://metammo.com/mobile-legends-guide/heroes/zhask", "https://mlbbanalytics.com/heroes?hero=Zhask"],
+    sources: [
+      "https://www.mlbbcore.com/heroes/zhask/counters/","https://liquipedia.net/mobilelegends/Zhask", "https://metammo.com/mobile-legends-guide/heroes/zhask", "https://mlbbanalytics.com/heroes?hero=Zhask"],
     patch: { version: HERO_DB_PATCH, notes: ["Decimation, Nightmaric Spawn, Mind Eater, Hive Clones и Dominator's Descent сверены по Liquipedia, METAMMO и MLBB Analytics.", "Профиль различает обычное и усиленное слиянием состояние порождения, включая изменение позиционирования и усиленные навыки.", "Матчапы и синергии не выводятся из ограниченных статистических страниц; профессиональный VOD-разбор pending."], reviewedAt: "2026-11-23" },
     confidence: "partial"
   },
@@ -5050,8 +5070,9 @@ export const heroProfiles = [
       "Невысокая устойчивость без готового щита делает опасным открытое позиционирование.",
       "Длительное удержание второго навыка расходует ману, а возврат пассивного эффекта происходит постепенно."
     ],
-    matchups: { strongAgainst: [], weakAgainst: [] },
-    synergies: [],
+    matchups: { strongAgainst: ["gloo", "khufra", "hylos"], weakAgainst: ["nolan", "odette", "hayabusa"] },
+    matchupEvidence: { source: "https://www.mlbbcore.com/heroes/zhuxin/counters/", method: "Measured all-rank ranked matchup and ally win-rate shifts", patch: HERO_DB_PATCH, checkedAt: "2026-11-24" },
+    synergies: ["odette", "kagura", "freya"],
     itemNotes: [
       "Приоритет — запас маны, магическая сила и перезарядка, поскольку второй навык может долго удерживаться и расходует ресурс.",
       "Предметы на замедление и дополнительную выживаемость могут помочь удерживать врагов в радиусе фонаря; конкретный выбор зависит от угрозы со стороны соперника.",
@@ -5062,7 +5083,8 @@ export const heroProfiles = [
       targetPriority: ["Группа противников, проходящая через радиус фонаря", "Цель, которую можно удерживать в зоне до десяти зарядов", "Противники, уже замедленные первым навыком и ограниченные союзным контролем"],
       avoid: ["Не удерживать второй навык на месте, если вражеский убийца уже обошёл переднюю линию.", "Не расходовать ультимейт для перемещения вглубь команды без поддержки.", "Не бросать захваченных противников в сторону, где союзники не смогут продолжить атаку."]
     },
-    sources: ["https://liquipedia.net/mobilelegends/Zhuxin", "https://mlbb-knowledge.vercel.app/heroes/125", "https://mlbb.tools/heroes/zhuxin"],
+    sources: [
+      "https://www.mlbbcore.com/heroes/zhuxin/counters/","https://liquipedia.net/mobilelegends/Zhuxin", "https://mlbb-knowledge.vercel.app/heroes/125", "https://mlbb.tools/heroes/zhuxin"],
     patch: { version: HERO_DB_PATCH, notes: ["Crimson Butterflies, Fluttering Grace, десять зарядов Soul Snare, удержание/отпускание Lantern Flare и поле Crimson Beacon сверены по Liquipedia, MLBB Knowledge и MLBB.tools.", "Разные источники расходятся в верхнем количестве пассивных бабочек и процентах возврата маны; профиль описывает надёжно подтверждённую функцию пассивного эффекта, не фиксируя спорные числа.", "Пользовательские билды не имеют исходов матчей и не трактуются как доказанный консенсус."], reviewedAt: "2026-11-23" },
     confidence: "partial"
   },
@@ -5092,8 +5114,9 @@ export const heroProfiles = [
       "Урон заметно зависит от базовых атак и может быть ограничен обезоруживанием или контролем.",
       "В командном бою ему сложно добраться до заднего ряда, если передняя линия сохраняет строй."
     ],
-    matchups: { strongAgainst: [], weakAgainst: [] },
-    synergies: [],
+    matchups: { strongAgainst: ["x-borg", "cici", "claude"], weakAgainst: ["karina", "tigreal", "popol-and-kupa"] },
+    matchupEvidence: { source: "https://www.mlbbcore.com/heroes/zilong/counters/", method: "Measured all-rank ranked matchup and ally win-rate shifts", patch: HERO_DB_PATCH, checkedAt: "2026-11-24" },
+    synergies: ["gloo", "belerick", "akai"],
     itemNotes: [
       "Сборка обычно ориентирована на физическую силу и скорость атаки, чтобы чаще запускать пассивную серию и реализовывать усиление ультимейта.",
       "Пробивание и критические эффекты рассматриваются по фактической защите соперников; защитный слот может быть необходим из-за низкой базовой устойчивости.",
@@ -5104,7 +5127,8 @@ export const heroProfiles = [
       targetPriority: ["Уязвимый герой задней линии, оставшийся без защитных навыков", "Противник, которого можно перебросить в сторону союзной команды", "Цель с низким запасом здоровья, по которой можно безопасно продолжить серию после сброса навыка"],
       avoid: ["Не входить первым в группу с неиспользованным контролем.", "Не тратить ультимейт на погоню, если после сближения не будет безопасного выхода.", "Не рассчитывать на сброс второго навыка, если нет реальной возможности завершить устранение."]
     },
-    sources: ["https://mlbb-knowledge.vercel.app/heroes/16", "https://liquipedia.net/mobilelegends/Zilong", "https://mlbbanalytics.com/heroes?hero=Zilong"],
+    sources: [
+      "https://www.mlbbcore.com/heroes/zilong/counters/","https://mlbb-knowledge.vercel.app/heroes/16", "https://liquipedia.net/mobilelegends/Zilong", "https://mlbbanalytics.com/heroes?hero=Zilong"],
     patch: { version: HERO_DB_PATCH, notes: ["Dragon Flurry, Spear Flip, сброс перезарядки Spear Strike после устранения и усиление Supreme Warrior сверены по MLBB Knowledge, Liquipedia и MLBB Analytics.", "Текущий профиль учитывает ускоренное срабатывание пассивной серии во время ультимейта и усиление урона по ослабленной цели.", "Низкая турнирная выборка не трактуется как универсальная оценка силы; профессиональный VOD-разбор остаётся pending."], reviewedAt: "2026-11-23" },
     confidence: "partial"
   },
