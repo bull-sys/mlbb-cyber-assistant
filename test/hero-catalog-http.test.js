@@ -188,7 +188,7 @@ test("profile and draft HTTP validation reject catalog display names absent from
   assert.equal(legacyProfileResponse.status, 200);
 });
 
-test("draft HTTP analysis still receives legacy catalog inputs and returns existing results", async () => {
+test("draft HTTP analysis returns three sourced counter candidates from the full hero catalogue", async () => {
   const response = await request("/api/ai/draft", {
     method: "POST",
     token: createToken(1),
@@ -196,10 +196,10 @@ test("draft HTTP analysis still receives legacy catalog inputs and returns exist
   });
   assert.equal(response.status, 200);
   const result = await response.json();
-  assert.deepEqual(result.counters.map(({ name, score }) => ({ name, score })), [
-    { name: "Бруно", score: 4 },
-    { name: "Грейнджер", score: 4 }
-  ]);
+  assert.equal(result.counters.length, 3);
+  assert.ok(result.counters.every(candidate => candidate.role === "Золото"));
+  assert.ok(result.counters.every(candidate => candidate.profileEvidence?.matchupSource));
+  assert.ok(result.counters.every(candidate => candidate.reason.length > 0));
 });
 
 test("OCR candidate construction still receives the legacy hero names from /api/data", async () => {
