@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
 import { heroes, items } from "../server/data.js";
+import { heroProfiles, validateHeroProfiles } from "../server/hero-profiles.js";
 
 // Keep production code untouched: load the local analyze() declaration from
 // server/index.js and evaluate only that function with the real catalogue.
@@ -270,5 +271,33 @@ test("equipment recommendations contain no duplicate items and never exceed six 
 
     assert.ok(result.build.length <= 6, myHero);
     assert.equal(new Set(result.build).size, result.build.length, myHero);
+  }
+});
+
+
+test("structured hero profiles contain complete non-empty tactical sections", () => {
+  const validation = validateHeroProfiles();
+
+  assert.equal(validation.ok, true, validation.errors.join("; "));
+  assert.equal(validation.count, heroProfiles.length);
+  for (const profile of heroProfiles) {
+    assert.ok(profile.mechanics.length > 0, profile.id);
+    assert.ok(profile.strengths.length > 0, profile.id);
+    assert.ok(profile.weaknesses.length > 0, profile.id);
+    assert.ok(profile.matchups.strongAgainst.length > 0, profile.id);
+    assert.ok(profile.matchups.weakAgainst.length > 0, profile.id);
+    assert.ok(profile.synergies.length > 0, profile.id);
+    assert.ok(profile.itemNotes.length > 0, profile.id);
+    assert.ok(profile.teamfight.preferredPlan, profile.id);
+    assert.ok(profile.sources.length > 0, profile.id);
+  }
+});
+
+test("Jawhead and Saber profiles resolve to playable catalogue heroes", () => {
+  for (const profile of heroProfiles) {
+    assert.ok(
+      heroes.some(hero => hero.name === profile.names.ru),
+      profile.id + " must resolve by its Russian catalogue name"
+    );
   }
 });
