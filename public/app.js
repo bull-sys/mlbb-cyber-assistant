@@ -498,6 +498,8 @@ function renderEncyHeroDescription(remote,hero,tacticalProfile=null){
  const strengths=Array.isArray(tactical?.strengths)?tactical.strengths.filter(Boolean):[];
  const weaknesses=Array.isArray(tactical?.weaknesses)?tactical.weaknesses.filter(Boolean):[];
  const itemNotes=Array.isArray(tactical?.itemNotes)?tactical.itemNotes.filter(Boolean):[];
+ const emblemNotes=Array.isArray(tactical?.emblemNotes)?tactical.emblemNotes.filter(Boolean):[];
+ const talentNotes=Array.isArray(tactical?.talentNotes)?tactical.talentNotes.filter(Boolean):[];
  const teamfight=tactical?.teamfight||{};
  const listSection=(heading,items,emptyText,extraClass="")=>{
   if(!items.length)return '<section class="ency-tactical-block '+extraClass+'"><h4>'+esc(heading)+'</h4><p class="ency-unverified">'+esc(emptyText)+'</p></section>';
@@ -513,6 +515,8 @@ function renderEncyHeroDescription(remote,hero,tacticalProfile=null){
   tacticalSections.push(listSection("Приоритетные цели",Array.isArray(teamfight.targetPriority)?teamfight.targetPriority:[],"Приоритетные цели пока не проверены."));
   tacticalSections.push(listSection("Чего избегать",Array.isArray(teamfight.avoid)?teamfight.avoid:[],"Тактические ограничения пока не уточнены."));
   tacticalSections.push(listSection("Заметки по предметам",itemNotes,"Предметные заметки пока не проверены для этого профиля."));
+  tacticalSections.push(listSection("Эмблемы",emblemNotes,"Эмблема для этого профиля ещё не проверена."));
+  tacticalSections.push(listSection("Таланты эмблемы",talentNotes,"Таланты для этого профиля ещё не проверены."));
   if(mechanics.length>1)tacticalSections.push('<details class="ency-tactical-details"><summary>Все особенности механик · '+mechanics.length+'</summary><ol>'+mechanics.slice(1).map(item=>'<li>'+esc(item)+'</li>').join("")+'</ol></details>');
  }else{
   tacticalSections.push('<section class="ency-tactical-block"><h4>Тактический профиль</h4><p class="ency-unverified">Для этого персонажа пока нет проверенного расширенного профиля. Не будем придумывать сильные стороны, контрпики и советы по драфту.</p></section>');
