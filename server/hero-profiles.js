@@ -566,8 +566,16 @@ const rawHeroProfiles = [
         "После неудачного ультимейта или потери ключевых навыков его влияние в продолжительной командной драке заметно снижается."
       ],
       "matchups": {
-      "strongAgainst": ["nolan", "lunox", "ling"],
-      "weakAgainst": ["leomord", "baxia", "miya"]
+      "strongAgainst": ["nolan","lunox","ling"],
+      "weakAgainst": ["leomord","baxia","miya"]
+    },
+    "matchupEvidence": {
+      "source": "https://mlbb.io/en/hero/saber",
+      "method": "MLBB.io all-rank ranked matchup deltas; measured win-rate shifts are statistical signals, not guaranteed counters.",
+      "patch": "2.2.23",
+      "checkedAt": "2026-11-24",
+      "dataUpdatedAt": "2026-11-24",
+      "caution": "Interpret alongside selected lane, pick rate and team composition; this is not proof of a direct lane counter or a guaranteed result."
     },
     "matchupEvidence": {
       "source": "https://mlbb.io/en/hero/saber",
@@ -2909,8 +2917,16 @@ const rawHeroProfiles = [
         "Ультимейт можно закрыть другими героями, а подготовка выстрела ограничивает мобильность."
       ],
       "matchups": {
-      "strongAgainst": ["claude", "bruno", "gatotkaca"],
-      "weakAgainst": ["masha", "estes", "gloo"]
+      "strongAgainst": ["claude","bruno","gatotkaca"],
+      "weakAgainst": ["masha","estes","gloo"]
+    },
+    "matchupEvidence": {
+      "source": "https://mlbb.io/en/hero/lesley",
+      "method": "MLBB.io all-rank ranked matchup deltas; measured win-rate shifts are statistical signals, not guaranteed counters.",
+      "patch": "2.2.23",
+      "checkedAt": "2026-11-24",
+      "dataUpdatedAt": "2026-11-24",
+      "caution": "Interpret alongside selected lane, pick rate and team composition; this is not proof of a direct lane counter or a guaranteed result."
     },
     "matchupEvidence": {
       "source": "https://mlbb.io/en/hero/lesley",
@@ -2997,8 +3013,16 @@ const rawHeroProfiles = [
         "Невысокий постоянный урон: Лолита зависит от команды, чтобы реализовать созданное ею окно контроля."
       ],
       "matchups": {
-      "strongAgainst": ["cyclops", "edith", "bane"],
-      "weakAgainst": ["aurora", "esmeralda", "zhuxin"]
+      "strongAgainst": ["cyclops","edith","harley"],
+      "weakAgainst": ["aurora","esmeralda","zhuxin"]
+    },
+    "matchupEvidence": {
+      "source": "https://mlbb.io/en/hero/lolita",
+      "method": "MLBB.io all-rank ranked matchup deltas; measured win-rate shifts are statistical signals, not guaranteed counters.",
+      "patch": "2.2.23",
+      "checkedAt": "2026-11-24",
+      "dataUpdatedAt": "2026-11-23",
+      "caution": "Interpret alongside selected lane, pick rate and team composition; this is not proof of a direct lane counter or a guaranteed result."
     },
     "matchupEvidence": {
       "source": "https://mlbb.io/en/hero/lolita",
@@ -3085,8 +3109,16 @@ const rawHeroProfiles = [
         "Телепортация требует подготовки и координации: союзники могут не успеть войти в круг или неверно оценить точку прибытия."
       ],
       "matchups": {
-      "strongAgainst": ["estes", "faramis", "chip"],
-      "weakAgainst": ["helcurt", "joy", "novaria"]
+      "strongAgainst": ["estes","faramis","chip"],
+      "weakAgainst": ["helcurt","joy","novaria"]
+    },
+    "matchupEvidence": {
+      "source": "https://mlbb.io/en/hero/luo-yi",
+      "method": "MLBB.io all-rank ranked matchup deltas; measured win-rate shifts are statistical signals, not guaranteed counters.",
+      "patch": "2.2.23",
+      "checkedAt": "2026-11-24",
+      "dataUpdatedAt": "2026-11-24",
+      "caution": "Interpret alongside selected lane, pick rate and team composition; this is not proof of a direct lane counter or a guaranteed result."
     },
     "matchupEvidence": {
       "source": "https://mlbb.io/en/hero/luo-yi",
@@ -3174,7 +3206,15 @@ const rawHeroProfiles = [
       ],
       "matchups": {
       "strongAgainst": ["johnson"],
-      "weakAgainst": ["joy", "natalia", "chou"]
+      "weakAgainst": ["joy","natalia","chou"]
+    },
+    "matchupEvidence": {
+      "source": "https://mlbb.io/en/hero/lylia",
+      "method": "MLBB.io all-rank ranked matchup deltas; measured win-rate shifts are statistical signals, not guaranteed counters.",
+      "patch": "2.2.23",
+      "checkedAt": "2026-11-24",
+      "dataUpdatedAt": "2026-11-24",
+      "caution": "Interpret alongside selected lane, pick rate and team composition; this is not proof of a direct lane counter or a guaranteed result."
     },
     "matchupEvidence": {
       "source": "https://mlbb.io/en/hero/lylia",
@@ -3262,8 +3302,16 @@ const rawHeroProfiles = [
         "Ошибочный выбор цели для ультимейта может оставить Мартиса без инструмента продолжения атаки."
       ],
       "matchups": {
-      "strongAgainst": ["chip", "sora", "moskov"],
-      "weakAgainst": ["x-borg", "minsitthar", "marcel"]
+      "strongAgainst": ["chip","sora","moskov"],
+      "weakAgainst": ["x-borg","minsitthar","marcel"]
+    },
+    "matchupEvidence": {
+      "source": "https://mlbb.io/en/hero/martis",
+      "method": "MLBB.io all-rank ranked matchup deltas; measured win-rate shifts are statistical signals, not guaranteed counters.",
+      "patch": "2.2.23",
+      "checkedAt": "2026-11-24",
+      "dataUpdatedAt": "2026-11-24",
+      "caution": "Interpret alongside selected lane, pick rate and team composition; this is not proof of a direct lane counter or a guaranteed result."
     },
     "matchupEvidence": {
       "source": "https://mlbb.io/en/hero/martis",
@@ -3747,8 +3795,16 @@ const rawHeroProfiles = [
       "После неудачного входа у него мало надёжной защиты, если маскировка и замедление уже потрачены."
     ],
     "matchups": {
-      "strongAgainst": ["cici", "claude", "hilda"],
-      "weakAgainst": ["gloo", "lolita", "hayabusa"]
+      "strongAgainst": ["cici","claude","hilda"],
+      "weakAgainst": ["gloo","lolita","hayabusa"]
+    },
+    "matchupEvidence": {
+      "source": "https://mlbb.io/en/hero/aamon",
+      "method": "MLBB.io all-rank ranked matchup deltas; measured win-rate shifts are statistical signals, not guaranteed counters.",
+      "patch": "2.2.23",
+      "checkedAt": "2026-11-24",
+      "dataUpdatedAt": "2026-11-24",
+      "caution": "Interpret alongside selected lane, pick rate and team composition; this is not proof of a direct lane counter or a guaranteed result."
     },
     "matchupEvidence": {
       "source": "https://mlbb.io/en/hero/aamon",
@@ -3841,8 +3897,16 @@ const rawHeroProfiles = [
       "Если первый навык потрачен без продуманной точки повторного применения, Алиса теряет главный инструмент коррекции позиции."
     ],
     "matchups": {
-      "strongAgainst": ["chip", "tigreal", "barats"],
-      "weakAgainst": ["angela", "floryn", "valir"]
+      "strongAgainst": ["chip","tigreal","barats"],
+      "weakAgainst": ["angela","floryn","valir"]
+    },
+    "matchupEvidence": {
+      "source": "https://mlbb.io/en/hero/alice",
+      "method": "MLBB.io all-rank ranked matchup deltas; measured win-rate shifts are statistical signals, not guaranteed counters.",
+      "patch": "2.2.23",
+      "checkedAt": "2026-11-24",
+      "dataUpdatedAt": "2026-11-24",
+      "caution": "Interpret alongside selected lane, pick rate and team composition; this is not proof of a direct lane counter or a guaranteed result."
     },
     "matchupEvidence": {
       "source": "https://mlbb.io/en/hero/alice",
@@ -3934,8 +3998,16 @@ const rawHeroProfiles = [
       "Её собственный урон и зачистка волн ограничены по сравнению с полноценными магами."
     ],
     "matchups": {
-      "strongAgainst": ["alice", "marcel", "balmond"],
-      "weakAgainst": ["lolita", "franco", "zilong"]
+      "strongAgainst": ["alice","marcel","balmond"],
+      "weakAgainst": ["lolita","franco","zilong"]
+    },
+    "matchupEvidence": {
+      "source": "https://www.mlbb.io/en/hero/angela",
+      "method": "MLBB.io all-rank ranked matchup deltas; measured win-rate shifts are statistical signals, not guaranteed counters.",
+      "patch": "2.2.23",
+      "checkedAt": "2026-11-24",
+      "dataUpdatedAt": "2026-11-24",
+      "caution": "Interpret alongside selected lane, pick rate and team composition; this is not proof of a direct lane counter or a guaranteed result."
     },
     "matchupEvidence": {
       "source": "https://www.mlbb.io/en/hero/angela",
@@ -4027,8 +4099,16 @@ const rawHeroProfiles = [
       "Без обзора и прикрытия Одетте трудно безопасно занять позицию для массового ультимейта."
     ],
     "matchups": {
-      "strongAgainst": ["kaja", "rafaela", "mathilda"],
-      "weakAgainst": ["vale", "nana", "alpha"]
+      "strongAgainst": ["kaja","rafaela","mathilda"],
+      "weakAgainst": ["vale","nana","alpha"]
+    },
+    "matchupEvidence": {
+      "source": "https://mlbb.io/en/hero/odette",
+      "method": "MLBB.io all-rank ranked matchup deltas; measured win-rate shifts are statistical signals, not guaranteed counters.",
+      "patch": "2.2.23",
+      "checkedAt": "2026-11-24",
+      "dataUpdatedAt": "2026-11-24",
+      "caution": "Interpret alongside selected lane, pick rate and team composition; this is not proof of a direct lane counter or a guaranteed result."
     },
     "matchupEvidence": {
       "source": "https://mlbb.io/en/hero/odette",
@@ -4120,8 +4200,16 @@ const rawHeroProfiles = [
       "Если команда не поддерживает вход, Фовиус может оказаться глубоко среди противников после прыжка."
     ],
     "matchups": {
-      "strongAgainst": ["wanwan", "harith", "freya"],
-      "weakAgainst": ["minsitthar", "x-borg", "alpha"]
+      "strongAgainst": ["wanwan","harith","freya"],
+      "weakAgainst": ["minsitthar","x-borg","alpha"]
+    },
+    "matchupEvidence": {
+      "source": "https://mlbb.io/en/hero/phoveus",
+      "method": "MLBB.io all-rank ranked matchup deltas; measured win-rate shifts are statistical signals, not guaranteed counters.",
+      "patch": "2.2.23",
+      "checkedAt": "2026-11-24",
+      "dataUpdatedAt": "2026-11-23",
+      "caution": "Interpret alongside selected lane, pick rate and team composition; this is not proof of a direct lane counter or a guaranteed result."
     },
     "matchupEvidence": {
       "source": "https://mlbb.io/en/hero/phoveus",
@@ -4216,8 +4304,16 @@ const rawHeroProfiles = [
       "Без подготовленных ловушек сложнее контролировать пространство и заранее защищать подходы к объектам."
     ],
     "matchups": {
-      "strongAgainst": ["selena", "harley", "jawhead"],
-      "weakAgainst": ["hanabi", "melissa", "atlas"]
+      "strongAgainst": ["selena","harley","jawhead"],
+      "weakAgainst": ["hanabi","melissa","atlas"]
+    },
+    "matchupEvidence": {
+      "source": "https://mlbb.io/en/hero/popol-and-kupa",
+      "method": "MLBB.io all-rank ranked matchup deltas; measured win-rate shifts are statistical signals, not guaranteed counters.",
+      "patch": "2.2.23",
+      "checkedAt": "2026-11-24",
+      "dataUpdatedAt": "2026-11-24",
+      "caution": "Interpret alongside selected lane, pick rate and team composition; this is not proof of a direct lane counter or a guaranteed result."
     },
     "matchupEvidence": {
       "source": "https://mlbb.io/en/hero/popol-and-kupa",
@@ -4310,8 +4406,16 @@ const rawHeroProfiles = [
       "Без союзников рядом притяжение нескольких врагов может превратиться в опасное сближение вместо успешного начала боя."
     ],
     "matchups": {
-      "strongAgainst": ["lunox", "sun", "argus"],
-      "weakAgainst": ["x-borg", "phoveus", "gord"]
+      "strongAgainst": ["lunox","sun","joy"],
+      "weakAgainst": ["x-borg","phoveus","gord"]
+    },
+    "matchupEvidence": {
+      "source": "https://mlbb.io/en/hero/ruby",
+      "method": "MLBB.io all-rank ranked matchup deltas; measured win-rate shifts are statistical signals, not guaranteed counters.",
+      "patch": "2.2.23",
+      "checkedAt": "2026-11-24",
+      "dataUpdatedAt": "2026-11-20",
+      "caution": "Interpret alongside selected lane, pick rate and team composition; this is not proof of a direct lane counter or a guaranteed result."
     },
     "matchupEvidence": {
       "source": "https://mlbb.io/en/hero/ruby",
@@ -4405,7 +4509,15 @@ const rawHeroProfiles = [
     ],
     "matchups": {
       "strongAgainst": ["vale"],
-      "weakAgainst": ["popol-and-kupa", "gloo", "chip"]
+      "weakAgainst": ["popol-and-kupa","gloo","chip"]
+    },
+    "matchupEvidence": {
+      "source": "https://mlbb.io/en/hero/selena",
+      "method": "MLBB.io all-rank ranked matchup deltas; measured win-rate shifts are statistical signals, not guaranteed counters.",
+      "patch": "2.2.23",
+      "checkedAt": "2026-11-24",
+      "dataUpdatedAt": "2026-11-24",
+      "caution": "Interpret alongside selected lane, pick rate and team composition; this is not proof of a direct lane counter or a guaranteed result."
     },
     "matchupEvidence": {
       "source": "https://mlbb.io/en/hero/selena",
@@ -4498,8 +4610,16 @@ const rawHeroProfiles = [
       "Сборка с чрезмерным упором только в магический урон делает её уязвимой для ответного фокуса."
     ],
     "matchups": {
-      "strongAgainst": ["aamon", "floryn", "rafaela"],
-      "weakAgainst": ["barats", "edith", "khufra"]
+      "strongAgainst": ["aamon","floryn","rafaela"],
+      "weakAgainst": ["barats","edith","khufra"]
+    },
+    "matchupEvidence": {
+      "source": "https://mlbb.io/en/hero/silvanna",
+      "method": "MLBB.io all-rank ranked matchup deltas; measured win-rate shifts are statistical signals, not guaranteed counters.",
+      "patch": "2.2.23",
+      "checkedAt": "2026-11-24",
+      "dataUpdatedAt": "2026-11-24",
+      "caution": "Interpret alongside selected lane, pick rate and team composition; this is not proof of a direct lane counter or a guaranteed result."
     },
     "matchupEvidence": {
       "source": "https://mlbb.io/en/hero/silvanna",
@@ -4591,8 +4711,16 @@ const rawHeroProfiles = [
       "После агрессивного входа Сора может оказаться глубоко среди врагов, особенно если выбран Гром и не осталось безопасного маршрута отхода."
     ],
     "matchups": {
-      "strongAgainst": ["estes", "rafaela", "roger"],
-      "weakAgainst": ["phoveus", "khufra", "alice"]
+      "strongAgainst": ["estes","rafaela","guinevere"],
+      "weakAgainst": ["phoveus","khufra","alice"]
+    },
+    "matchupEvidence": {
+      "source": "https://mlbb.io/en/hero/sora",
+      "method": "MLBB.io all-rank ranked matchup deltas; measured win-rate shifts are statistical signals, not guaranteed counters.",
+      "patch": "2.2.23",
+      "checkedAt": "2026-11-24",
+      "dataUpdatedAt": "2026-11-24",
+      "caution": "Interpret alongside selected lane, pick rate and team composition; this is not proof of a direct lane counter or a guaranteed result."
     },
     "matchupEvidence": {
       "source": "https://mlbb.io/en/hero/sora",
