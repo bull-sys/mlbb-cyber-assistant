@@ -984,3 +984,13 @@ details.ency-info-card.visual>.ency-info-summary{display:grid}
 .matchup-source a:hover{text-decoration:underline}
 .team-plan-card p{margin:6px 0 0;font-size:11px;line-height:1.55;color:#c9c6d8}
 @media(max-width:560px){.matchup-card,.team-plan-card{padding:11px}.matchup-confidence{font-size:8px}}
+
+
+/* Per-match counter-item explanations */
+.matchup-item-answer{margin-top:10px;padding:9px 10px;border:1px solid rgba(255,211,110,.2);border-radius:9px;background:rgba(255,190,85,.055)}
+.matchup-item-answer>small{font-size:9px;letter-spacing:.08em;color:#ffd78a;font-weight:700}
+.matchup-item-answer ul{margin:7px 0 0;padding-left:17px;display:grid;gap:6px}
+.matchup-item-answer li{font-size:11px;line-height:1.45;color:#e7ddc9}
+.matchup-item-answer li span{display:block;color:#bdb5a8;font-size:10px;margin-top:2px}
+.build-targets{font-size:10px!important;color:#9bdde9!important;margin-top:5px!important}
+.build-timing{font-size:10px!important;color:#d5bd8b!important;margin-top:4px!important}
