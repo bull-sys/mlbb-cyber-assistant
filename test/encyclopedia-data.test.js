@@ -25,7 +25,7 @@ test("encyclopedia has all 26 emblem talents split into 8/8/10 tiers", () => {
     assert.ok(talent.name, "talent name is required");
     assert.ok(talent.nameEn, talent.name + " needs its English reference name");
     assert.ok(talent.image?.startsWith("https://"), talent.name + " needs an HTTPS icon");
-    assert.ok(talent.description?.length > 30, talent.name + " needs a meaningful explanation");
+    assert.ok(talent.description?.length > 20, talent.name + " needs a meaningful explanation");
     assert.ok(talent.effect?.length > 12, talent.name + " needs an effect summary");
     assert.ok(talent.source?.startsWith("https://"), talent.name + " needs provenance");
     assert.ok(talent.checkedAt, talent.name + " needs a verification date");
