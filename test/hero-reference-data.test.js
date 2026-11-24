@@ -135,31 +135,3 @@ test("encyclopedia returns dated local passport data when the live source is una
     globalThis.fetch = originalFetch;
   }
 });
-
-
-
-test("legacy detailed profiles remain linked to known catalogue entries", () => {
-  const catalogIds = new Set(heroCatalog.map(hero => hero.id));
-  assert.equal(heroProfiles.length, 133);
-  for (const profile of heroProfiles) {
-    assert.ok(catalogIds.has(profile.id), "profile without catalogue entry: " + profile.id);
-  }
-});
-
-test("encyclopedia returns dated local passport data when the live source is unavailable", async () => {
-  const originalFetch = globalThis.fetch;
-  globalThis.fetch = async () => { throw new Error("offline test"); };
-  try {
-    const hero = heroCatalog.find(entry => entry.id === "chang-e");
-    const result = await getHeroKnowledge(hero);
-    assert.equal(result.ok, true);
-    assert.equal(result.fallback, true);
-    assert.equal(result.profile.name, "Chang'e");
-    assert.equal(result.profile.roles[0], "Маг");
-    assert.ok(result.profile.stats.hp1 > 0);
-    assert.equal(result.source.license, "CC BY-SA");
-    assert.equal(result.updatedAt, "2026-11-20");
-  } finally {
-    globalThis.fetch = originalFetch;
-  }
-});
