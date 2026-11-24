@@ -229,6 +229,25 @@ test("equal counter scores retain catalogue order", () => {
   assert.deepEqual(result.counters.map(candidate => candidate.name), ["Бруно", "Грейнджер"]);
 });
 
+test("draft analysis returns hero-specific mechanics, counterplay weaknesses, and provenance", () => {
+  const result = run({ enemies: ["Хелкарт"] });
+  assert.equal(result.enemyMatchups.length, 1);
+  const matchup = result.enemyMatchups[0];
+  assert.equal(matchup.name, "Хелкарт");
+  assert.ok(matchup.mechanics.length > 0);
+  assert.ok(matchup.weaknesses.length > 0);
+  assert.ok(matchup.reviewedAt);
+  assert.ok(matchup.sources.length > 0);
+});
+
+test("team plan adapts to enemy composition threats", () => {
+  const result = run({ enemies: ["Хелкарт", "Тигрил", "Минотавр"] });
+  const titles = result.teamPlan.map(item => item.title);
+  assert.ok(titles.includes("Защити уязвимую заднюю линию"));
+  assert.ok(titles.includes("Не собирайтесь в одну точку до инициации"));
+  assert.ok(titles.includes("Срежь восстановление и фокусируйте одну цель"));
+});
+
 test("counter-picks include profile-specific identity, strength, and caution", () => {
   const result = run({ lane: "Золото", enemies: ["Эйдора"] });
   assert.ok(result.counters.length > 0);
