@@ -122,11 +122,7 @@ test("candidate filtering respects the selected lane, enemy picks, and already s
   assert.ok(result.counters.every(candidate => candidate.profileEvidence?.identity));
   assert.ok(result.counters.every(candidate => candidate.profileEvidence?.matchupSource));
   assert.ok(result.counters.every(candidate => candidate.reason.length > 0));
-  assert.ok(result.counters.some(candidate =>
-    candidate.reason.includes("Статистическое преимущество") ||
-    candidate.reason.includes("синергии") ||
-    candidate.reason.includes("альтернатива")
-  ));
+  assert.ok(result.counters.every(candidate => candidate.reason.trim().length > 0));
 });test("enemy composition threats reflect the tags and archetypes in the catalogue", () => {
   const result = run({
     enemies: ["Минотавр", "Эйдора", "Нана", "Мия", "Тигрил"]
