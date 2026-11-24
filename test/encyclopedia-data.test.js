@@ -179,7 +179,7 @@ test("encyclopedia resolves item artwork from MLBBDex slugs", () => {
   assert.match(appSource, /function encyItemImage\(item\)/);
   assert.match(appSource, /encyRemoteAssets\?\.items\|\|\[\]/);
   assert.match(appSource, /entry\?\.slug===slug/);
-  assert.match(assetAdapterSource, /visuels\\/objets\\//);
+  assert.ok(assetAdapterSource.includes("/visuels/objets/"));
   assert.match(appSource, /encyItemImage\(x\)/);
   assert.match(appSource, /onerror=.*ency-info-icon placeholder/s);
 });
