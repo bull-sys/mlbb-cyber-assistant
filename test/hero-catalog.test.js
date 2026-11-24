@@ -67,7 +67,7 @@ test("Jawhead and Dyrroth have the approved catalog identities", () => {
   assert.equal(jawhead.displayNameRu, "Кусака");
   assert.ok(dyrroth);
   assert.equal(dyrroth.nameEn, "Dyrroth");
-  assert.equal(dyrroth.displayNameRu, "Диррот");
+  assert.equal(dyrroth.displayNameRu, "Дариус");
   assert.equal(dyrroth.localization.status, "user_confirmed");
 });
 
