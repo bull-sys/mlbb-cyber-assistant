@@ -489,6 +489,63 @@ function analyze({lane, enemies = [], allies = [], myHero = ""}) {
       .map(item=>({name:item.name,reason:item.reasons.join("; "),priority:item.priority}))
   }));
 
+  // Boots and roam blessings are selected separately from the six main item slots.
+  const magicEnemyCount = enemy.filter(hero => {
+    const profile = enemyProfileByName.get(hero.name);
+    return profile?.combat?.damage === "magic" || hero.type === "mage";
+  }).length;
+  const physicalEnemyCount = enemy.filter(hero => {
+    const profile = enemyProfileByName.get(hero.name);
+    return profile?.combat?.damage === "physical" || ["assassin","fighter","marksman"].includes(hero.type);
+  }).length;
+  const controlEnemyCount = enemy.filter(hero =>
+    (hero.tags || []).some(tag => ["control","engage","silence"].includes(tag))
+  ).length;
+  let bootName = "Ботинки";
+  let bootReason = "Базовая обувь для ранней игры; финальный вариант зависит от фактической угрозы и контроля противника.";
+  if (controlEnemyCount > 0 || magicEnemyCount >= 2) {
+    bootName = "Ботинки стойкости";
+    bootReason = "Сокращают длительность контроля и дают магическую защиту; особенно полезны против нескольких магов или героев с контролем.";
+  } else if (physicalEnemyCount >= 2) {
+    bootName = "Ботинки воина";
+    bootReason = "Добавляют физическую защиту и накапливают её при получении физического урона.";
+  }
+  const bootRecommendation = {
+    name: bootName,
+    reason: bootReason,
+    against: enemy.filter(hero => {
+      const profile = enemyProfileByName.get(hero.name);
+      return bootName === "Ботинки стойкости"
+        ? (profile?.combat?.damage === "magic" || hero.type === "mage" || (hero.tags || []).some(tag => ["control","engage","silence"].includes(tag)))
+        : bootName === "Ботинки воина"
+          ? profile?.combat?.damage === "physical" || ["assassin","fighter","marksman"].includes(hero.type)
+          : false;
+    }).map(hero => hero.name),
+    source: "https://metammo.com/mobile-legends-guide/items",
+    checkedAt: "2026-10-30"
+  };
+
+  let roamRecommendation = null;
+  if (lane === "Роум") {
+    const ownTags = new Set(selected?.tags || []);
+    const roamName = ownTags.has("heal") || ownTags.has("protect")
+      ? "Благословение"
+      : ownTags.has("engage") || ownTags.has("control")
+        ? "Скрытность"
+        : ownTags.has("pickoff")
+          ? "Удар по слабому месту"
+          : "Поддержка";
+    const roamItem = items.find(item => item.name === roamName);
+    roamRecommendation = roamItem ? {
+      name: roamItem.name,
+      englishName: roamItem.englishName,
+      reason: roamItem.description,
+      passive: roamItem.passive,
+      source: roamItem.source,
+      checkedAt: roamItem.checkedAt
+    } : null;
+  }
+
   const emblem = selected?.type === "mage" ? "Мага"
     : selected?.type === "marksman" ? "Стрелка"
     : selected?.type === "tank" ? "Танка"
@@ -510,6 +567,8 @@ function analyze({lane, enemies = [], allies = [], myHero = ""}) {
     build: buildDetails.map(x => x.name),
     buildDetails,
     itemCatalogCount: items.length,
+    bootRecommendation,
+    roamRecommendation,
     emblem,
     talentTiers: ["Разрыв", "Мастер-убийца", "Серия убийств"],
     spell: lane === "Лес" ? "Возмездие" : "Вспышка",
