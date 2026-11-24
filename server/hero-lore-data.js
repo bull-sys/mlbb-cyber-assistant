@@ -1,5 +1,5 @@
 /**
- * Original Russian summaries of 31 previously missing local hero biographies.
+ * Original Russian summaries for the 133-hero local roster.
  * Source: achedon12/mlbb content/fr/lore/*.json, pinned to commit
  * 92f0fe94e4226ab6057db25711c4d65b3ca12130.
  * The source repository attributes its factual lore data to the Mobile Legends
