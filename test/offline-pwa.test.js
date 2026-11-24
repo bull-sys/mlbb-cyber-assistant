@@ -121,7 +121,7 @@ test("draft picker supports role and lane filters and concise tactical card fact
 
 
 test("multi-select picker stays open while filling a team and closes at five", () => {
- assert.match(app, /if\(arr\.length>=5\)\{\$\("heroPicker"\)\.classList\.add\("hidden"\)/);
+ assert.match(app, /if\(arr\.length>=\(pickerTarget==="allies"\?4:5\)\)\{\$\("heroPicker"\)\.classList\.add\("hidden"\)/);
  assert.match(app, /renderHeroPicker\(\);/);
  assert.match(app, /Выбрано "\+current\.length\+" из 5/);
  assert.match(css, /\.hero-tile\.selected/);
