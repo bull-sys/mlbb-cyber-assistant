@@ -699,8 +699,11 @@ test("Mathilda has a sourced partial tactical profile with distinct support and 
   assert.equal(mathilda.confidence, "partial");
   assert.equal(mathilda.patch.version, HERO_DB_PATCH);
   assert.equal(mathilda.patch.reviewedAt, "2026-11-23");
-  assert.deepEqual(mathilda.matchups.strongAgainst, []);
-  assert.deepEqual(mathilda.matchups.weakAgainst, []);
+  assert.ok(mathilda.matchups.strongAgainst.length > 0);
+  assert.ok(mathilda.matchups.weakAgainst.length > 0);
+  assert.ok(mathilda.synergies.length > 0);
+  assert.ok(mathilda.matchupEvidence);
+  assert.ok(mathilda.sources.includes(mathilda.matchupEvidence.source));
 });
 
 
@@ -727,8 +730,11 @@ test("Melissa has a sourced partial tactical profile with doll-link damage and a
   assert.equal(melissa.confidence, "partial");
   assert.equal(melissa.patch.version, HERO_DB_PATCH);
   assert.equal(melissa.patch.reviewedAt, "2026-11-23");
-  assert.deepEqual(melissa.matchups.strongAgainst, []);
-  assert.deepEqual(melissa.matchups.weakAgainst, []);
+  assert.ok(melissa.matchups.strongAgainst.length > 0);
+  assert.ok(melissa.matchups.weakAgainst.length > 0);
+  assert.ok(melissa.synergies.length > 0);
+  assert.ok(melissa.matchupEvidence);
+  assert.ok(melissa.sources.includes(melissa.matchupEvidence.source));
 });
 
 
