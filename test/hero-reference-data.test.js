@@ -140,3 +140,22 @@ test("encyclopedia returns dated local passport data when the live source is una
     globalThis.fetch = originalFetch;
   }
 });
+
+
+test("canonical Russian hero names match across catalog, reference data and detailed profiles", () => {
+  const expected = {
+    "luo-yi": "Ло Йи",
+    kaja: "Кайя",
+    claude: "Клауд",
+    cici: "Чичи",
+    baxia: "Баксий",
+    aldous: "Алдос",
+    pharsa: "Фаша",
+    dyrroth: "Дариус"
+  };
+  for (const [id, name] of Object.entries(expected)) {
+    assert.equal(heroCatalog.find(hero => hero.id === id)?.displayNameRu, name, id + ": catalog name");
+    assert.equal(heroReferenceData.find(hero => hero.id === id)?.displayNameRu, name, id + ": reference name");
+    assert.equal(heroProfiles.find(profile => profile.id === id)?.names?.ru, name, id + ": profile name");
+  }
+});
