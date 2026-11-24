@@ -36,7 +36,7 @@ test("limited analysis never renders empty or fabricated counter recommendations
 test("server blocks full analysis when any selected catalog hero lacks verified mapping", async () => {
   const source = await readFile(new URL("../server/index.js", import.meta.url), "utf8");
   const limited = source.indexOf('if(unsupported.length)');
-  const analyze = source.indexOf("const result=analyze(resolvedDraft)", limited);
+  const analyze = source.indexOf("const result=analyze({", limited);
   assert.ok(limited >= 0);
   assert.ok(analyze > limited);
   assert.match(source.slice(limited, analyze), /analysisStatus:"limited"/);
@@ -133,7 +133,7 @@ test("counter recommendations distinguish direct matchup evidence from situation
   assert.match(app, /counter-matchup-signal/);
   assert.match(app, /counter-matchup-risk/);
   assert.match(app, /counter-method-note/);
-  assert.match(app, /не гарантия победы/);
+  assert.match(app, /не гарантирует победу/);
   assert.doesNotMatch(app, /counter-score/);
   assert.match(css, /\.counter-kind/);
   assert.match(css, /\.counter-method-note/);
