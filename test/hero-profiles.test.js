@@ -1021,7 +1021,7 @@ test("all 133 hero profiles have structured emblem and talent starting points", 
   for(const id of hero.emblemProfile.talentIds)assert.ok(talentIds.has(id),hero.id+" known talent "+id);
   assert.ok(hero.emblemNotes?.length>=1,hero.id+" emblem notes");
   assert.ok(hero.talentNotes?.length>=1,hero.id+" talent notes");
-  assert.match(hero.emblemProfile.method,/не персональный статистический пресет/i);
+  assert.match(hero.emblemProfile.method,/не персональный статистический пресет|не универсальная рекомендация для всех матчей/i);
   assert.equal(hero.emblemProfile.checkedAt,"2026-11-24");
  }
 });
