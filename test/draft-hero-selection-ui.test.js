@@ -150,3 +150,15 @@ test("draft places three lane-filtered recommendations inside the player pick sl
   assert.match(app, /arenaMyHeroRecommendations.*runDraft\(\)/);
   assert.match(validation, /allies\.length > 4/);
 });
+
+
+test("draft automatically supports FIRST PICK with no enemy heroes and labels blind-pick recommendations", async () => {
+  const app = await readFile(new URL("../public/app.js", import.meta.url), "utf8");
+  const server = await readFile(new URL("../server/index.js", import.meta.url), "utf8");
+  assert.doesNotMatch(app, /if\(!enemies\.length\)return toast\("Добавь врагов"\)/);
+  assert.match(app, /const mode=enemies\.length\?"COUNTER PICK":"FIRST PICK"/);
+  assert.match(app, /item\.matchupType==="first-pick"/);
+  assert.match(server, /draftMode: enemy\.length \? "counter-pick" : "first-pick"/);
+  assert.match(server, /FIRST PICK: оценка по гибкости линии, устойчивости/);
+  assert.match(server, /Вражеский состав неизвестен/);
+});
