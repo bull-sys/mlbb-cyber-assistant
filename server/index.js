@@ -312,7 +312,7 @@ function analyze({lane, enemies = [], allies = [], myHero = "", rankedMatchups =
 
   // Контрпики строятся по всем 133 профилям, а не по старому списку из 32 героев.
   // Статистический матчап — сигнал для ранжирования, а не гарантия победы.
-  const candidates = !enemy.length ? [] : heroProfiles
+  const candidates = heroProfiles
     .filter(profile => {
       const hero = heroByName.get(profile.names?.ru);
       return hero &&
@@ -333,6 +333,32 @@ function analyze({lane, enemies = [], allies = [], myHero = "", rankedMatchups =
         rawScore += points;
         if (reason && !reasons.includes(reason)) reasons.push(reason);
       };
+
+      // FIRST PICK ranks blind-pick resilience without inventing enemy matchups.
+      if (!enemy.length) {
+        const lanes = new Set((profile.lanes || []).map(normalizeLane).filter(Boolean));
+        const laneFlex = Math.max(0, lanes.size - 1);
+        const confidence = profile.confidence || "unverified";
+        if (laneFlex) add(Math.min(2, laneFlex), "Гибкость: герой подходит для нескольких линий");
+        if (confidence === "complete") add(2, "Тактический профиль имеет высокий уровень заполненности");
+        else if (confidence === "partial") add(1, "Есть частично проверенный тактический профиль");
+        const resilience = [
+          ["durability", 2, "Устойчивость помогает переживать неизвестные угрозы"],
+          ["disengage", 2, "Есть инструменты выхода из неблагоприятного боя"],
+          ["mobility", 1, "Мобильность помогает менять позицию и избегать опасности"],
+          ["sustain", 1, "Восстановление поддерживает героя в затяжных разменах"],
+          ["control", 1, "Контроль даёт полезность даже без знания вражеского пика"]
+        ];
+        for (const [stat, points, reason] of resilience) {
+          if (["high", "very_high"].includes(profile.combat?.[stat])) add(points, reason);
+        }
+        if ((profile.strengths || []).length >= 2 && (profile.mechanics || []).length >= 2) {
+          add(1, "У героя описаны несколько сильных сторон и механик");
+        }
+        const knownWeaknesses = (profile.matchups?.weakAgainst || []).length;
+        if (knownWeaknesses) add(-Math.min(2, knownWeaknesses), "В базе отмечены уязвимые матчапы; без вражеского пика риск нельзя уточнить");
+        if (!reasons.length) add(0, "Герой подходит для выбранной линии, но данных для оценки универсальности пока мало");
+      }
 
       for (const opponent of enemy) {
         const enemyProfile = opponent.profile;
@@ -455,7 +481,9 @@ function analyze({lane, enemies = [], allies = [], myHero = "", rankedMatchups =
       const hasRisk = riskyEnemies.length > 0;
       const hasRankedPositive = rankedEvidenceList.some(entry => entry.advantagePp > 0);
       const hasRankedNegative = rankedEvidenceList.some(entry => entry.advantagePp < 0);
-      const matchupType = hasPositiveMatchup && hasRisk
+      const matchupType = !enemy.length
+        ? "first-pick"
+        : hasPositiveMatchup && hasRisk
         ? "mixed-matchup"
         : hasRankedPositive
           ? "ranked-advantage"
@@ -466,7 +494,9 @@ function analyze({lane, enemies = [], allies = [], myHero = "", rankedMatchups =
               : synergies.length
                 ? "team-synergy"
                 : "situational";
-      if (!reasons.length) {
+      if (!enemy.length) {
+        reasons.push("FIRST PICK: оценка по гибкости линии, устойчивости и заполненности профиля. Вражеские матчапы пока неизвестны.");
+      } else if (!reasons.length) {
         reasons.push("Подходит для выбранной линии; подтверждённого преимущества против введённых героев в доступных матчап-данных не найдено.");
       } else if (!hasPositiveMatchup && !hasRisk) {
         reasons.push("Это ситуационная альтернатива, а не подтверждённая прямая контра.");
@@ -720,15 +750,22 @@ function analyze({lane, enemies = [], allies = [], myHero = "", rankedMatchups =
     itemCatalogCount: items.length,
     bootRecommendation,
     roamRecommendation,
-    emblem,
-    talentTiers: ["Разрыв", "Мастер-убийца", "Серия убийств"],
-    spell: lane === "Лес" ? "Возмездие" : "Вспышка",
+    emblem: selected ? emblem : null,
+    talentTiers: selected ? ["Разрыв", "Мастер-убийца", "Серия убийств"] : [],
+    spell: selected ? (lane === "Лес" ? "Возмездие" : "Вспышка") : null,
     timing: {
       early: "Контролируй ключевые участки карты и отслеживай перемещения противника.",
       mid: "Используй преимущество после покупки основных предметов и участвуй в борьбе за объекты.",
       late: "Выбирай момент для командного боя с учётом расположения главных угроз."
     },
-    note: "Рекомендации учитывают локальные тактические профили и, если источник доступен, ранговые матчап-данные за 15 дней. Статистика пары не является доказательством контры на выбранной линии."
+    draftMode: enemy.length ? "counter-pick" : "first-pick",
+    firstPickMeta: !enemy.length ? {
+      method: "Оценка по соответствию линии, гибкости, устойчивости, мобильности, выходу из боя и заполненности тактического профиля.",
+      limitation: "Вражеский состав неизвестен: рекомендации не являются контрпиками и не используют выдуманные матчапы."
+    } : null,
+    note: enemy.length
+      ? "Рекомендации учитывают локальные тактические профили и, если источник доступен, ранговые матчап-данные за 15 дней. Статистика пары не является доказательством контры на выбранной линии."
+      : "Режим FIRST PICK: три кандидата ранжированы по соответствию линии и устойчивости к неизвестному составу. Это оценка слепого выбора, а не прогноз текущей меты или гарантия победы."
   };
 }
 
