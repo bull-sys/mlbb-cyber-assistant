@@ -47,7 +47,7 @@ test("draft picker renders a live selected-hero strip with portraits and team ca
   assert.match(source, /const selectedValues=pickerTarget==="myHero"/);
   assert.match(source, /picker-selection-slots/);
   assert.match(source, /heroPortraitUrl\(hero\)/);
-  assert.match(source, /current\.length\+" \/ 5"/);
+  assert.match(source, /current\.length\+" \/ "\+currentLimit/);
   assert.match(source, /Добавь героев в состав/);
 });
 
