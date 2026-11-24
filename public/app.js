@@ -157,7 +157,10 @@ function renderHeroPicker(){
  const current=pickerTarget==="enemies"?enemies:pickerTarget==="allies"?allies:[];
  const accentValue=pickerTarget==="myHero"?$("myHero").value:(current[current.length-1]||current[0]);
  setPickerAccent(entries.find(h=>h.value===accentValue)||null);
- $("pickerSelectionStatus").textContent=pickerTarget==="myHero"?"Выбери своего героя":("Выбрано "+current.length+" из 5 · можно добавить несколько подряд");
+ const selectedValues=pickerTarget==="myHero"?($("myHero").value?[$("myHero").value]:[]):current;
+ const selectedHeroes=selectedValues.map(value=>entries.find(hero=>hero.value===value)).filter(Boolean);
+ const statusLabel=pickerTarget==="myHero"?(selectedHeroes.length?"ТВОЙ ВЫБОР":"ВЫБЕРИ СВОЕГО ГЕРОЯ"):("СОСТАВ · "+current.length+" / 5");
+ $("pickerSelectionStatus").innerHTML='<div class="picker-selection-top"><span>'+statusLabel+'</span><small>'+(pickerTarget==="myHero"?(selectedHeroes.length?"ГЕРОЙ ЗАКРЕПЛЁН":"ОДИН ГЕРОЙ" ):(current.length>=5?"СОСТАВ ГОТОВ":"МОЖНО ДОБАВИТЬ ЕЩЁ "+(5-current.length)))+'</small></div><div class="picker-selection-slots" aria-label="Текущий выбор">'+(selectedHeroes.length?selectedHeroes.map(hero=>'<span class="picker-selected-hero"><img src="'+heroPortraitUrl(hero)+'" alt=""><b>'+esc(hero.name)+'</b><i>✓</i></span>').join(""):'<span class="picker-selection-empty">＋ '+(pickerTarget==="myHero"?"Выбери основного героя":"Добавь героев в состав")+'</span>')+'</div>';
  const recent=pickerRecent().map(value=>entries.find(h=>h.value===value)).filter(Boolean);
  $("recentHeroes").innerHTML=recent.length?'<small>НЕДАВНО ВЫБРАННЫЕ</small><div class="picker-recent-grid">'+recent.map(h=>heroTileMarkup(h,"recent")).join("")+'</div>':"";
  const roleOptions=["Убийца","Маг","Стрелок","Боец","Танк","Поддержка","Лес","Золото","Опыт","Мид","Роум"];
