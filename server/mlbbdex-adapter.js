@@ -162,8 +162,9 @@ async function getTalentAssets() {
 }
 
 export async function getGameAssets() {
-  const [emblemsResult, talents] = await Promise.all([
+  const [emblemsResult, itemsResult, talents] = await Promise.all([
     cachedJson("emblems", BASE + "/api/v1/emblems?locale=en").catch(() => null),
+    cachedJson("items", BASE + "/api/v1/items?locale=en").catch(() => null),
     getTalentAssets()
   ]);
   const normalizeAsset = item => {
@@ -173,13 +174,22 @@ export async function getGameAssets() {
     return { ...item, image: absoluteImage(candidate) };
   };
   const emblems = (Array.isArray(emblemsResult?.data) ? emblemsResult.data : []).map(normalizeAsset);
-  const items = [];
+  // MLBBDex serves the original item artwork at /visuels/objets/{slug}.webp.
+  // The public item JSON supplies stable slugs, but intentionally omits image URLs.
+  const items = (Array.isArray(itemsResult?.data) ? itemsResult.data : [])
+    .filter(item => item && typeof item.slug === "string" && /^[a-z0-9-]+$/u.test(item.slug))
+    .map(item => ({
+      slug: item.slug,
+      name: item.name || item.slug,
+      category: item.category || null,
+      image: BASE + "/visuels/objets/" + item.slug + ".webp"
+    }));
   return {
     ok: true,
     emblems,
     items,
     talents,
-    sources: [emblemsResult?.source].filter(Boolean),
+    sources: [emblemsResult?.source, itemsResult?.source].filter(Boolean),
     updatedAt: new Date().toISOString()
   };
 }
