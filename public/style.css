@@ -919,3 +919,25 @@ details.ency-info-card.visual>.ency-info-summary{display:grid}
  .ency-graph-toolbar{grid-template-columns:1fr;gap:6px}
  .app-back-button{padding:7px 9px;font-size:10px}
 }
+
+
+/* Encyclopedia factual details: readable stats, effects, provenance and verified icon sizing */
+.ency-info-card.visual .ency-info-visual{width:62px;height:62px;flex:0 0 62px;display:grid;place-items:center}
+.ency-info-card.visual .ency-info-icon{width:56px;height:56px;object-fit:contain;image-rendering:auto;filter:drop-shadow(0 4px 10px #0008)}
+.ency-info-card.visual .ency-info-icon.placeholder{display:grid;place-items:center;border:1px solid rgba(218,145,238,.25);border-radius:14px;color:#dca4ed;background:#211829}
+.ency-info-expanded{padding:12px 14px 14px}
+.ency-info-expanded>p:first-child{line-height:1.55;color:#e4d9ea}
+.ency-info-facts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px 12px;list-style:none;padding:0;margin:10px 0}
+.ency-info-facts li{padding:7px 9px;border:1px solid rgba(213,164,232,.13);border-radius:8px;background:rgba(255,255,255,.025);font-size:11px;line-height:1.35;color:#f0e6f4}
+.ency-info-effect{margin-top:10px;padding:10px 11px;border-left:2px solid #c47be0;border-radius:0 8px 8px 0;background:rgba(180,100,210,.07)}
+.ency-info-effect b{display:block;font-size:11px;color:#f1c7ff;margin-bottom:4px}
+.ency-info-effect p{margin:0;font-size:11px;line-height:1.5;color:#d9cadd}
+.ency-info-source{display:inline-block;margin-top:10px;color:#d7a1ee;font-size:10px;text-decoration:none}
+.ency-info-source:hover{text-decoration:underline}
+.ency-info-verification{display:block;margin-top:8px;color:#e5c28b;font-size:10px}
+.ency-info-expanded-meta{font-size:10px;color:#bca9c8}
+@media(max-width:560px){
+ .ency-info-facts{grid-template-columns:1fr}
+ .ency-info-card.visual .ency-info-visual{width:54px;height:54px;flex-basis:54px}
+ .ency-info-card.visual .ency-info-icon{width:48px;height:48px}
+}
