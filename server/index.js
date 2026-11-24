@@ -309,6 +309,10 @@ function analyze({lane, enemies = [], allies = [], myHero = ""}) {
 
     if (magicMage && item.category === "Атака") return false;
 
+    // Предметы с явной специализацией на стрелках не должны попадать
+    // в резервные сборки других классов.
+    if (!marksman && (item.tags || []).includes("marksman")) return false;
+
     return true;
   };
 
