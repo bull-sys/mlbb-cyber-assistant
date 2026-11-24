@@ -100,3 +100,18 @@ test("draft report entrance and hero materialization respect reduced motion", as
   assert.match(css, /@media\(prefers-reduced-motion:reduce\)\{\.arena-slot-enter/);
   assert.doesNotMatch(app, /lastPick|last-pick|последнего пика/i);
 });
+
+
+test("tactical report starts with a scan-first composition and decision overview", async () => {
+  const app = await readFile(new URL("../public/app.js", import.meta.url), "utf8");
+  const css = await readFile(new URL("../public/style.css", import.meta.url), "utf8");
+  assert.match(app, /const reportRoster=\(values,side\)=>values\.map/);
+  assert.match(app, /report-rosters/);
+  assert.match(app, /reportRoster\(enemies,"enemy"\)/);
+  assert.match(app, /priorityCounter=d\.counters\?\.\[0\]/);
+  assert.match(app, /priorityPlan=d\.teamPlan\?\.\[0\]/);
+  assert.match(app, /ПО ДАННЫМ АНАЛИЗА/);
+  assert.match(css, /\.report-overview\{/);
+  assert.match(css, /\.report-decision-grid/);
+  assert.match(css, /@media\(max-width:650px\)\{\.report-overview/);
+});
