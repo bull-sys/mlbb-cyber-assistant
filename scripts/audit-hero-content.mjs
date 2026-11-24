@@ -1,6 +1,7 @@
 import { mkdir, writeFile } from "node:fs/promises";
 import { heroCatalog } from "../server/hero-catalog.js";
 import { heroLoreData } from "../server/hero-lore-data.js";
+import { heroProfiles } from "../server/hero-profiles.js";
 
 const PROFILE_BASE = "https://mlbbdex.com/api/v1/heroes/";
 const RUSSIAN_SKILLS_URL = "https://raw.githubusercontent.com/achedon12/mlbb/92f0fe94e4226ab6057db25711c4d65b3ca12130/src/data/game/skills/ru.json";
@@ -97,6 +98,12 @@ try { russianSkills = await fetchJson(RUSSIAN_SKILLS_URL); }
 catch (error) { russianSkillsError = String(error?.message || error); }
 
 const localLoreById = new Map(heroLoreData.map(entry => [entry.id, entry]));
+const localProfilesById = new Map(heroProfiles.map(entry => [entry.id, entry]));
+const emptyMatchupProfiles = heroProfiles.filter(entry =>
+  !(entry.matchups?.strongAgainst?.length) &&
+  !(entry.matchups?.weakAgainst?.length) &&
+  !(entry.synergies?.length)
+).map(entry => entry.id);
 
 const heroes = await mapLimit(heroCatalog, CONCURRENCY, async hero => {
   const url = PROFILE_BASE + encodeURIComponent(slug(hero.id));
@@ -114,6 +121,16 @@ const heroes = await mapLimit(heroCatalog, CONCURRENCY, async hero => {
     localLore: {
       status: localLoreById.has(hero.id) ? "available" : "missing",
       summaryLength: textValue(localLoreById.get(hero.id)?.summary).length
+    },
+    localTacticalProfile: {
+      status: localProfilesById.has(hero.id) ? "available" : "missing",
+      matchupCoverage: (() => {
+        const profile = localProfilesById.get(hero.id);
+        if (!profile) return "missing";
+        const filled = [profile.matchups?.strongAgainst, profile.matchups?.weakAgainst, profile.synergies]
+          .filter(values => Array.isArray(values) && values.length > 0).length;
+        return filled === 3 ? "complete" : filled === 0 ? "empty" : "partial";
+      })()
     },
     profile: {
       status: profile ? "available" : "unavailable",
@@ -142,6 +159,12 @@ const report = {
   localLoreAvailable: heroCatalog.filter(hero => localLoreById.has(hero.id) && textValue(localLoreById.get(hero.id)?.summary)).length,
   localLoreMissing: heroCatalog.filter(hero => !localLoreById.has(hero.id) || !textValue(localLoreById.get(hero.id)?.summary)).map(hero => hero.id),
   localLoreDuplicateIds: heroLoreData.length - localLoreById.size,
+  localTacticalProfilesAvailable: localProfilesById.size,
+  localTacticalProfilesMissing: heroCatalog.filter(hero => !localProfilesById.has(hero.id)).map(hero => hero.id),
+  localTacticalProfileDuplicateIds: heroProfiles.length - localProfilesById.size,
+  profilesWithCompleteMatchupData: heroProfiles.filter(profile => profile.matchups?.strongAgainst?.length && profile.matchups?.weakAgainst?.length && profile.synergies?.length).length,
+  profilesWithEmptyMatchupData: emptyMatchupProfiles.length,
+  emptyMatchupProfileIds: emptyMatchupProfiles,
   profilesWithExplicitLoreCandidates: loreAvailable,
   totalRussianSkillEntries: skillEntries,
   heroes
@@ -155,12 +178,20 @@ console.log(JSON.stringify({
   localLoreAvailable: report.localLoreAvailable,
   localLoreMissing: report.localLoreMissing,
   localLoreDuplicateIds: report.localLoreDuplicateIds,
+  localTacticalProfilesAvailable: report.localTacticalProfilesAvailable,
+  localTacticalProfilesMissing: report.localTacticalProfilesMissing,
+  localTacticalProfileDuplicateIds: report.localTacticalProfileDuplicateIds,
+  profilesWithCompleteMatchupData: report.profilesWithCompleteMatchupData,
+  profilesWithEmptyMatchupData: report.profilesWithEmptyMatchupData,
+  emptyMatchupProfileIds: report.emptyMatchupProfileIds,
   profilesWithExplicitLoreCandidates: loreAvailable,
   totalRussianSkillEntries: skillEntries,
   russianSkillsError,
   perHero: heroes.map(hero => ({
     id: hero.id,
     localLore: hero.localLore.status,
+    localTacticalProfile: hero.localTacticalProfile.status,
+    matchupCoverage: hero.localTacticalProfile.matchupCoverage,
     profile: hero.profile.status,
     keys: hero.profile.topLevelKeys,
     loreCandidates: hero.profile.loreCandidates.map(item => item.path),
