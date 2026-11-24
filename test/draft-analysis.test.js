@@ -204,11 +204,27 @@ test("duplicate enemy names have the same analysis effect as one pick", () => {
   assert.deepEqual(repeated, once);
 });
 
-test("empty enemy composition yields no threats or counter-picks", () => {
+test("empty enemy composition activates FIRST PICK and returns three lane-eligible options", () => {
   const result = run({ lane: "Лес", enemies: [] });
 
   assert.deepEqual(result.threats, []);
-  assert.deepEqual(result.counters, []);
+  assert.equal(result.draftMode, "first-pick");
+  assert.equal(result.counters.length, 3);
+  assert.ok(result.counters.every(candidate => candidate.role === "Лес"));
+  assert.ok(result.counters.every(candidate => candidate.matchupType === "first-pick"));
+  assert.ok(result.counters.every(candidate => candidate.matchedEnemies.length === 0));
+  assert.ok(result.counters.every(candidate => candidate.reason.includes("FIRST PICK")));
+  assert.ok(result.firstPickMeta?.limitation.includes("не являются контрпиками"));
+});
+
+test("FIRST PICK recommendations respect all five lanes and exclude known allies", () => {
+  for (const lane of ["Лес", "Золото", "Опыт", "Мид", "Роум"]) {
+    const result = run({ lane, enemies: [], allies: ["Тигрил"] });
+    assert.equal(result.counters.length, 3, lane);
+    assert.ok(result.counters.every(candidate => candidate.role === lane), lane);
+    assert.ok(result.counters.every(candidate => candidate.name !== "Тигрил"), lane);
+    assert.equal(result.draftMode, "first-pick", lane);
+  }
 });
 
 test("unsupported lane yields no candidates and uses the non-jungle spell fallback", () => {
