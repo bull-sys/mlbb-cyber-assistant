@@ -77,3 +77,26 @@ test("CYBER ARENA draft stage renders ten interactive team slots and a separate 
   assert.match(css, /\.enemy-team\{--arena-accent:#ff5eae/);
   assert.match(css, /\.ally-team\{--arena-accent:#51eaff/);
 });
+
+
+test("manual draft selection animates only the chosen slot and marks both full teams", async () => {
+  const app = await readFile(new URL("../public/app.js", import.meta.url), "utf8");
+  const html = await readFile(new URL("../public/index.html", import.meta.url), "utf8");
+  assert.match(app, /let draftEntrance=null/);
+  assert.match(app, /draftEntrance=\{side:pickerTarget,value\}/);
+  assert.match(app, /arena-slot-enter/);
+  assert.match(app, /enemyCount===5&&allyCount===5/);
+  assert.match(app, /СОСТАВЫ ЗАПОЛНЕНЫ/);
+  assert.match(html, /data-arena-completion/);
+});
+
+test("draft report entrance and hero materialization respect reduced motion", async () => {
+  const app = await readFile(new URL("../public/app.js", import.meta.url), "utf8");
+  const css = await readFile(new URL("../public/style.css", import.meta.url), "utf8");
+  assert.match(app, /function animateDraftReport\(\)/);
+  assert.match(app, /animateDraftReport\(\)/);
+  assert.match(css, /@keyframes arena-slot-materialize/);
+  assert.match(css, /@keyframes arena-report-arrive/);
+  assert.match(css, /@media\(prefers-reduced-motion:reduce\)\{\.arena-slot-enter/);
+  assert.doesNotMatch(app, /lastPick|last-pick|последнего пика/i);
+});
