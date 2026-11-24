@@ -83,9 +83,24 @@ Never synthesize a sample size, absolute head-to-head win rate, or lane-specific
 6. Keep mechanics-based explanations distinct from measured statistical evidence.
 7. Do not expose a fabricated win probability or confidence percentage.
 
+## Implemented integration
+
+The branch now contains `server/ranked-matchup-adapter.js`, which:
+
+- reads the Rone Arena ranked hero index to map upstream numeric hero IDs to the local 133-profile catalogue;
+- requests each selected enemy's counter records using the chosen rank and a 15-day window;
+- normalizes signed `increase_win_rate` values to percentage-point impact;
+- preserves source URL, retrieval time, upstream update time when present, rank bracket and window;
+- deliberately leaves `lane`, `sampleSize`, and `patch` null because the endpoint does not provide those pair-level fields;
+- caches successful upstream responses for 30 minutes and degrades to the existing local matchup catalogue if the source is unavailable.
+
+Draft scoring uses a measured ranked-pair signal in preference to the local profile matchup link for that same candidate/opponent pair, avoiding double-counting. Positive and negative signals remain visible. Ranked advantages and ranked risks have their own labels; mixed positive/negative evidence remains a mixed matchup. Candidate eligibility is still hard-filtered by the user's selected lane, but the ranked pair statistic is not represented as lane-specific.
+
+Rank selection is taken from an explicit supported `rank` in the draft request, otherwise from the authenticated user's saved profile rank, and otherwise defaults to `all`. Supported upstream filters are `all`, `epic`, `legend`, `mythic`, `honor`, and `glory`.
+
 ## Current research conclusion
 
-- Rank-specific matchup evidence is available and suitable for improving the ranking signal.
+- Rank-specific matchup evidence is now integrated as a separate ranking signal, with a 15-day window and explicit source metadata.
 - Pair-level sample sizes are not published by the inspected public interfaces.
 - MLBB Core's documented GMS pair data is rank-selectable and uses a 15-day window, but is explicitly treated as a team-level signal, not a lane duel.
 - Lane-specific hero-vs-hero outcome evidence was **not** established by these sources.
