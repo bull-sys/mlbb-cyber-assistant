@@ -322,3 +322,85 @@ test("enemy heroes outside the old 32-entry list are resolved from the full prof
   assert.equal(result.counters.length, 3);
 });
 
+test("full draft scenario matrix: every catalogue hero can be analyzed against all five selected lanes", () => {
+  const lanes = ["Лес", "Золото", "Опыт", "Мид", "Роум"];
+  const failures = [];
+
+  for (const lane of lanes) {
+    for (const enemy of heroProfiles) {
+      const enemyName = enemy.names?.ru;
+      if (!enemyName) {
+        failures.push({ lane, enemy: enemy.id, issue: "missing Russian display name" });
+        continue;
+      }
+
+      const result = run({ lane, enemies: [enemyName] });
+      if (result.enemyMatchups.length !== 1 ||
+          result.enemyMatchups[0].name !== enemyName) {
+        failures.push({ lane, enemy: enemyName, issue: "enemy profile was not resolved" });
+      }
+      if (result.counters.length !== 3) {
+        failures.push({ lane, enemy: enemyName, issue: "expected three recommendations", count: result.counters.length });
+        continue;
+      }
+      if (result.counters.some(candidate => candidate.role !== lane)) {
+        failures.push({ lane, enemy: enemyName, issue: "recommendation escaped selected lane" });
+      }
+      if (result.counters.some(candidate => candidate.name === enemyName)) {
+        failures.push({ lane, enemy: enemyName, issue: "enemy hero recommended as own counterpick" });
+      }
+      if (result.counters.some(candidate => !candidate.profileEvidence?.matchupSource)) {
+        failures.push({ lane, enemy: enemyName, issue: "recommendation missing source provenance" });
+      }
+      if (result.counters.some(candidate => !candidate.reason?.trim())) {
+        failures.push({ lane, enemy: enemyName, issue: "recommendation missing explanation" });
+      }
+    }
+  }
+
+  assert.deepEqual(failures, [], JSON.stringify(failures.slice(0, 20), null, 2));
+});
+
+test("multi-enemy scenario matrix: three- and five-hero drafts keep lane lock and exclude occupied picks", () => {
+  const scenarios = [
+    { lane: "Лес", enemies: ["Хелкарт", "Тигрил", "Эйдора"], allies: ["Бруно"] },
+    { lane: "Золото", enemies: ["Нолан", "Минотавр", "Нана", "Теризла", "Ханзо"], allies: ["Ангела"] },
+    { lane: "Опыт", enemies: ["Лесли", "Эйдора", "Тигрил"], allies: ["Линг", "Мия"] },
+    { lane: "Мид", enemies: ["Хелкарт", "Теризла", "Мия", "Франко", "Нана"], allies: ["Тигрил"] },
+    { lane: "Роум", enemies: ["Лесли", "Эйдора", "Нолан"], allies: ["Бруно", "Лилия"] }
+  ];
+
+  for (const scenario of scenarios) {
+    const result = run(scenario);
+    assert.equal(result.counters.length, 3, scenario.lane);
+    assert.ok(result.counters.every(candidate => candidate.role === scenario.lane), scenario.lane);
+    const occupied = new Set([...scenario.enemies, ...scenario.allies]);
+    assert.ok(result.counters.every(candidate => !occupied.has(candidate.name)), scenario.lane);
+    assert.ok(result.counters.every(candidate => candidate.reason?.trim()), scenario.lane);
+  }
+});
+
+test("matchup labels are evidence-based and never call a situational pick a direct counter", () => {
+  const result = run({ lane: "Роум", enemies: ["Лесли", "Эйдора", "Тигрил"] });
+  for (const candidate of result.counters) {
+    if (candidate.matchupType === "direct-counter") {
+      assert.ok(candidate.matchedEnemies.length > 0, candidate.name);
+    } else {
+      assert.deepEqual(candidate.matchedEnemies, [], candidate.name);
+    }
+    if (candidate.matchupType === "situational") {
+      assert.match(candidate.reason, /ситуационн/i, candidate.name);
+    }
+  }
+});
+
+test("negative matchup evidence is exposed instead of being hidden by positive signals", () => {
+  const result = run({ lane: "Опыт", enemies: ["Сора", "Хелкарт", "Эйдора"] });
+  assert.ok(result.counters.some(candidate => candidate.riskyEnemies.length > 0));
+  for (const candidate of result.counters) {
+    if (candidate.riskyEnemies.length) {
+      assert.match(candidate.reason, /риск/i, candidate.name);
+    }
+  }
+});
+
