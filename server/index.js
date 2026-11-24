@@ -169,8 +169,7 @@ function analyze({lane, enemies = [], allies = [], myHero = ""}) {
   };
   const legacyByName = new Map(heroes.map(hero => [hero.name, hero]));
   const profileByName = new Map(heroProfiles.map(profile => [profile.names?.ru, profile]).filter(([name]) => name));
-  const profileById = new Map(heroProfiles.map(profile => [profile.id, profile]));
-  const heroByName = new Map(heroProfiles.map(profile => {
+    const heroByName = new Map(heroProfiles.map(profile => {
     const legacy = legacyByName.get(profile.names?.ru);
     const combat = profile.combat || {};
     const tags = new Set(legacy?.tags || []);
@@ -619,7 +618,7 @@ function analyze({lane, enemies = [], allies = [], myHero = ""}) {
     teamPlan,
     counters: candidates.map(x => ({
       name: x.hero.name,
-      role: x.hero.role,
+      role: lane,
       reason: x.reason,
       score: x.score,
       profileEvidence: x.profileEvidence
