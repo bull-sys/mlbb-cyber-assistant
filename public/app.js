@@ -282,20 +282,31 @@ async function runDraft(){
    return '<article class="matchup-card"><div class="matchup-card-head"><div><b>'+esc(item.name)+'</b><small>'+esc(item.role||"Роль не указана")+'</small></div><span class="matchup-confidence">'+verified+'</span></div>'+(combat?'<p class="matchup-combat">'+esc(combat)+'</p>':"")+(mechanics?'<div class="matchup-detail"><small>ЧТО ДЕЛАЕТ ПРОТИВНИК</small><ul>'+mechanics+'</ul></div>':"")+(weaknesses?'<div class="matchup-detail matchup-answer"><small>КАК ЕМУ ПРОТИВОДЕЙСТВОВАТЬ</small><ul>'+weaknesses+'</ul></div>':'<p class="report-muted">Контрмеры пока не подтверждены тактическим профилем.</p>')+(counterItems?'<div class="matchup-item-answer"><small>ПРЕДМЕТЫ ПРОТИВ ЭТОГО ГЕРОЯ</small><ul>'+counterItems+'</ul></div>':"")+(item.reviewedAt?'<small class="matchup-source">Проверено: '+esc(item.reviewedAt)+(item.patch?' · патч '+esc(item.patch):"")+'</small>':"")+(sources?'<small class="matchup-source">Источники: '+sources+'</small>':"")+'</article>';
   }).join("")||'<div class="report-empty">Для выбранных героев пока нет отдельных тактических карточек.</div>';
   const teamPlan=(d.teamPlan||[]).map(item=>'<article class="team-plan-card"><b>'+esc(item.title)+'</b><p>'+esc(item.detail)+'</p></article>').join("");
+  const rankedMeta=d.rankedMatchupMeta||null;
+  const rankNames={all:"Все ранги",epic:"Эпик",legend:"Легенда",mythic:"Мифик",honor:"Мифическая слава",glory:"Мифическая бессмертие"};
+  const rankedSummary=rankedMeta
+   ?'<small class="counter-method-note">Rone Arena · '+esc(rankNames[rankedMeta.rankBracket]||rankedMeta.rankBracket||"ранг не указан")+' · окно '+esc(rankedMeta.windowDays||15)+' дней · общекомандная статистика, не статистика выбранной линии · размер выборки не опубликован'+(rankedMeta.status==="unavailable"?' · источник временно недоступен':rankedMeta.status==="partial"?' · часть матчапов недоступна':"")+'</small>'
+   :"";
   const counters=(d.counters||[]).map((item,index)=>{
    const profile=item.profileEvidence;
-   const kindLabel=item.matchupType==="direct-counter"?"ЕСТЬ СТАТИСТИЧЕСКИЙ МАТЧАП"
+   const kindLabel=item.matchupType==="ranked-advantage"?"РАНГОВОЕ ПРЕИМУЩЕСТВО"
+    :item.matchupType==="ranked-risk"?"РАНГОВЫЙ РИСК"
+    :item.matchupType==="direct-counter"?"ЕСТЬ СИГНАЛ В МАТЧАП-ДАННЫХ"
     :item.matchupType==="mixed-matchup"?"СМЕШАННЫЙ МАТЧАП · ЕСТЬ РИСК"
     :item.matchupType==="team-synergy"?"СИНЕРГИЯ С СОЮЗНИКАМИ":"СИТУАЦИОННЫЙ ВАРИАНТ";
    const matched=(item.matchedEnemies||[]).length
-    ?'<small class="counter-matchup-signal">Матчап-сигнал против: '+esc(item.matchedEnemies.join(", "))+'</small>'
-    :'<small class="counter-matchup-signal">Прямое статистическое преимущество не подтверждено</small>';
+    ?'<small class="counter-matchup-signal">Положительный сигнал против: '+esc(item.matchedEnemies.join(", "))+'</small>'
+    :'<small class="counter-matchup-signal">Положительный матчап-сигнал не найден</small>';
    const risky=(item.riskyEnemies||[]).length
     ?'<small class="counter-matchup-risk">Риск матчапа: '+esc(item.riskyEnemies.join(", "))+'</small>':"";
+   const rankedDetails=(profile?.rankedMatchups||[]).map(entry=>{
+    const sign=entry.advantagePp>0?"+":"";
+    return '<small class="counter-ranked-evidence">Rone Arena · '+esc(rankNames[entry.rankBracket]||entry.rankBracket||"ранг")+' · '+sign+Number(entry.advantagePp).toFixed(1)+' п.п. против '+esc(entry.opponent)+' · не lane-specific</small>';
+   }).join("");
    const profileDetails=profile
     ?'<div class="counter-profile-evidence"><div><small>КЛЮЧЕВАЯ МЕХАНИКА</small><p>'+esc(profile.identity||"Не описана")+'</p></div><div><small>СИЛЬНАЯ СТОРОНА</small><p>'+esc(profile.strength||"Не описана")+'</p></div><div><small>УЧТИ ПРИ ВЫБОРЕ</small><p>'+esc(profile.caution||"Не описано")+'</p></div><small class="counter-profile-status">Данные из тактического паспорта · '+(profile.confidence==="complete"?"полный профиль":"частичный профиль")+(profile.matchupCheckedAt?' · матчапы проверены '+esc(profile.matchupCheckedAt):"")+'</small></div>'
     :'<small class="counter-profile-missing">Тактический паспорт этого героя пока не проверен; дополнительная оценка не приводится.</small>';
-   return '<article class="counter-card"><div class="counter-rank">'+String(index+1).padStart(2,"0")+'</div><div class="counter-copy"><div class="counter-title"><b>'+esc(item.name)+'</b><span>'+esc(item.role||"Роль не указана")+'</span></div><small class="counter-kind">'+kindLabel+'</small><p>'+esc(item.reason)+'</p>'+matched+risky+'<small class="counter-method-note">Рейтинговый статистический сигнал, не гарантия победы и не отдельная статистика линии.</small>'+profileDetails+'</div></article>';
+   return '<article class="counter-card"><div class="counter-rank">'+String(index+1).padStart(2,"0")+'</div><div class="counter-copy"><div class="counter-title"><b>'+esc(item.name)+'</b><span>'+esc(item.role||"Роль не указана")+'</span></div><small class="counter-kind">'+kindLabel+'</small><p>'+esc(item.reason)+'</p>'+matched+risky+rankedDetails+'<small class="counter-method-note">Статистический сигнал не гарантирует победу. Он не доказывает преимущество именно на выбранной линии.</small>'+profileDetails+'</div></article>';
   }).join("")||'<div class="report-empty">Для этого состава не удалось построить рекомендации. Проверь выбранных героев и линию.</div>';
   const build=(d.buildDetails||[]).map((item,index)=>'<article class="build-card"><span class="build-number">'+(index+1)+'</span><div><b>'+esc(item.name)+'</b><small>'+esc(item.priority||"Ситуативный выбор")+(item.category?' · '+esc(item.category):"")+'</small><p>'+esc((item.reasons||[]).join(" · ")||"Подбор по угрозам состава")+'</p>'+(item.against?.length?'<p class="build-targets">Против: '+esc(item.against.join(", "))+'</p>':"")+(item.timing?'<p class="build-timing">'+esc(item.timing)+'</p>':"")+'</div></article>').join("")||'<div class="report-empty">Для выбранного героя и текущего состава контрпредметы не определены. Выбери своего героя и добавь противников.</div>';
   const boot=d.bootRecommendation?'<article class="utility-pick"><small>ОБУВЬ</small><b>'+esc(d.bootRecommendation.name)+'</b><p>'+esc(d.bootRecommendation.reason)+'</p>'+(d.bootRecommendation.against?.length?'<small>Учитывает: '+esc(d.bootRecommendation.against.join(", "))+'</small>':"")+'</article>':"";
