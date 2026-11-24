@@ -299,9 +299,10 @@ function analyze({lane, enemies = [], allies = [], myHero = ""}) {
     };
   });
 
-  const compatible = itemScores.filter(item => {
-    if (item.score <= 0) return false;
-
+  // Одинаковые ограничения применяются и к основному подбору, и к запасным слотам.
+  // Иначе защитный fallback мог добавить предмет неподходящей категории
+  // (например, «Ветер природы» в сборку мага).
+  const isItemAllowed = item => {
     if (physicalAssassin &&
         (item.category === "Магия" ||
          item.category === "Магия / защита")) return false;
@@ -309,7 +310,11 @@ function analyze({lane, enemies = [], allies = [], myHero = ""}) {
     if (magicMage && item.category === "Атака") return false;
 
     return true;
-  });
+  };
+
+  const compatible = itemScores.filter(item =>
+    item.score > 0 && isItemAllowed(item)
+  );
 
   // Не более одного предмета с антихилом
   const buildDetails = [];
@@ -332,17 +337,11 @@ function analyze({lane, enemies = [], allies = [], myHero = ""}) {
   }
 
   // Заполняем оставшиеся слоты подходящими защитными предметами
-  const fallbacks = items.filter(item => {
-    if (buildDetails.some(x => x.name === item.name)) return false;
-
-    if (physicalAssassin &&
-        (item.category === "Магия" ||
-         item.category === "Магия / защита")) return false;
-
-    if (magicMage && item.category === "Атака") return false;
-
-    return item.tags.includes("survival");
-  });
+  const fallbacks = items.filter(item =>
+    !buildDetails.some(x => x.name === item.name) &&
+    isItemAllowed(item) &&
+    item.tags.includes("survival")
+  );
 
   for (const item of fallbacks) {
     if (buildDetails.length >= 6) break;
