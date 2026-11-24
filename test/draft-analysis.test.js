@@ -251,8 +251,10 @@ test("physical assassin equipment fallback never inserts magic-category items", 
 
   assert.ok(result.build.length > 0);
   assert.ok(result.build.every(name => {
-    const category = items.find(item => item.name === name)?.category;
-    return category !== "Магия" && category !== "Магия / защита";
+    const item = items.find(entry => entry.name === name);
+    return item.category !== "Магия" &&
+      item.category !== "Магия / защита" &&
+      !item.tags.includes("marksman");
   }));
 });
 
