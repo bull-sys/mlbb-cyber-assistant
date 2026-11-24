@@ -115,3 +115,15 @@ test("tactical report starts with a scan-first composition and decision overview
   assert.match(css, /\.report-decision-grid/);
   assert.match(css, /@media\(max-width:650px\)\{\.report-overview/);
 });
+
+
+test("counter recommendations distinguish direct matchup evidence from situational options", async () => {
+  const app = await readFile(new URL("../public/app.js", import.meta.url), "utf8");
+  const css = await readFile(new URL("../public/style.css", import.meta.url), "utf8");
+  assert.match(app, /item\.matchupType==="direct-counter"/);
+  assert.match(app, /item\.matchedEnemies/);
+  assert.match(app, /counter-matchup-signal/);
+  assert.match(app, /counter-matchup-risk/);
+  assert.doesNotMatch(app, /counter-score/);
+  assert.match(css, /\.counter-kind/);
+});
