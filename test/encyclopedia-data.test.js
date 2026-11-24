@@ -73,7 +73,7 @@ test("item encyclopedia records have descriptions and the six shop categories", 
   assert.match(itemById("Ice Queen Wand").passive, /10% на 2 секунды/);
   assert.match(itemById("Malefic Roar").passive, /30% физического пробивания/);
   assert.match(itemById("Golden Staff").passive, /Endless Strike/);
-  assert.match(itemById("Lightning Truncheon").passive, /каждые 6 секунд/);
+  assert.match(itemById("Lightning Truncheon").passive, /Каждые 6 секунд/);
   assert.equal(items.filter(item => item.verification === "checked against item detail page").length, 24);
   for (const item of items) {
     assert.ok(item.name, "item name is required");
