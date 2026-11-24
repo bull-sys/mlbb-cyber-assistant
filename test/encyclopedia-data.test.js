@@ -77,6 +77,10 @@ test("item encyclopedia records have descriptions and the six shop categories", 
   assert.match(itemById("Flask of the Oasis").passive, /35%.*100 × уровень героя.*60 секунд/);
   assert.match(itemById("Starlium Scythe").passive, /90.*60% общей магической силы.*15%/);
   assert.match(itemById("Wishing Lantern").passive, /каждые 900.*8% его текущего здоровья/);
+  assert.match(itemById("Blade of the Heptaseas").passive, /5 секунд.*160.*40% общей физической атаки/);
+  assert.match(itemById("Great Dragon Spear").passive, /после применения ультимейта.*30%.*7,5 секунды/);
+  assert.match(itemById("Malefic Gun").passive, /30%.*12%.*10% скорости/);
+  assert.match(itemById("Windtalker").passive, /5–2 секунды.*150–362.*200%/);
   assert.match(itemById("Antique Cuirass").passive, /8%/);
   assert.match(itemById("Immortality").passive, /210 секунд/);
   assert.match(itemById("Sea Halberd").passive, /Punish/);
@@ -93,7 +97,7 @@ test("item encyclopedia records have descriptions and the six shop categories", 
   assert.match(itemById("Malefic Roar").passive, /30% физического пробивания/);
   assert.match(itemById("Golden Staff").passive, /Endless Strike/);
   assert.match(itemById("Lightning Truncheon").passive, /Каждые 6 секунд/);
-  assert.equal(items.filter(item => item.verification === "checked against item detail page").length, 42);
+  assert.equal(items.filter(item => item.verification === "checked against item detail page").length, 46);
   for (const item of items) {
     assert.ok(item.name, "item name is required");
     assert.ok(item.description?.length > 15, item.name + " needs a description");
