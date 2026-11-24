@@ -46,7 +46,7 @@ export const items = [
  {name:"Древняя кираса",englishName:"Antique Cuirass",category:"Защита",priceGold:2170,tags:["physical","physical-defense","anti-skill-physical"],stats:["+920 здоровья","+40 физической защиты","+4 восстановления здоровья"],passive:"Получение урона от навыка снижает физический урон атакующего на 6% на 2 секунды; эффект складывается до 3 раз.",description:"Защита против героев, чьи основные угрозы наносятся физическими навыками.",source:"https://www.mlbbguides.com/items/",checkedAt:"2026-11-24",verification:"community-data; сверить с клиентом"},
  {name:"Шипованная броня",category:"Защита",tags:["attack-speed","physical"],description:"Ситуативная защита против частых физических базовых атак."},
  {name:"Бессмертие",category:"Защита",tags:["survival"],description:"Дополнительная возможность пережить позднюю командную драку."},
- {name:"Зимняя корона",category:"Магия / защита",tags:["survival","active"],description:"Активный защитный эффект, позволяющий пережить опасный момент. Сверяйте текущую версию предмета."},
+ {name:"Зимняя корона",category:"Магия",tags:["survival","active"],description:"Активный защитный эффект, позволяющий пережить опасный момент. Сверяйте текущую версию предмета."},
  {name:"Топор войны",category:"Атака",tags:["fighter","sustain"],description:"Предмет для подходящих бойцов и продолжительных сражений."},
  {name:"Пылающий жезл",category:"Магия",tags:["magic","burn"],description:"Усиление магического урона с эффектом горения."},
  {name:"Ожерелье заточения",category:"Магия",tags:["anti-heal"],description:"Магический вариант антихила."},
