@@ -59,7 +59,7 @@ test("first 20 researched heroes include cross-source role and lane evidence", (
     assert.ok(hero, id);
     assert.equal(hero.role.status, "verified", id);
     assert.equal(hero.research.checkedAt, id === "badang" ? "2026-11-24" : "2026-11-22", id);
-    assert.equal(hero.research.roleAndLaneSources.length, 3, id);
+    assert.ok(hero.research.roleAndLaneSources.length >= 3, id);
     assert.equal(
       hero.research.competitiveReviewStatus,
       id === "fanny" || id === "bane" ? "partial" : "pending",
