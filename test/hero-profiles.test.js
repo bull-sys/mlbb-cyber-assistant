@@ -889,7 +889,7 @@ test("Popol and Kupa, Ruby, Selena, Silvanna and Sora tactical profiles are sour
     ["popol-and-kupa", "Пополь и Купа", ["Стрелок"], ["Золотая линия", "Лес"]],
     ["ruby", "Руби", ["Боец"], ["Линия опыта", "Роум"]],
     ["selena", "Селена", ["Убийца", "Маг"], ["Средняя линия"]],
-    ["silvanna", "Сильванна", ["Боец"], ["Линия опыта"]],
+    ["silvanna", "Сильвана", ["Боец"], ["Линия опыта"]],
     ["sora", "Сора", ["Боец", "Убийца"], ["Линия опыта"]]
   ];
   for (const [id, ru, roles, lanes] of expected) {
