@@ -320,9 +320,8 @@ test("enemy heroes outside the old 32-entry list are resolved from the full prof
   const result = run({ lane: "Мид", enemies: ["Лолита"] });
   assert.equal(result.enemyMatchups.length, 1);
   assert.equal(result.enemyMatchups[0].name, "Лолита");
-  assert.equal(result.enemyMatchups[0].confidence, "unverified");
-  assert.match(result.enemyMatchups[0].note, /базовые сведения о роли и линии/);
-  assert.deepEqual(result.enemyMatchups[0].mechanics, []);
+  assert.equal(result.enemyMatchups[0].confidence, "partial");
+  assert.ok(result.enemyMatchups[0].mechanics.length > 0);
   assert.equal(result.counters.length, 3);
 });
 
