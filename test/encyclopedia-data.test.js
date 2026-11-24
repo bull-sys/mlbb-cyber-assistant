@@ -111,6 +111,22 @@ test("item encyclopedia records have descriptions and the six shop categories", 
   assert.equal(itemById("Rogue Meteor").passive, undefined);
   assert.equal(itemById("Tome of Evil").passive, undefined);
   assert.match(itemById("Swift Crossbow").passive, /40 адаптивного урона.*3% скорости атаки.*5 зарядов/);
+  assert.equal(itemById("Boots").stats[0], "+20 скорости передвижения");
+  assert.equal(itemById("Healing Necklace").stats[0], "+4 восстановления здоровья");
+  assert.equal(itemById("Hero's Ring").stats[1], "+5% сокращения перезарядки");
+  assert.equal(itemById("Leather Jerkin").stats[0], "+14 физической защиты");
+  assert.equal(itemById("Magic Resist Cloak").stats[0], "+14 магической защиты");
+  assert.equal(itemById("Vitality Crystal").stats[0], "+230 здоровья");
+  assert.equal(itemById("Book of Sages").stats[1], "+5% сокращения перезарядки");
+  assert.equal(itemById("Dagger").stats[0], "+15 физической атаки");
+  assert.equal(itemById("Iron Hunting Bow").stats[1], "+5% сокращения перезарядки");
+  assert.equal(itemById("Javelin").stats[0], "+8% шанса критического удара");
+  assert.equal(itemById("Knife").stats[0], "+10% скорости атаки");
+  assert.equal(itemById("Magic Necklace").stats[0], "+2 восстановления маны");
+  assert.equal(itemById("Magic Wand").stats[0], "+45 магической силы");
+  assert.equal(itemById("Mystery Codex").stats[0], "+15 магической силы");
+  assert.equal(itemById("Power Crystal").stats[0], "+280 маны");
+  assert.equal(itemById("Vampire Mallet").stats[1], "+8% физического вампиризма");
   assert.match(itemById("Antique Cuirass").passive, /8%/);
   assert.match(itemById("Immortality").passive, /210 секунд/);
   assert.match(itemById("Sea Halberd").passive, /Punish/);
@@ -127,7 +143,7 @@ test("item encyclopedia records have descriptions and the six shop categories", 
   assert.match(itemById("Malefic Roar").passive, /30% физического пробивания/);
   assert.match(itemById("Golden Staff").passive, /Endless Strike/);
   assert.match(itemById("Lightning Truncheon").passive, /Каждые 6 секунд/);
-  assert.equal(items.filter(item => item.verification === "checked against item detail page").length, 76);
+  assert.equal(items.filter(item => item.verification === "checked against item detail page").length, 92);
   for (const item of items) {
     assert.ok(item.name, "item name is required");
     assert.ok(item.description?.length > 15, item.name + " needs a description");
