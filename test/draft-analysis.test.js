@@ -537,16 +537,16 @@ test("ranked matchup evidence is scored separately from lane eligibility and sta
 
 test("ranked matchup risk remains visible alongside a positive ranked signal", () => {
   const enemy = heroProfiles.find(profile => profile.names.ru === "Эйдора");
-  const secondEnemy = heroProfiles.find(profile => profile.names.ru === "Мия");
+  const secondEnemy = heroProfiles.find(profile => profile.names.ru === "Тигрил");
   const candidate = heroProfiles.find(profile => profile.names.ru === "Кэрри");
   const result = run({
     lane: "Золото",
-    enemies: ["Эйдора", "Мия"],
+    enemies: ["Эйдора", "Тигрил"],
     rankedMatchups: {
       [enemy.id]: {
         [candidate.id]: {
           opponentId: enemy.id, candidateId: candidate.id, source: "Rone Arena API",
-          rankBracket: "legend", windowDays: 15, lane: null, advantagePp: 4.2,
+          rankBracket: "legend", windowDays: 15, lane: null, advantagePp: 5,
           sampleSize: null, direction: "candidate-favourable"
         }
       },
@@ -564,6 +564,6 @@ test("ranked matchup risk remains visible alongside a positive ranked signal", (
   assert.ok(recommendation);
   assert.equal(recommendation.matchupType, "mixed-matchup");
   assert.ok(recommendation.matchedEnemies.includes("Эйдора"));
-  assert.ok(recommendation.riskyEnemies.includes("Мия"));
+  assert.ok(recommendation.riskyEnemies.includes("Тигрил"));
   assert.match(recommendation.reason, /неоднозначный/i);
 });
