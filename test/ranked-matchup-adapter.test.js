@@ -1,9 +1,11 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import {
+  getRankedMatchupEvidence,
   normalizeRankedCounterPayload,
   normalizeRankedMatchupRank
 } from "../server/ranked-matchup-adapter.js";
+import { heroProfiles } from "../server/hero-profiles.js";
 
 test("rank labels normalize to the upstream rank filters", () => {
   assert.equal(normalizeRankedMatchupRank("Легенда"), "legend");
@@ -70,4 +72,61 @@ test("Rone counter normalization skips unknown hero IDs, missing values, and zer
     profileIdByRoneId: new Map([[39, "candidate"]])
   });
   assert.equal(evidence.size, 0);
+});
+
+
+test("ranked evidence fetch maps upstream hero IDs and requests the selected rank window", async () => {
+  const enemy = heroProfiles.find(profile => profile.names.ru === "Эйдора");
+  const candidate = heroProfiles.find(profile => profile.names.ru === "Кэрри");
+  const requested = [];
+  const originalFetch = globalThis.fetch;
+  globalThis.fetch = async url => {
+    const value = String(url);
+    requested.push(value);
+    if (value.includes("/heroes/rank?")) {
+      return {
+        ok: true,
+        json: async () => ({
+          code: 0,
+          data: { records: [
+            { data: { main_heroid: 17, main_hero: { data: { name: "Eudora" } } } },
+            { data: { main_heroid: 39, main_hero: { data: { name: "Karrie" } } } }
+          ] }
+        })
+      };
+    }
+    if (value.includes("/heroes/Eudora/counters?")) {
+      return {
+        ok: true,
+        json: async () => ({
+          code: 0,
+          data: { records: [{
+            _updatedAt: 1795521600000,
+            data: {
+              main_heroid: 17,
+              sub_hero: [{ heroid: 39, increase_win_rate: 0.03125 }]
+            }
+          }] }
+        })
+      };
+    }
+    throw new Error("Unexpected upstream URL: " + value);
+  };
+
+  try {
+    const result = await getRankedMatchupEvidence([enemy], "Легенда", heroProfiles);
+    const evidence = result.byOpponent[enemy.id]?.[candidate.id];
+    assert.ok(evidence);
+    assert.equal(evidence.advantagePp, 3.1);
+    assert.equal(evidence.rankBracket, "legend");
+    assert.equal(evidence.windowDays, 15);
+    assert.equal(evidence.lane, null);
+    assert.equal(evidence.sampleSize, null);
+    assert.equal(result.metadata.status, "available");
+    assert.equal(result.metadata.laneScoped, false);
+    assert.ok(requested.some(url => url.includes("rank=all") && url.includes("size=200")));
+    assert.ok(requested.some(url => url.includes("rank=legend") && url.includes("days=15")));
+  } finally {
+    globalThis.fetch = originalFetch;
+  }
 });
