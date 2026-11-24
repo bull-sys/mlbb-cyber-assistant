@@ -310,6 +310,16 @@ const TALENT_LOCAL_NAMES={
  "firmness":"Твёрдость","thrill":"Воодушевление","tenacity":"Упорство","seasoned-hunter":"Опытный охотник",
  "master-assassin":"Мастер-убийца","weakness-finder":"Поиск слабости"
 };
+function encyHeroAccent(hero){
+ const roles=Array.isArray(hero?.role?.values)?hero.role.values.join(" ").toLowerCase():"";
+ if(roles.includes("mage"))return "#b68cff";
+ if(roles.includes("assassin"))return "#ff79c8";
+ if(roles.includes("marksman"))return "#ffd36e";
+ if(roles.includes("tank"))return "#6fe7d1";
+ if(roles.includes("support"))return "#80d8ff";
+ if(roles.includes("fighter"))return "#ff9878";
+ return "#dc91ff";
+}
 function renderEncy(){
  const q=$("encySearch").value.toLocaleLowerCase("ru");
  const items=data.items.map(x=>({...x,image:encyItemImage(x),type:"item",category:x.category||"Предмет"}));
@@ -325,7 +335,7 @@ function renderEncy(){
  const emblems=emblemSource.map(x=>{
   const slug=typeof x==="string"?(EMBLEM_IMAGE_KEYS[x]||itemAssetSlug(x)):(x.slug||itemAssetSlug(x.role||x.name));
   const image=(typeof x==="object"&&(x.image||x.icon))||(slug&&slug!=="common"?("https://mlbbdex.com/visuels/emblemes/"+slug+"-emblem.webp"):null);
-  return {name:EMBLEM_LOCAL_NAMES[slug]||(typeof x==="string"?"Эмблема "+x:x.name||"Эмблема"),category:"Эмблема",description:EMBLEM_LOCAL_DESCRIPTIONS[slug]||(typeof x==="object"&&(x.description||x.bestFor))||"Описание эмблемы уточняется.",image,type:"emblem"};
+  return {...(typeof x==="object"&&x?x:{}),name:EMBLEM_LOCAL_NAMES[slug]||(typeof x==="string"?"Эмблема "+x:x.name||"Эмблема"),category:"Эмблема",description:EMBLEM_LOCAL_DESCRIPTIONS[slug]||(typeof x==="object"&&(x.description||x.bestFor))||"Описание эмблемы уточняется.",image,type:"emblem"};
  });
  const heroEntries=(data.heroCatalog||[]).filter(hero=>hero&&typeof hero==="object").map(hero=>{
   const profile=(data.heroProfiles||[]).find(entry=>entry?.id===hero.id);
@@ -336,7 +346,7 @@ function renderEncy(){
  });
  const groups=[{type:"hero",title:"Герои",entries:heroEntries},{type:"item",title:"Предметы",entries:items},{type:"emblem",title:"Эмблемы",entries:emblems},{type:"talent",title:"Таланты и атрибуты",entries:talents}];
  const selected=groups.filter(group=>encyFilter==="all"||group.type===encyFilter);
- let html="";
+ let html='<div class="ency-catalog-counts"><span><b>'+emblems.length+'</b> эмблем</span><span><b>'+talents.length+'</b> талантов</span><span><b>8 / 8 / 10</b> по уровням</span></div>';
  for(const group of selected){
   const list=group.entries.filter(x=>(x.name+" "+x.category+" "+(x.description||"")+" "+(x.roles||"")+" "+(x.lanes||"")).toLocaleLowerCase("ru").includes(q));
   if(!list.length)continue;
@@ -345,7 +355,7 @@ function renderEncy(){
    if(x.type==="hero"){
     const url=encyHeroPortrait(x.hero),p=x.profile;
     const status=p?(p.confidence==="complete"?"Профиль проверен":"Профиль частичный"):"Профиль в работе";
-    return '<button class="ency-hero-card" type="button" data-open-hero="'+esc(x.hero.id)+'" style="--ency-portrait:url(&quot;'+url+'&quot;)"><span class="ency-hero-image"><img src="'+url+'" alt="" loading="lazy" onerror="this.parentElement.classList.add(\'missing\');this.remove()"></span><span class="ency-hero-copy"><b>'+esc(x.name)+'</b><small>'+esc(x.category)+'</small><span class="ency-hero-meta">'+esc(x.roles)+' · '+esc(x.lanes)+'</span><span class="ency-hero-status">'+esc(status)+'</span><span class="ency-hero-open">Открыть описание ↗</span></span></button>';
+    return '<button class="ency-hero-card" type="button" data-open-hero="'+esc(x.hero.id)+'" style="--ency-portrait:url(&quot;'+url+'&quot;);--hero-accent:'+encyHeroAccent(x.hero)+'"><span class="ency-hero-image"><img src="'+url+'" alt="" loading="lazy" onerror="this.parentElement.classList.add(\'missing\');this.remove()"></span><span class="ency-hero-copy"><b>'+esc(x.name)+'</b><small>'+esc(x.category)+'</small><span class="ency-hero-meta">'+esc(x.roles)+' · '+esc(x.lanes)+'</span><span class="ency-hero-status">'+esc(status)+'</span><span class="ency-hero-open">Открыть описание ↗</span></span></button>';
    }
    const visual=x.image?'<img class="ency-info-icon" src="'+esc(x.image)+'" alt="" loading="lazy" decoding="async" onerror="this.outerHTML=\'<span class=&quot;ency-info-icon placeholder&quot;>✦</span>\'">':'<span class="ency-info-icon placeholder">✦</span>';
    const details=x.description||x.summary||x.bonus||"Описание уточняется";
@@ -655,6 +665,8 @@ function renderEncyHeroModal(id){
   '<section class="ency-profile-section wide"><h3>Умения персонажа</h3><div id="encyHeroSkills" class="ency-skill-list"><p class="ency-unverified">Загружаем описания навыков...</p></div></section>'+
   '<section class="ency-profile-section wide"><h3>Характеристики и развитие</h3><div id="encyHeroRemoteProfile" class="ency-remote-panel"><p class="ency-unverified">Загружаем характеристики...</p></div></section>'+
   '<section class="ency-profile-section wide"><h3>Проверка данных</h3><p>Статус: '+esc(status)+' · Последняя проверка: '+esc(reviewed)+'. Данные могут меняться после обновлений игры.</p>'+(sources.length?'<div class="ency-source-list">'+sources.map((source,i)=>'<a href="'+esc(source)+'" target="_blank" rel="noopener">Источник '+(i+1)+' ↗</a>').join("")+'</div>':"")+'</section></div>';
+  const modalFrame=$("encyHeroModal").querySelector(".ency-hero-modal");
+  if(modalFrame)modalFrame.style.setProperty("--hero-accent",encyHeroAccent(hero));
   $("encyHeroModal").classList.remove("hidden");
  history.pushState({...(history.state||{}),encyHeroModal:true},"","#"+(document.querySelector(".page:not(.hidden)")?.id?.replace("page-","")||"ency")+"/"+id);
  renderEncyHeroDescription(null,hero,p);
