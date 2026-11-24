@@ -355,11 +355,17 @@ function analyze({lane, enemies = [], allies = [], myHero = ""}) {
         }
       }
 
+      let secondaryScore = 0;
+      const noteSecondary = (points, reason) => {
+        secondaryScore += points;
+        if (!reasons.includes(reason)) reasons.push(reason);
+      };
+
       for (const ally of team) {
         const candidateSynergy = (profile.synergies || []).includes(ally.profile.id);
         const allySynergy = (ally.profile.synergies || []).includes(profile.id);
         if (candidateSynergy || allySynergy) {
-          add(candidateSynergy && allySynergy ? 3 : 2,
+          noteSecondary(candidateSynergy && allySynergy ? 2 : 1,
             "Есть статистический сигнал синергии с союзником " + ally.name);
           synergies.push(ally.name);
         }
@@ -382,43 +388,53 @@ function analyze({lane, enemies = [], allies = [], myHero = ""}) {
       ).length >= 2;
 
       if (enemyHasMobile && combat.control && !["none", "low", "unknown"].includes(combat.control)) {
-        add(2, "Контроль помогает останавливать мобильных противников");
+        noteSecondary(2, "Контроль помогает останавливать мобильных противников");
       }
       if (enemyHasDurableFrontline && ["high", "very_high"].includes(combat.dps)) {
-        add(2, "Высокий постоянный урон полезен против плотной передней линии");
+        noteSecondary(2, "Высокий постоянный урон полезен против плотной передней линии");
       }
       if (enemyHasBurst) {
         if (combat.disengage === "high" || combat.disengage === "very_high") {
-          add(3, "Есть надёжные инструменты выхода из опасного взрывного урона");
+          noteSecondary(3, "Есть надёжные инструменты выхода из опасного взрывного урона");
         } else if (combat.disengage === "medium") {
-          add(1, "Есть ограниченные инструменты для выхода из взрывного урона");
+          noteSecondary(1, "Есть ограниченные инструменты для выхода из взрывного урона");
         }
         if (combat.durability === "high" || combat.durability === "very_high") {
-          add(2, "Повышенная устойчивость помогает переживать вражеский прокаст");
+          noteSecondary(2, "Повышенная устойчивость помогает переживать вражеский прокаст");
         }
         if (combat.sustain === "high" || combat.sustain === "very_high") {
-          add(1, "Восстановление помогает переживать повторные размены");
+          noteSecondary(1, "Восстановление помогает переживать повторные размены");
         }
       }
       if (enemyHasLowDurability && ["high", "very_high"].includes(combat.burst)) {
-        add(2, "Взрывной урон может наказывать уязвимых противников");
+        noteSecondary(2, "Взрывной урон может наказывать уязвимых противников");
       }
       if (enemy.some(opponent => opponent.type === "mage") &&
           combat.range === "ranged" &&
           ["high", "very_high"].includes(combat.dps)) {
-        add(1, "Дальняя атака и постоянный урон дают возможность безопаснее отвечать на мага");
+        noteSecondary(1, "Дальняя атака и постоянный урон дают возможность безопаснее отвечать на мага");
+      }
+
+      if (secondaryScore > 0) {
+        add(Math.min(2, secondaryScore),
+          "Синергия с союзниками и ситуационное соответствие учитываются как вторичные сигналы");
       }
 
       const hasDirectMatchup = matchedEnemies.length > 0;
-      const matchupType = hasDirectMatchup
-        ? "direct-counter"
-        : synergies.length
-          ? "team-synergy"
-          : "situational";
+      const hasRisk = riskyEnemies.length > 0;
+      const matchupType = hasDirectMatchup && hasRisk
+        ? "mixed-matchup"
+        : hasDirectMatchup
+          ? "direct-counter"
+          : synergies.length
+            ? "team-synergy"
+            : "situational";
       if (!reasons.length) {
         reasons.push("Подходит для выбранной линии; подтверждённого прямого преимущества против введённых героев в матчап-таблицах не найдено.");
       } else if (!hasDirectMatchup) {
         reasons.push("Это ситуационная альтернатива, а не подтверждённая прямая контра.");
+      } else if (hasRisk) {
+        reasons.push("Матчап неоднозначный: есть и положительные, и отрицательные статистические сигналы.");
       }
 
       const matchupEvidence = profile.matchupEvidence || null;
@@ -443,7 +459,12 @@ function analyze({lane, enemies = [], allies = [], myHero = ""}) {
         }
       };
     })
-    .sort((a, b) => b.rawScore - a.rawScore || a.hero.name.localeCompare(b.hero.name, "ru"))
+    .sort((a, b) => {
+      const priority = { "direct-counter": 3, "mixed-matchup": 2, "team-synergy": 1, "situational": 0 };
+      return b.rawScore - a.rawScore ||
+        priority[b.matchupType] - priority[a.matchupType] ||
+        a.hero.name.localeCompare(b.hero.name, "ru");
+    })
     .slice(0, 3);
 
   // Контрсборка: совместимость с выбранным героем + подтверждённые угрозы врагов.
