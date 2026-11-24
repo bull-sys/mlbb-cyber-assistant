@@ -1,6 +1,6 @@
 # Hero Data Coverage — MLBB Cyber Assistant
 
-Last audited: 2026-11-23  
+Last audited: 2026-11-24  
 Project reference patch: 2.2.23  
 Working branch: assistant/cyber-redesign-2
 
@@ -11,7 +11,7 @@ Working branch: assistant/cyber-redesign-2
 | Working hero catalogue | 133 / 133 | The current project catalogue contains 133 entries with unique IDs. This remains a working roster, not an independently verified official-client snapshot. |
 | Neutral reference dataset | 133 / 133 | Every catalogue entry has a local reference record with title, role, lane, specialties, release metadata, region/resource labels, source ratings and base statistics. |
 | Role cross-check | 133 / 133 | Every role now matches the pinned reference and the matching MLBB.io page. |
-| Primary-lane cross-check | 132 / 133 | 132 entries have a verified primary lane; Badang remains pending because its split-lane record has no settled primary. |
+| Lane classification cross-check | 133 / 133 | All 133 lane classifications are verified. 132 heroes have a named primary lane; Badang has a verified EXP Lane/Roam split with no forced primary lane. |
 | Extended local profile records | 133 / 133 | All 133 heroes have a structured local profile record. |
 | Runtime profile endpoint | 133 / 133 supported by catalogue lookup | The encyclopedia requests the current neutral hero profile from MLBBDex. When that endpoint is unavailable, the new local reference dataset supplies the base passport and statistics. |
 | Local Russian lore summaries | 133 / 133 | Every catalogue hero has an original Russian summary based on the pinned CC BY-SA lore dataset, with source revision and attribution retained. |
@@ -40,7 +40,7 @@ The dataset deliberately excludes authored gameplay analysis and equipment/build
 - Current source fields are merged with the local base-reference snapshot, so a missing optional field does not erase a known base statistic.
 - If the external profile endpoint fails, the adapter returns the local record and marks it as a dated fallback.
 - The UI distinguishes current source data from fallback data. It does not present the fallback snapshot as live.
-- A separate local lore dataset supplies concise Russian summaries for the 31 previously missing extended profiles, including source revision and CC BY-SA attribution. The adapter exposes the same `lore` field to the existing encyclopedia section in both live and offline modes.
+- A separate local lore dataset supplies concise Russian summaries for all 133 heroes, including source revision and CC BY-SA attribution. The adapter exposes the same `lore` field to the existing encyclopedia section in both live and offline modes.
 - Skill descriptions continue to come from the separate skill-data path. Russian descriptions are machine-translated source text and must remain visibly identified as such. The content audit flagged the literal Helcurt state translation “Бродяга”; this is a localization defect, not an approved Russian term, and must be corrected in a dedicated terminology pass.
 - No missing story, statistic, translation or patch note should be filled with a guess.
 
@@ -124,7 +124,7 @@ The source-data comparison and stat-page retrieval are complete for this pass, b
 - Identity: 35 source-verified, 2 user-confirmed, 96 still marked pending review.
 - English hero headings matched the expected names on 133 / 133 MLBB.io pages.
 - Role: 133 / 133 marked verified after matching the pinned reference and MLBB.io page.
-- Primary lane: 132 / 133 marked verified; Badang remains pending because its EXP/Roam split is deliberately not collapsed into a single primary lane.
+- Lane classification: 133 / 133 marked verified. Badang's EXP/Roam split is deliberately not collapsed into a single primary lane.
 - 13 catalog lane sets contain additional or different flexible-lane assignments compared with the single-lane MLBBDex snapshot: Julian, Atlas, Akai, Alucard, Arlott, Barats, Edith, Guinevere, Harith, Hylos, Valir, Rafaela and Minotaur. These are retained because the catalog has separate multi-source research; they need individual reconciliation rather than automatic deletion.
 - At the time of that earlier audit snapshot, 29 heroes still lacked a local extended profile record; the current list is maintained in the section above.
 - The current run verifies source availability and table parsing, not in-game values against a fresh client build. Patch-specific confirmation and visual review in the preview app remain separate tasks.
