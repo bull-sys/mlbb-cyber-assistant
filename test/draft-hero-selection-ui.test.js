@@ -16,7 +16,8 @@ test("draft UI restores catalog IDs and renders their visible names", async () =
   const source = await readFile(new URL("../public/app.js", import.meta.url), "utf8");
   assert.match(source, /data\.draftHeroOptions\|\|\[\]\)\.map\(h=>h\.id\)/);
   assert.match(source, /function draftHeroLabel\(value\)/);
-  assert.match(source, /const name=draftHeroLabel\(value\)/);\n  assert.match(source, /esc\(name\)/);
+  assert.match(source, /const name=draftHeroLabel\(value\)/);
+  assert.match(source, /esc\(name\)/);
 });
 
 test("limited analysis never renders empty or fabricated counter recommendations", async () => {
