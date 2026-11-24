@@ -393,7 +393,12 @@ function itemAssetKey(value){
 function itemAssetSlug(value){
  return String(value||"").normalize("NFKD").replace(/[\u0300-\u036f]/gu,"").toLowerCase().replace(/&/g,"and").replace(/['’]/g,"").replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");
 }
-function encyItemImage(item){return item?.image||null;}
+function encyItemImage(item){
+ if(item?.image)return item.image;
+ const slug=itemAssetSlug(item?.englishName||item?.name);
+ const remote=(encyRemoteAssets?.items||[]).find(entry=>entry?.slug===slug);
+ return remote?.image||null;
+}
 const EMBLEM_LOCAL_NAMES={tank:"Эмблема танка",fighter:"Эмблема бойца",assassin:"Эмблема убийцы",mage:"Эмблема мага",marksman:"Эмблема стрелка",support:"Эмблема поддержки"};
 const EMBLEM_LOCAL_DESCRIPTIONS={tank:"Эмблема с защитными характеристиками.",fighter:"Эмблема с характеристиками бойца.",assassin:"Эмблема с физическими атакующими характеристиками.",mage:"Эмблема с магическими характеристиками.",marksman:"Эмблема с характеристиками стрелка.",support:"Эмблема с характеристиками поддержки."};
 const TALENT_LOCAL_NAMES={
