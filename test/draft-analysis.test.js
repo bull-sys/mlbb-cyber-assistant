@@ -490,3 +490,71 @@ test("mixed matchup classification preserves both positive and negative signals"
   assert.match(mixed.reason, /неоднозначный/i);
 });
 
+
+
+test("ranked matchup evidence is scored separately from lane eligibility and static matchup links", () => {
+  const enemy = heroProfiles.find(profile => profile.names.ru === "Эйдора");
+  const candidate = heroProfiles.find(profile => profile.names.ru === "Кэрри");
+  const result = run({
+    lane: "Золото",
+    enemies: ["Эйдора"],
+    rankedMatchups: {
+      [enemy.id]: {
+        [candidate.id]: {
+          opponentId: enemy.id,
+          candidateId: candidate.id,
+          source: "Rone Arena API",
+          sourceUrl: "https://arena.rone.dev/api/heroes/eudora/counters?rank=legend&days=15",
+          observedAt: "2026-11-24T12:00:00.000Z",
+          rankBracket: "legend",
+          windowDays: 15,
+          lane: null,
+          advantagePp: 4.2,
+          sampleSize: null,
+          direction: "candidate-favourable",
+          evidenceKind: "measured-ranked-pair"
+        }
+      }
+    },
+    rankedMatchupMeta: {
+      source: "Rone Arena API",
+      rankBracket: "legend",
+      windowDays: 15,
+      laneScoped: false,
+      sampleSizeAvailable: false,
+      status: "available"
+    }
+  });
+  const recommendation = result.counters.find(item => item.name === "Кэрри");
+  assert.ok(recommendation, "Karrie remains eligible on Gold Lane");
+  assert.equal(recommendation.matchupType, "ranked-advantage");
+  assert.deepEqual(recommendation.matchedEnemies, ["Эйдора"]);
+  assert.equal(recommendation.profileEvidence.rankedMatchups[0].advantagePp, 4.2);
+  assert.equal(recommendation.profileEvidence.rankedMatchups[0].lane, null);
+  assert.equal(recommendation.profileEvidence.rankedMatchups[0].sampleSize, null);
+  assert.equal(result.rankedMatchupMeta.laneScoped, false);
+});
+
+test("ranked matchup risk is retained and mixed with positive signals without claiming a lane counter", () => {
+  const enemy = heroProfiles.find(profile => profile.names.ru === "Эйдора");
+  const candidate = heroProfiles.find(profile => profile.names.ru === "Кэрри");
+  const result = run({
+    lane: "Золото",
+    enemies: ["Эйдора"],
+    rankedMatchups: {
+      [enemy.id]: {
+        [candidate.id]: {
+          opponentId: enemy.id, candidateId: candidate.id, source: "Rone Arena API",
+          rankBracket: "legend", windowDays: 15, lane: null, advantagePp: -2.7,
+          sampleSize: null, direction: "opponent-favourable"
+        }
+      }
+    },
+    rankedMatchupMeta: { rankBracket: "legend", laneScoped: false }
+  });
+  const recommendation = result.counters.find(item => item.name === "Кэрри");
+  assert.ok(recommendation);
+  assert.equal(recommendation.matchupType, "ranked-risk");
+  assert.deepEqual(recommendation.riskyEnemies, ["Эйдора"]);
+  assert.match(recommendation.reason, /риск/i);
+});
