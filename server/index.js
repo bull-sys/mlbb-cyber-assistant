@@ -752,7 +752,7 @@ function analyze({lane, enemies = [], allies = [], myHero = "", rankedMatchups =
     roamRecommendation,
     emblem: selected ? emblem : null,
     talentTiers: selected ? ["Разрыв", "Мастер-убийца", "Серия убийств"] : [],
-    spell: selected ? (lane === "Лес" ? "Возмездие" : "Вспышка") : null,
+    spell: lane === "Лес" ? "Возмездие" : "Вспышка",
     timing: {
       early: "Контролируй ключевые участки карты и отслеживай перемещения противника.",
       mid: "Используй преимущество после покупки основных предметов и участвуй в борьбе за объекты.",
