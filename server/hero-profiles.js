@@ -2258,7 +2258,8 @@ export const heroProfiles = [
       "Нет надёжного постоянного рывка, поэтому мобильные герои и неожиданный вход с фланга опасны.",
       "Серия навыков расходует ману; без контроля ресурсов давление на линии становится менее стабильным."
     ],
-    matchups: { strongAgainst: [], weakAgainst: [] }, synergies: [],
+    matchups: { strongAgainst: ["karina", "natalia", "atlas"], weakAgainst: ["fanny", "saber", "alice"] },
+    matchupEvidence: { source: "https://mlbbcore.com/heroes/clint/counters/", method: "Measured all-rank ranked matchup and ally win-rate shifts", patch: HERO_DB_PATCH, checkedAt: "2026-11-24" }, synergies: ["floryn", "roger", "kimmy"],
     itemNotes: [
       "В патче 2.2.23 MLBBHub показывает физический взрывной вариант с Magic Boots, Endless Battle и Berserker's Fury; последующие слоты подбираются под защиту и состав соперника.",
       "Не считать этот порядок универсальным: приоритет пробивания, критического урона и выживаемости меняется в зависимости от темпа матча."
@@ -2268,7 +2269,8 @@ export const heroProfiles = [
       targetPriority: ["Цели, по которым можно провести линию усиленной атаки без риска зайти в радиус контроля", "Вражеский герой, который уже потратил рывок и оказался в зоне безопасного добивания"],
       avoid: ["Не применять навыки подряд, забывая о пассивной усиленной атаке.", "Не расходовать второй навык для агрессии, если рядом остаётся угроза обхода.", "Не стоять на одной линии с несколькими противниками, если это позволяет им попасть по Клинту контролем."]
     },
-    sources: ["https://www.mlbbanalytics.com/heroes?hero=Clint", "https://mlbb.io/en/hero/clint", "https://mlbbhub.com/ru/heroes/clint", "https://www.mlbbguides.com/heroes/clint/"],
+    sources: [
+      "https://mlbbcore.com/heroes/clint/counters/","https://www.mlbbanalytics.com/heroes?hero=Clint", "https://mlbb.io/en/hero/clint", "https://mlbbhub.com/ru/heroes/clint", "https://www.mlbbguides.com/heroes/clint/"],
     patch: { version: HERO_DB_PATCH, notes: ["Механики Double Shot, Quick Draw, Trapping Recoil и Grenade Bombardment сверены по MLBB Analytics и MLBB Guides на 2026-11-22.", "Рейтинговые данные MLBB.io и MLBBHub не смешиваются с выборками MPL и других турниров из MLBB Analytics.", "Индивидуальный VOD-разбор профессиональных матчей текущего патча не выполнен; competitive/VOD review pending."], reviewedAt: "2026-11-22" },
     confidence: "partial"
   },
@@ -2292,7 +2294,8 @@ export const heroProfiles = [
       "Мобильные стрелки и герои с дальним уроном могут держать дистанцию и не позволять ей эффективно сокращать разрыв.",
       "Если первый навык потрачен без возможности продолжить контакт, её выживаемость и темп заметно снижаются."
     ],
-    matchups: { strongAgainst: [], weakAgainst: [] }, synergies: [],
+    matchups: { strongAgainst: ["marcel", "jawhead", "lapu-lapu"], weakAgainst: ["dyrroth", "karrie", "lunox"] },
+    matchupEvidence: { source: "https://mlbbcore.com/heroes/esmeralda/counters/", method: "Measured all-rank ranked matchup and ally win-rate shifts", patch: HERO_DB_PATCH, checkedAt: "2026-11-24" }, synergies: ["bane", "nolan", "helcurt"],
     itemNotes: [
       "На патче 2.2.23 источники показывают несколько вариантов: более защитный EXP-профиль с Oracle и Dominance Ice либо вариант с дополнительной магической силой. Состав соперника определяет, какой подход полезнее.",
       "Не фиксировать один порядок предметов для всех матчей: усиление лечения, защита от физического/магического урона и сокращение восстановления выбираются по реальным угрозам."
@@ -2302,7 +2305,8 @@ export const heroProfiles = [
       targetPriority: ["Сгруппированные цели, по которым можно попасть ультимейтом", "Герои, чья защита заметно зависит от щитов"],
       avoid: ["Не начинать бой в одиночку, если союзники не могут продолжить атаку.", "Не тратить первый навык слишком рано, если впереди ожидается ответный урон.", "Не пытаться бесконечно преследовать мобильную заднюю линию без возможности сократить дистанцию."]
     },
-    sources: ["https://mlbb-knowledge.vercel.app/heroes/81", "https://liquipedia.net/mobilelegends/Esmeralda", "https://mlbb.io/en/hero/esmeralda", "https://www.mlbbguides.com/heroes/esmeralda/skills/", "https://mlbbhub.com/ru/heroes/esmeralda"],
+    sources: [
+      "https://mlbbcore.com/heroes/esmeralda/counters/","https://mlbb-knowledge.vercel.app/heroes/81", "https://liquipedia.net/mobilelegends/Esmeralda", "https://mlbb.io/en/hero/esmeralda", "https://www.mlbbguides.com/heroes/esmeralda/skills/", "https://mlbbhub.com/ru/heroes/esmeralda"],
     patch: { version: HERO_DB_PATCH, notes: ["Механики Starmoon Casket, Frostmoon Shield, Stardust Dance и Falling Starmoon сверены по MLBB Knowledge, Liquipedia и MLBB Guides на 2026-11-22.", "Числа и описания отдельных щитов различаются между источниками; профиль сохраняет механику и не закрепляет спорные значения.", "Рейтинговые срезы MLBBHub/MLBB.io рассматриваются отдельно от профессиональных данных; индивидуальный VOD-разбор текущего патча pending."], reviewedAt: "2026-11-22" },
     confidence: "partial"
   },
@@ -2318,10 +2322,12 @@ export const heroProfiles = [
     ],
     strengths:["Ультимейт способен перевернуть командный бой, если применён непосредственно перед большим входящим уроном.","Первый навык даёт мобильность через препятствия и возможность собрать несколько отмеченных целей.","Фрагменты душ поддерживают выживаемость и могут сокращать время возвращения после гибели."],
     weaknesses:["Ценность ультимейта снижается, если союзники находятся далеко друг от друга или покидают область.","Для контроля первым навыком Фарамису приходится входить ближе к противникам.","Без своевременного ультимейта он не заменяет полноценного фронтлайнера."],
-    matchups:{strongAgainst:[],weakAgainst:[]},synergies:[],
+    matchups: { strongAgainst: ["gloo", "sun", "ling"], weakAgainst: ["estes", "angela", "alice"] },
+    matchupEvidence: { source: "https://mlbbcore.com/heroes/faramis/counters/", method: "Measured all-rank ranked matchup and ally win-rate shifts", patch: HERO_DB_PATCH, checkedAt: "2026-11-24", caution: "Small sample: Faramis is picked in under 0.2% of all-rank games; treat matchup shifts as low-confidence." },synergies: ["kaja", "kalea", "ruby"],
     itemNotes:["В патче 2.2.23 MLBBHub показывает мидовый вариант через Magic Boots, Enchanted Talisman и Fleeting Time; дальнейшие слоты меняются между уроном и защитой.","Для роум-варианта приоритет защитных предметов может быть выше, чем для мидового. Не смешивать два назначения в один обязательный билд."],
     teamfight:{preferredPlan:"Сохранить ультимейт до момента, когда союзники действительно собираются принять ответный урон. Затем поддержать вход первым навыком, отметить несколько целей и стянуть их; второй навык использовать по сгруппированным врагам.",targetPriority:["Союзники, которые входят в бой и могут воспользоваться защитным окном ультимейта","Несколько близко расположенных противников, которых можно отметить и стянуть"],avoid:["Не нажимать ультимейт слишком рано, пока союзники ещё не вступили в бой.","Не уходить из собственной области ультимейта без необходимости.","Не использовать первый навык для глубокой погони, если команда не может продолжить атаку."]},
-    sources:["https://mlbb-knowledge.vercel.app/heroes/76","https://mlbbhub.com/ru/heroes/faramis","https://mlbb.io/en/hero/faramis","https://liquipedia.net/mobilelegends/Faramis"],
+    sources:[
+      "https://mlbbcore.com/heroes/faramis/counters/","https://mlbb-knowledge.vercel.app/heroes/76","https://mlbbhub.com/ru/heroes/faramis","https://mlbb.io/en/hero/faramis","https://liquipedia.net/mobilelegends/Faramis"],
     patch:{version:HERO_DB_PATCH,notes:["Vicious Retrieval, Shadow Stampede, Ghost Bursters и Nether Realm сверены по MLBB Knowledge и независимым справочникам на 2026-11-22.","Мидовый и роум-варианты предметов рассматриваются раздельно.","Рейтинговые агрегаты не объединяются с профессиональными выборками; индивидуальный VOD-разбор текущего патча pending."],reviewedAt:"2026-11-22"},confidence:"partial"
   },
   {
@@ -2336,10 +2342,12 @@ export const heroProfiles = [
     ],
     strengths:["Сочетает высокую стойкость, восстановление здоровья и контроль.","Накопленная Кристальная энергия превращает полученный урон в ресурс для ответного удара.","Полезен в борьбе за нейтральные объекты благодаря плотности и урону по области."],
     weaknesses:["Ультимейт требует накопить очки комбинации и Кристальную энергию.","Мобильные герои могут выходить из зоны контроля и заставлять Фредрина тратить рывок на погоню.","Ему сложно добраться до задней линии, если перед ней стоит плотная защита."],
-    matchups:{strongAgainst:[],weakAgainst:[]},synergies:[],
+    matchups: { strongAgainst: ["gloo", "alucard", "lunox"], weakAgainst: ["valir", "gord", "x-borg"] },
+    matchupEvidence: { source: "https://mlbbcore.com/heroes/fredrinn/counters/", method: "Measured all-rank ranked matchup and ally win-rate shifts", patch: HERO_DB_PATCH, checkedAt: "2026-11-24" },synergies: ["diggie", "granger", "angela"],
     itemNotes:["В патче 2.2.23 MLBBHub показывает защитное лесное направление: Tough Boots, Cursed Helmet, Thunder Belt, Guardian Helmet и Oracle встречаются в рекомендованном варианте.","Защитные слоты меняются под основной тип урона противника."],
     teamfight:{preferredPlan:"Набрать очки комбинации навыками по подходящим целям и принять часть урона, пока запас Кристальной энергии не станет полезным для ультимейта. Провокацию использовать для защиты союзников или фиксации цели; ультимейт направлять по группе после накопления ресурсов.",targetPriority:["Группа противников, которую можно удержать контролем и накрыть ультимейтом","Герой, угрожающий союзной задней линии"],avoid:["Не тратить ультимейт до набора необходимого количества очков комбинации.","Не уходить в одиночную погоню, теряя контроль над нейтральным объектом.","Не начинать бой без оценки запаса Кристальной энергии."]},
-    sources:["https://mlbb-knowledge.vercel.app/heroes/117","https://mlbb.io/en/hero/fredrinn","https://metammo.com/mobile-legends-guide/heroes/fredrinn","https://mlbb.tools/heroes/fredrinn","https://mlbbhub.com/ru/heroes/fredrinn"],
+    sources:[
+      "https://mlbbcore.com/heroes/fredrinn/counters/","https://mlbb-knowledge.vercel.app/heroes/117","https://mlbb.io/en/hero/fredrinn","https://metammo.com/mobile-legends-guide/heroes/fredrinn","https://mlbb.tools/heroes/fredrinn","https://mlbbhub.com/ru/heroes/fredrinn"],
     patch:{version:HERO_DB_PATCH,notes:["Crystalline Armor, Piercing Strike, Brave Assault, Energy Eruption и Appraiser's Wrath сверены по MLBB Knowledge, MLBB.io и METAMMO на 2026-11-22.","Очки комбинации и Кристальная энергия рассматриваются как отдельные ресурсы; порядок их расходования зависит от уровня ультимейта.","Рейтинговая статистика отделена от турниров и VOD-разбора; current-patch VOD review pending."],reviewedAt:"2026-11-22"},confidence:"partial"
   },
   {
@@ -2353,10 +2361,12 @@ export const heroProfiles = [
     ],
     strengths:["Сильная командная инициация с дальней дистанции благодаря ультимейту по области.","Провокация второго навыка помогает защищать союзников.","Пассивная защита и восстановление здоровья поддерживают его в продолжительных столкновениях."],
     weaknesses:["Ультимейт требует точного выбора области и менее полезен, если противники заранее рассредоточились.","Подготовка второго навыка делает направление входа читаемым.","После неудачной инициации ему трудно быстро выйти из боя."],
-    matchups:{strongAgainst:[],weakAgainst:[]},synergies:[],
+    matchups: { strongAgainst: ["odette", "badang", "minsitthar"], weakAgainst: ["x-borg", "lesley", "uranus"] },
+    matchupEvidence: { source: "https://mlbbcore.com/heroes/gatotkaca/counters/", method: "Measured all-rank ranked matchup and ally win-rate shifts", patch: HERO_DB_PATCH, checkedAt: "2026-11-24" },synergies: ["angela", "ling", "saber"],
     itemNotes:["Актуальные рекомендации разделяют роум- и EXP-варианты. В обоих встречаются Tough Boots, Thunder Belt, Dominance Ice и Oracle; порядок зависит от роли.","Не переносить роум-сборку автоматически на EXP-линию: в одиночной линии важны собственная устойчивость и темп зачистки."],
     teamfight:{preferredPlan:"Найти позицию, с которой ультимейт накроет несколько целей или перекроет подход к союзной задней линии. После приземления использовать провокацию, затем замедлить врагов первым навыком и поддержать усиленными атаками при накопленной ярости.",targetPriority:["Несколько сгруппированных целей","Вражеский инициатор, которого можно вынудить атаковать Гатоткачу вместо союзников"],avoid:["Не прыгать ультимейтом в одиночку, если союзники не готовы продолжить бой.","Не начинать подготовку второго навыка на виду у врагов, если они могут разойтись.","Не расходовать контроль на цель, не представляющую угрозы команде."]},
-    sources:["https://mlbb-knowledge.vercel.app/heroes/41","https://liquipedia.net/mobilelegends/Gatotkaca","https://mlbb.io/en/hero/gatotkaca","https://mlbbhub.com/ru/heroes/gatotkaca"],
+    sources:[
+      "https://mlbbcore.com/heroes/gatotkaca/counters/","https://mlbb-knowledge.vercel.app/heroes/41","https://liquipedia.net/mobilelegends/Gatotkaca","https://mlbb.io/en/hero/gatotkaca","https://mlbbhub.com/ru/heroes/gatotkaca"],
     patch:{version:HERO_DB_PATCH,notes:["Steel Bones, Blast Iron Fist, Unbreakable и Avatar of the Guardian сверены по MLBB Knowledge, Liquipedia и MLBB.io на 2026-11-22.","Roam и EXP варианты предметов рассмотрены раздельно.","Рейтинговые и профессиональные выборки не объединяются; индивидуальный VOD-разбор текущего патча pending."],reviewedAt:"2026-11-22"},confidence:"partial"
   },
   {
@@ -2370,10 +2380,12 @@ export const heroProfiles = [
     ],
     strengths:["Может нарушить позицию важной цели, прикрепившись к ней и перемещая её вместе с собой.","Связка первого и второго навыков позволяет повторно взрывать сгустки и создавать цепочки контроля.","Высокая устойчивость и пассивное снижение входящего урона помогают выдерживать давление."],
     weaknesses:["Для ультимейта нужно заранее набрать максимальные заряды липкости на выбранной цели.","Мобильные стрелки и герои с дальней атакой могут мешать Глу добраться до цели.","После изменений патча 2.2.23 контроль первого навыка и перенос урона ультимейтом ослаблены."],
-    matchups:{strongAgainst:[],weakAgainst:[]},synergies:[],
+    matchups: { strongAgainst: ["aamon", "johnson", "jawhead"], weakAgainst: ["natan", "moskov", "lunox"] },
+    matchupEvidence: { source: "https://mlbbcore.com/heroes/gloo/counters/", method: "Measured all-rank ranked matchup and ally win-rate shifts", patch: HERO_DB_PATCH, checkedAt: "2026-11-24" },synergies: ["zilong", "helcurt", "aldous"],
     itemNotes:["В патче 2.2.23 источники показывают защитные варианты для роум-позиции и EXP-линии. Встречаются Cursed Helmet, Glowing Wand, Oracle и предметы физической защиты.","Выбор между роум- и EXP-сборкой зависит от роли в команде; не копировать один набор на обе позиции."],
     teamfight:{preferredPlan:"Сначала наложить заряды липкости на выбранную цель и подготовить сгусток первого навыка. Использовать второй навык для сближения или перемещения врагов к сгустку; ультимейт включать только после подтверждения максимальных зарядов и готовности союзников продолжить атаку.",targetPriority:["Малоподвижный герой, которого можно довести до максимальных зарядов липкости","Вражеский маг или стрелок, чья позиция критична для построения команды"],avoid:["Не пытаться прикрепиться к цели до набора максимальных зарядов.","Учитывать ослабления контроля и переноса урона в патче 2.2.23.","Не уводить прикреплённую цель слишком далеко от союзников."]},
-    sources:["https://mlbb-knowledge.vercel.app/heroes/104","https://liquipedia.net/mobilelegends/Gloo","https://mlbb.io/en/hero/gloo","https://mlbbhub.com/ru/heroes/gloo","https://kazukiofficial.com/heroes/gloo"],
+    sources:[
+      "https://mlbbcore.com/heroes/gloo/counters/","https://mlbb-knowledge.vercel.app/heroes/104","https://liquipedia.net/mobilelegends/Gloo","https://mlbb.io/en/hero/gloo","https://mlbbhub.com/ru/heroes/gloo","https://kazukiofficial.com/heroes/gloo"],
     patch:{version:HERO_DB_PATCH,notes:["Stick, Stick, Slam, Slam, Spread, Spread и Grab, Grab сверены по MLBB Knowledge и Liquipedia на 2026-11-22.","В патче 2.2.23 уменьшены время обездвиживания и урон взрыва первого навыка, а доля переносимого ультимейтом урона снижена; старые значения не переносятся.","Роум и EXP варианты предметов рассмотрены отдельно; профессиональный VOD-разбор текущего патча pending."],reviewedAt:"2026-11-22"},confidence:"partial"
   },
   {
@@ -2387,10 +2399,12 @@ export const heroProfiles = [
     ],
     strengths:["Высокий продолжительный магический урон по целям, остающимся в зоне навыков.","Первый навык даёт инструмент начала комбинации и помогает раскрыть противников.","Может быстро очищать волны и контролировать проходы вокруг нейтральных объектов."],
     weaknesses:["Низкая мобильность делает Горда уязвимым к обходу и внезапному сближению.","Ультимейт требует сохранять позицию и может потерять ценность, если враг выходит из луча.","Урон ниже, если противники свободно покидают область второго навыка."],
-    matchups:{strongAgainst:[],weakAgainst:[]},synergies:[],
+    matchups: { strongAgainst: ["barats", "fredrinn", "phoveus"], weakAgainst: ["natalia", "helcurt", "ling"] },
+    matchupEvidence: { source: "https://mlbbcore.com/heroes/gord/counters/", method: "Measured all-rank ranked matchup and ally win-rate shifts", patch: HERO_DB_PATCH, checkedAt: "2026-11-24" },synergies: ["cyclops", "harley", "saber"],
     itemNotes:["В патче 2.2.23 MLBBHub показывает магический вариант через Magic Boots, Enchanted Talisman, Glowing Wand и Ice Queen Wand с последующим пробиванием и усилением магии.","Замедление и магическое пробивание полезны для удержания целей в поле; защитный слот выбирается по угрозам матча."],
     teamfight:{preferredPlan:"Держаться за передней линией и начинать комбинацию первым навыком, затем накрывать обездвиженную или замедленную цель вторым навыком. Ультимейт использовать из защищённой позиции и корректировать луч по движению врагов.",targetPriority:["Герои, уже попавшие под оглушение или замедление","Сгруппированные противники, вынужденные проходить через область второго навыка"],avoid:["Не начинать бой с ультимейта, если враги могут быстро добраться до Горда.","Не стоять на одной линии с угрозой флангового входа.","Не расходовать первый навык бездумно, если он нужен для защиты от сближения."]},
-    sources:["https://mlbb.io/en/hero/gord","https://mlbbanalytics.com/heroes?hero=Gord","https://liquipedia.net/mobilelegends/Gord","https://mlbbhub.com/ru/heroes/gord","https://www.mlbbguides.com/heroes/gord/"],
+    sources:[
+      "https://mlbbcore.com/heroes/gord/counters/","https://mlbb.io/en/hero/gord","https://mlbbanalytics.com/heroes?hero=Gord","https://liquipedia.net/mobilelegends/Gord","https://mlbbhub.com/ru/heroes/gord","https://www.mlbbguides.com/heroes/gord/"],
     patch:{version:HERO_DB_PATCH,notes:["Mystic Favor, Mystic Projectile, Mystic Injunction и Mystic Gush сверены по MLBB.io, MLBB Analytics и Liquipedia на 2026-11-22.","Профессиональные выборки MSC/MPL из MLBB Analytics не смешиваются с рейтинговыми показателями MLBBHub.","Индивидуальный VOD-разбор матчей патча 2.2.23 не выполнен; competitive/VOD review pending."],reviewedAt:"2026-11-22"},confidence:"partial"
   },
 
@@ -2405,10 +2419,12 @@ export const heroProfiles = [
     ],
     strengths:["Сочетает прочность, защиту от контроля во время навыков и мощное взаимодействие со стенами.","Может менять геометрию боя стеной и создавать удобные условия для командного контроля.","Ультимейт позволяет начать бой с защищённого рывка и получить массовое подбрасывание у препятствия."],
     weaknesses:["Эффективность ряда навыков сильно зависит от расположения стен и других препятствий.","Если стена второго навыка перекрывает путь союзникам, инициация может навредить собственной команде.","После неудачного входа ему трудно быстро вернуться к задней линии союзников."],
-    matchups:{strongAgainst:[],weakAgainst:[]},synergies:[],
+    matchups: { strongAgainst: ["johnson", "diggie", "yin"], weakAgainst: ["alice", "esmeralda", "marcel"] },
+    matchupEvidence: { source: "https://mlbbcore.com/heroes/grock/counters/", method: "Measured all-rank ranked matchup and ally win-rate shifts", patch: HERO_DB_PATCH, checkedAt: "2026-11-24" },synergies: ["saber", "natalia", "zilong"],
     itemNotes:["В патче 2.2.23 MLBBHub показывает защитное роум-направление с Tough Boots, Dominance Ice и ситуативными предметами физической/магической защиты.","При выборе предметов учитывать, что пассивный щит и близость к препятствиям уже дают Гроку дополнительную стойкость; не жертвовать командной защитой ради урона."],
     teamfight:{preferredPlan:"Перед началом столкновения оценить расположение стен и направление отхода. Использовать стену второго навыка для изменения маршрута противника, затем выбирать рывок ультимейта к препятствию и продолжать контроль первым навыком.",targetPriority:["Герои, которых можно прижать к препятствию или отрезать от команды","Сгруппированные цели, по которым союзники могут продолжить контроль"],avoid:["Не ставить стену поперёк маршрута союзников без причины.","Не тратить ультимейт в открытом пространстве, если нет полезной траектории продолжения.","Не отходить далеко от команды после неудачного входа."]},
-    sources:["https://mlbb-knowledge.vercel.app/heroes/44","https://liquipedia.net/mobilelegends/Grock","https://mlbb.io/en/hero/grock","https://mlbbhub.com/ru/heroes/grock"],
+    sources:[
+      "https://mlbbcore.com/heroes/grock/counters/","https://mlbb-knowledge.vercel.app/heroes/44","https://liquipedia.net/mobilelegends/Grock","https://mlbb.io/en/hero/grock","https://mlbbhub.com/ru/heroes/grock"],
     patch:{version:HERO_DB_PATCH,notes:["Bastion of Stone, Mighty Swing, Earthen Rampart и Tectonic Charge сверены по MLBB Knowledge, Liquipedia и MLBB.io на 2026-11-22.","Пассивный эффект у препятствий и взаимодействие навыков со стенами отражены отдельно от рейтинговых данных.","Индивидуальный профессиональный VOD-разбор текущего патча pending."],reviewedAt:"2026-11-22"},confidence:"partial"
   },
   {
@@ -2502,10 +2518,12 @@ export const heroProfiles = [
     ],
     strengths:["Очень высокая мобильность позволяет выбирать угол атаки и возвращаться к безопасной позиции через фантомы.","Силен в изоляции одиночной цели, на которой можно заранее накопить метки.","Быстро перемещается между линиями и помогает забирать нейтральные цели."],
     weaknesses:["Ультимейт теряет часть эффективности, если рядом с выбранной целью находятся другие противники, на которых могут распределиться удары.","Ошибочное применение второго навыка оставляет Хаябусу без надёжного пути отхода.","Энергия и перезарядки ограничивают частоту повторных заходов."],
-    matchups:{strongAgainst:[],weakAgainst:[]},synergies:[],
+    matchups: { strongAgainst: ["aamon", "zhuxin", "nolan"], weakAgainst: ["saber", "fredrinn", "zhask"] },
+    matchupEvidence: { source: "https://mlbbcore.com/heroes/hayabusa/counters/", method: "Measured all-rank ranked matchup and ally win-rate shifts", patch: HERO_DB_PATCH, checkedAt: "2026-11-24" },synergies: ["khufra", "masha", "belerick"],
     itemNotes:["В патче 2.2.23 MLBBHub показывает лесное направление с Magic Boots, Hunter Strike, War Axe, Malefic Roar и ситуационными предметами.","Сборка должна учитывать броню противника и возможность безопасно завершить цикл навыков; не выбирать предметы только по одному рейтинговому срезу."],
     teamfight:{preferredPlan:"Искать изолированную цель и заранее накопить на ней метки. Использовать фантомы для входа и выбора угла, затем первый навык и ультимейт; сохранить повторное применение второго навыка для выхода или продолжения только при безопасной позиции.",targetPriority:["Изолированный маг или стрелок без готового направленного контроля","Цель с уже накопленными метками, если рядом нет противников, способных перехватить удары ультимейта"],avoid:["Не тратить все фантомы на вход, если рядом остаётся угроза контроля.","Не применять ультимейт в плотную группу, если это размоет удары по основной цели.","Не продолжать погоню после потери энергии и доступных путей отхода."]},
-    sources:["https://mlbb-knowledge.vercel.app/heroes/21","https://mlbbhub.com/ru/heroes/hayabusa","https://mlbb.io/en/hero/hayabusa","https://liquipedia.net/mobilelegends/Hayabusa"],
+    sources:[
+      "https://mlbbcore.com/heroes/hayabusa/counters/","https://mlbb-knowledge.vercel.app/heroes/21","https://mlbbhub.com/ru/heroes/hayabusa","https://mlbb.io/en/hero/hayabusa","https://liquipedia.net/mobilelegends/Hayabusa"],
     patch:{version:HERO_DB_PATCH,notes:["Trace of Shadow, Phantom Shuriken, Quad Shadow и Shadow Kill сверены по MLBB Knowledge, MLBBHub и Liquipedia на 2026-11-22.","Ультимейт приоритизирует цели с метками, но распределение ударов зависит от расположения других врагов.","Рейтинговые данные отделены от профессиональных выборок; индивидуальный VOD-разбор текущего патча pending."],reviewedAt:"2026-11-22"},confidence:"partial"
   },
   {
@@ -2519,10 +2537,12 @@ export const heroProfiles = [
     ],
     strengths:["Очень высокая стойкость и возможность использовать здоровье вместо маны позволяют долго оставаться на передней линии.","Ультимейт ускоряет союзную команду и создаёт удобный маршрут для начала или продолжения боя.","Кольцо наказания мешает противникам долго находиться рядом и снижает их темп атак."],
     weaknesses:["Постоянное использование второго навыка быстро расходует ресурсы и может заставить Хилоса платить здоровьем.","Ему трудно догонять мобильных героев без помощи ультимейта и союзников.","Большая часть его пользы зависит от того, насколько команда использует созданный маршрут."],
-    matchups:{strongAgainst:[],weakAgainst:[]},synergies:[],
+    matchups: { strongAgainst: ["yin", "layla", "vale"], weakAgainst: ["x-borg", "karrie", "valir"] },
+    matchupEvidence: { source: "https://mlbbcore.com/heroes/hylos/counters/", method: "Measured all-rank ranked matchup and ally win-rate shifts", patch: HERO_DB_PATCH, checkedAt: "2026-11-24" },synergies: ["angela", "edith", "saber"],
     itemNotes:["В патче 2.2.23 MLBBHub показывает роум-направление с Rapid Boots, Clock of Destiny, Dominance Ice и Thunder Belt; защита подбирается по составу соперника.","Учитывать взаимодействие здоровья и маны: предметы на здоровье могут также повышать запас маны благодаря пассивной способности."],
     teamfight:{preferredPlan:"Прокладывать ультимейтом маршрут, по которому союзники смогут войти в бой или отступить. Ускориться первым навыком к приоритетной цели, оглушить её и включить кольцо для постоянного давления, следя за запасом здоровья и маны.",targetPriority:["Вражеские герои, которые не могут быстро выйти из радиуса кольца","Цель, которую союзники могут удержать на дорожке ультимейта"],avoid:["Не держать кольцо включённым без необходимости, если запас маны или здоровья низкий.","Не уходить далеко от союзников после прокладки дорожки.","Не использовать ультимейт только для личного преследования, если команда не может подключиться."]},
-    sources:["https://mlbb-knowledge.vercel.app/heroes/49","https://mlbbhub.com/heroes/hylos","https://mlbb.io/en/hero/hylos","https://liquipedia.net/mobilelegends/Hylos"],
+    sources:[
+      "https://mlbbcore.com/heroes/hylos/counters/","https://mlbb-knowledge.vercel.app/heroes/49","https://mlbbhub.com/heroes/hylos","https://mlbb.io/en/hero/hylos","https://liquipedia.net/mobilelegends/Hylos"],
     patch:{version:HERO_DB_PATCH,notes:["Thickened Blood, Law and Order, Ring of Punishment и Glorious Pathway сверены по MLBB Knowledge и MLBBHub на 2026-11-22.","Отдельно отмечено расходование здоровья вместо маны и постоянное потребление маны вторым навыком.","Роум и EXP варианты рассматриваются отдельно; профессиональный VOD-разбор текущего патча pending."],reviewedAt:"2026-11-22"},confidence:"partial"
   },
   {
