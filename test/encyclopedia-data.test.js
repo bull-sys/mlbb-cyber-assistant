@@ -46,6 +46,11 @@ test("item encyclopedia records have descriptions and the six shop categories", 
     [...categories].sort(),
     ["Атака", "Защита", "Лес", "Магия", "Передвижение", "Роум"].sort()
   );
+  const categoryCounts = Object.fromEntries(["Атака", "Магия", "Защита", "Передвижение", "Лес", "Роум"].map(category => [
+    category,
+    items.filter(item => (item.categories || [item.category]).includes(category)).length
+  ]));
+  assert.deepEqual(categoryCounts, { "Атака": 34, "Магия": 31, "Защита": 26, "Передвижение": 11, "Лес": 3, "Роум": 4 });
   const adaptive = items.filter(item => item.categories?.includes("Магия"));
   assert.deepEqual(adaptive.filter(item => ["Fleeting Time", "Sky Piercer"].includes(item.englishName)).map(item => item.englishName).sort(), ["Fleeting Time", "Sky Piercer"].sort());
   assert.deepEqual(items.find(item => item.englishName === "Fleeting Time").categories, ["Атака", "Магия", "Защита"]);
@@ -57,6 +62,7 @@ test("item encyclopedia records have descriptions and the six shop categories", 
     assert.ok(categories.has(item.category), item.name + " needs a valid shop category");
     assert.ok(item.source?.startsWith("https://"), item.name + " needs provenance");
     assert.ok(item.checkedAt, item.name + " needs a verification date");
+    assert.ok(["partial", "checked against item detail page"].includes(item.verification), item.name + " needs a clear verification status");
   }
 });
 
