@@ -3,7 +3,10 @@ import test from "node:test";
 import { heroProfiles, validateHeroProfiles, HERO_DB_PATCH } from "../server/hero-profiles.js";
 import { heroCatalog } from "../server/hero-catalog.js";
 
-const MATCHUP_REVIEWED_IDS = new Set(["helcurt", "hanzo", "roger", "ling", "badang", "nolan", "fanny", "jawhead", "suyou", "karrie", "cyclops", "gusion", "alpha", "eudora", "guinevere", "harith", "harley", "hilda", "ixia", "johnson", "dyrroth", "chou", "franco", "akai", "aurora", "bruno", "terizla", "masha", "marcel", "argus", "khufra", "diggie", "sun", "belerick", "hanabi"]);
+const MATCHUP_REVIEWED_IDS = new Set([
+  "helcurt", "hanzo", "roger", "ling", "badang", "nolan", "fanny", "jawhead", "suyou", "karrie", "cyclops", "gusion", "alpha", "eudora", "guinevere", "harith", "harley", "hilda", "ixia", "johnson", "dyrroth", "chou", "franco", "akai", "aurora", "bruno", "terizla", "masha", "marcel", "argus", "khufra", "diggie", "sun", "belerick", "hanabi",
+  ...heroProfiles.filter(hero => hero.matchupEvidence).map(hero => hero.id)
+]);
 
 test("hero profile database remains structurally valid", () => {
   const result = validateHeroProfiles();
@@ -1020,15 +1023,21 @@ test("tactical profile coverage is explicit and does not invent profiles for the
   assert.equal(missing.length, 0);
 });
 
-test("five hero profiles contain dated, source-backed matchup and synergy IDs", () => {
+test("all researched hero profiles contain dated, source-backed matchup and synergy IDs", () => {
   for (const id of MATCHUP_REVIEWED_IDS) {
     const hero = heroProfiles.find(entry => entry.id === id);
     assert.ok(hero, id + " profile exists");
     assert.ok(hero.matchups.strongAgainst.length > 0, id + " strong matchups");
     assert.ok(hero.matchups.weakAgainst.length > 0, id + " weak matchups");
     assert.ok(hero.synergies.length > 0, id + " synergies");
-    assert.equal(hero.matchupsReviewedAt, "2026-11-24");
-    assert.match(hero.matchupsMethod, /ranked matchup deltas/i);
-    assert.ok(hero.sources.some(source => source.includes("mlbb.io")));
+    if (hero.matchupEvidence) {
+      assert.equal(hero.matchupEvidence.checkedAt, "2026-11-24");
+      assert.match(hero.matchupEvidence.method, /measured all-rank ranked matchup/i);
+      assert.ok(hero.sources.includes(hero.matchupEvidence.source));
+    } else {
+      assert.equal(hero.matchupsReviewedAt, "2026-11-24");
+      assert.match(hero.matchupsMethod, /ranked matchup deltas/i);
+      assert.ok(hero.sources.some(source => source.includes("mlbb.io")));
+    }
   }
 });
