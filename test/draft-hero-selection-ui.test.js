@@ -41,3 +41,21 @@ test("server blocks full analysis when any selected catalog hero lacks verified 
   assert.match(source.slice(limited, analyze), /analysisStatus:"limited"/);
   assert.match(source.slice(limited, analyze), /return res\.json/);
 });
+
+test("draft picker renders a live selected-hero strip with portraits and team capacity", async () => {
+  const source = await readFile(new URL("../public/app.js", import.meta.url), "utf8");
+  assert.match(source, /const selectedValues=pickerTarget==="myHero"/);
+  assert.match(source, /picker-selection-slots/);
+  assert.match(source, /heroPortraitUrl\(hero\)/);
+  assert.match(source, /current\.length\+" \/ 5"/);
+  assert.match(source, /Добавь героев в состав/);
+});
+
+test("draft picker uses a circular neon selection grid and respects reduced motion", async () => {
+  const css = await readFile(new URL("../public/style.css", import.meta.url), "utf8");
+  assert.match(css, /CYBER ARENA · draft selection stage polish/);
+  assert.match(css, /\.hero-tile\.selected\s*\{/);
+  assert.match(css, /border-radius:50%/);
+  assert.match(css, /@media\(prefers-reduced-motion:reduce\)/);
+  assert.match(css, /\.picker-selection-slots/);
+});
