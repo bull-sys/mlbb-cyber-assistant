@@ -1430,3 +1430,5 @@ details.ency-info-card.visual>.ency-info-summary{display:grid}
 .own-recommendation i{color:#c4b5fd;font-size:6px;font-style:normal;font-weight:950;white-space:nowrap}
 @media(max-width:650px){.arena-own-card{grid-template-columns:minmax(0,1fr) 50px}.arena-my-recommendations{grid-column:1/-1;grid-row:2}.own-recommendation{grid-template-columns:16px 28px minmax(0,1fr) auto}.own-recommendation img,.own-recommendation-fallback{width:28px;height:28px}}
 @media(prefers-reduced-motion:reduce){.own-recommendation{transition:none}}
+
+.ally-slots{grid-template-columns:repeat(4,minmax(0,1fr))}
