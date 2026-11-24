@@ -450,7 +450,7 @@ function renderEncy(){
   const list=group.entries.filter(x=>(x.name+" "+x.category+" "+(x.secondaryCategory||"")+" "+(x.description||"")+" "+(x.roles||"")+" "+(x.lanes||"")).toLocaleLowerCase("ru").includes(q));
   if(!list.length)continue;
   if(group.type==="item")list.sort((a,b)=>a.category.localeCompare(b.category,"ru")||a.name.localeCompare(b.name,"ru"));
-  html+='<div class="ency-group-heading"><b>'+group.title+'</b><small>'+list.length+'</small></div>';
+  html+='<div class="ency-group-heading"><b>'+group.title+'</b><small>'+list.length+(group.type==="item"?' · иконки MLBBDex':'')+'</small></div>';
   html+=list.map((x,index)=>{
    if(x.type==="hero"){
     const url=encyHeroPortrait(x.hero),p=x.profile;
