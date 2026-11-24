@@ -378,13 +378,11 @@ function analyze({lane, enemies = [], allies = [], myHero = ""}) {
   // Контрсборка: совместимость с выбранным героем + подтверждённые угрозы врагов.
   const selectedProfile = profileByName.get(myHero) || null;
   const enemyProfileByName = new Map(enemy.map(hero => [hero.name, profileByName.get(hero.name)]));
-  let hasMagicBurst = false, hasPhysicalBurst = false, hasBurstThreat = false;
+  let hasBurstThreat = false;
   for (const hero of enemy) {
     const profile = enemyProfileByName.get(hero.name);
     const damage = profile?.combat?.damage || (hero.type === "mage" ? "magic" : ["assassin","fighter","marksman"].includes(hero.type) ? "physical" : "unknown");
     const burst = profile?.combat?.burst || ((hero.tags || []).includes("burst") ? "high" : "unknown");
-    if (damage === "magic" && burst === "high") hasMagicBurst = true;
-    if (damage === "physical" && burst === "high") hasPhysicalBurst = true;
     if (burst === "high") hasBurstThreat = true;
   }
 
@@ -434,7 +432,7 @@ function analyze({lane, enemies = [], allies = [], myHero = ""}) {
 
     const magicDpsTargets = enemy.filter(hero => {
       const profile = enemyProfileByName.get(hero.name);
-      return profile?.combat?.damage === "magic" || hero.type === "mage";
+      return (profile?.combat?.damage === "magic" || hero.type === "mage") && profile?.combat?.burst !== "high";
     }).map(hero => hero.name);
     if (tags.has("magic-dps") && magicDpsTargets.length) add(7, "Полезен против повторяющегося магического урона", magicDpsTargets);
 
