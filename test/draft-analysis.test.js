@@ -175,7 +175,7 @@ test("items answer sustain and double-mage threats while respecting mage categor
   assert.ok(athenaRecommendation);
   assert.ok(athenaRecommendation.against.includes("Эйдора"));
   assert.ok(athenaRecommendation.against.includes("Нана"));
-  assert.ok(result.build.includes("Господство льда"));
+  assert.ok(result.build.includes("Пылающий жезл"));
   const antiHealCount = result.build.filter(name =>
     items.find(item => item.name === name)?.tags.includes("anti-heal")
   ).length;
