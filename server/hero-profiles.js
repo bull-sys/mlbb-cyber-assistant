@@ -571,7 +571,7 @@ const rawHeroProfiles = [
     },
     "matchupEvidence": {
       "source": "https://mlbb.io/en/hero/saber",
-      "method": "MLBB.io all-rank ranked matchup deltas; measured win-rate shifts are statistical signals, not guaranteed counters.",
+      "method": "Measured all-rank ranked matchup win-rate deltas from MLBB.io; statistical signal, not a guaranteed counter.",
       "patch": "2.2.23",
       "checkedAt": "2026-11-24",
       "dataUpdatedAt": "2026-11-24",
@@ -2922,7 +2922,7 @@ const rawHeroProfiles = [
     },
     "matchupEvidence": {
       "source": "https://mlbb.io/en/hero/lesley",
-      "method": "MLBB.io all-rank ranked matchup deltas; measured win-rate shifts are statistical signals, not guaranteed counters.",
+      "method": "Measured all-rank ranked matchup win-rate deltas from MLBB.io; statistical signal, not a guaranteed counter.",
       "patch": "2.2.23",
       "checkedAt": "2026-11-24",
       "dataUpdatedAt": "2026-11-24",
@@ -3018,7 +3018,7 @@ const rawHeroProfiles = [
     },
     "matchupEvidence": {
       "source": "https://mlbb.io/en/hero/lolita",
-      "method": "MLBB.io all-rank ranked matchup deltas; measured win-rate shifts are statistical signals, not guaranteed counters.",
+      "method": "Measured all-rank ranked matchup win-rate deltas from MLBB.io; statistical signal, not a guaranteed counter.",
       "patch": "2.2.23",
       "checkedAt": "2026-11-24",
       "dataUpdatedAt": "2026-11-23",
@@ -3114,7 +3114,7 @@ const rawHeroProfiles = [
     },
     "matchupEvidence": {
       "source": "https://mlbb.io/en/hero/luo-yi",
-      "method": "MLBB.io all-rank ranked matchup deltas; measured win-rate shifts are statistical signals, not guaranteed counters.",
+      "method": "Measured all-rank ranked matchup win-rate deltas from MLBB.io; statistical signal, not a guaranteed counter.",
       "patch": "2.2.23",
       "checkedAt": "2026-11-24",
       "dataUpdatedAt": "2026-11-24",
@@ -3210,7 +3210,7 @@ const rawHeroProfiles = [
     },
     "matchupEvidence": {
       "source": "https://mlbb.io/en/hero/lylia",
-      "method": "MLBB.io all-rank ranked matchup deltas; measured win-rate shifts are statistical signals, not guaranteed counters.",
+      "method": "Measured all-rank ranked matchup win-rate deltas from MLBB.io; statistical signal, not a guaranteed counter.",
       "patch": "2.2.23",
       "checkedAt": "2026-11-24",
       "dataUpdatedAt": "2026-11-24",
@@ -3307,7 +3307,7 @@ const rawHeroProfiles = [
     },
     "matchupEvidence": {
       "source": "https://mlbb.io/en/hero/martis",
-      "method": "MLBB.io all-rank ranked matchup deltas; measured win-rate shifts are statistical signals, not guaranteed counters.",
+      "method": "Measured all-rank ranked matchup win-rate deltas from MLBB.io; statistical signal, not a guaranteed counter.",
       "patch": "2.2.23",
       "checkedAt": "2026-11-24",
       "dataUpdatedAt": "2026-11-24",
@@ -3800,7 +3800,7 @@ const rawHeroProfiles = [
     },
     "matchupEvidence": {
       "source": "https://mlbb.io/en/hero/aamon",
-      "method": "MLBB.io all-rank ranked matchup deltas; measured win-rate shifts are statistical signals, not guaranteed counters.",
+      "method": "Measured all-rank ranked matchup win-rate deltas from MLBB.io; statistical signal, not a guaranteed counter.",
       "patch": "2.2.23",
       "checkedAt": "2026-11-24",
       "dataUpdatedAt": "2026-11-24",
@@ -3902,7 +3902,7 @@ const rawHeroProfiles = [
     },
     "matchupEvidence": {
       "source": "https://mlbb.io/en/hero/alice",
-      "method": "MLBB.io all-rank ranked matchup deltas; measured win-rate shifts are statistical signals, not guaranteed counters.",
+      "method": "Measured all-rank ranked matchup win-rate deltas from MLBB.io; statistical signal, not a guaranteed counter.",
       "patch": "2.2.23",
       "checkedAt": "2026-11-24",
       "dataUpdatedAt": "2026-11-24",
@@ -4003,7 +4003,7 @@ const rawHeroProfiles = [
     },
     "matchupEvidence": {
       "source": "https://www.mlbb.io/en/hero/angela",
-      "method": "MLBB.io all-rank ranked matchup deltas; measured win-rate shifts are statistical signals, not guaranteed counters.",
+      "method": "Measured all-rank ranked matchup win-rate deltas from MLBB.io; statistical signal, not a guaranteed counter.",
       "patch": "2.2.23",
       "checkedAt": "2026-11-24",
       "dataUpdatedAt": "2026-11-24",
@@ -4104,7 +4104,7 @@ const rawHeroProfiles = [
     },
     "matchupEvidence": {
       "source": "https://mlbb.io/en/hero/odette",
-      "method": "MLBB.io all-rank ranked matchup deltas; measured win-rate shifts are statistical signals, not guaranteed counters.",
+      "method": "Measured all-rank ranked matchup win-rate deltas from MLBB.io; statistical signal, not a guaranteed counter.",
       "patch": "2.2.23",
       "checkedAt": "2026-11-24",
       "dataUpdatedAt": "2026-11-24",
@@ -4205,7 +4205,7 @@ const rawHeroProfiles = [
     },
     "matchupEvidence": {
       "source": "https://mlbb.io/en/hero/phoveus",
-      "method": "MLBB.io all-rank ranked matchup deltas; measured win-rate shifts are statistical signals, not guaranteed counters.",
+      "method": "Measured all-rank ranked matchup win-rate deltas from MLBB.io; statistical signal, not a guaranteed counter.",
       "patch": "2.2.23",
       "checkedAt": "2026-11-24",
       "dataUpdatedAt": "2026-11-23",
@@ -4309,7 +4309,7 @@ const rawHeroProfiles = [
     },
     "matchupEvidence": {
       "source": "https://mlbb.io/en/hero/popol-and-kupa",
-      "method": "MLBB.io all-rank ranked matchup deltas; measured win-rate shifts are statistical signals, not guaranteed counters.",
+      "method": "Measured all-rank ranked matchup win-rate deltas from MLBB.io; statistical signal, not a guaranteed counter.",
       "patch": "2.2.23",
       "checkedAt": "2026-11-24",
       "dataUpdatedAt": "2026-11-24",
@@ -4411,7 +4411,7 @@ const rawHeroProfiles = [
     },
     "matchupEvidence": {
       "source": "https://mlbb.io/en/hero/ruby",
-      "method": "MLBB.io all-rank ranked matchup deltas; measured win-rate shifts are statistical signals, not guaranteed counters.",
+      "method": "Measured all-rank ranked matchup win-rate deltas from MLBB.io; statistical signal, not a guaranteed counter.",
       "patch": "2.2.23",
       "checkedAt": "2026-11-24",
       "dataUpdatedAt": "2026-11-20",
@@ -4513,7 +4513,7 @@ const rawHeroProfiles = [
     },
     "matchupEvidence": {
       "source": "https://mlbb.io/en/hero/selena",
-      "method": "MLBB.io all-rank ranked matchup deltas; measured win-rate shifts are statistical signals, not guaranteed counters.",
+      "method": "Measured all-rank ranked matchup win-rate deltas from MLBB.io; statistical signal, not a guaranteed counter.",
       "patch": "2.2.23",
       "checkedAt": "2026-11-24",
       "dataUpdatedAt": "2026-11-24",
@@ -4615,7 +4615,7 @@ const rawHeroProfiles = [
     },
     "matchupEvidence": {
       "source": "https://mlbb.io/en/hero/silvanna",
-      "method": "MLBB.io all-rank ranked matchup deltas; measured win-rate shifts are statistical signals, not guaranteed counters.",
+      "method": "Measured all-rank ranked matchup win-rate deltas from MLBB.io; statistical signal, not a guaranteed counter.",
       "patch": "2.2.23",
       "checkedAt": "2026-11-24",
       "dataUpdatedAt": "2026-11-24",
@@ -4716,7 +4716,7 @@ const rawHeroProfiles = [
     },
     "matchupEvidence": {
       "source": "https://mlbb.io/en/hero/sora",
-      "method": "MLBB.io all-rank ranked matchup deltas; measured win-rate shifts are statistical signals, not guaranteed counters.",
+      "method": "Measured all-rank ranked matchup win-rate deltas from MLBB.io; statistical signal, not a guaranteed counter.",
       "patch": "2.2.23",
       "checkedAt": "2026-11-24",
       "dataUpdatedAt": "2026-11-24",
