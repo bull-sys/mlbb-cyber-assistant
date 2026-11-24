@@ -47,9 +47,7 @@ const catalogEntry = (id, nameEn, displayNameRu, {
     lanes: {
       primary: resolvedPrimaryLane,
       flexible: resolvedFlexibleLanes,
-      status: laneReviewPending.has(id)
-        ? "pending_review"
-        : (laneStatus === "pending_review" && reference ? "verified" : laneStatus)
+      status: laneStatus === "pending_review" && reference ? "verified" : laneStatus
     },
     tacticalProfile: { status: tacticalProfileStatus },
     ...(research ? { research } : {})
