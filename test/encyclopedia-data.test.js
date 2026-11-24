@@ -46,8 +46,11 @@ test("item encyclopedia records have descriptions and the six shop categories", 
     [...categories].sort(),
     ["Атака", "Защита", "Лес", "Магия", "Передвижение", "Роум"].sort()
   );
-  const adaptive = items.filter(item => item.secondaryCategory === "Магия");
-  assert.deepEqual(adaptive.map(item => item.englishName).sort(), ["Fleeting Time", "Sky Piercer"].sort());
+  const adaptive = items.filter(item => item.categories?.includes("Магия"));
+  assert.deepEqual(adaptive.filter(item => ["Fleeting Time", "Sky Piercer"].includes(item.englishName)).map(item => item.englishName).sort(), ["Fleeting Time", "Sky Piercer"].sort());
+  assert.deepEqual(items.find(item => item.englishName === "Fleeting Time").categories, ["Атака", "Магия", "Защита"]);
+  assert.deepEqual(items.find(item => item.englishName === "Winter Crown").categories, ["Атака", "Магия"]);
+  assert.ok(items.find(item => item.englishName === "Expert Gloves").stats.includes("+30 адаптивной атаки"));
   for (const item of items) {
     assert.ok(item.name, "item name is required");
     assert.ok(item.description?.length > 15, item.name + " needs a description");
