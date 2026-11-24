@@ -1,4 +1,4 @@
-const CACHE="mlbb-cyber-v15";
+const CACHE="mlbb-cyber-v16";
 const DATA_CACHE="mlbb-cyber-data-v1";
 const CORE=["/","/index.html","/style.css","/app.js","/manifest.webmanifest","/icons/icon-192.png","/icons/icon-512.png"];
 
