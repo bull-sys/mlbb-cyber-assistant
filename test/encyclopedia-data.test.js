@@ -127,6 +127,20 @@ test("item encyclopedia records have descriptions and the six shop categories", 
   assert.equal(itemById("Mystery Codex").stats[0], "+15 магической силы");
   assert.equal(itemById("Power Crystal").stats[0], "+280 маны");
   assert.equal(itemById("Vampire Mallet").stats[1], "+8% физического вампиризма");
+  assert.match(itemById("Conceal").passive, /40%.*5 секунд.*60 секунд.*1000 золота/);
+  assert.match(itemById("Dire Hit").passive, /20 зарядов.*чистый урон.*15 секунд/);
+  assert.match(itemById("Encourage").passive, /20 дополнительной гибридной защиты.*1000 золота/);
+  assert.match(itemById("Favor").passive, /каждые 15 секунд.*400 здоровья.*5 единиц/);
+  assert.match(itemById("Bloody Retribution").passive, /40.*3 × уровень героя.*1%.*3 секунд/);
+  assert.match(itemById("Bloody Retribution").effect, /100 чистого урона.*24% дополнительного здоровья.*35 секунд/);
+  assert.match(itemById("Flame Retribution").effect, /71–120 физической атаки.*35 секунд/);
+  assert.match(itemById("Ice Retribution").effect, /52–80 скорости передвижения.*35 секунд/);
+  assert.match(itemById("Allow Throw").passive, /союзному Джавхеду.*подбрасывать/);
+  assert.match(itemById("Broken Heart").passive, /иммунитет.*Сесилиона/);
+  assert.match(itemById("Flower of Hope").passive, /каждые 6 секунд.*100.*40% общей физической атаки.*30% общей магической силы/);
+  assert.equal(itemById("Flower of Hope").stats[0], "+8% адаптивной атаки");
+  assert.match(itemById("Lantern of Hope").passive, /увеличиваются с уровнем героя/);
+  assert.match(itemById("Throw Forbidden").passive, /иммунитет.*Джавхеда/);
   assert.match(itemById("Antique Cuirass").passive, /8%/);
   assert.match(itemById("Immortality").passive, /210 секунд/);
   assert.match(itemById("Sea Halberd").passive, /Punish/);
@@ -143,7 +157,7 @@ test("item encyclopedia records have descriptions and the six shop categories", 
   assert.match(itemById("Malefic Roar").passive, /30% физического пробивания/);
   assert.match(itemById("Golden Staff").passive, /Endless Strike/);
   assert.match(itemById("Lightning Truncheon").passive, /Каждые 6 секунд/);
-  assert.equal(items.filter(item => item.verification === "checked against item detail page").length, 92);
+  assert.equal(items.filter(item => item.verification === "checked against item detail page").length, 104);
   for (const item of items) {
     assert.ok(item.name, "item name is required");
     assert.ok(item.description?.length > 15, item.name + " needs a description");
