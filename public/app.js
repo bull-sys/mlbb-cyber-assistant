@@ -313,7 +313,7 @@ const TALENT_LOCAL_NAMES={
 function renderEncy(){
  const q=$("encySearch").value.toLocaleLowerCase("ru");
  const items=data.items.map(x=>({...x,image:encyItemImage(x),type:"item",category:x.category||"Предмет"}));
- const talentSource=encyRemoteAssets?.talents?.length?encyRemoteAssets.talents:data.talents;
+ const talentSource=data.talents.length?data.talents:(encyRemoteAssets?.talents||[]);
  const talents=talentSource.map(x=>{
   const slug=x.slug||itemAssetSlug(x.name||x.nameEn);
   const fallback=data.talents.find(t=>itemAssetKey(t.name)===itemAssetKey(x.name)||itemAssetKey(t.name)===itemAssetKey(TALENT_LOCAL_NAMES[slug]||""));
@@ -321,7 +321,7 @@ function renderEncy(){
   const category=tier===1?"Атрибут · уровень 1":tier===2?"Талант · уровень 2":tier===3?"Ключевой талант · уровень 3":"Талант эмблемы";
   return {...x,tier,name:TALENT_LOCAL_NAMES[slug]||x.name||fallback?.name||"Талант",description:x.description||x.summary||fallback?.description||"Описание таланта уточняется.",category,type:"talent",image:x.image||x.icon||(TALENT_LOCAL_NAMES[slug]?"https://mlbbdex.com/visuels/talents/"+slug+".webp":null)};
  });
- const emblemSource=encyRemoteAssets?.emblems?.length?encyRemoteAssets.emblems:data.emblems;
+ const emblemSource=data.emblems.length?data.emblems:(encyRemoteAssets?.emblems||[]);
  const emblems=emblemSource.map(x=>{
   const slug=typeof x==="string"?(EMBLEM_IMAGE_KEYS[x]||itemAssetSlug(x)):(x.slug||itemAssetSlug(x.role||x.name));
   const image=(typeof x==="object"&&(x.image||x.icon))||(slug&&slug!=="common"?("https://mlbbdex.com/visuels/emblemes/"+slug+"-emblem.webp"):null);
@@ -349,11 +349,19 @@ function renderEncy(){
    }
    const visual=x.image?'<img class="ency-info-icon" src="'+esc(x.image)+'" alt="" loading="lazy" decoding="async" onerror="this.outerHTML=\'<span class=&quot;ency-info-icon placeholder&quot;>✦</span>\'">':'<span class="ency-info-icon placeholder">✦</span>';
    const details=x.description||x.summary||x.bonus||"Описание уточняется";
-   const meta=x.price?'<small class="ency-item-price">'+esc(String(x.price))+' золота</small>':"";
+   const metaParts=[];
+   if(x.price)metaParts.push(esc(String(x.price))+" золота");
+   if(x.tier)metaParts.push("Уровень "+esc(String(x.tier)));
+   const expandedMeta=metaParts.length?'<p class="ency-info-expanded-meta">'+metaParts.join(" · ")+'</p>':"";
    if(x.type==="emblem"||x.type==="talent"||x.type==="item"){
     const tags=Array.isArray(x.tags)&&x.tags.length?'<small class="ency-info-tags">Метки: '+x.tags.map(tag=>esc(String(tag).replace(/-/g," "))).join(" · ")+'</small>':"";
-    const expandedMeta=meta?'<p class="ency-info-expanded-meta">'+meta+'</p>':"";
-    return '<details class="ency-info-card visual '+x.type+'"><summary class="ency-info-summary"><div class="ency-info-visual">'+visual+'</div><div class="ency-info-copy"><b>'+esc(x.name)+'</b><small>'+esc(x.category||"")+'</small><span class="ency-expand-hint">Нажми, чтобы открыть сведения <i>＋</i></span></div></summary><div class="ency-info-expanded"><p>'+esc(details)+'</p>'+tags+expandedMeta+'</div></details>';
+    const facts=Array.isArray(x.stats)?x.stats:(Array.isArray(x.attributes)?x.attributes:[]);
+    const factsMarkup=facts.length?'<ul class="ency-info-facts">'+facts.map(value=>'<li>'+esc(String(value))+'</li>').join("")+'</ul>':"";
+    const passive=x.passive?'<div class="ency-info-effect"><b>'+esc(x.passiveName||"Эффект")+'</b><p>'+esc(x.passive)+'</p></div>':"";
+    const effect=x.effect?'<div class="ency-info-effect"><b>Точный эффект</b><p>'+esc(x.effect)+'</p></div>':"";
+    const source=x.source?'<a class="ency-info-source" href="'+esc(x.source)+'" target="_blank" rel="noopener">Источник и дата проверки ↗</a>':"";
+    const verification=x.verification==="partial"?'<small class="ency-info-verification">Требуется дополнительная сверка с текущей версией игры</small>':"";
+    return '<details class="ency-info-card visual '+x.type+'"><summary class="ency-info-summary"><div class="ency-info-visual">'+visual+'</div><div class="ency-info-copy"><b>'+esc(x.name)+'</b><small>'+esc(x.category||"")+'</small><span class="ency-expand-hint">Нажми, чтобы открыть сведения <i>＋</i></span></div></summary><div class="ency-info-expanded"><p>'+esc(details)+'</p>'+factsMarkup+passive+effect+tags+expandedMeta+verification+source+'</div></details>';
    }
   }).join("");
  }
