@@ -433,3 +433,60 @@ test("negative matchup evidence is exposed instead of being hidden by positive s
   assert.ok(observed.candidate.riskyEnemies.includes(observed.weakEnemyName));
 });
 
+test("direct matchup evidence outranks team synergy and generic composition fit", () => {
+  let comparisons = 0;
+  for (const lane of ["Лес", "Золото", "Опыт", "Мид", "Роум"]) {
+    for (const enemy of heroProfiles) {
+      const result = run({ lane, enemies: [enemy.names.ru] });
+      const directIndex = result.counters.findIndex(candidate => candidate.matchupType === "direct-counter");
+      const secondaryIndexes = result.counters
+        .map((candidate, index) => ({ candidate, index }))
+        .filter(({ candidate }) => ["team-synergy", "situational"].includes(candidate.matchupType))
+        .map(({ index }) => index);
+      if (directIndex < 0 || !secondaryIndexes.length) continue;
+      const bestSecondaryIndex = secondaryIndexes[0];
+      const direct = result.counters[directIndex];
+      const secondary = result.counters[bestSecondaryIndex];
+      assert.ok(
+        direct.score >= secondary.score,
+        lane + " vs " + enemy.names.ru + ": direct matchup should not rank below a secondary-only option"
+      );
+      if (direct.score === secondary.score) {
+        assert.ok(directIndex < bestSecondaryIndex, "direct matchup wins score ties");
+      }
+      comparisons += 1;
+    }
+  }
+  assert.ok(comparisons > 0, "scenario matrix should contain direct-vs-secondary comparisons");
+});
+
+test("mixed matchup classification preserves both positive and negative signals", () => {
+  let mixed = null;
+  for (const lane of ["Лес", "Золото", "Опыт", "Мид", "Роум"]) {
+    for (const profile of heroProfiles) {
+      const strong = profile.matchups?.strongAgainst || [];
+      const weak = profile.matchups?.weakAgainst || [];
+      if (!strong.length || !weak.length) continue;
+      const enemyIds = [...new Set([...strong, weak[0]])];
+      const enemyNames = enemyIds
+        .map(id => heroProfiles.find(entry => entry.id === id)?.names?.ru)
+        .filter(Boolean);
+      const weakEnemyName = heroProfiles.find(entry => entry.id === weak[0])?.names?.ru;
+      const result = run({ lane, enemies: enemyNames });
+      const candidate = result.counters.find(entry =>
+        entry.name === profile.names?.ru &&
+        entry.matchupType === "mixed-matchup" &&
+        entry.matchedEnemies.length > 0 &&
+        entry.riskyEnemies.includes(weakEnemyName)
+      );
+      if (candidate) {
+        mixed = candidate;
+        break;
+      }
+    }
+    if (mixed) break;
+  }
+  assert.ok(mixed, "expected a returned mixed-matchup candidate with positive and negative signals");
+  assert.match(mixed.reason, /неоднозначный/i);
+});
+
