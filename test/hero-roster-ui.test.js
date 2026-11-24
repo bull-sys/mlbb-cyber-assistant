@@ -7,7 +7,7 @@ const html = await readFile(new URL("../public/index.html", import.meta.url), "u
 
 test("encyclopedia exposes the complete hero catalog as a separate filter", () => {
   assert.match(html, /data-filter="hero">Герои/);
-  assert.match(app, /const heroEntries=\(data\.heroCatalog\|\|\[\]\)\.map\(hero=>/);
+  assert.match(app, /const heroEntries=\(data\.heroCatalog\|\|\[\]\)\.filter\(hero=>hero&&typeof hero==="object"\)\.map\(hero=>/);
   assert.match(app, /type:"hero"/);
   assert.match(app, /hero\.role\?\.values/);
   assert.match(app, /hero\.lanes\?\.primary/);
