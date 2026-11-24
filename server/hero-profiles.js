@@ -1027,8 +1027,8 @@ export const heroProfiles = [
       "Ультимейт заметно сильнее у стен, поэтому открытая местность ограничивает потенциал оглушения.",
       "Ошибочный угол первого навыка или ультимейта может разорвать строй команды."
     ],
-    matchups: { strongAgainst: [], weakAgainst: [] },
-    synergies: [],
+    matchups: { strongAgainst: ["alucard","silvanna","paquito","guinevere","sora","gusion"], weakAgainst: ["alice","zhuxin","minotaur","estes","kimmy","marcel"] },
+    synergies: ["natalia","helcurt","saber","chou","valentina","harith"],
     itemNotes: [
       "MLBBHub для Roam Anti-Dash Conceal предлагает Tough Boots, Thunder Belt, Dominance Ice, Cursed Helmet, Chastise Pauldron и Immortality; Tank Emblem и Flicker — основной опубликованный вариант.",
       "Если у противника мало рывков, рассмотри фронтальную защитную сборку вместо того, чтобы рассчитывать только на анти-мобильность."
@@ -1042,8 +1042,9 @@ export const heroProfiles = [
       "https://liquipedia.net/mobilelegends/Khufra",
       "https://mlbb.io/en/hero/khufra",
       "https://metammo.com/mobile-legends-guide/heroes/khufra",
-      "https://mlbbhub.com/ru/heroes/khufra"
+      "https://mlbbhub.com/ru/heroes/khufra",
     ],
+    matchupsReviewedAt: "2026-11-24", matchupsMethod: "Ranked matchup deltas from MLBB.io, data updated 2026-11-24; win-rate shifts are statistical signals, not guaranteed outcomes.",
     patch: {
       version: HERO_DB_PATCH,
       notes: [
@@ -1081,8 +1082,8 @@ export const heroProfiles = [
       "Сам по себе Дигги не является надёжным фронтлайн-инициатором и нуждается в союзнике, который создаёт угрозу.",
       "Бомбы заметны по зоне действия и могут быть обойдены или уничтожены до срабатывания."
     ],
-    matchups: { strongAgainst: [], weakAgainst: [] },
-    synergies: [],
+    matchups: { strongAgainst: ["alpha","guinevere","zhuxin","balmond","cici","valir"], weakAgainst: ["esmeralda","estes","hanzo","sun","chang-e","floryn"] },
+    synergies: ["baxia","ixia","saber","natan","zhuxin","valentina"],
     itemNotes: [
       "MLBBHub для Roam CDR предлагает Magic Boots, Flask of the Oasis, Fleeting Time, Dominance Ice, Antique Cuirass и Immortality; Support Emblem и Revitalize — опубликованная базовая сборка.",
       "Состав предметов можно менять под частоту ультимейта, угрозу физического урона и потребность команды в дополнительных щитах."
@@ -1096,8 +1097,9 @@ export const heroProfiles = [
       "https://mlbb-knowledge.vercel.app/heroes/48",
       "https://www.mlbbguides.com/heroes/diggie/skills/",
       "https://mlbb.io/en/hero/diggie",
-      "https://mlbbhub.com/ru/heroes/diggie"
+      "https://mlbbhub.com/ru/heroes/diggie",
     ],
+    matchupsReviewedAt: "2026-11-24", matchupsMethod: "Ranked matchup deltas from MLBB.io, data updated 2026-11-24; win-rate shifts are statistical signals, not guaranteed outcomes.",
     patch: {
       version: HERO_DB_PATCH,
       notes: [
@@ -1133,8 +1135,8 @@ export const heroProfiles = [
       "Урон и выживаемость копий ограничены, поэтому массовая зачистка и быстрый фокус уменьшают ценность призывов.",
       "Не является надёжным инициатором 5 на 5: часто выгоднее создавать давление на фланге и приходить к бою после реакции соперника."
     ],
-    matchups: { strongAgainst: [], weakAgainst: [] },
-    synergies: [],
+    matchups: { strongAgainst: ["jawhead","harley","karrie","diggie","hanzo","layla"], weakAgainst: ["natan","joy","alucard","marcel","kimmy","ruby"] },
+    synergies: ["x-borg","terizla","angela","lapu-lapu","benedetta","cici"],
     itemNotes: [
       "MLBBHub для EXP-варианта патча 2.2.23 показывает Swift Boots, Corrosion Scythe, Demon Hunter Sword, Golden Staff, Sea Halberd и Windtalker; это ориентир для давления через скорость атак и эффекты попаданий, а не обязательный порядок в каждой игре.",
       "Для лесного варианта предметы и заклинание нужно пересматривать отдельно: не переносить автоматически EXP-сборку на роль лесника."
@@ -1144,7 +1146,9 @@ export const heroProfiles = [
       targetPriority: ["Одинокая цель или башня при отсутствии быстрой зачистки копий", "Вражеский фронтлайн, если команда может безопасно реализовать длительные атаки"],
       avoid: ["Не путай двойников с полноценной заменой фронтлайну.", "Не отдавай все навыки на погоню, если нужно сохранить путь отхода.", "Не продолжай сплит-пуш, когда команда уже вынуждена драться без тебя."]
     },
-    sources: ["https://mlbb-knowledge.vercel.app/heroes/27", "https://liquipedia.net/mobilelegends/Sun", "https://mlbb.io/en/hero/sun", "https://mlbbhub.com/ru/heroes/sun"],
+    sources: ["https://mlbb-knowledge.vercel.app/heroes/27", "https://liquipedia.net/mobilelegends/Sun", "https://mlbb.io/en/hero/sun", "https://mlbbhub.com/ru/heroes/sun",
+    ],
+    matchupsReviewedAt: "2026-11-24", matchupsMethod: "Ranked matchup deltas from MLBB.io, data updated 2026-11-24; win-rate shifts are statistical signals, not guaranteed outcomes.",
     patch: { version: HERO_DB_PATCH, notes: ["Механики двойников сверены по MLBB Knowledge, Liquipedia и MLBB.io; числовые значения пассивного эффекта в источниках различаются, поэтому они не зафиксированы как окончательные.", "MLBBdex на 22 ноября 2026 показывает около 54.0% побед по всем рангам в патче 2.2.23; этот агрегат не заменяет отдельный срез по рангу.", "Профессиональные пики/баны и VOD текущего патча отдельно не подтверждены; рейтинговые показатели не переносятся на про-сцену."] , reviewedAt: "2026-11-22" },
     confidence: "partial"
   },
@@ -1170,8 +1174,8 @@ export const heroProfiles = [
       "Провокация первого навыка задержанная и может быть обойдена выходом из отмеченной линии.",
       "Против дальнего кайта и героев, способных не подпускать его к нужной зоне, ему сложнее навязать выгодную драку."
     ],
-    matchups: { strongAgainst: [], weakAgainst: [] },
-    synergies: [],
+    matchups: { strongAgainst: ["obsidia","miya","zhask","melissa","valentina","kimmy"], weakAgainst: ["lesley","natalia","aldous","cici","xavier","x-borg"] },
+    synergies: ["natalia","helcurt","saber","zilong","silvanna","chou"],
     itemNotes: [
       "MLBBHub для Roam Punishment в патче 2.2.23 предлагает Tough Boots, Cursed Helmet, Dominance Ice, Oracle, Immortality и Guardian Helmet; Tank Emblem и Vengeance — базовый вариант из этого гайда.",
       "Подбирай защиту под основной тип входящего урона и состав соперника; не считай один опубликованный набор универсальным."
@@ -1181,7 +1185,9 @@ export const heroProfiles = [
       targetPriority: ["Герои ближнего боя, вынужденные атаковать Белерика", "Инициаторы и бойцы, вошедшие в зону ультимейта"],
       avoid: ["Не преследуй дальнего стрелка в одиночку.", "Не трать ультимейт на одну цель, если скоро ожидается массовый вход.", "Не провоцируй противников за пределами досягаемости союзной команды."]
     },
-    sources: ["https://mlbb-knowledge.vercel.app/heroes/70", "https://mlbb.io/en/hero/belerick", "https://mlbbdex.com/en/heroes/belerick", "https://mlbbanalytics.com/heroes?hero=Belerick", "https://mlbbhub.com/ru/heroes/belerick"],
+    sources: ["https://mlbb-knowledge.vercel.app/heroes/70", "https://mlbb.io/en/hero/belerick", "https://mlbbdex.com/en/heroes/belerick", "https://mlbbanalytics.com/heroes?hero=Belerick", "https://mlbbhub.com/ru/heroes/belerick",
+    ],
+    matchupsReviewedAt: "2026-11-24", matchupsMethod: "Ranked matchup deltas from MLBB.io, data updated 2026-11-24; win-rate shifts are statistical signals, not guaranteed outcomes.",
     patch: { version: HERO_DB_PATCH, notes: ["Пассивный эффект и навыки сверены по MLBB Knowledge, MLBB.io и MLBB Analytics; сборка и роль роумера сопоставлены с MLBBHub.", "MLBBDex на 21 ноября показывает около 52.1% побед и около 55.9% банов по всем рангам; высокая частота банов может отражать силу контроля и удобство героя, но не является доказательством про-силы.", "MLBB Analytics приводит отдельные выборки турниров MSC 2026 и Games of the Future 2026; это исторические турнирные срезы, не текущий патч. Патч-specific VOD review остаётся pending."] , reviewedAt: "2026-11-22" },
     confidence: "partial"
   },
@@ -1207,8 +1213,8 @@ export const heroProfiles = [
       "Иммунитет к контролю зависит от наличия щита; после его снятия Ханаби снова уязвима к цепному контролю.",
       "Её массовый урон слабее, когда противники рассредоточены или могут быстро добраться до задней линии."
     ],
-    matchups: { strongAgainst: [], weakAgainst: [] },
-    synergies: [],
+    matchups: { strongAgainst: ["popol-and-kupa","kalea","moskov","guinevere","kaja","akai"], weakAgainst: ["lolita","beatrix","wanwan","karina","joy","ixia"] },
+    synergies: ["franco","roger","lolita","chou","martis","chip"],
     itemNotes: [
       "MLBBHub для Gold Lane Shield DPS в патче 2.2.23 предлагает Swift Boots, Corrosion Scythe, Demon Hunter Sword, Golden Staff, Malefic Gun и Rose Gold Meteor; эмблема Fighter и Aegis — опубликованный базовый вариант.",
       "Если соперник лечится или получает много щитов, рассмотрите Sea Halberd; против физического взрыва может пригодиться Wind of Nature вместо более жадного слота."
@@ -1218,7 +1224,9 @@ export const heroProfiles = [
       targetPriority: ["Ближайшая доступная цель, по которой можно безопасно наносить базовые атаки", "Сгруппированные противники, которых можно зацепить отскоками и ультимейтом"],
       avoid: ["Не выходи вперёд ради дальнего добивания без щита.", "Не трать щит слишком рано до ключевого контроля.", "Не рассчитывай на отскоки, если соперник уже рассредоточился."]
     },
-    sources: ["https://www.mlbbguides.com/heroes/hanabi/skills/", "https://mlbb-knowledge.vercel.app/heroes/60", "https://mlbbhub.com/heroes/hanabi", "https://mlbb.io/en/hero/hanabi"],
+    sources: ["https://www.mlbbguides.com/heroes/hanabi/skills/", "https://mlbb-knowledge.vercel.app/heroes/60", "https://mlbbhub.com/heroes/hanabi", "https://mlbb.io/en/hero/hanabi",
+    ],
+    matchupsReviewedAt: "2026-11-24", matchupsMethod: "Ranked matchup deltas from MLBB.io, data updated 2026-11-24; win-rate shifts are statistical signals, not guaranteed outcomes.",
     patch: { version: HERO_DB_PATCH, notes: ["Пассивный эффект, щит и контроль ультимейта сверены по MLBB Guides и MLBB Knowledge; рейтинговая сборка Gold Lane сопоставлена с MLBBHub.", "MLBBHub и MLBBdex дают близкие значения около 52.7% побед и 2.4% выбора в общерандовом рейтинговом срезе; показатель зависит от периода и ранга.", "Профессиональные пики/баны и VOD текущего патча отдельно не подтверждены; рейтинговые значения не переносятся на про-сцену."] , reviewedAt: "2026-11-22" },
     confidence: "partial"
   },
