@@ -36,11 +36,11 @@ test("encyclopedia has all 26 emblem talents split into 8/8/10 tiers", () => {
 });
 
 test("item encyclopedia records have descriptions and the six shop categories", () => {
-  assert.ok(items.length >= 50);
+  assert.ok(items.length >= 54);
   const categories = new Set(items.map(item => item.category));
   assert.deepEqual(
     [...categories].sort(),
-    ["Атака", "Защита", "Лес", "Магия", "Передвижение", "Роум"].sort()
+    ["Адаптивные", "Атака", "Защита", "Лес", "Магия", "Передвижение", "Роум"].sort()
   );
   for (const item of items) {
     assert.ok(item.name, "item name is required");
