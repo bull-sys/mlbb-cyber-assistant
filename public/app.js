@@ -13,11 +13,11 @@ function toast(s){let el=document.createElement("div");el.textContent=s;el.style
 function options(el,arr,placeholder="Выбери..."){el.innerHTML=(placeholder?`<option value="">${placeholder}</option>`:"")+arr.map(x=>`<option>${typeof x==="string"?x:x.name}</option>`).join("")}
 function draftOptions(el){
  const legacy=data.heroes.map(hero=>({value:hero.name,label:hero.name+" · проверенная старая база"}));
- const catalog=(data.draftHeroOptions||[]).filter(hero=>!hero.analysisSupported).map(hero=>({
+ const catalog=(data.draftHeroOptions||[]).filter(hero=>hero.analysisSupported).map(hero=>({
   value:hero.id,
-  label:(hero.localizationStatus==="user_confirmed"||hero.localizationStatus==="source_verified"?"":"⚠ ")+hero.name+" ("+hero.nameEn+") · анализ пока недоступен"
+  label:hero.name+" ("+hero.nameEn+") · "+(hero.analysisDepth==="detailed"?"тактический паспорт":"базовый анализ")
  }));
- el.innerHTML='<option value="">Выбери...</option><optgroup label="Старая база · анализ доступен">'+legacy.map(x=>'<option value="'+esc(x.value)+'">'+esc(x.label)+'</option>').join("")+'</optgroup><optgroup label="Каталог героев · проверка продолжается">'+catalog.map(x=>'<option value="'+esc(x.value)+'">'+esc(x.label)+'</option>').join("")+'</optgroup>';
+ el.innerHTML='<option value="">Выбери...</option><optgroup label="Старая база · анализ доступен">'+legacy.map(x=>'<option value="'+esc(x.value)+'">'+esc(x.label)+'</option>').join("")+'</optgroup><optgroup label="Каталог героев · полный список">'+catalog.map(x=>'<option value="'+esc(x.value)+'">'+esc(x.label)+'</option>').join("")+'</optgroup>';
 }
 function draftHeroLabel(value){
  const legacy=data.heroes.find(hero=>hero.name===value);
@@ -146,7 +146,7 @@ function pickerEntries(){
   const linked=catalog.find(x=>x.id===h.id),profile=profileFor(h.id,h.name);
   const roles=profile?.roles||linked?.role?.values||[];
   const lanes=profile?.lanes||[linked?.lanes?.primary,...(linked?.lanes?.flexible||[])].filter(Boolean);
-  return {value:h.id,name:h.name,nameEn:h.nameEn,supported:Boolean(h.analysisSupported),catalog:true,roles,lanes,profile};
+  return {value:h.id,name:h.name,nameEn:h.nameEn,supported:Boolean(h.analysisSupported),analysisDepth:h.analysisDepth||"baseline",catalog:true,roles,lanes,profile};
  });
  return [...legacy,...options];
 }
@@ -186,7 +186,7 @@ function heroTileMarkup(h,extra=""){
  const facts=(strength||weakness)
   ?'<span class="hero-card-fact positive"><i>＋</i>'+esc(strength)+'</span><span class="hero-card-fact negative"><i>−</i>'+esc(weakness)+'</span>'
   :'<span class="hero-card-fact muted">Тактический профиль уточняется</span>';
- const status=h.supported?'<span class="hero-status ready">АНАЛИЗ</span>':'<span class="hero-status pending">КАТАЛОГ</span>';
+ const status=h.supported?(h.analysisDepth==="baseline"?'<span class="hero-status pending">БАЗОВЫЙ АНАЛИЗ</span>':'<span class="hero-status ready">ПАСПОРТ</span>'):'<span class="hero-status pending">НЕТ ДАННЫХ</span>';
  const selected=pickerTarget==="enemies"?enemies.includes(h.value):pickerTarget==="allies"?allies.includes(h.value):$("myHero").value===h.value;
  return '<button class="hero-tile '+extra+(selected?" selected":"")+'" style="--hero-portrait-glow:url(&quot;'+url+'&quot;)" aria-pressed="'+selected+'" data-picker-value="'+esc(h.value)+'"><span class="hero-portrait-wrap"><img class="hero-portrait" src="'+url+'" alt="" loading="lazy" decoding="async" onerror="this.hidden=true;this.parentElement.classList.add(\'portrait-missing\')"><span class="portrait-fallback">✦</span></span><span class="hero-card-copy"><span class="hero-card-title"><b>'+esc(h.name)+'</b>'+status+'</span><small class="hero-role">'+esc(role)+'</small>'+facts+'</span></button>';
 }
