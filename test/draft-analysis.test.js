@@ -546,7 +546,7 @@ test("ranked matchup risk is retained and mixed with positive signals without cl
       [enemy.id]: {
         [candidate.id]: {
           opponentId: enemy.id, candidateId: candidate.id, source: "Rone Arena API",
-          rankBracket: "legend", windowDays: 15, lane: null, advantagePp: -2.7,
+          rankBracket: "legend", windowDays: 15, lane: null, advantagePp: -0.1,
           sampleSize: null, direction: "opponent-favourable"
         }
       }
