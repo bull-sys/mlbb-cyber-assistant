@@ -57,3 +57,10 @@ test("draft route uses shared validation before analysis", async () => {
   const source = await readFile(new URL("../server/index.js", import.meta.url), "utf8");
   assert.match(source, /if\(!isValidDraftRequest\(b,roles,isLegacyHeroName,isCatalogHeroId\)/);
 });
+
+test("test-drive draft uses a verified catalog ID for Dyrroth", async () => {
+  const { readFile } = await import("node:fs/promises");
+  const source = await readFile(new URL("../public/app.js", import.meta.url), "utf8");
+  assert.match(source, /enemies=\["Тигрил","Эйдора","Кэрри","dyrroth","Атлас"\]/);
+  assert.doesNotMatch(source, /enemies=\["Тигрил","Эйдора","Кэрри","Дариус","Атлас"\]/);
+});
