@@ -409,7 +409,7 @@ function analyze({lane, enemies = [], allies = [], myHero = ""}) {
     };
     if (physicalBuild && item.category === "Атака" &&
         (tags.has("burst") || tags.has("physical") || tags.has("penetration") ||
-         (selected?.type === "marksman" && (tags.has("marksman") || tags.has("critical")))) {
+         (selected?.type === "marksman" && (tags.has("marksman") || tags.has("critical"))))) {
       add(3, "Совместим с физической сборкой выбранного героя");
     }
     if (magicBuild && item.category === "Магия" && tags.has("magic")) {
