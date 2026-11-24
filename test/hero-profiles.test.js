@@ -671,8 +671,11 @@ test("Saber has a complete researched tactical profile instead of a placeholder"
   assert.equal(saber.confidence, "partial");
   assert.equal(saber.patch.version, HERO_DB_PATCH);
   assert.equal(saber.patch.reviewedAt, "2026-11-22");
-  assert.deepEqual(saber.matchups.strongAgainst, []);
-  assert.deepEqual(saber.matchups.weakAgainst, []);
+  assert.deepEqual(saber.matchups.strongAgainst, ["nolan", "lunox", "ling"]);
+  assert.deepEqual(saber.matchups.weakAgainst, ["leomord", "baxia", "miya"]);
+  assert.deepEqual(saber.synergies, ["marcel", "diggie", "estes"]);
+  assert.equal(saber.matchupEvidence.checkedAt, "2026-11-24");
+  assert.ok(saber.sources.includes(saber.matchupEvidence.source));
 });
 
 test("Mathilda has a sourced partial tactical profile with distinct support and engage mechanics", () => {
