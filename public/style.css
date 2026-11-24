@@ -1178,3 +1178,89 @@ details.ency-info-card.visual>.ency-info-summary{display:grid}
  .hero-tile.selected,.picker-panel:after,.ency-hero-card:hover .ency-hero-image{animation:none}
  .hero-tile,.ency-hero-card,.ency-info-card.visual.item{transition:none}
 }
+
+
+/* CYBER ARENA · draft selection stage polish */
+.picker-panel{
+ background:
+  radial-gradient(ellipse at 50% -12%,rgba(45,198,231,.17),transparent 48%),
+  radial-gradient(ellipse at 100% 0%,rgba(126,83,255,.13),transparent 38%),
+  linear-gradient(155deg,#101b2d 0%,#090e1b 72%);
+ border:1px solid rgba(99,224,255,.42);
+}
+.picker-heading{position:relative}
+.picker-heading>div:after{content:"DRAFT / HERO SELECT";display:block;margin-top:5px;color:#6e91ad;font-size:8px;font-weight:900;letter-spacing:.2em}
+.picker-heading h2{color:#f2f8ff;text-shadow:0 0 18px rgba(99,242,255,.2)}
+.picker-selection-status{
+ top:108px;padding:10px 12px;border-radius:13px;
+ background:linear-gradient(110deg,rgba(10,45,61,.96),rgba(26,24,59,.96));
+ border-color:rgba(99,242,255,.35);box-shadow:0 8px 24px rgba(0,0,0,.24),inset 0 1px rgba(255,255,255,.05);
+}
+.picker-selection-top{display:flex;justify-content:space-between;align-items:center;gap:8px;color:#dffaff;font-size:10px;font-weight:950;letter-spacing:.12em}
+.picker-selection-top small{color:#7f9dbb;font-size:8px;letter-spacing:.1em;text-align:right}
+.picker-selection-slots{display:flex;gap:7px;overflow-x:auto;padding:8px 1px 1px;scrollbar-width:none}
+.picker-selection-slots::-webkit-scrollbar{display:none}
+.picker-selected-hero{position:relative;display:flex;align-items:center;gap:6px;flex:0 0 auto;min-width:0;padding:4px 9px 4px 4px;border:1px solid rgba(99,242,255,.3);border-radius:999px;background:rgba(6,16,29,.72);color:#f1f7ff;font-size:9px}
+.picker-selected-hero img{width:28px;height:28px;border-radius:50%;object-fit:cover;border:1px solid #5feaff;box-shadow:0 0 10px rgba(99,242,255,.28)}
+.picker-selected-hero b{max-width:88px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.picker-selected-hero i{display:grid;place-items:center;width:15px;height:15px;border-radius:50%;background:#174d50;color:#8efff2;font-size:9px;font-style:normal}
+.picker-selection-empty{display:block;padding:7px 2px 2px;color:#8299b3;font-size:9px;letter-spacing:.04em}
+.hero-picker-grid{grid-template-columns:repeat(auto-fill,minmax(116px,1fr));gap:11px}
+.hero-tile{
+ position:relative;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:8px;
+ min-height:0;padding:12px 7px 10px;border-radius:16px;text-align:center;overflow:hidden;
+ border:1px solid rgba(108,145,190,.25);
+ background:radial-gradient(ellipse at 50% 0%,rgba(69,105,164,.2),transparent 62%),linear-gradient(155deg,#15243a,#0d1626);
+ transition:transform .22s,border-color .22s,box-shadow .22s,background .22s;
+}
+.hero-tile:before{content:"";position:absolute;inset:0;border-radius:inherit;background:linear-gradient(125deg,transparent 20%,rgba(99,242,255,.09) 48%,transparent 72%);opacity:0;transform:translateX(-100%);pointer-events:none}
+.hero-portrait-wrap{position:relative;width:clamp(58px,6vw,76px);height:clamp(58px,6vw,76px);border-radius:50%;padding:3px;overflow:hidden}
+.hero-portrait{width:100%;height:100%;border-radius:50%;object-fit:cover;object-position:center 18%;border:2px solid #101729}
+.hero-card-copy{align-items:center;text-align:center;gap:5px}
+.hero-card-title{justify-content:center;flex-wrap:wrap;gap:5px}
+.hero-card-title b{font-size:11px;text-align:center;overflow-wrap:anywhere}
+.hero-role{text-align:center;font-size:8px}
+.hero-card-fact{display:none}
+.hero-status{font-size:7px;letter-spacing:.08em}
+.hero-tile.selected{
+ border-color:#63f2ff;color:#fff;
+ background:radial-gradient(ellipse at 50% 28%,rgba(43,211,231,.26),transparent 65%),linear-gradient(155deg,#16364a,#1b1740);
+ box-shadow:0 0 0 1px rgba(99,242,255,.35),0 0 22px rgba(58,215,255,.25),inset 0 0 20px rgba(99,242,255,.09);
+ animation:arena-pulse 2.4s ease-in-out infinite;
+}
+.hero-tile.selected:after{content:"✓";position:absolute;top:7px;right:7px;display:grid;place-items:center;width:19px;height:19px;border-radius:50%;background:#53e9e7;color:#07131d;font-size:11px;font-weight:1000;box-shadow:0 0 13px rgba(83,233,231,.65)}
+.hero-tile.selected .hero-portrait-wrap{box-shadow:0 0 0 2px rgba(255,255,255,.16),0 0 24px rgba(99,242,255,.55)}
+.hero-tile.selected .hero-status{background:rgba(17,87,92,.8);color:#a9ffff}
+.hero-tile.recent{display:flex;flex-direction:row;align-items:center;justify-content:flex-start;min-width:116px;max-width:150px;min-height:0;padding:7px 9px;border-radius:13px;text-align:left}
+.hero-tile.recent .hero-portrait-wrap{width:38px;height:38px}
+.hero-tile.recent .hero-card-copy{align-items:flex-start;text-align:left}
+.hero-tile.recent .hero-card-title{justify-content:flex-start}
+.hero-tile.recent .hero-card-title b{text-align:left;font-size:9px}
+.hero-tile.recent .hero-role{text-align:left}
+@media(hover:hover){
+ .hero-tile:hover{transform:translateY(-4px);border-color:rgba(99,242,255,.78);box-shadow:0 0 0 1px rgba(99,242,255,.18),0 12px 28px rgba(0,0,0,.3),0 0 20px rgba(99,242,255,.14)}
+ .hero-tile:hover:before{opacity:1;animation:arena-card-sweep .9s ease}
+}
+@keyframes arena-card-sweep{to{transform:translateX(100%);opacity:0}}
+@media(max-width:650px){
+ .picker-selection-status{top:102px;padding:8px 9px}
+ .picker-selection-top{font-size:9px}
+ .picker-selection-top small{font-size:7px}
+ .hero-picker-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}
+ .hero-tile{padding:9px 4px;gap:6px;border-radius:13px}
+ .hero-portrait-wrap{width:clamp(45px,14vw,60px);height:clamp(45px,14vw,60px)}
+ .hero-card-title b{font-size:9px}
+ .hero-role{font-size:7px}
+ .hero-status{font-size:6px;padding:3px}
+ .hero-tile.recent{min-width:108px;grid-template-columns:none}
+}
+@media(max-width:360px){
+ .hero-picker-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:5px}
+ .hero-tile{padding:8px 3px}
+ .hero-portrait-wrap{width:43px;height:43px}
+ .hero-card-title b{font-size:8px}
+}
+@media(prefers-reduced-motion:reduce){
+ .hero-tile.selected{animation:none}
+ .hero-tile:hover:before{animation:none}
+}
