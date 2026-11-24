@@ -509,6 +509,7 @@ function analyze({lane, enemies = [], allies = [], myHero = ""}) {
     })),
     build: buildDetails.map(x => x.name),
     buildDetails,
+    itemCatalogCount: items.length,
     emblem,
     talentTiers: ["Разрыв", "Мастер-убийца", "Серия убийств"],
     spell: lane === "Лес" ? "Возмездие" : "Вспышка",
