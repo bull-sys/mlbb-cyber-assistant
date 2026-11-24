@@ -395,12 +395,41 @@ test("matchup labels are evidence-based and never call a situational pick a dire
 });
 
 test("negative matchup evidence is exposed instead of being hidden by positive signals", () => {
-  const result = run({ lane: "Опыт", enemies: ["Сора", "Хелкарт", "Эйдора"] });
-  assert.ok(result.counters.some(candidate => candidate.riskyEnemies.length > 0));
-  for (const candidate of result.counters) {
-    if (candidate.riskyEnemies.length) {
-      assert.match(candidate.reason, /риск/i, candidate.name);
+  let observed = null;
+
+  for (const lane of ["Лес", "Золото", "Опыт", "Мид", "Роум"]) {
+    for (const profile of heroProfiles) {
+      if (!(profile.lanes || []).some(value => ({
+        "EXP-линия": "Опыт", "Линия опыта": "Опыт",
+        "Золотая линия": "Золото", "Линия золота": "Золото",
+        "Средняя линия": "Мид", "Центр": "Мид"
+      })[value] || value === lane)) continue;
+      const strong = profile.matchups?.strongAgainst || [];
+      const weak = profile.matchups?.weakAgainst || [];
+      if (!strong.length || !weak.length) continue;
+
+      const enemyIds = [...new Set([...strong, weak[0]])];
+      const enemyNames = enemyIds
+        .map(id => heroProfiles.find(entry => entry.id === id)?.names?.ru)
+        .filter(Boolean);
+      const weakEnemyName = heroProfiles.find(entry => entry.id === weak[0])?.names?.ru;
+      if (!weakEnemyName || !enemyNames.includes(weakEnemyName)) continue;
+
+      const result = run({ lane, enemies: enemyNames });
+      const candidate = result.counters.find(entry =>
+        entry.name === profile.names?.ru &&
+        entry.riskyEnemies.includes(weakEnemyName)
+      );
+      if (candidate) {
+        observed = { lane, candidate, weakEnemyName };
+        break;
+      }
     }
+    if (observed) break;
   }
+
+  assert.ok(observed, "expected at least one returned candidate to retain a known negative matchup signal");
+  assert.match(observed.candidate.reason, /риск/i);
+  assert.ok(observed.candidate.riskyEnemies.includes(observed.weakEnemyName));
 });
 
