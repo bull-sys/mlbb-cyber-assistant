@@ -58,7 +58,7 @@ test("first 20 researched heroes include cross-source role and lane evidence", (
     const hero = heroCatalog.find(entry => entry.id === id);
     assert.ok(hero, id);
     assert.equal(hero.role.status, "verified", id);
-    assert.equal(hero.research.checkedAt, "2026-11-22", id);
+    assert.equal(hero.research.checkedAt, id === "badang" ? "2026-11-24" : "2026-11-22", id);
     assert.equal(hero.research.roleAndLaneSources.length, 3, id);
     assert.equal(
       hero.research.competitiveReviewStatus,
