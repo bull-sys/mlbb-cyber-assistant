@@ -360,7 +360,7 @@ function renderEncy(){
  const selected=groups.filter(group=>encyFilter==="all"||group.type===encyFilter);
  let html='<div class="ency-catalog-counts"><span><b>'+emblems.length+'</b> эмблем</span><span><b>'+talents.length+'</b> талантов</span><span><b>8 / 8 / 10</b> по уровням</span></div>';
  for(const group of selected){
-  const list=group.entries.filter(x=>(x.name+" "+x.category+" "+(x.description||"")+" "+(x.roles||"")+" "+(x.lanes||"")).toLocaleLowerCase("ru").includes(q));
+  const list=group.entries.filter(x=>(x.name+" "+x.category+" "+(x.secondaryCategory||"")+" "+(x.description||"")+" "+(x.roles||"")+" "+(x.lanes||"")).toLocaleLowerCase("ru").includes(q));
   if(!list.length)continue;
   if(group.type==="item")list.sort((a,b)=>a.category.localeCompare(b.category,"ru")||a.name.localeCompare(b.name,"ru"));
   html+='<div class="ency-group-heading"><b>'+group.title+'</b><small>'+list.length+'</small></div>';
@@ -385,7 +385,7 @@ function renderEncy(){
     const source=x.source?'<div class="ency-info-source-wrap"><a class="ency-info-source" href="'+esc(x.source)+'" target="_blank" rel="noopener">Источник ↗</a>'+(x.checkedAt?'<small class="ency-info-checked">Проверено: '+esc(x.checkedAt)+'</small>':"")+'</div>':"";
     const verification=x.verification==="partial"?'<small class="ency-info-verification">Требуется дополнительная сверка с текущей версией игры</small>':"";
     const categoryHeading=x.type==="item"&&(index===0||list[index-1].category!==x.category)?'<div class="ency-subgroup-heading"><b>'+esc(x.category)+'</b><small>'+list.filter(entry=>entry.category===x.category).length+'</small></div>':"";
-    return categoryHeading+'<details class="ency-info-card visual '+x.type+'"><summary class="ency-info-summary"><div class="ency-info-visual">'+visual+'</div><div class="ency-info-copy"><b>'+esc(x.name)+'</b><small>'+esc(x.category||"")+'</small><span class="ency-expand-hint">Нажми, чтобы открыть сведения <i>＋</i></span></div></summary><div class="ency-info-expanded"><p>'+esc(details)+'</p>'+factsMarkup+passive+effect+tags+expandedMeta+verification+source+'</div></details>';
+    return categoryHeading+'<details class="ency-info-card visual '+x.type+'"><summary class="ency-info-summary"><div class="ency-info-visual">'+visual+'</div><div class="ency-info-copy"><b>'+esc(x.name)+'</b><small>'+esc([x.category,x.secondaryCategory].filter(Boolean).join(" · ")||"")+'</small><span class="ency-expand-hint">Нажми, чтобы открыть сведения <i>＋</i></span></div></summary><div class="ency-info-expanded"><p>'+esc(details)+'</p>'+factsMarkup+passive+effect+tags+expandedMeta+verification+source+'</div></details>';
    }
   }).join("");
  }
