@@ -35,6 +35,7 @@ $("threats").innerHTML=threatDefs.map(([id,name])=>`<button class="chip" data-th
 restoreDraft();drawTeams();renderEncy();$api("/game-assets").then(result=>{if(result?.ok){encyRemoteAssets=result;renderEncy()}}).catch(()=>{});if(token)await refreshMe();
  if(window.__MLBB_APP_DIAGNOSTICS)window.__MLBB_APP_DIAGNOSTICS.stage="ready";
 }
+let draftEntrance=null;
 function drawTeams(){
  const entries=pickerEntries();
  for(const [side,arr] of [["enemies",enemies],["allies",allies]]){
@@ -46,21 +47,31 @@ function drawTeams(){
    const hero=entries.find(item=>item.value===value);
    const name=draftHeroLabel(value);
    const portrait=hero?heroPortraitUrl(hero):"";
-   return '<button type="button" class="arena-slot filled" data-side="'+side+'" data-i="'+slot+'" aria-label="Удалить '+esc(name)+' из состава"><span class="arena-slot-number">0'+(slot+1)+'</span>'+(portrait?'<img class="arena-slot-portrait" src="'+portrait+'" alt="" loading="lazy">':'<span class="arena-slot-fallback">'+esc(name.slice(0,1))+'</span>')+'<b>'+esc(name)+'</b><small>ЗАКРЕПЛЁН</small><i aria-hidden="true">×</i></button>';
+   const entrance=draftEntrance&&draftEntrance.side===side&&draftEntrance.value===value?" arena-slot-enter":"";
+   return '<button type="button" class="arena-slot filled'+entrance+'" data-side="'+side+'" data-i="'+slot+'" aria-label="Удалить '+esc(name)+' из состава"><span class="arena-slot-number">0'+(slot+1)+'</span>'+(portrait?'<img class="arena-slot-portrait" src="'+portrait+'" alt="" loading="lazy">':'<span class="arena-slot-fallback">'+esc(name.slice(0,1))+'</span>')+'<b>'+esc(name)+'</b><small>ЗАКРЕПЛЁН</small><i aria-hidden="true">×</i></button>';
   }).join("");
   host.setAttribute("aria-label",(side==="enemies"?"Вражеская":"Союзная")+" команда: "+arr.length+" из 5");
  }
- const count=arr=>arr.length;
- const enemyCount=$("enemies")?enemies.length:0,allyCount=$("allies")?allies.length:0;
+ const enemyCount=enemies.length,allyCount=allies.length;
  const enemyLabel=document.querySelector('[data-arena-count="enemies"]'),allyLabel=document.querySelector('[data-arena-count="allies"]');
  if(enemyLabel)enemyLabel.textContent=enemyCount+" / 5";
  if(allyLabel)allyLabel.textContent=allyCount+" / 5";
+ const completion=document.querySelector("[data-arena-completion]");
+ if(completion){
+  const complete=enemyCount===5&&allyCount===5;
+  completion.classList.toggle("is-complete",complete);
+  completion.textContent=complete
+   ?"СОСТАВЫ ЗАПОЛНЕНЫ · 5 / 5 · МОЖНО АНАЛИЗИРОВАТЬ"
+   :"ЗАПОЛНЕНИЕ СОСТАВОВ · ПРОТИВНИКИ "+enemyCount+"/5 · СОЮЗНИКИ "+allyCount+"/5";
+  completion.setAttribute("aria-label",complete?"Обе команды заполнены, можно запускать анализ":"Заполнение команд: противники "+enemyCount+" из 5, союзники "+allyCount+" из 5");
+ }
  const own=$("arenaMyHeroPortrait"),ownName=$("arenaMyHeroName");
  if(own&&ownName){
   const selected=$("myHero").value,hero=entries.find(item=>item.value===selected);
   ownName.textContent=selected?draftHeroLabel(selected):"ГЕРОЙ НЕ ВЫБРАН";
   own.innerHTML=hero?'<img src="'+heroPortraitUrl(hero)+'" alt="" class="arena-own-portrait">':'<span class="arena-own-empty">＋</span>';
   own.classList.toggle("is-selected",!!hero);
+  own.classList.toggle("arena-own-enter",Boolean(hero&&draftEntrance&&draftEntrance.side==="myHero"&&draftEntrance.value===selected));
  }
 }
 function draftSnapshot(){return {version:1,enemies:[...enemies],allies:[...allies],lane:$("lane").value,myHero:$("myHero").value,threats:[...threats],savedAt:Date.now()}}
@@ -211,12 +222,12 @@ function openHeroPicker(target){
 function choosePickerHero(value){
  const entries=pickerEntries(),hero=entries.find(h=>h.value===value);if(!hero)return;
  if(pickerTarget==="myHero"){
-  $("myHero").value=value;$("myHeroChoice").textContent=hero.name;saveDraft();rememberPickerHero(value);$("heroPicker").classList.add("hidden");return;
+  $("myHero").value=value;$("myHeroChoice").textContent=hero.name;draftEntrance={side:"myHero",value};drawTeams();draftEntrance=null;saveDraft();rememberPickerHero(value);$("heroPicker").classList.add("hidden");return;
  }
  const arr=pickerTarget==="enemies"?enemies:allies;
  if(arr.length>=5)return toast("Команда уже заполнена");
  if(arr.includes(value))return toast("Этот герой уже выбран");
- arr.push(value);drawTeams();saveDraft();rememberPickerHero(value);renderHeroPicker();
+ arr.push(value);draftEntrance={side:pickerTarget,value};drawTeams();draftEntrance=null;saveDraft();rememberPickerHero(value);renderHeroPicker();
  if(arr.length>=5){$("heroPicker").classList.add("hidden");toast("Команда заполнена");}
 }
 $("openEnemyPicker").onclick=()=>openHeroPicker("enemies");
@@ -237,12 +248,19 @@ const backButton=$("appBackButton");if(backButton)backButton.addEventListener("c
 window.addEventListener("popstate",event=>{const page=event.state?.mlbbPage||location.hash.replace(/^#/,"")||"home";showAppPage(page,{push:false,scroll:false});if(!$("encyHeroModal").classList.contains("hidden")){ $("encyHeroModal").classList.add("hidden");document.body.classList.remove("ency-modal-open");}});
 history.replaceState({...(history.state||{}),mlbbPage:document.querySelector(".page:not(.hidden)")?.id?.replace("page-","")||"home",mlbbPrevious:null},"",location.href);
 $("testDraft").onclick=()=>{enemies=["Тигрил","Эйдора","Кэрри","Дариус","Атлас"];allies=["Ангела","Линг","Теризла"];$("lane").value="Лес";$("myHero").value="Хелкарт";drawTeams();saveDraft();runDraft()};
-$("analyze").onclick=runDraft;$("lane").addEventListener("change",saveDraft);$("myHero").addEventListener("change",()=>{$("myHeroChoice").textContent=$("myHero").value?draftHeroLabel($("myHero").value):"Не выбран";saveDraft()});
+function animateDraftReport(){
+ const report=$("draftResult");
+ report.classList.remove("arena-report-enter");
+ void report.offsetWidth;
+ report.classList.add("arena-report-enter");
+}
+$("analyze").onclick=runDraft;$("lane").addEventListener("change",saveDraft);$("myHero").addEventListener("change",()=>{$("myHeroChoice").textContent=$("myHero").value?draftHeroLabel($("myHero").value):"Не выбран";drawTeams();saveDraft()});
 async function runDraft(){
  if(!enemies.length)return toast("Добавь врагов");
  saveDraft();
  const button=$("analyze"),originalLabel=button.textContent;
  button.disabled=true;button.textContent="Анализирую состав…";
+ $("draftResult").classList.remove("arena-report-enter");
  $("draftResult").classList.remove("hidden");
  $("draftResult").innerHTML='<div class="report-loading"><span class="report-loader"></span><div><b>Собираю тактический отчёт</b><small>Проверяю угрозы и доступные контрпики</small></div></div>';
  try{
@@ -250,6 +268,7 @@ async function runDraft(){
   if(d.analysisStatus==="limited"){
    const unsupported=(d.unsupportedHeroes||[]).map(hero=>'<div class="report-hero-row"><b>'+esc(hero.name)+'</b><small>'+esc(hero.id)+'</small></div>').join("");
    $("draftResult").innerHTML='<div class="report-eyebrow">ОТЧЁТ · ОГРАНИЧЕННЫЙ АНАЛИЗ</div><div class="report-heading"><div><h2>Нужна проверка данных</h2><p>Для части выбранных героев пока нет подтверждённой тактической базы.</p></div><span class="report-status limited">ОГРАНИЧЕНО</span></div><div class="report-note"><b>Почему нет контрпиков?</b><p>'+esc(d.note)+'</p></div><h3 class="report-section-title">Герои, ожидающие исследования</h3><div class="report-hero-list">'+unsupported+'</div>';
+   animateDraftReport();
    return;
   }
   const threats=(d.threats||[]).map(item=>'<span class="threat-tag">'+esc(item)+'</span>').join("")||'<span class="report-muted">Явные угрозы по базе не определены</span>';
@@ -277,7 +296,9 @@ async function runDraft(){
   const phases=[["РАННЯЯ ИГРА",timing.early],["СРЕДНЯЯ ИГРА",timing.mid],["ПОЗДНЯЯ ИГРА",timing.late]].filter(x=>x[1]).map(x=>'<article class="phase-card"><small>'+x[0]+'</small><p>'+esc(x[1])+'</p></article>').join("");
   const talents=(d.talentTiers||[]).map((item,index)=>'<div class="talent-row"><small>ТИР '+(index+1)+'</small><b>'+esc(item)+'</b></div>').join("");
   $("draftResult").innerHTML='<div class="report-eyebrow">MLBB CYBER · ТАКТИЧЕСКИЙ ОТЧЁТ</div><div class="report-heading"><div><h2>План на этот драфт</h2><p>Линия: '+esc($("lane").value)+' · Врагов: '+enemies.length+' · Союзников: '+allies.length+'</p></div><span class="report-status complete">АНАЛИЗ ГОТОВ</span></div><section class="report-block"><div class="report-block-heading"><h3>Угрозы состава</h3><small>ЧТО УЧЕСТЬ</small></div><div class="threat-list">'+threats+'</div></section><section class="report-block"><div class="report-block-heading"><h3>Тактика против каждого героя</h3><small>МАТЧАПЫ</small></div><div class="matchup-list">'+matchupCards+'</div></section><section class="report-block"><div class="report-block-heading"><h3>План против состава</h3><small>КОМАНДНАЯ ТАКТИКА</small></div><div class="team-plan-list">'+teamPlan+'</div></section><section class="report-block"><div class="report-block-heading"><h3>Контрпики</h3><small>ПО ПРИОРИТЕТУ</small></div><div class="counter-list">'+counters+'</div></section><section class="report-block"><div class="report-block-heading"><h3>Контрпредметы и изменения сборки</h3><small>ПО ТВОЕМУ ГЕРОЮ И СОСТАВУ</small></div><div class="build-list">'+build+'</div><div class="utility-picks">'+boot+roam+'</div><p class="build-catalog-note">Контрподбор рассчитан по '+esc(d.itemCatalogCount||0)+' предметам из подключённого каталога. Полноту каталога и изображения предметов проверяем отдельно.</p></section><section class="report-block"><div class="report-block-heading"><h3>Эмблема и заклинание</h3><small>НАСТРОЙКА</small></div><div class="loadout-card"><div><small>ЭМБЛЕМА</small><b>'+esc(d.emblem||"Не определена")+'</b></div><div><small>ЗАКЛИНАНИЕ</small><b>'+esc(d.spell||"Не определено")+'</b></div></div>'+talents+'</section><section class="report-block"><div class="report-block-heading"><h3>План по времени</h3><small>ТРИ ЭТАПА</small></div><div class="phase-list">'+phases+'</div></section><div class="report-footnote">'+esc(d.aiExplanation||d.note||"Рекомендации рассчитаны по локальной тактической базе.")+'</div>';
+  animateDraftReport();
  }catch(e){
+  $("draftResult").classList.remove("arena-report-enter");
   $("draftResult").innerHTML='<div class="report-error"><b>Не удалось завершить анализ</b><p>'+esc(e.message||"Проверь соединение и попробуй ещё раз.")+'</p><button id="retryDraft" class="btn secondary">Повторить анализ</button></div>';
   $("retryDraft").onclick=runDraft;
  }finally{button.disabled=false;button.textContent=originalLabel}
