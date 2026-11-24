@@ -371,6 +371,7 @@ export const heroProfiles = [
       "https://mlbb-knowledge.vercel.app/heroes/17",
       "https://www.mlbbanalytics.com/heroes?hero=Fanny"
     
+    
     ],
     matchupsReviewedAt: "2026-11-24", matchupsMethod: "Ranked matchup deltas from MLBB.io; statistical signal, not a guaranteed counter or synergy.",
     patch: {
@@ -444,6 +445,7 @@ export const heroProfiles = [
       "https://www.mlbbanalytics.com/esports?tab=matches&tournament=msc-2026",
       "https://mldb.gg/id/hero/nolan"
     
+    
     ],
     matchupsReviewedAt: "2026-11-24", matchupsMethod: "Ranked matchup deltas from MLBB.io; statistical signal, not a guaranteed counter or synergy.",
     patch: {
@@ -499,9 +501,10 @@ export const heroProfiles = [
     sources: [
       "https://liquipedia.net/mobilelegends/Jawhead",
       "https://mlbb-knowledge.vercel.app/heroes/54",
-      "https://mlbbhub.com/ru/heroes/jawhead"
+      "https://mlbbhub.com/ru/heroes/jawhead",
     
       "https://mlbb.io/en/hero/jawhead",
+    
     ],
     matchupsReviewedAt: "2026-11-24", matchupsMethod: "Ranked matchup deltas from MLBB.io; statistical signal, not a guaranteed counter or synergy.",
     patch: {
@@ -646,9 +649,10 @@ export const heroProfiles = [
       "https://liquipedia.net/mobilelegends/Suyou",
       "https://mlbbhub.com/ru/heroes/suyou",
       "https://mlbb.io/en/hero/suyou/build",
-      "https://mlbbdex.com/en/heroes/suyou"
+      "https://mlbbdex.com/en/heroes/suyou",
     
       "https://www.mlbbcore.com/heroes/suyou/counters/",
+    
     ],
     matchupsReviewedAt: "2026-11-24", matchupsMethod: "Ranked matchup deltas from MLBB.io and MLBBcore; sources differ in coverage, so values are statistical signals rather than guaranteed counters or synergies.",
     patch: {
@@ -702,6 +706,7 @@ export const heroProfiles = [
       "https://liquipedia.net/mobilelegends/Karrie",
       "https://www.mlbb.io/en/hero/karrie",
       "https://mlbbhub.com/ru/heroes/karrie"
+    
     
     ],
     matchupsReviewedAt: "2026-11-24", matchupsMethod: "Ranked matchup deltas from MLBB.io; statistical signal, not a guaranteed counter or synergy.",
