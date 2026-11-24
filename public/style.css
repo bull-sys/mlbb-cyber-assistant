@@ -1435,3 +1435,8 @@ details.ency-info-card.visual>.ency-info-summary{display:grid}
 
 .own-pick-reset{justify-self:start;padding:5px 8px;border:1px solid rgba(167,137,255,.4);border-radius:7px;background:rgba(130,92,230,.1);color:#c4b5fd;font-size:7px;font-weight:900;cursor:pointer}
 .own-pick-reset:hover{border-color:#c4b5fd;background:rgba(130,92,230,.2)}
+
+/* FIRST PICK mode */
+.first-pick-overview{border-color:rgba(167,139,250,.48)}
+.first-pick-overview .report-decision.counter{border-color:rgba(167,139,250,.5)}
+.first-pick-overview .report-decision.counter>small{color:#c4b5fd}
