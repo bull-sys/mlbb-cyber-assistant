@@ -97,7 +97,7 @@ function applyDraftState(saved){
  const aliases={"Диррот":"Дариус","Фарса":"Фаша","Эудора":"Эйдора","Олдос":"Алдос","Баксия":"Баксий","Бейн":"Бэйн","Баратс":"Бартс","Сиси":"Чичи","Иритэль":"Иритель","Каджа":"Кайя","Ло И":"Ло Йи","Клод":"Клауд","Фовеус":"Фовиус","Сильванна":"Сильвана","Юй Чжун":"Чонг","Жаск":"Заск","Чжусин":"Чжусинь","Аамон":"Эймон"};
  const normalizeName=value=>aliases[value]||value;
  enemies=Array.isArray(saved.enemies)?saved.enemies.map(normalizeName).filter(x=>names.has(x)).slice(0,5):[];
- allies=Array.isArray(saved.allies)?saved.allies.map(normalizeName).filter(x=>names.has(x)).slice(0,5):[];
+ allies=Array.isArray(saved.allies)?saved.allies.map(normalizeName).filter(x=>names.has(x)).slice(0,4):[];
  if(data.roles.includes(saved.lane))$("lane").value=saved.lane;
  const savedMyHero=normalizeName(saved.myHero);
  if(names.has(savedMyHero)){$("myHero").value=savedMyHero;$("myHeroChoice").textContent=draftHeroLabel(savedMyHero)}else $("myHeroChoice").textContent="Не выбран";
@@ -206,7 +206,7 @@ function renderHeroPicker(){
  const selectedValues=pickerTarget==="myHero"?($("myHero").value?[$("myHero").value]:[]):current;
  const selectedHeroes=selectedValues.map(value=>entries.find(hero=>hero.value===value)).filter(Boolean);
  const currentLimit=pickerTarget==="allies"?4:5;const legacySelectionLabel="Выбрано "+current.length+" из "+currentLimit;
- const statusLabel=pickerTarget==="myHero"?(selectedHeroes.length?"ТВОЙ ВЫБОР":"ВЫБЕРИ СВОЕГО ГЕРОЯ"):("СОСТАВ · "+current.length+" / 5");
+ const statusLabel=pickerTarget==="myHero"?(selectedHeroes.length?"ТВОЙ ВЫБОР":"ВЫБЕРИ СВОЕГО ГЕРОЯ"):("СОСТАВ · "+current.length+" / "+currentLimit);
  $("pickerSelectionStatus").setAttribute("aria-label",pickerTarget==="myHero"?"Выбранный герой":legacySelectionLabel);
  $("pickerSelectionStatus").innerHTML='<div class="picker-selection-top"><span>'+statusLabel+'</span><small>'+(pickerTarget==="myHero"?(selectedHeroes.length?"ГЕРОЙ ЗАКРЕПЛЁН":"ОДИН ГЕРОЙ" ):(current.length>=currentLimit?"СОСТАВ ГОТОВ":"МОЖНО ДОБАВИТЬ ЕЩЁ "+(currentLimit-current.length)))+'</small></div><div class="picker-selection-slots" aria-label="Текущий выбор">'+(selectedHeroes.length?selectedHeroes.map(hero=>'<span class="picker-selected-hero"><img src="'+heroPortraitUrl(hero)+'" alt=""><b>'+esc(hero.name)+'</b><i>✓</i></span>').join(""):'<span class="picker-selection-empty">＋ '+(pickerTarget==="myHero"?"Выбери основного героя":"Добавь героев в состав")+'</span>')+'</div>';
  const recent=pickerRecent().map(value=>entries.find(h=>h.value===value)).filter(Boolean);
@@ -240,7 +240,7 @@ function choosePickerHero(value){
 }
 $("openEnemyPicker").onclick=()=>openHeroPicker("enemies");
 $("openAllyPicker").onclick=()=>openHeroPicker("allies");
-$("openMyHeroPicker").onclick=()=>openHeroPicker("myHero");
+
 $("closeHeroPicker").onclick=()=>$("heroPicker").classList.add("hidden");
 document.addEventListener("keydown",e=>{if(e.key==="Escape")$("heroPicker").classList.add("hidden")});
 $("heroPicker").onclick=e=>{if(e.target===$("heroPicker"))$("heroPicker").classList.add("hidden")};
