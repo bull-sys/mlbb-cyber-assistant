@@ -3,6 +3,8 @@ import { readFile } from "node:fs/promises";
 import test from "node:test";
 import { heroes, items } from "../server/data.js";
 import { heroProfiles } from "../server/hero-profiles.js";
+import { getDraftHeroAnalysisProfiles } from "../server/draft-hero-selection.js";
+const draftAnalysisProfiles = getDraftHeroAnalysisProfiles();
 
 // Keep production code untouched: load the local analyze() declaration from
 // server/index.js and evaluate only that function with the real catalogue.
@@ -99,7 +101,7 @@ if (serverSource.slice(analyzeEnd, endpointStart).trim() !== "") {
 const analyzeSource = serverSource.slice(analyzeStart, analyzeEnd);
 let analyze;
 try {
-  analyze = new Function("heroes", "items", "heroProfiles", `${analyzeSource}\nreturn analyze;`)(heroes, items, heroProfiles);
+  analyze = new Function("heroes", "items", "heroProfiles", "draftAnalysisProfiles", `${analyzeSource}\nreturn analyze;`)(heroes, items, heroProfiles, draftAnalysisProfiles);
 } catch (error) {
   throw new Error(`Draft analysis tests could not compile the complete analyze() function from server/index.js: ${error.message}`, { cause: error });
 }
@@ -318,7 +320,9 @@ test("enemy heroes outside the old 32-entry list are resolved from the full prof
   const result = run({ lane: "Мид", enemies: ["Лолита"] });
   assert.equal(result.enemyMatchups.length, 1);
   assert.equal(result.enemyMatchups[0].name, "Лолита");
-  assert.ok(result.enemyMatchups[0].mechanics.length > 0);
+  assert.equal(result.enemyMatchups[0].confidence, "unverified");
+  assert.match(result.enemyMatchups[0].note, /базовые сведения о роли и линии/);
+  assert.deepEqual(result.enemyMatchups[0].mechanics, []);
   assert.equal(result.counters.length, 3);
 });
 
@@ -327,7 +331,7 @@ test("full draft scenario matrix: every catalogue hero can be analyzed against a
   const failures = [];
 
   for (const lane of lanes) {
-    for (const enemy of heroProfiles) {
+    for (const enemy of draftAnalysisProfiles) {
       const enemyName = enemy.names?.ru;
       if (!enemyName) {
         failures.push({ lane, enemy: enemy.id, issue: "missing Russian display name" });
