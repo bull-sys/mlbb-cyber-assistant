@@ -170,3 +170,14 @@ test("X.Borg portrait uses the real xborg.png asset filename", async () => {
   const appSource = await readFile(new URL("../public/app.js", import.meta.url), "utf8");
   assert.match(appSource, /"x-borg"\s*:\s*"xborg"/);
 });
+
+
+test("all 133 Russian hero names stay identical across catalog, reference data and detailed profiles", () => {
+  const referenceById = new Map(heroReferenceData.map(hero => [hero.id, hero]));
+  const profileById = new Map(heroProfiles.map(profile => [profile.id, profile]));
+  assert.equal(heroCatalog.length, 133);
+  for (const hero of heroCatalog) {
+    assert.equal(referenceById.get(hero.id)?.displayNameRu, hero.displayNameRu, hero.id + ": reference name");
+    assert.equal(profileById.get(hero.id)?.names?.ru, hero.displayNameRu, hero.id + ": profile name");
+  }
+});
