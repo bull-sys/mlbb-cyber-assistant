@@ -44,6 +44,16 @@ test("encyclopedia client script remains syntactically valid", async () => {
   assert.doesNotThrow(() => new Script(app));
 });
 
+test("encyclopedia keeps one compact interactive graph with a stat selector and level slider", async () => {
+  const app = await readFile(new URL("../public/app.js", import.meta.url), "utf8");
+  assert.equal((app.match(/id="encySingleGraph"/g) || []).length, 1);
+  assert.match(app, /id="encyStatSelect"/);
+  assert.match(app, /id="encyLevelSlider"/);
+  assert.match(app, /select\.addEventListener\("change",draw\)/);
+  assert.match(app, /slider\.addEventListener\("input",draw\)/);
+  assert.match(app, /item\.estimated\?"estimated":""/);
+});
+
 test("encyclopedia passport exposes sourced tactical profile sections", async () => {
   const app = await readFile(new URL("../public/app.js", import.meta.url), "utf8");
   assert.match(app, /function renderEncyHeroDescription\(remote,hero,tacticalProfile=null\)/);
