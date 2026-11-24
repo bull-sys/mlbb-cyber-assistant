@@ -941,3 +941,7 @@ details.ency-info-card.visual>.ency-info-summary{display:grid}
  .ency-info-card.visual .ency-info-visual{width:54px;height:54px;flex-basis:54px}
  .ency-info-card.visual .ency-info-icon{width:48px;height:48px}
 }
+
+.ency-info-source-wrap{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:8px}
+.ency-info-source-wrap .ency-info-source{margin-top:0}
+.ency-info-checked{font-size:9px;color:#a997b2}
