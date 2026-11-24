@@ -137,9 +137,9 @@ test("item encyclopedia records have descriptions and the six shop categories", 
   assert.match(itemById("Ice Retribution").effect, /52–80 скорости передвижения.*35 секунд/);
   assert.match(itemById("Allow Throw").passive, /союзному Джавхеду.*подбрасывать/);
   assert.match(itemById("Broken Heart").passive, /иммунитет.*Сесилиона/);
-  assert.match(itemById("Flower of Hope").passive, /каждые 6 секунд.*100.*40% общей физической атаки.*30% общей магической силы/);
+  assert.match(itemById("Flower of Hope").passive, /Каждые 6 секунд.*100.*40% общей физической атаки.*30% общей магической силы/);
   assert.equal(itemById("Flower of Hope").stats[0], "+8% адаптивной атаки");
-  assert.match(itemById("Lantern of Hope").passive, /увеличиваются с уровнем героя/);
+  assert.match(itemById("Lantern of Hope").passive, /Характеристики.*увеличиваются с уровнем героя/);
   assert.match(itemById("Throw Forbidden").passive, /иммунитет.*Джавхеда/);
   assert.match(itemById("Antique Cuirass").passive, /8%/);
   assert.match(itemById("Immortality").passive, /210 секунд/);
