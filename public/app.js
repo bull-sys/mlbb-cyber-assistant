@@ -381,7 +381,7 @@ function renderEncy(){
     const facts=Array.isArray(x.stats)?x.stats:(Array.isArray(x.attributes)?x.attributes:[]);
     const factsMarkup=facts.length?'<ul class="ency-info-facts">'+facts.map(value=>'<li>'+esc(String(value))+'</li>').join("")+'</ul>':"";
     const passive=x.passive?'<div class="ency-info-effect"><b>'+esc(x.passiveName||"Эффект")+'</b><p>'+esc(x.passive)+'</p></div>':"";
-    const effect=x.effect?'<div class="ency-info-effect"><b>Точный эффект</b><p>'+esc(x.effect)+'</p></div>':"";
+    const effect=x.effect?'<div class="ency-info-effect"><b>'+esc(x.effectName||"Точный эффект")+'</b><p>'+esc(x.effect)+'</p></div>':"";
     const source=x.source?'<div class="ency-info-source-wrap"><a class="ency-info-source" href="'+esc(x.source)+'" target="_blank" rel="noopener">Источник ↗</a>'+(x.checkedAt?'<small class="ency-info-checked">Проверено: '+esc(x.checkedAt)+'</small>':"")+'</div>':"";
     const verification=x.verification==="partial"?'<small class="ency-info-verification">Требуется дополнительная сверка с текущей версией игры</small>':"";
     const categoryHeading=x.type==="item"&&(index===0||list[index-1].category!==x.category)?'<div class="ency-subgroup-heading"><b>'+esc(x.category)+'</b><small>'+list.filter(entry=>entry.category===x.category).length+'</small></div>':"";
