@@ -752,7 +752,7 @@ app.post("/api/ai/draft",guestDraftRateLimit,optionalAuth,async(req,res)=>{
   normalizeRankedMatchupRank(req.user ? safeUser(req.user.id)?.rank : null) || "all";
  const enemyProfilesForStats = b.enemies
   .map(value => resolveDraftHeroSelection(value))
-  .map(selection => heroProfiles.find(profile => profile.id === selection?.id))
+  .map(selection => draftAnalysisProfiles.find(profile => profile.id === selection?.id))
   .filter(Boolean);
  const rankedEvidence = await getRankedMatchupEvidence(enemyProfilesForStats, requestedRank, heroProfiles);
  const result=analyze({
