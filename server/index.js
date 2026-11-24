@@ -193,6 +193,70 @@ function analyze({lane, enemies = [], allies = [], myHero = ""}) {
     threats.push("Высокая мобильность");
 
   
+  // Персональная тактика против каждого выбранного героя.
+  const enemyMatchups = enemy.map(hero => {
+    const profile = profileByName.get(hero.name) || null;
+    if (!profile) return {
+      name: hero.name, role: hero.role, confidence: "unverified",
+      mechanics: [], weaknesses: [],
+      note: "Для этого героя пока нет проверенного тактического паспорта."
+    };
+    return {
+      name: hero.name,
+      role: profile.roles?.[0] || hero.role,
+      confidence: profile.confidence || "partial",
+      damage: profile.combat?.damage || "unknown",
+      burst: profile.combat?.burst || "unknown",
+      mobility: profile.combat?.mobility || "unknown",
+      control: profile.combat?.control || "unknown",
+      durability: profile.combat?.durability || "unknown",
+      mechanics: (profile.mechanics || []).slice(0, 3),
+      weaknesses: (profile.weaknesses || []).slice(0, 3),
+      reviewedAt: profile.patch?.reviewedAt || null,
+      patch: profile.patch?.version || null,
+      sources: (profile.sources || []).slice(0, 3)
+    };
+  });
+
+  // Тактические правила против сочетаний угроз — без выдуманных процентов и винрейтов.
+  const teamPlan = [];
+  if (has("burst") || has("pickoff") || has("ambush")) {
+    teamPlan.push({
+      title: "Защити уязвимую заднюю линию",
+      detail: "Не отдавай мага и стрелка по одному. Держите дистанцию друг от друга, заранее определите, кто встречает вражеского убийцу, и не тратьте все защитные навыки до его входа."
+    });
+  }
+  if (has("control") || has("engage")) {
+    teamPlan.push({
+      title: "Не собирайтесь в одну точку до инициации",
+      detail: "Следите за углом входа танка и контролёра. Не начинайте бой в узком проходе без обзора; после потраченной ключевой инициации используйте окно для ответного входа."
+    });
+  }
+  if (has("heal") || has("sustain")) {
+    teamPlan.push({
+      title: "Срежь восстановление и фокусируйте одну цель",
+      detail: "Антихил должен купить герой, который стабильно попадает по противникам. Не размазывайте урон по всей команде: сначала выберите приоритетную цель и доведите размен до конца."
+    });
+  }
+  if (enemyHas("tank")) {
+    teamPlan.push({
+      title: "Играй через переднюю линию",
+      detail: "Не пытайся каждый раз обойти танка и добраться до задней линии ценой собственной позиции. Сначала вынуждай переднюю линию потратить защитные навыки, затем продавливай открывшуюся цель."
+    });
+  }
+  if (has("mobility")) {
+    teamPlan.push({
+      title: "Сохраняй контроль для момента входа",
+      detail: "Не отдавай надёжное замедление или оглушение в пустоту. Дождись рывка или момента, когда мобильный герой уже вошёл в бой и ему сложнее сменить направление."
+    });
+  }
+  if (!teamPlan.length) {
+    teamPlan.push({
+      title: "Играй от информации и численного преимущества",
+      detail: "Проверяй кусты перед заходом на объект, не начинай бой без понимания позиций противников и используй численное преимущество после ухода одного из врагов с линии."
+    });
+  }
+
   // Подбор контрпиков с учётом состава
   const candidates = heroes
     .filter(h =>
@@ -450,6 +514,8 @@ function analyze({lane, enemies = [], allies = [], myHero = ""}) {
 
   return {
     threats,
+    enemyMatchups,
+    teamPlan,
     counters: candidates.map(x => ({
       name: x.hero.name,
       role: x.hero.role,
