@@ -256,7 +256,7 @@ function recommendBuild({items,archetype,threats=[]}){
   "Маг / взрывной урон":{categories:["Магия","Магия / защита","Защита"],preferred:["magic","penetration"]},
   "Стрелок / скорость атаки":{categories:["Атака","Защита"],preferred:["marksman","critical","attack-speed"]},
   "Боец / длительный бой":{categories:["Атака","Защита"],preferred:["fighter","sustain","physical"]},
-  "Танк / инициатор":{categories:["Защита","Магия / защита"],preferred:["survival","physical","magic-burst","anti-attack-speed","magic-defense","anti-magic-burst"]},
+  "Танк / инициатор":{categories:["Защита","Магия / защита"],preferred:["survival","physical","magic-burst","anti-attack-speed"]},
   "Поддержка / хилер":{categories:["Защита","Магия","Магия / защита"],preferred:["survival","anti-heal","magic"]}
  };
  const threatRules={
