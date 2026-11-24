@@ -7,7 +7,7 @@ test("draft UI exposes both the legacy analyzer roster and canonical catalog IDs
   assert.match(source, /function draftOptions\(el\)/);
   assert.match(source, /data\.draftHeroOptions/);
   assert.match(source, /Старая база · анализ доступен/);
-  assert.match(source, /Каталог героев · проверка продолжается/);
+  assert.match(source, /Каталог героев · полный список/);
   assert.match(source, /analysisSupported/);
   assert.match(source, /filter\(hero=>!hero\.analysisSupported\)/);
 });
@@ -33,14 +33,13 @@ test("limited analysis never renders empty or fabricated counter recommendations
   assert.doesNotMatch(limitedBranch, /d\.counters\.map/);
 });
 
-test("server blocks full analysis when any selected catalog hero lacks verified mapping", async () => {
+test("server resolves every selected catalog hero to a tactical profile without legacy mapping", async () => {
   const source = await readFile(new URL("../server/index.js", import.meta.url), "utf8");
-  const limited = source.indexOf('if(unsupported.length)');
-  const analyze = source.indexOf("const result=analyze({", limited);
-  assert.ok(limited >= 0);
-  assert.ok(analyze > limited);
-  assert.match(source.slice(limited, analyze), /analysisStatus:"limited"/);
-  assert.match(source.slice(limited, analyze), /return res\.json/);
+  assert.doesNotMatch(source, /if\(unsupported\.length\)/);
+  assert.match(source, /const draftAnalysisProfiles=getDraftHeroAnalysisProfiles\(\)/);
+  assert.match(source, /const unresolved=selectedValues\.filter/);
+  assert.match(source, /const legacyName=value=>resolveDraftHeroSelection\(value\)\.legacyName/);
+  assert.match(source, /const result=analyze\(\{/);
 });
 
 test("draft picker renders a live selected-hero strip with portraits and team capacity", async () => {
