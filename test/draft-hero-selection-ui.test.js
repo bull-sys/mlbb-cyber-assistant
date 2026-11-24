@@ -137,3 +137,16 @@ test("counter recommendations distinguish direct matchup evidence from situation
   assert.match(css, /\.counter-kind/);
   assert.match(css, /\.counter-method-note/);
 });
+
+
+test("draft places three lane-filtered recommendations inside the player pick slot", async () => {
+  const html = await readFile(new URL("../public/index.html", import.meta.url), "utf8");
+  const app = await readFile(new URL("../public/app.js", import.meta.url), "utf8");
+  const validation = await readFile(new URL("../server/draft-validation.js", import.meta.url), "utf8");
+  assert.match(html, /id="arenaMyHeroRecommendations"/);
+  assert.doesNotMatch(html, /id="openMyHeroPicker"/);
+  assert.match(app, /draftRecommendations=\(d\.counters\|\|\[\]\)\.slice\(0,3\)/);
+  assert.match(app, /data-own-recommendation/);
+  assert.match(app, /arenaMyHeroRecommendations.*runDraft\(\)/);
+  assert.match(validation, /allies\.length > 4/);
+});
