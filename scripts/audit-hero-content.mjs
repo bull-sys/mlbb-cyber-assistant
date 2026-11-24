@@ -1,5 +1,6 @@
 import { mkdir, writeFile } from "node:fs/promises";
 import { heroCatalog } from "../server/hero-catalog.js";
+import { heroLoreData } from "../server/hero-lore-data.js";
 
 const PROFILE_BASE = "https://mlbbdex.com/api/v1/heroes/";
 const RUSSIAN_SKILLS_URL = "https://raw.githubusercontent.com/achedon12/mlbb/92f0fe94e4226ab6057db25711c4d65b3ca12130/src/data/game/skills/ru.json";
@@ -95,6 +96,8 @@ let russianSkills = null, russianSkillsError = null;
 try { russianSkills = await fetchJson(RUSSIAN_SKILLS_URL); }
 catch (error) { russianSkillsError = String(error?.message || error); }
 
+const localLoreById = new Map(heroLoreData.map(entry => [entry.id, entry]));
+
 const heroes = await mapLimit(heroCatalog, CONCURRENCY, async hero => {
   const url = PROFILE_BASE + encodeURIComponent(slug(hero.id));
   let payload = null, error = null;
@@ -108,6 +111,10 @@ const heroes = await mapLimit(heroCatalog, CONCURRENCY, async hero => {
     id: hero.id,
     nameEn: hero.nameEn,
     displayNameRu: hero.displayNameRu,
+    localLore: {
+      status: localLoreById.has(hero.id) ? "available" : "missing",
+      summaryLength: textValue(localLoreById.get(hero.id)?.summary).length
+    },
     profile: {
       status: profile ? "available" : "unavailable",
       url,
@@ -132,6 +139,9 @@ const report = {
   russianSkillsError,
   profileAvailable,
   profileUnavailable: heroCatalog.length - profileAvailable,
+  localLoreAvailable: heroCatalog.filter(hero => localLoreById.has(hero.id) && textValue(localLoreById.get(hero.id)?.summary)).length,
+  localLoreMissing: heroCatalog.filter(hero => !localLoreById.has(hero.id) || !textValue(localLoreById.get(hero.id)?.summary)).map(hero => hero.id),
+  localLoreDuplicateIds: heroLoreData.length - localLoreById.size,
   profilesWithExplicitLoreCandidates: loreAvailable,
   totalRussianSkillEntries: skillEntries,
   heroes
@@ -142,11 +152,15 @@ console.log(JSON.stringify({
   roster: report.rosterCount,
   profileAvailable,
   profileUnavailable: report.profileUnavailable,
+  localLoreAvailable: report.localLoreAvailable,
+  localLoreMissing: report.localLoreMissing,
+  localLoreDuplicateIds: report.localLoreDuplicateIds,
   profilesWithExplicitLoreCandidates: loreAvailable,
   totalRussianSkillEntries: skillEntries,
   russianSkillsError,
   perHero: heroes.map(hero => ({
     id: hero.id,
+    localLore: hero.localLore.status,
     profile: hero.profile.status,
     keys: hero.profile.topLevelKeys,
     loreCandidates: hero.profile.loreCandidates.map(item => item.path),
