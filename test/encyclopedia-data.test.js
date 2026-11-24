@@ -4,6 +4,7 @@ import { items, emblems, talents } from "../server/data.js";
 import { readFile } from "node:fs/promises";
 
 const appSource = await readFile(new URL("../public/app.js", import.meta.url), "utf8");
+const assetAdapterSource = await readFile(new URL("../server/mlbbdex-adapter.js", import.meta.url), "utf8");
 
 test("encyclopedia has all seven emblem sets with visible factual attributes", () => {
   assert.equal(emblems.length, 7);
@@ -177,7 +178,7 @@ test("encyclopedia resolves item artwork from MLBBDex slugs", () => {
   assert.match(appSource, /function encyItemImage\(item\)/);
   assert.match(appSource, /encyRemoteAssets\?\.items\|\|\[\]/);
   assert.match(appSource, /entry\?\.slug===slug/);
-  assert.match(appSource, /visuels\\/objets\\//);
+  assert.match(assetAdapterSource, /visuels\\/objets\\//);
   assert.match(appSource, /encyItemImage\(x\)/);
   assert.match(appSource, /onerror=.*ency-info-icon placeholder/s);
 });
