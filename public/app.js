@@ -48,7 +48,7 @@ function readLocalDraft(){try{return JSON.parse(localStorage.getItem(draftStorag
 function applyDraftState(saved){
  if(!saved||saved.version!==1)return;
  const names=new Set([...data.heroes.map(h=>h.name),...(data.draftHeroOptions||[]).map(h=>h.id)]);
- const aliases={"Диррот":"Дариус","Фарса":"Фаша","Эудора":"Эйдора","Олдос":"Алдос","Баксия":"Баксий","Бейн":"Бэйн","Баратс":"Бартс","Сиси":"Чичи","Иритэль":"Иритель","Каджа":"Кайя","Ло И":"Ло Йи","Фовеус":"Фовиус","Сильванна":"Сильвана","Юй Чжун":"Чонг","Жаск":"Заск","Чжусин":"Чжусинь","Аамон":"Эймон"};
+ const aliases={"Диррот":"Дариус","Фарса":"Фаша","Эудора":"Эйдора","Олдос":"Алдос","Баксия":"Баксий","Бейн":"Бэйн","Баратс":"Бартс","Сиси":"Чичи","Иритэль":"Иритель","Каджа":"Кайя","Ло И":"Ло Йи","Клод":"Клауд","Фовеус":"Фовиус","Сильванна":"Сильвана","Юй Чжун":"Чонг","Жаск":"Заск","Чжусин":"Чжусинь","Аамон":"Эймон"};
  const normalizeName=value=>aliases[value]||value;
  enemies=Array.isArray(saved.enemies)?saved.enemies.map(normalizeName).filter(x=>names.has(x)).slice(0,5):[];
  allies=Array.isArray(saved.allies)?saved.allies.map(normalizeName).filter(x=>names.has(x)).slice(0,5):[];
@@ -131,6 +131,7 @@ function heroPortraitUrl(hero){
   "luo-yi":"luo_yi",
   "popol-and-kupa":"popol_and_kupa",
   "yi-sun-shin":"yi_sun-shin",
+  "x-borg":"xborg",
   "yu-zhong":"yu_zhong"
  };
  const filename=filenames[id]||id;
