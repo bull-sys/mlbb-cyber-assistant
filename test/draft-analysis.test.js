@@ -248,6 +248,11 @@ test("team plan adapts to enemy composition threats", () => {
   assert.ok(titles.includes("Срежь восстановление и фокусируйте одну цель"));
 });
 
+test("draft analysis reports the size of its current counter-item catalogue", () => {
+  const result = run({ myHero: "Роджер", enemies: ["Хелкарт"] });
+  assert.equal(result.itemCatalogCount, items.length);
+});
+
 test("counter build adapts to Roger versus Helcurt without suggesting mage or marksman-only items", () => {
   const result = run({ myHero: "Роджер", enemies: ["Хелкарт"] });
   const names = result.buildDetails.map(item => item.name);
