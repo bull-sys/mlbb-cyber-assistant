@@ -9,7 +9,7 @@ test("draft UI exposes both the legacy analyzer roster and canonical catalog IDs
   assert.match(source, /Старая база · анализ доступен/);
   assert.match(source, /Каталог героев · полный список/);
   assert.match(source, /analysisSupported/);
-  assert.match(source, /filter\(hero=>!hero\.analysisSupported\)/);
+  assert.match(source, /filter\(hero=>hero\.analysisSupported\)/);
 });
 
 test("draft UI restores catalog IDs and renders their visible names", async () => {
