@@ -566,10 +566,16 @@ export const heroProfiles = [
         "После неудачного ультимейта или потери ключевых навыков его влияние в продолжительной командной драке заметно снижается."
       ],
       "matchups": {
-        "strongAgainst": [],
-        "weakAgainst": []
-      },
-      "synergies": [],
+      "strongAgainst": ["nolan", "lunox", "ling"],
+      "weakAgainst": ["leomord", "baxia", "miya"]
+    },
+    "matchupEvidence": {
+      "source": "https://mlbb.io/en/hero/saber",
+      "method": "Measured all-rank ranked matchup and ally win-rate shifts",
+      "patch": "2.2.23",
+      "checkedAt": "2026-11-24"
+    },
+      "synergies": ["marcel", "diggie", "estes"],
       "itemNotes": [
         "Лесной вариант в актуальном срезе MLBBHub для патча 2.2.23: Magic Boots, Hunter Strike, War Axe, Endless Battle, Rose Gold Meteor и Brute Force Breastplate. Это ориентир, а не неизменный набор: защитные предметы и пробивание подстраиваются под состав соперника.",
         "Для леса базовый выбор — эмблема Убийцы с талантами Thrill, Seasoned Hunter и Temporal Reign; боевое заклинание — Возмездие. Для роум-позиции набор талантов и предметов нужно пересматривать отдельно.",
@@ -589,6 +595,7 @@ export const heroProfiles = [
         ]
       },
       "sources": [
+      "https://mlbb.io/en/hero/saber",
         "https://liquipedia.net/mobilelegends/Saber",
         "https://mlbb-knowledge.vercel.app/heroes/3",
         "https://mlbb.io/en/hero/saber",
@@ -604,7 +611,7 @@ export const heroProfiles = [
           "Сборка Jungle Default и таланты эмблемы приведены как датированный ориентир MLBBHub для патча 2.2.23, проверенного 18 ноября 2026 года; это не универсальная рекомендация для каждой игры.",
           "Профессиональный VOD-разбор текущего патча не выполнен. Контрпики и синергии оставлены пустыми, чтобы не выдавать неподтверждённые матчапы за проверенные."
         ],
-        "reviewedAt": "2026-11-22"
+        "reviewedAt": "2026-11-24"
       },
       "confidence": "partial"
     },
@@ -2899,10 +2906,16 @@ export const heroProfiles = [
         "Ультимейт можно закрыть другими героями, а подготовка выстрела ограничивает мобильность."
       ],
       "matchups": {
-        "strongAgainst": [],
-        "weakAgainst": []
-      },
-      "synergies": [],
+      "strongAgainst": ["claude", "bruno", "gatotkaca"],
+      "weakAgainst": ["masha", "estes", "gloo"]
+    },
+    "matchupEvidence": {
+      "source": "https://mlbb.io/en/hero/lesley",
+      "method": "Measured all-rank ranked matchup and ally win-rate shifts",
+      "patch": "2.2.23",
+      "checkedAt": "2026-11-24"
+    },
+      "synergies": ["popol-and-kupa", "roger", "edith"],
       "itemNotes": [
         "Сборка обычно строится вокруг критического урона и физической атаки; фиксировать набор предметов без свежего патчевого среза не следует.",
         "Важнее сохранять дистанцию и стабильный цикл усиленных выстрелов, чем пытаться соревноваться в ближнем бою."
@@ -2920,6 +2933,7 @@ export const heroProfiles = [
         ]
       },
       "sources": [
+      "https://mlbb.io/en/hero/lesley",
         "https://mlbb.io/en/hero/lesley",
         "https://mobile-legends.fandom.com/wiki/Lesley",
         "https://mlbbhub.com/ru/heroes/lesley"
@@ -2931,7 +2945,7 @@ export const heroProfiles = [
           "Класс Marksman/Assassin и Gold Lane подтверждены текущей карточкой героя MLBB.io; текущая статистика сайта не трактуется как профессиональный тир-лист.",
           "Профессиональный VOD-разбор актуального патча не выполнен."
         ],
-        "reviewedAt": "2026-11-22"
+        "reviewedAt": "2026-11-24"
       },
       "confidence": "partial"
     },
@@ -2980,10 +2994,17 @@ export const heroProfiles = [
         "Невысокий постоянный урон: Лолита зависит от команды, чтобы реализовать созданное ею окно контроля."
       ],
       "matchups": {
-        "strongAgainst": [],
-        "weakAgainst": []
-      },
-      "synergies": [],
+      "strongAgainst": ["cyclops", "edith", "bane"],
+      "weakAgainst": ["aurora", "esmeralda", "zhuxin"]
+    },
+    "matchupEvidence": {
+      "source": "https://mlbb.io/en/hero/lolita",
+      "method": "Measured all-rank ranked matchup and ally win-rate shifts",
+      "patch": "2.2.23",
+      "checkedAt": "2026-11-24",
+      "caution": "Very low pick rate (~0.1%); matchup deltas are low-sample directional signals."
+    },
+      "synergies": ["saber", "natalia", "helcurt"],
       "itemNotes": [
         "Для роум-позиции приоритетны защитные параметры и предметы под фактический тип урона соперника.",
         "Заклинание «Вспышка» может помочь скорректировать позицию для ультимейта, но выбор следует сверять с текущей сборкой и составом."
@@ -3001,6 +3022,7 @@ export const heroProfiles = [
         ]
       },
       "sources": [
+      "https://mlbb.io/en/hero/lolita",
         "https://mlbb.io/en/hero/lolita",
         "https://www.mobillegends.com/en/hero/lolita/",
         "https://liquipedia.net/mobilelegends/Lolita"
@@ -3012,7 +3034,7 @@ export const heroProfiles = [
           "Support/Tank и Roam подтверждены актуальной карточкой MLBB.io; небольшой объём сборок не используется как надёжная мета-оценка.",
           "Профессиональный VOD-разбор актуального патча не выполнен."
         ],
-        "reviewedAt": "2026-11-22"
+        "reviewedAt": "2026-11-24"
       },
       "confidence": "partial"
     },
@@ -3060,10 +3082,17 @@ export const heroProfiles = [
         "Телепортация требует подготовки и координации: союзники могут не успеть войти в круг или неверно оценить точку прибытия."
       ],
       "matchups": {
-        "strongAgainst": [],
-        "weakAgainst": []
-      },
-      "synergies": [],
+      "strongAgainst": ["estes", "faramis", "chip"],
+      "weakAgainst": ["helcurt", "joy", "novaria"]
+    },
+    "matchupEvidence": {
+      "source": "https://mlbb.io/en/hero/luo-yi",
+      "method": "Measured all-rank ranked matchup and ally win-rate shifts",
+      "patch": "2.2.23",
+      "checkedAt": "2026-11-24",
+      "caution": "Low pick rate (~0.2%); matchup deltas are directional and should not be treated as a stable universal ranking."
+    },
+      "synergies": ["atlas", "marcel", "thamuz"],
       "itemNotes": [
         "Основной профиль — магический урон с усилением навыков; конкретные предметы и эмблемы следует сверять по актуальной статистике патча.",
         "Командная ценность часто выше при наличии союзников, способных удержать противников в зоне поля или продолжить массовый контроль."
@@ -3081,6 +3110,7 @@ export const heroProfiles = [
         ]
       },
       "sources": [
+      "https://mlbb.io/en/hero/luo-yi",
         "https://mlbb.io/en/hero/luo-yi",
         "https://liquipedia.net/mobilelegends/Luo_Yi",
         "https://metammo.com/mobile-legends-guide/heroes/luo-yi"
@@ -3092,7 +3122,7 @@ export const heroProfiles = [
           "Mage/Mid Lane подтверждены карточкой героя MLBB.io; статистика сайта отражает только его текущую выборку и не является доказательством профессиональной силы.",
           "Профессиональный VOD-разбор актуального патча не выполнен."
         ],
-        "reviewedAt": "2026-11-22"
+        "reviewedAt": "2026-11-24"
       },
       "confidence": "partial"
     },
@@ -3140,10 +3170,17 @@ export const heroProfiles = [
         "Ошибочное использование ультимейта может вернуть Лилию в небезопасную точку, поэтому важно помнить прежнюю позицию."
       ],
       "matchups": {
-        "strongAgainst": [],
-        "weakAgainst": []
-      },
-      "synergies": [],
+      "strongAgainst": ["johnson"],
+      "weakAgainst": ["joy", "natalia", "chou"]
+    },
+    "matchupEvidence": {
+      "source": "https://mlbb.io/en/hero/lylia",
+      "method": "Measured all-rank ranked matchup and ally win-rate shifts",
+      "patch": "2.2.23",
+      "checkedAt": "2026-11-24",
+      "caution": "Only one positive strong-against matchup is listed in the current all-rank snapshot; no additional counters were inferred."
+    },
+      "synergies": ["harley", "atlas", "natalia"],
       "itemNotes": [
         "Ориентироваться на магическую силу и сокращение перезарядки, сохраняя достаточно маны для постоянной расстановки зарядов.",
         "Выбор заклинания зависит от угрозы: дополнительный инструмент дистанции или защиты ценнее, чем слепое копирование одного варианта."
@@ -3161,6 +3198,7 @@ export const heroProfiles = [
         ]
       },
       "sources": [
+      "https://mlbb.io/en/hero/lylia",
         "https://mlbb.io/en/hero/lylia",
         "https://metammo.com/mobile-legends-guide/heroes/lylia",
         "https://www.mobillegends.com/en/hero/lylia/"
@@ -3172,7 +3210,7 @@ export const heroProfiles = [
           "Mage/Mid Lane подтверждены актуальной карточкой MLBB.io; числовые значения навыков не фиксируются, поскольку они могут меняться между балансными обновлениями.",
           "Профессиональный VOD-разбор актуального патча не выполнен."
         ],
-        "reviewedAt": "2026-11-22"
+        "reviewedAt": "2026-11-24"
       },
       "confidence": "partial"
     },
@@ -3221,10 +3259,16 @@ export const heroProfiles = [
         "Ошибочный выбор цели для ультимейта может оставить Мартиса без инструмента продолжения атаки."
       ],
       "matchups": {
-        "strongAgainst": [],
-        "weakAgainst": []
-      },
-      "synergies": [],
+      "strongAgainst": ["chip", "sora", "moskov"],
+      "weakAgainst": ["x-borg", "minsitthar", "marcel"]
+    },
+    "matchupEvidence": {
+      "source": "https://mlbb.io/en/hero/martis",
+      "method": "Measured all-rank ranked matchup and ally win-rate shifts",
+      "patch": "2.2.23",
+      "checkedAt": "2026-11-24"
+    },
+      "synergies": ["hanzo", "joy", "fredrinn"],
       "itemNotes": [
         "Для леса важны темп зачистки и урон, позволяющий надёжно добивать цели; для линии опыта балансировать урон с выживаемостью.",
         "Не переносить один и тот же набор предметов между лесом и линией опыта без учёта состава противника и текущей статистики."
@@ -3242,6 +3286,7 @@ export const heroProfiles = [
         ]
       },
       "sources": [
+      "https://mlbb.io/en/hero/martis",
         "https://www.mlbb.io/en/hero/martis",
         "https://mlbb-knowledge.vercel.app/heroes/58",
         "https://liquipedia.net/mobilelegends/Martis",
@@ -3255,7 +3300,7 @@ export const heroProfiles = [
           "Fighter с линиями Jungle/EXP подтверждён несколькими независимыми базами. Ранговые показатели и турнирные выборки не смешиваются; конкретный текущий профессиональный VOD не разбирался.",
           "Статистика MLBB.io на 22 ноября 2026 года показывает низкую частоту выбора и винрейт ниже 50%; это срез агрегатора, а не универсальный вывод о силе героя."
         ],
-        "reviewedAt": "2026-11-22"
+        "reviewedAt": "2026-11-24"
       },
       "confidence": "partial"
     },
@@ -3699,10 +3744,16 @@ export const heroProfiles = [
       "После неудачного входа у него мало надёжной защиты, если маскировка и замедление уже потрачены."
     ],
     "matchups": {
-      "strongAgainst": [],
-      "weakAgainst": []
+      "strongAgainst": ["cici", "claude", "hilda"],
+      "weakAgainst": ["gloo", "lolita", "hayabusa"]
     },
-    "synergies": [],
+    "matchupEvidence": {
+      "source": "https://mlbb.io/en/hero/aamon",
+      "method": "Measured all-rank ranked matchup and ally win-rate shifts",
+      "patch": "2.2.23",
+      "checkedAt": "2026-11-24"
+    },
+    "synergies": ["akai", "beatrix", "freya"],
     "itemNotes": [
       "Основной урон строится вокруг магической силы и магического пробивания; предметы подбирай под фактическую защиту противников, а не по фиксированному шаблону.",
       "В опубликованных наборах для Эймона встречаются Arcane Boots, Genius Wand и Holy Crystal как магическая основа; это ориентир из базы сборок, а не обязательный порядок для каждого матча.",
@@ -3724,6 +3775,7 @@ export const heroProfiles = [
     },
     "sources": [
       "https://mlbb.io/en/hero/aamon",
+      "https://mlbb.io/en/hero/aamon",
       "https://liquipedia.net/mobilelegends/Aamon",
       "https://mlbb-knowledge.vercel.app/heroes/109",
       "https://www.mlbbguides.com/heroes/aamon/"
@@ -3735,7 +3787,7 @@ export const heroProfiles = [
         "Роль Assassin и основная линия Jungle сверены с каталогами героев; числовые коэффициенты не закреплены как постоянные из-за возможных балансных изменений.",
         "Предметы указаны как направления и опубликованные примеры; профессиональный VOD-разбор не выполнен, матчапы и синергии оставлены пустыми."
       ],
-      "reviewedAt": "2026-11-23"
+      "reviewedAt": "2026-11-24"
     },
     "confidence": "partial"
   },
@@ -3786,10 +3838,16 @@ export const heroProfiles = [
       "Если первый навык потрачен без продуманной точки повторного применения, Алиса теряет главный инструмент коррекции позиции."
     ],
     "matchups": {
-      "strongAgainst": [],
-      "weakAgainst": []
+      "strongAgainst": ["chip", "tigreal", "barats"],
+      "weakAgainst": ["angela", "floryn", "valir"]
     },
-    "synergies": [],
+    "matchupEvidence": {
+      "source": "https://mlbb.io/en/hero/alice",
+      "method": "Measured all-rank ranked matchup and ally win-rate shifts",
+      "patch": "2.2.23",
+      "checkedAt": "2026-11-24"
+    },
+    "synergies": ["aldous", "cici", "argus"],
     "itemNotes": [
       "Профиль Алисы выигрывает от сочетания дополнительного здоровья и магической силы: здоровье повышает запас прочности, а магическая сила усиливает урон и лечение навыков.",
       "Не копируй сборку мага с низким запасом здоровья автоматически: сравнивай предметы на выживаемость, магическое пробивание и восстановление в зависимости от того, может ли команда обеспечить Алисе время рядом с врагами.",
@@ -3811,6 +3869,7 @@ export const heroProfiles = [
     },
     "sources": [
       "https://mlbb.io/en/hero/alice",
+      "https://mlbb.io/en/hero/alice",
       "https://www.mlbbguides.com/heroes/alice/",
       "https://mlbbcore.com/heroes/alice/",
       "https://www.mlbbanalytics.com/heroes?search=Alice"
@@ -3822,7 +3881,7 @@ export const heroProfiles = [
         "Tank/Mage и EXP Lane отражены по текущей классификации справочника; профессиональный VOD-разбор и независимая оценка матчапов не завершены.",
         "Сборка описана как принципы предметов, а не как единственный порядок покупок; matchup- и synergy-массивы оставлены пустыми."
       ],
-      "reviewedAt": "2026-11-23"
+      "reviewedAt": "2026-11-24"
     },
     "confidence": "partial"
   },
@@ -3872,10 +3931,16 @@ export const heroProfiles = [
       "Её собственный урон и зачистка волн ограничены по сравнению с полноценными магами."
     ],
     "matchups": {
-      "strongAgainst": [],
-      "weakAgainst": []
+      "strongAgainst": ["alice", "marcel", "balmond"],
+      "weakAgainst": ["lolita", "franco", "zilong"]
     },
-    "synergies": [],
+    "matchupEvidence": {
+      "source": "https://www.mlbb.io/en/hero/angela",
+      "method": "Measured all-rank ranked matchup and ally win-rate shifts",
+      "patch": "2.2.23",
+      "checkedAt": "2026-11-24"
+    },
+    "synergies": ["gatotkaca", "sun", "uranus"],
     "itemNotes": [
       "Для роум-поддержки приоритетны предметы, усиливающие лечение/щиты, сокращающие перезарядки и помогающие команде переживать продолжительные стычки.",
       "Flask of the Oasis и Fleeting Time встречаются в опубликованных поддерживающих вариантах; проверяй актуальную совместимость пассивных эффектов и тайминг ультимейта в текущем патче.",
@@ -3897,6 +3962,7 @@ export const heroProfiles = [
     },
     "sources": [
       "https://www.mlbb.io/en/hero/angela",
+      "https://www.mlbb.io/en/hero/angela",
       "https://liquipedia.net/mobilelegends/Angela",
       "https://www.mlbbguides.com/heroes/angela/",
       "https://metammo.com/mobile-legends-guide/heroes/angela"
@@ -3908,7 +3974,7 @@ export const heroProfiles = [
         "Support/Roam подтверждены независимой классификацией; проценты матчапов не используются как универсальные контрпики или гарантированные синергии.",
         "Профиль описывает поддержку и выбор момента ультимейта; профессиональный VOD-разбор не выполнен, matchup- и synergy-массивы оставлены пустыми."
       ],
-      "reviewedAt": "2026-11-23"
+      "reviewedAt": "2026-11-24"
     },
     "confidence": "partial"
   },
@@ -3958,10 +4024,16 @@ export const heroProfiles = [
       "Без обзора и прикрытия Одетте трудно безопасно занять позицию для массового ультимейта."
     ],
     "matchups": {
-      "strongAgainst": [],
-      "weakAgainst": []
+      "strongAgainst": ["kaja", "rafaela", "mathilda"],
+      "weakAgainst": ["vale", "nana", "alpha"]
     },
-    "synergies": [],
+    "matchupEvidence": {
+      "source": "https://mlbb.io/en/hero/odette",
+      "method": "Measured all-rank ranked matchup and ally win-rate shifts",
+      "patch": "2.2.23",
+      "checkedAt": "2026-11-24"
+    },
+    "synergies": ["chip", "kaja", "mathilda"],
     "itemNotes": [
       "Основной ориентир — магическая сила и пробивание, чтобы усиливать навыки и продолжительный урон ультимейта.",
       "Покупай защитный слот, если соперники регулярно добираются до Одетты до или во время ультимейта; сохранённое время действия часто ценнее ещё одного атакующего компонента.",
@@ -3983,6 +4055,7 @@ export const heroProfiles = [
     },
     "sources": [
       "https://mlbb.io/en/hero/odette",
+      "https://mlbb.io/en/hero/odette",
       "https://mlbb-knowledge.vercel.app/heroes/46",
       "https://liquipedia.net/mobilelegends/Odette",
       "https://www.mlbbguides.com/heroes/odette/"
@@ -3994,7 +4067,7 @@ export const heroProfiles = [
         "Mage/Mid Lane подтверждены независимыми справочниками; малые выборки сборок и турниров не трактуются как устойчивый рейтинг силы.",
         "Тактический профиль остаётся частичным до просмотра матчей текущего патча; матчапы и синергии оставлены пустыми."
       ],
-      "reviewedAt": "2026-11-23"
+      "reviewedAt": "2026-11-24"
     },
     "confidence": "partial"
   },
@@ -4044,10 +4117,16 @@ export const heroProfiles = [
       "Если команда не поддерживает вход, Фовиус может оказаться глубоко среди противников после прыжка."
     ],
     "matchups": {
-      "strongAgainst": [],
-      "weakAgainst": []
+      "strongAgainst": ["wanwan", "harith", "freya"],
+      "weakAgainst": ["minsitthar", "x-borg", "alpha"]
     },
-    "synergies": [],
+    "matchupEvidence": {
+      "source": "https://mlbb.io/en/hero/phoveus",
+      "method": "Measured all-rank ranked matchup and ally win-rate shifts",
+      "patch": "2.2.23",
+      "checkedAt": "2026-11-24"
+    },
+    "synergies": ["sun", "lukas", "bane"],
     "itemNotes": [
       "Сборка обычно сочетает выживаемость, сокращение перезарядок и физические характеристики, усиливающие навыки; выбирай защитные предметы под тип основного входящего урона.",
       "Опубликованные варианты часто используют боевые предметы для устойчивого ближнего боя, но не копируй список без проверки актуальных эффектов и состава соперника.",
@@ -4069,6 +4148,7 @@ export const heroProfiles = [
     },
     "sources": [
       "https://mlbb.io/en/hero/phoveus",
+      "https://mlbb.io/en/hero/phoveus",
       "https://www.mlbbanalytics.com/heroes?hero=Phoveus",
       "https://mlbb-knowledge.vercel.app/heroes/",
       "https://liquipedia.net/mobilelegends/Phoveus",
@@ -4081,7 +4161,7 @@ export const heroProfiles = [
         "Роль Fighter и линия EXP указаны как рабочая классификация; гибкие варианты роли требуют отдельной проверки.",
         "Предметные заметки намеренно описывают принципы, а не неподтверждённый универсальный билд; профессиональный VOD-разбор и matchup-проверка не выполнены."
       ],
-      "reviewedAt": "2026-11-23"
+      "reviewedAt": "2026-11-24"
     },
     "confidence": "partial"
   },
@@ -4133,10 +4213,16 @@ export const heroProfiles = [
       "Без подготовленных ловушек сложнее контролировать пространство и заранее защищать подходы к объектам."
     ],
     "matchups": {
-      "strongAgainst": [],
-      "weakAgainst": []
+      "strongAgainst": ["selena", "harley", "jawhead"],
+      "weakAgainst": ["hanabi", "melissa", "atlas"]
     },
-    "synergies": [],
+    "matchupEvidence": {
+      "source": "https://mlbb.io/en/hero/popol-and-kupa",
+      "method": "Measured all-rank ranked matchup and ally win-rate shifts",
+      "patch": "2.2.23",
+      "checkedAt": "2026-11-24"
+    },
+    "synergies": ["granger", "lesley", "clint"],
     "itemNotes": [
       "Для роли стрелка приоритетны физический урон и скорость атаки, чтобы усиливать постоянные атаки пары; ориентируйся на актуальные эффекты предметов, а не на старые сборки до переработки.",
       "Вариант лесника требует Retribution и отдельного распределения предметов под фарм; не смешивай лесной набор с обычной сборкой Gold Lane.",
@@ -4157,6 +4243,7 @@ export const heroProfiles = [
       ]
     },
     "sources": [
+      "https://mlbb.io/en/hero/popol-and-kupa",
       "https://liquipedia.net/mobilelegends/Patch_2.2.23",
       "https://liquipedia.net/mobilelegends/Popol_and_Kupa",
       "https://mlbb.io/en/hero/popol-and-kupa",
@@ -4169,7 +4256,7 @@ export const heroProfiles = [
         "Предметные заметки разделяют Gold Lane и Jungle; прежние сборки до переработки не считаются автоматически актуальными.",
         "Роль Marksman с вариантами Jungle/Gold Lane сверена с MLBB.io; матчапы и синергии оставлены пустыми до отдельной проверки."
       ],
-      "reviewedAt": "2026-11-23"
+      "reviewedAt": "2026-11-24"
     },
     "confidence": "partial"
   },
@@ -4220,10 +4307,16 @@ export const heroProfiles = [
       "Без союзников рядом притяжение нескольких врагов может превратиться в опасное сближение вместо успешного начала боя."
     ],
     "matchups": {
-      "strongAgainst": [],
-      "weakAgainst": []
+      "strongAgainst": ["lunox", "sun", "argus"],
+      "weakAgainst": ["x-borg", "phoveus", "gord"]
     },
-    "synergies": [],
+    "matchupEvidence": {
+      "source": "https://mlbb.io/en/hero/ruby",
+      "method": "Measured all-rank ranked matchup and ally win-rate shifts",
+      "patch": "2.2.23",
+      "checkedAt": "2026-11-24"
+    },
+    "synergies": ["faramis", "bane", "sun"],
     "itemNotes": [
       "Основу обычно составляют физические боевые предметы с выживаемостью, сокращением перезарядки и усилением восстановления; подбирай их под длину размена и угрозы вражеского состава.",
       "War Axe и Queen's Wings встречаются в вариантах EXP-сборки, а Oracle усиливает ценность восстановительных эффектов; это ориентиры, не неизменный порядок покупок.",
@@ -4244,6 +4337,7 @@ export const heroProfiles = [
       ]
     },
     "sources": [
+      "https://mlbb.io/en/hero/ruby",
       "https://mlbb-knowledge.vercel.app/heroes/29",
       "https://mlbbhub.com/heroes/ruby",
       "https://mlbb.io/en/hero/ruby",
@@ -4256,7 +4350,7 @@ export const heroProfiles = [
         "Fighter/EXP Lane — основная классификация; Roam оставлен как гибкий вариант на основе опубликованных сборок, не как обязательная позиция.",
         "Рейтинговые и турнирные таблицы не превращены в универсальные контрпики; matchup- и synergy-массивы оставлены пустыми."
       ],
-      "reviewedAt": "2026-11-23"
+      "reviewedAt": "2026-11-24"
     },
     "confidence": "partial"
   },
@@ -4307,10 +4401,17 @@ export const heroProfiles = [
       "Для полной реализации нужно следить за формой, метками и перезарядками; случайная смена формы ломает последовательность."
     ],
     "matchups": {
-      "strongAgainst": [],
-      "weakAgainst": []
+      "strongAgainst": ["vale"],
+      "weakAgainst": ["popol-and-kupa", "gloo", "chip"]
     },
-    "synergies": [],
+    "matchupEvidence": {
+      "source": "https://mlbb.io/en/hero/selena",
+      "method": "Measured all-rank ranked matchup and ally win-rate shifts",
+      "patch": "2.2.23",
+      "checkedAt": "2026-11-24",
+      "caution": "Only one positive strong-against matchup is listed in the current all-rank snapshot; no additional counters were inferred."
+    },
+    "synergies": ["floryn", "beatrix", "estes"],
     "itemNotes": [
       "Ориентир — магическая сила и пробивание для усиления взрывного урона по целям с метками; для роум-подхода также важны мобильность и ранний темп карты.",
       "Arcane Boots и Genius Wand встречаются в магических вариантах, но порядок зависит от того, насколько рано Селена должна угрожать стрелой и насколько быстро противники собирают магическую защиту.",
@@ -4331,6 +4432,7 @@ export const heroProfiles = [
       ]
     },
     "sources": [
+      "https://mlbb.io/en/hero/selena",
       "https://mlbb-knowledge.vercel.app/heroes/63",
       "https://mlbb.io/en/hero/selena",
       "https://liquipedia.net/mobilelegends/Selena",
@@ -4343,7 +4445,7 @@ export const heroProfiles = [
         "Assassin/Mage и Mid Lane подтверждены текущей классификацией; Roam оставлен как гибкая позиция для раннего контроля карты.",
         "Статистические matchup-таблицы не используются как доказательство абсолютных контрпиков; матчапы и синергии оставлены пустыми."
       ],
-      "reviewedAt": "2026-11-23"
+      "reviewedAt": "2026-11-24"
     },
     "confidence": "partial"
   },
@@ -4393,10 +4495,16 @@ export const heroProfiles = [
       "Сборка с чрезмерным упором только в магический урон делает её уязвимой для ответного фокуса."
     ],
     "matchups": {
-      "strongAgainst": [],
-      "weakAgainst": []
+      "strongAgainst": ["aamon", "floryn", "rafaela"],
+      "weakAgainst": ["barats", "edith", "khufra"]
     },
-    "synergies": [],
+    "matchupEvidence": {
+      "source": "https://mlbb.io/en/hero/silvanna",
+      "method": "Measured all-rank ranked matchup and ally win-rate shifts",
+      "patch": "2.2.23",
+      "checkedAt": "2026-11-24"
+    },
+    "synergies": ["hilda", "lolita", "khaleed"],
     "itemNotes": [
       "Базовое направление — магическая сила, пробивание и достаточная выживаемость, чтобы Сильванна могла пережить ответ во время ультимейта.",
       "Genius Wand и Concentrated Energy встречаются в текущих вариантах; Feather of Heaven может усилить длительную серию второго навыка, но не обязателен в каждой сборке.",
@@ -4418,6 +4526,7 @@ export const heroProfiles = [
     },
     "sources": [
       "https://mlbb.io/en/hero/silvanna",
+      "https://mlbb.io/en/hero/silvanna",
       "https://mlbbhub.com/heroes/silvanna",
       "https://kazukiofficial.com/heroes/silvanna"
     ],
@@ -4428,7 +4537,7 @@ export const heroProfiles = [
         "В профиль включены базовые механики патча 2.2.23. Более поздние изменения 2.2.34 не применяются к текущей контрольной версии проекта.",
         "Предметы описаны как направления, а не универсальный порядок; matchup- и synergy-массивы оставлены пустыми."
       ],
-      "reviewedAt": "2026-11-23"
+      "reviewedAt": "2026-11-24"
     },
     "confidence": "partial"
   },
@@ -4479,10 +4588,16 @@ export const heroProfiles = [
       "После агрессивного входа Сора может оказаться глубоко среди врагов, особенно если выбран Гром и не осталось безопасного маршрута отхода."
     ],
     "matchups": {
-      "strongAgainst": [],
-      "weakAgainst": []
+      "strongAgainst": ["estes", "rafaela", "roger"],
+      "weakAgainst": ["phoveus", "khufra", "alice"]
     },
-    "synergies": [],
+    "matchupEvidence": {
+      "source": "https://mlbb.io/en/hero/sora",
+      "method": "Measured all-rank ranked matchup and ally win-rate shifts",
+      "patch": "2.2.23",
+      "checkedAt": "2026-11-24"
+    },
+    "synergies": ["bane", "sun", "julian"],
     "itemNotes": [
       "Для Грома полезны физическая атака и пробивание, чтобы реализовать убийственный стиль; для Потока важны здоровье и выживаемость, поскольку форма переводит атаку в запас здоровья.",
       "Не смешивай два набора предметов механически: сначала выбери стиль под драфт, затем подбирай предметы, усиливающие его основную характеристику.",
@@ -4503,6 +4618,7 @@ export const heroProfiles = [
       ]
     },
     "sources": [
+      "https://mlbb.io/en/hero/sora",
       "https://www.mobilelegends.com/en/help",
       "https://mlbb.io/en/hero/sora",
       "https://liquipedia.net/mobilelegends/Sora",
@@ -4516,7 +4632,7 @@ export const heroProfiles = [
         "Fighter/Assassin и EXP Lane подтверждены актуальной страницей MLBB.io; профиль учитывает обе формы как разные тактические роли.",
         "Числовые коэффициенты не фиксируются в профиле, чтобы не привязывать механику к отдельной балансной версии; матчапы и синергии оставлены пустыми."
       ],
-      "reviewedAt": "2026-11-23"
+      "reviewedAt": "2026-11-24"
     },
     "confidence": "partial"
   },
