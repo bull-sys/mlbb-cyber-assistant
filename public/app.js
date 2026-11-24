@@ -284,7 +284,7 @@ async function runDraft(){
   const teamPlan=(d.teamPlan||[]).map(item=>'<article class="team-plan-card"><b>'+esc(item.title)+'</b><p>'+esc(item.detail)+'</p></article>').join("");
   const counters=(d.counters||[]).map((item,index)=>{
    const profile=item.profileEvidence;
-   const kindLabel=item.matchupType==="direct-counter"?"СТАТИСТИЧЕСКОЕ ПРЕИМУЩЕСТВО"
+   const kindLabel=item.matchupType==="direct-counter"?"ЕСТЬ СТАТИСТИЧЕСКИЙ МАТЧАП"
     :item.matchupType==="team-synergy"?"СИНЕРГИЯ С СОЮЗНИКАМИ":"СИТУАЦИОННЫЙ ВАРИАНТ";
    const matched=(item.matchedEnemies||[]).length
     ?'<small class="counter-matchup-signal">Матчап-сигнал против: '+esc(item.matchedEnemies.join(", "))+'</small>'
@@ -294,7 +294,7 @@ async function runDraft(){
    const profileDetails=profile
     ?'<div class="counter-profile-evidence"><div><small>КЛЮЧЕВАЯ МЕХАНИКА</small><p>'+esc(profile.identity||"Не описана")+'</p></div><div><small>СИЛЬНАЯ СТОРОНА</small><p>'+esc(profile.strength||"Не описана")+'</p></div><div><small>УЧТИ ПРИ ВЫБОРЕ</small><p>'+esc(profile.caution||"Не описано")+'</p></div><small class="counter-profile-status">Данные из тактического паспорта · '+(profile.confidence==="complete"?"полный профиль":"частичный профиль")+(profile.matchupCheckedAt?' · матчапы проверены '+esc(profile.matchupCheckedAt):"")+'</small></div>'
     :'<small class="counter-profile-missing">Тактический паспорт этого героя пока не проверен; дополнительная оценка не приводится.</small>';
-   return '<article class="counter-card"><div class="counter-rank">'+String(index+1).padStart(2,"0")+'</div><div class="counter-copy"><div class="counter-title"><b>'+esc(item.name)+'</b><span>'+esc(item.role||"Роль не указана")+'</span></div><small class="counter-kind">'+kindLabel+'</small><p>'+esc(item.reason)+'</p>'+matched+risky+profileDetails+'</div></article>';
+   return '<article class="counter-card"><div class="counter-rank">'+String(index+1).padStart(2,"0")+'</div><div class="counter-copy"><div class="counter-title"><b>'+esc(item.name)+'</b><span>'+esc(item.role||"Роль не указана")+'</span></div><small class="counter-kind">'+kindLabel+'</small><p>'+esc(item.reason)+'</p>'+matched+risky+'<small class="counter-method-note">Рейтинговый статистический сигнал, не гарантия победы и не отдельная статистика линии.</small>'+profileDetails+'</div></article>';
   }).join("")||'<div class="report-empty">Для этого состава не удалось построить рекомендации. Проверь выбранных героев и линию.</div>';
   const build=(d.buildDetails||[]).map((item,index)=>'<article class="build-card"><span class="build-number">'+(index+1)+'</span><div><b>'+esc(item.name)+'</b><small>'+esc(item.priority||"Ситуативный выбор")+(item.category?' · '+esc(item.category):"")+'</small><p>'+esc((item.reasons||[]).join(" · ")||"Подбор по угрозам состава")+'</p>'+(item.against?.length?'<p class="build-targets">Против: '+esc(item.against.join(", "))+'</p>':"")+(item.timing?'<p class="build-timing">'+esc(item.timing)+'</p>':"")+'</div></article>').join("")||'<div class="report-empty">Для выбранного героя и текущего состава контрпредметы не определены. Выбери своего героя и добавь противников.</div>';
   const boot=d.bootRecommendation?'<article class="utility-pick"><small>ОБУВЬ</small><b>'+esc(d.bootRecommendation.name)+'</b><p>'+esc(d.bootRecommendation.reason)+'</p>'+(d.bootRecommendation.against?.length?'<small>Учитывает: '+esc(d.bootRecommendation.against.join(", "))+'</small>':"")+'</article>':"";
