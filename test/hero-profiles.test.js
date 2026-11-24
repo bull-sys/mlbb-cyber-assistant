@@ -3,6 +3,7 @@ import test from "node:test";
 import { heroProfiles, validateHeroProfiles, HERO_DB_PATCH } from "../server/hero-profiles.js";
 import { heroCatalog } from "../server/hero-catalog.js";
 import { emblems, talents } from "../server/data.js";
+import { buildCounterPickDataAudit } from "../server/counter-pick-data-audit.js";
 
 const MATCHUP_REVIEWED_IDS = new Set([
   "helcurt", "hanzo", "roger", "ling", "badang", "nolan", "fanny", "jawhead", "suyou", "karrie", "cyclops", "gusion", "alpha", "eudora", "guinevere", "harith", "harley", "hilda", "ixia", "johnson", "dyrroth", "chou", "franco", "akai", "aurora", "bruno", "terizla", "masha", "marcel", "argus", "khufra", "diggie", "sun", "belerick", "hanabi",
@@ -1066,4 +1067,36 @@ test("all researched hero profiles contain dated, source-backed matchup and syne
       assert.ok(hero.sources.some(source => source.includes("mlbb.io")));
     }
   }
+});
+
+
+test("counter-pick data audit exposes coverage and evidence gaps without guessing", () => {
+  const audit = buildCounterPickDataAudit();
+
+  assert.equal(audit.catalogCount, 133);
+  assert.equal(audit.profileCount, 133);
+  assert.deepEqual(audit.missingProfiles, []);
+  assert.deepEqual(audit.profilesOutsideCatalog, []);
+
+  assert.equal(audit.matchup.strongMatchupCount, 456);
+  assert.equal(audit.matchup.weakMatchupCount, 488);
+  assert.equal(audit.matchup.uniqueTargets, 130);
+  assert.deepEqual(audit.matchup.targetsWithoutProfile, []);
+  assert.equal(audit.matchup.profilesWithRankedEvidence, 82);
+  assert.equal(audit.matchup.profilesWithDatedMethodReview, 35);
+  assert.deepEqual(audit.matchup.profilesWithoutEvidence, [
+    "saber", "lesley", "lolita", "luo-yi", "lylia", "martis", "aamon",
+    "alice", "angela", "odette", "phoveus", "popol-and-kupa", "ruby",
+    "selena", "silvanna", "sora"
+  ]);
+
+  assert.deepEqual(audit.incompleteCombatProfiles, []);
+  assert.deepEqual(audit.laneCoverage, {
+    "Лес": 40,
+    "Роум": 38,
+    "EXP": 46,
+    "Золото": 21,
+    "Мид": 30
+  });
+  assert.equal(audit.legacyDraftCandidateCount, 32);
 });
