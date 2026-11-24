@@ -198,7 +198,11 @@ $("heroPicker").querySelector(".picker-tabs").onclick=e=>{const b=e.target.close
 $("pickerRoles").onclick=e=>{const b=e.target.closest("[data-picker-role]");if(!b)return;pickerRoleFilter=b.dataset.pickerRole;renderHeroPicker()};
 
 document.addEventListener("click",e=>{let b=e.target.closest("[data-side]");if(b){(b.dataset.side==="enemies"?enemies:allies).splice(+b.dataset.i,1);drawTeams();saveDraft()}});
-document.addEventListener("click",e=>{const b=e.target.closest("[data-page]");if(!b)return;const page=b.dataset.page;if(!document.getElementById("page-"+page))return;document.querySelectorAll("#nav [data-page]").forEach(x=>x.classList.toggle("active",x.dataset.page===page));document.querySelectorAll(".page").forEach(x=>x.classList.toggle("hidden",x.id!=="page-"+page));window.scrollTo({top:0,behavior:"smooth"})});
+function showAppPage(page,{push=true,scroll=true}={}){if(!document.getElementById("page-"+page))return;const current=document.querySelector(".page:not(.hidden)")?.id?.replace("page-","");if(current===page)return;document.querySelectorAll("#nav [data-page]").forEach(x=>x.classList.toggle("active",x.dataset.page===page));document.querySelectorAll(".page").forEach(x=>x.classList.toggle("hidden",x.id!=="page-"+page));const back=$("appBackButton");if(back)back.classList.toggle("hidden",page==="home");if(push){history.pushState({mlbbPage:page},"","#"+page)}if(scroll)window.scrollTo({top:0,behavior:"smooth"})}
+document.addEventListener("click",e=>{const b=e.target.closest("[data-page]");if(!b)return;showAppPage(b.dataset.page)});
+const backButton=$("appBackButton");if(backButton)backButton.addEventListener("click",()=>{if(history.state?.mlbbPage&&history.length>1)history.back();else showAppPage("home",{push:false})});
+window.addEventListener("popstate",event=>{const page=event.state?.mlbbPage||location.hash.replace(/^#/,"")||"home";showAppPage(page,{push:false,scroll:false});if(!$("encyHeroModal").classList.contains("hidden")){ $("encyHeroModal").classList.add("hidden");document.body.classList.remove("ency-modal-open");}});
+history.replaceState({...(history.state||{}),mlbbPage:document.querySelector(".page:not(.hidden)")?.id?.replace("page-","")||"home"},"",location.href);
 $("testDraft").onclick=()=>{enemies=["Тигрил","Эйдора","Кэрри","Дариус","Атлас"];allies=["Ангела","Линг","Теризла"];$("lane").value="Лес";$("myHero").value="Хелкарт";drawTeams();saveDraft();runDraft()};
 $("analyze").onclick=runDraft;$("lane").addEventListener("change",saveDraft);$("myHero").addEventListener("change",()=>{$("myHeroChoice").textContent=$("myHero").value?draftHeroLabel($("myHero").value):"Не выбран";saveDraft()});
 async function runDraft(){
@@ -501,75 +505,53 @@ function renderEncyHeroRemoteProfile(remote){
  const growthStats=remote?.growthData?.stats||{};
  const statDefs=[
   {key:"hp",label:"Здоровье",description:"Общий запас здоровья персонажа.",first:"hp1",last:"hp15"},
-  {key:"hpRegen",label:"Восстановление здоровья",description:"Сколько здоровья восстанавливается за единицу времени.",first:"hp_regen1",last:"hp_regen15"},
-  {key:"mana",label:"Запас маны",description:"Количество маны, доступное герою, если он использует этот ресурс.",first:"mana1",last:"mana15"},
-  {key:"manaRegen",label:"Восстановление маны",description:"Сколько маны восстанавливается за единицу времени.",first:"mana_regen1",last:"mana_regen15"},
-  {key:"physicalAttack",label:"Физическая атака",description:"Базовое значение физической атаки без дополнительных источников.",first:"physical_atk1",last:"physical_atk15"},
+  {key:"hpRegen",label:"Восстановление здоровья",description:"Восстановление здоровья за единицу времени.",first:"hp_regen1",last:"hp_regen15"},
+  {key:"mana",label:"Запас маны",description:"Доступный запас маны.",first:"mana1",last:"mana15"},
+  {key:"manaRegen",label:"Восстановление маны",description:"Восстановление маны за единицу времени.",first:"mana_regen1",last:"mana_regen15"},
+  {key:"physicalAttack",label:"Физический урон",description:"Базовая физическая атака без дополнительных источников.",first:"physical_atk1",last:"physical_atk15"},
   {key:"physicalDefense",label:"Физическая защита",description:"Показатель защиты от физического урона.",first:"physical_def1",last:"physical_def15"},
   {key:"magicDefense",label:"Магическая защита",description:"Показатель защиты от магического урона.",first:"magic_def1",last:"magic_def15"},
   {key:"attackSpeed",label:"Скорость атаки",description:"Базовая скорость выполнения обычных атак.",first:"atk_spd1",last:"atk_spd15"}
  ];
  const fmt=value=>Number(value).toLocaleString("ru-RU",{maximumFractionDigits:3});
- const graphs=[],base=[];
- const graphFor=(definition)=>{
+ const available=[];
+ for(const definition of statDefs){
   const source=growthStats[definition.key]||{};
   const first=encyStatNumber(source.level1)??encyStatNumber(stats[definition.first]);
   const last=encyStatNumber(source.level15)??encyStatNumber(stats[definition.last]);
   const perLevel=encyStatNumber(source.perLevel);
-  if(first===null&&last===null)return "";
-  if(first===null||last===null||(first===last&&perLevel===null)){
-   return encyStatCard(definition.label,first??last,first!==null?"уровень 1":"уровень 15",definition.description);
-  }
+  if(first===null&&last===null)continue;
   let values=[],estimated=false,mode="";
-  if(perLevel!==null&&first!==null){
-   const calculatedLast=first+perLevel*14;
-   const tolerance=Math.max(0.005,Math.abs(last)*0.0005);
-   if(Math.abs(calculatedLast-last)<=tolerance){
+  if(first!==null&&last!==null&&first!==last){
+   if(perLevel!==null&&Math.abs(first+perLevel*14-last)<=Math.max(.005,Math.abs(last)*.0005)){
     values=Array.from({length:15},(_,index)=>first+perLevel*index);
     mode="Рост по уровню опубликован источником";
    }else{
     values=Array.from({length:15},(_,index)=>first+(last-first)*index/14);
-    estimated=true;
-    mode="Промежуточные значения рассчитаны по уровням 1 и 15";
+    estimated=true;mode="Промежуточные значения рассчитаны по уровням 1 и 15";
    }
+  }else if(first!==null&&last!==null){
+   values=Array(15).fill(first);mode="Постоянное значение по доступным данным";
   }else{
-   values=Array.from({length:15},(_,index)=>first+(last-first)*index/14);
-   estimated=true;
-   mode="Промежуточные значения рассчитаны по уровням 1 и 15";
+   const known=first??last;values=Array(15).fill(known);
+   mode="Доступно только одно значение; рост не предполагается";
   }
-  const min=Math.min(...values),max=Math.max(...values),span=max-min||1;
-  const x=index=>22+index*(256/14);
-  const y=value=>80-((value-min)/span)*54;
-  const points=values.map((value,index)=>x(index).toFixed(1)+","+y(value).toFixed(1)).join(" ");
-  const markerIndexes=[0,3,7,11,14];
-  const markers=markerIndexes.map(index=>'<circle cx="'+x(index).toFixed(1)+'" cy="'+y(values[index]).toFixed(1)+'" r="3" fill="#d78cf0"><title>Уровень '+(index+1)+': '+fmt(values[index])+'</title></circle>').join("");
-  const axis=[["1",22],["4",76],["8",149],["12",222],["15",278]].map(([label,pos])=>'<text x="'+pos+'" y="105" text-anchor="middle">'+label+'</text>').join("");
-  const grid=[22,49,76].map(pos=>'<line x1="22" y1="'+pos+'" x2="278" y2="'+pos+'" class="ency-graph-grid"/>').join("");
-  const delta=last-first;
-  const initialY=y(values[0]).toFixed(1);
-  return '<article class="ency-stat-graph" data-values="'+esc(JSON.stringify(values))+'" data-min="'+min+'" data-max="'+max+'"><div class="ency-stat-graph-head"><b>'+esc(definition.label)+'</b><span class="ency-stat-current-value">'+esc(fmt(values[0]))+'</span></div><p class="ency-stat-graph-desc">'+esc(definition.description)+'</p>'+
-   '<svg class="ency-stat-chart" viewBox="0 0 300 112" role="img" aria-label="'+esc(definition.label)+': уровень 1 — '+esc(fmt(first))+', уровень 15 — '+esc(fmt(last))+'">'+grid+
-   '<polyline points="'+points+'" class="ency-graph-line '+(estimated?"estimated":"")+'"/><line class="ency-current-guide" x1="22" y1="18" x2="22" y2="82"/><circle class="ency-current-marker" cx="22" cy="'+initialY+'" r="5"/>'+markers+axis+'</svg>'+
-   '<div class="ency-stat-graph-foot"><span>Δ '+(delta>=0?"+":"")+esc(fmt(delta))+'</span><small>'+esc(mode)+'</small></div></article>';
- };
- for(const definition of statDefs){
-  const result=graphFor(definition);
-  if(result.includes("ency-stat-graph"))graphs.push(result);
-  else if(result)base.push(result);
+  available.push({...definition,values,estimated,mode,first:first??values[0],last:last??values[14]});
  }
- const staticDefs=[["Скорость передвижения","movement_spd","Базовая скорость перемещения персонажа."],["Дальность обычной атаки","basic_atk_range","Дистанция, на которой доступна обычная атака."]];
+ const base=[];
+ const staticDefs=[["Скорость передвижения","movement_spd","Базовая скорость перемещения персонажа."],["Дальность обычной атаки","basic_atk_range","Дистанция обычной атаки."]];
  for(const [label,key,description] of staticDefs){
-  const raw=stats[key];
-  const parsed=encyStatNumber(raw);
+  const raw=stats[key],parsed=encyStatNumber(raw);
   const value=parsed!==null?parsed:(raw!==undefined&&raw!==null&&raw!==""?String(raw):encyStatNumber(growthStats[key]?.level1));
   if(value!==null)base.push(encyStatCard(label,value,"постоянное значение",description));
  }
  const ratingNames={offense:"Атака",durability:"Живучесть",abilityEffects:"Эффекты умений",difficulty:"Сложность освоения"};
  const ratingValues=Object.entries(ratingNames).filter(([key])=>Number.isFinite(Number(ratings[key]))).map(([key,label])=>encyStatCard(label,ratings[key]+"/10","оценка справочника"));
  const sections=[];
- if(graphs.length){
-  sections.push('<h4>Рост характеристик · уровни 1–15</h4><div class="ency-level-control"><label for="encyLevelSlider">Уровень героя <b id="encyLevelOutput">1</b></label><input id="encyLevelSlider" type="range" min="1" max="15" step="1" value="1" aria-label="Выбрать уровень героя от 1 до 15"><div class="ency-level-ticks"><span>1</span><span>5</span><span>10</span><span>15</span></div></div><div class="ency-stat-graph-grid">'+graphs.join("")+'</div>');
-  sections.push('<p class="ency-graph-note">Перемещай ползунок — все графики и значения обновятся одновременно. Сплошная линия — рост, опубликованный источником. Пунктир — расчётная оценка между крайними уровнями; она не выдаётся за точные игровые значения.</p>');
+ if(available.length){
+  const selected=available[0];
+  sections.push('<h4>Рост характеристик · уровни 1–15</h4><div class="ency-graph-toolbar"><label for="encyStatSelect">Показатель</label><select id="encyStatSelect" aria-label="Выбрать характеристику">'+available.map((item,index)=>'<option value="'+index+'">'+esc(item.label)+'</option>').join("")+'</select></div><div class="ency-level-control"><label for="encyLevelSlider">Уровень героя <b id="encyLevelOutput">1</b></label><input id="encyLevelSlider" type="range" min="1" max="15" step="1" value="1" aria-label="Выбрать уровень героя от 1 до 15"><div class="ency-level-ticks"><span>1</span><span>5</span><span>10</span><span>15</span></div></div><div id="encySingleGraph" class="ency-stat-graph"></div>');
+  sections.push('<p class="ency-graph-note">На экране отображается один график. Выбери показатель в списке и уровень ползунком. Пунктир обозначает расчётные промежуточные значения, а не точные игровые данные.</p>');
  }else{
   sections.push('<p class="ency-unverified">Подтверждённая таблица роста по уровням пока не найдена. Доступные базовые значения показаны отдельно.</p>');
  }
@@ -584,28 +566,24 @@ function renderEncyHeroRemoteProfile(remote){
   const growthSource=remote.growthData.source;
   sections.push('<small class="ency-data-credit">Данные роста: <a href="'+esc(growthSource.url)+'" target="_blank" rel="noopener">MLBB.io ↗</a>'+(growthSource.updatedAt?' · обновлено '+esc(growthSource.updatedAt):'')+'. Проверено '+esc(new Date(remote.growthData.checkedAt||Date.now()).toLocaleDateString("ru-RU"))+'.</small>');
  }else{
-  sections.push('<small class="ency-data-credit">'+(remote?.growthUnavailable?"Дополнительный источник роста временно недоступен; графики показывают только опубликованные значения основного справочника.":"Проверяем дополнительный источник роста; пока показаны опубликованные значения основного справочника.")+'</small>');
+  sections.push('<small class="ency-data-credit">'+(remote?.growthUnavailable?"Дополнительный источник роста временно недоступен; показаны только опубликованные значения основного справочника.":"Проверяем дополнительный источник роста; пока показаны опубликованные значения основного справочника.")+'</small>');
  }
  host.innerHTML=sections.join("")||'<p class="ency-unverified">Характеристики этого персонажа пока не опубликованы в проверенном источнике.</p>';
- const slider=host.querySelector("#encyLevelSlider");
- if(slider){
-  const updateLevel=()=>{
-   const level=Number(slider.value),index=level-1;
-   const output=host.querySelector("#encyLevelOutput");
-   if(output)output.textContent=String(level);
-   host.querySelectorAll(".ency-stat-graph").forEach(card=>{
-    let values=[];try{values=JSON.parse(card.dataset.values||"[]")}catch{}
-    if(values.length!==15)return;
-    const value=values[index],min=Number(card.dataset.min),max=Number(card.dataset.max),span=max-min||1;
-    const x=22+index*(256/14),y=80-((value-min)/span)*54;
-    const marker=card.querySelector(".ency-current-marker"),guide=card.querySelector(".ency-current-guide"),readout=card.querySelector(".ency-stat-current-value");
-    if(marker){marker.setAttribute("cx",x.toFixed(1));marker.setAttribute("cy",y.toFixed(1));}
-    if(guide){guide.setAttribute("x1",x.toFixed(1));guide.setAttribute("x2",x.toFixed(1));}
-    if(readout)readout.textContent=fmt(value);
-   });
+ const slider=host.querySelector("#encyLevelSlider"),select=host.querySelector("#encyStatSelect"),graph=host.querySelector("#encySingleGraph");
+ if(slider&&select&&graph){
+  const draw=()=>{
+   const item=available[Number(select.value)]||available[0],level=Number(slider.value),index=level-1,values=item.values;
+   const min=Math.min(...values),max=Math.max(...values),span=max-min||1;
+   const x=i=>22+i*(256/14),y=value=>80-((value-min)/span)*54;
+   const points=values.map((value,i)=>x(i).toFixed(1)+","+y(value).toFixed(1)).join(" ");
+   const markers=[0,3,7,11,14].map(i=>'<circle cx="'+x(i).toFixed(1)+'" cy="'+y(values[i]).toFixed(1)+'" r="3" fill="#d78cf0"><title>Уровень '+(i+1)+': '+fmt(values[i])+'</title></circle>').join("");
+   const axis=[["1",22],["4",76],["8",149],["12",222],["15",278]].map(([label,pos])=>'<text x="'+pos+'" y="105" text-anchor="middle">'+label+'</text>').join("");
+   const grid=[22,49,76].map(pos=>'<line x1="22" y1="'+pos+'" x2="278" y2="'+pos+'" class="ency-graph-grid"/>').join("");
+   const value=values[index],delta=item.last-item.first;
+   graph.innerHTML='<div class="ency-stat-graph-head"><b>'+esc(item.label)+'</b><span class="ency-stat-current-value">'+esc(fmt(value))+'</span></div><p class="ency-stat-graph-desc">'+esc(item.description)+'</p><svg class="ency-stat-chart" viewBox="0 0 300 112" role="img" aria-label="'+esc(item.label)+': уровень '+level+' — '+esc(fmt(value))+'">'+grid+'<polyline points="'+points+'" class="ency-graph-line '+(item.estimated?"estimated":"")+'"/><line class="ency-current-guide" x1="'+x(index)+'" y1="18" x2="'+x(index)+'" y2="82"/><circle class="ency-current-marker" cx="'+x(index)+'" cy="'+y(value)+'" r="5"/>'+markers+axis+'</svg><div class="ency-stat-graph-foot"><span>Δ '+(delta>=0?"+":"")+esc(fmt(delta))+'</span><small>'+esc(item.mode)+'</small></div>';
+   const output=host.querySelector("#encyLevelOutput");if(output)output.textContent=String(level);
   };
-  slider.addEventListener("input",updateLevel);
-  updateLevel();
+  slider.addEventListener("input",draw);select.addEventListener("change",draw);draw();
  }
 }
 async function loadEncyHeroGrowth(id,remote,request){
@@ -670,6 +648,7 @@ function renderEncyHeroModal(id){
   '<section class="ency-profile-section wide"><h3>Характеристики и развитие</h3><div id="encyHeroRemoteProfile" class="ency-remote-panel"><p class="ency-unverified">Загружаем характеристики...</p></div></section>'+
   '<section class="ency-profile-section wide"><h3>Проверка данных</h3><p>Статус: '+esc(status)+' · Последняя проверка: '+esc(reviewed)+'. Данные могут меняться после обновлений игры.</p>'+(sources.length?'<div class="ency-source-list">'+sources.map((source,i)=>'<a href="'+esc(source)+'" target="_blank" rel="noopener">Источник '+(i+1)+' ↗</a>').join("")+'</div>':"")+'</section></div>';
   $("encyHeroModal").classList.remove("hidden");
+ history.pushState({...(history.state||{}),encyHeroModal:true},"","#"+(document.querySelector(".page:not(.hidden)")?.id?.replace("page-","")||"ency")+"/"+id);
  renderEncyHeroDescription(null,hero,p);
  document.body.classList.add("ency-modal-open");
  loadEncyHeroSkills(id);
@@ -683,12 +662,14 @@ $("encyHeroModal").addEventListener("click",e=>{
  if(e.target=== $("encyHeroModal")||e.target.closest("[data-ency-close]")){
   $("encyHeroModal").classList.add("hidden");
   document.body.classList.remove("ency-modal-open");
+  if(history.state?.encyHeroModal)history.back();
  }
 });
 document.addEventListener("keydown",e=>{
  if(e.key==="Escape"&&!$("encyHeroModal").classList.contains("hidden")){
   $("encyHeroModal").classList.add("hidden");
   document.body.classList.remove("ency-modal-open");
+  if(history.state?.encyHeroModal)history.back();
  }
 });
 $("encySearch").oninput=renderEncy;$("encyFilters").onclick=e=>{let b=e.target.closest("[data-filter]");if(!b)return;encyFilter=b.dataset.filter;document.querySelectorAll("#encyFilters .chip").forEach(x=>x.classList.toggle("active",x===b));renderEncy()};
