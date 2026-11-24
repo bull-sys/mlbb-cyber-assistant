@@ -47,11 +47,7 @@ export const heroProfiles = [
       "Контроль и своевременное обнаружение могут сорвать вход и не дать реализовать преимущество мобильности.",
       "Пассивное восстановление здоровья требует не наносить урон; постоянные атаки во время перемещения лишают Хелкарта этого окна восстановления."
     ],
-    matchups: {
-      strongAgainst: [],
-      weakAgainst: []
-    },
-    synergies: [],
+    matchups: { strongAgainst: ["x-borg","valir","xavier"], weakAgainst: ["karina","argus","obsidia","hilda"] }, synergies: ["khufra","akai","belerick"],
     itemNotes: [
       "Не фиксировать один универсальный билд: текущие рекомендации по предметам расходятся между источниками и зависят от того, играет ли Хелкарт через разовый пик-офф или через более продолжительный урон шипами.",
       "Для следующего этапа требуется повторная проверка актуальных предметов, эмблем и заклинаний по патчу 2.2.23 и игровым матчам."
@@ -72,6 +68,7 @@ export const heroProfiles = [
       "https://mlbbhub.com/ru/heroes/helcurt",
       "https://mlbbdex.com/en/esports"
     ],
+    matchupsReviewedAt: "2026-11-24", matchupsMethod: "Ranked matchup deltas from MLBB.io; statistical signal, not a guaranteed counter or synergy.",
     patch: {
       version: HERO_DB_PATCH,
       notes: [
@@ -128,11 +125,7 @@ export const heroProfiles = [
       "Без ультимейта его угроза в командном бою заметно ниже; важно не тратить ключевую форму на бесполезную погоню.",
       "Плотная физическая защита и несколько героев передней линии снижают ценность попытки быстро устранить одну цель."
     ],
-    matchups: {
-      strongAgainst: [],
-      weakAgainst: []
-    },
-    synergies: [],
+    matchups: { strongAgainst: ["ixia","franco","diggie"], weakAgainst: ["natalia","ling","helcurt"] }, synergies: ["hilda","angela","valir"],
     itemNotes: [
       "На патче 2.2.23 подтверждены два разных направления сборки: скорость атаки и эффекты базовых атак для продолжительного урона Ханэкагэ либо физический взрывной урон для изолированного пик-оффа. Не смешивать их в один обязательный шаблон.",
       "В актуальной подборке MLBBHub базовый вариант использует Corrosion Scythe, Demon Hunter Sword и Golden Staff; альтернативный пик-офф строится вокруг Blade of the Heptaseas и Hunter Strike. Это отправные точки, а не гарантия лучшей сборки в каждом матче.",
@@ -161,6 +154,7 @@ export const heroProfiles = [
       "https://mlbbdex.com/en/esports",
       "https://www.mlbbanalytics.com/heroes?search=Hanzo"
     ],
+    matchupsReviewedAt: "2026-11-24", matchupsMethod: "Ranked matchup deltas from MLBB.io; statistical signal, not a guaranteed counter or synergy.",
     patch: {
       version: HERO_DB_PATCH,
       notes: [
@@ -204,8 +198,7 @@ export const heroProfiles = [
       "Его эффективность зависит от грамотного чередования форм и сохранения прыжка для нужного момента; преждевременное сближение лишает его важного инструмента продолжения атаки или уклонения.",
       "При отставании по золоту сложнее быстро устранять приоритетные цели, а затяжные фронтальные бои могут быть неудобны против устойчивых героев."
     ],
-    matchups: { strongAgainst: [], weakAgainst: [] },
-    synergies: [],
+    matchups: { strongAgainst: ["gusion","harley"], weakAgainst: ["yve","popol-and-kupa","leomord"] }, synergies: ["clint","ixia","lesley"],
     itemNotes: [
       "Не закреплять один билд как обязательный: актуальные источники сходятся на лесной роли, но расходятся в последовательности предметов и доле критического урона, скорости атаки и бойцовских характеристик.",
       "Один актуальный кураторский вариант для леса на патче 2.2.23: Tough Boots, Windtalker, Sky Piercer, Rose Gold Meteor, Haas's Claws и Berserker's Fury. Это вариант для темповой игры и преследования ослабленных целей, а не универсальный рецепт.",
@@ -233,6 +226,7 @@ export const heroProfiles = [
       "https://mlbb-stats.com/builds/roger",
       "https://www.mlbbanalytics.com/heroes?search=Roger"
     ],
+    matchupsReviewedAt: "2026-11-24", matchupsMethod: "Ranked matchup deltas from MLBB.io; statistical signal, not a guaranteed counter or synergy.",
     patch: {
       version: HERO_DB_PATCH,
       notes: [
@@ -275,8 +269,7 @@ export const heroProfiles = [
       "До получения ключевых предметов урон и скорость устранения целей могут быть недостаточными; ранняя игра требует аккуратного темпа.",
       "Уязвим, если команда противника держится компактно и сохраняет контроль для его входа: Лингу сложнее безопасно добраться до задней линии."
     ],
-    matchups: { strongAgainst: [], weakAgainst: [] },
-    synergies: [],
+    matchups: { strongAgainst: ["hanzo","novaria","gord"], weakAgainst: ["natalia","lukas","karina"] }, synergies: ["johnson","tigreal","vexana"],
     itemNotes: [
       "Основной подтверждённый путь для леса на патче 2.2.23: Tough Boots, Berserker's Fury, Haas's Claws, Endless Battle, Blade of Despair и Malefic Roar. Это базовая критическая сборка, а не обязательный порядок для каждого матча.",
       "Assassin Emblem и Retribution — наиболее часто рекомендуемая основа для лесной роли. В качестве талантов актуальные сборки MLBBHub указывают Fatal, Seasoned Hunter и War Cry.",
@@ -305,6 +298,7 @@ export const heroProfiles = [
       "https://www.mlbbguides.com/heroes/ling/skills/",
       "https://metammo.com/mobile-legends-guide/heroes/ling"
     ],
+    matchupsReviewedAt: "2026-11-24", matchupsMethod: "Ranked matchup deltas from MLBB.io; statistical signal, not a guaranteed counter or synergy.",
     patch: {
       version: HERO_DB_PATCH,
       notes: [
@@ -1876,10 +1870,11 @@ export const heroProfiles = [
     mechanics:["Пассивный эффект «Кулак доблести» накапливает заряды от базовых атак. После четырёх попаданий следующая атака отбрасывает цель; столкновение с препятствием оглушает её. Ветер от навыков также помогает активировать эффект.","Первый навык «Кулак ветра» выпускает волну, которая наносит урон, замедляет и отталкивает врагов. При столкновении с препятствием волна взрывается и наносит дополнительный урон.","Второй навык «Разрушительный кулак» позволяет Бадангу совершить рывок, получить щит и создать препятствие за задетым героем. Препятствие можно убрать повторным применением.","Ультимейт «Кулак ярости» выпускает серию ударов по направлению перед Бадангом; создаваемые волны взаимодействуют с препятствиями, а во время применения герой получает защиту от контроля.","Главная комбинация строится вокруг стены или созданного вторым навыком препятствия: отбрасывание в преграду усиливает контроль и помогает реализовать серию ударов."],
     strengths:["Сильный контроль в узких проходах и рядом со стенами.","Созданное препятствие может разделить команду противника и зафиксировать цель.","Ультимейт даёт окно защиты от контроля во время нанесения урона."],
     weaknesses:["Без подходящего препятствия часть контроля пассивки теряет ценность.","Если второй навык промахивается или создаёт неудобную стену, вход может оказаться неэффективным.","Уязвим к дистанционному давлению до сближения и после окончания ультимейта."],
-    matchups:{strongAgainst:[],weakAgainst:[]},synergies:[],
+    matchups: { strongAgainst: ["fanny"], weakAgainst: ["karina","esmeralda","lolita"] }, synergies: ["aldous","natalia","silvanna"],
     itemNotes:["MLBBHub для патча 2.2.23 предлагает EXP-сборку через Demon Hunter Sword, Golden Staff и Corrosion Scythe; это вариант через эффекты атак, а не универсальный набор.","Срез MLBBHub за сентябрь 2026 показывает около 50.3% побед, 1.36% выбора и 3.63% банов. MLBB Stats публикует отдельные значения для Mythic+ и Roam; эти выборки нельзя смешивать.","Flicker помогает менять угол входа и ставить препятствие в нужном направлении. Проверяй защитные замены, если команда противника может пережить первую комбинацию."],
     teamfight:{preferredPlan:"Ищи узкий проход или угол у стены. Сначала оцени, где второй навык создаст препятствие, затем входи и направляй отбрасывание к преграде. Ультимейт используй, когда цель уже ограничена в движении или противники сгруппированы. Не расходуй контроль на переднюю линию, если за ней доступен стрелок или маг.",targetPriority:["Стрелок или маг, которого можно прижать к препятствию","Сгруппированные противники в узком проходе","Враг, уже ограниченный союзным контролем"],avoid:["Не начинать комбинацию без понимания направления отбрасывания.","Не ставить препятствие так, чтобы оно перекрыло путь союзникам.","Не входить глубоко без щита и поддержки команды."]},
     sources:["https://liquipedia.net/mobilelegends/Badang","https://mlbb-knowledge.vercel.app/heroes/77","https://www.mlbb.io/en/hero/badang","https://www.mlbbguides.com/heroes/badang/","https://mlbbhub.com/ru/heroes/badang"],
+    matchupsReviewedAt: "2026-11-24", matchupsMethod: "Ranked matchup deltas from MLBB.io; statistical signal, not a guaranteed counter or synergy.",
     patch:{version:HERO_DB_PATCH,notes:["Chivalry Fist, Fist Wind, Fist Break и Fist Crack сверены по Liquipedia, MLBB Knowledge, MLBB.io и MLBBGuides.","MLBBHub для патча 2.2.23 показывает около 50.31% побед, 1.36% выбора и 3.63% банов; MLBB Stats отдельно публикует Mythic+ и Roam выборки.","Профессиональная VOD-проверка текущего патча не выполнена; VOD review pending."],reviewedAt:"2026-11-22"},confidence:"partial"
   },
   {
