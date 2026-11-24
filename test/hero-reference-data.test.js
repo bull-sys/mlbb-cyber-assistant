@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
+import { readFile } from "node:fs/promises";
 import { heroCatalog } from "../server/hero-catalog.js";
 import { heroProfiles } from "../server/hero-profiles.js";
 import { HERO_REFERENCE_SOURCE, heroReferenceData } from "../server/hero-reference-data.js";
@@ -158,4 +159,10 @@ test("canonical Russian hero names match across catalog, reference data and deta
     assert.equal(heroReferenceData.find(hero => hero.id === id)?.displayNameRu, name, id + ": reference name");
     assert.equal(heroProfiles.find(profile => profile.id === id)?.names?.ru, name, id + ": profile name");
   }
+});
+
+
+test("X.Borg portrait uses the real xborg.png asset filename", async () => {
+  const appSource = await readFile(new URL("../public/app.js", import.meta.url), "utf8");
+  assert.match(appSource, /"x-borg"\s*:\s*"xborg"/);
 });
