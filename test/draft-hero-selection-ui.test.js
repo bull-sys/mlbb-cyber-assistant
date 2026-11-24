@@ -59,3 +59,20 @@ test("draft picker uses a circular neon selection grid and respects reduced moti
   assert.match(css, /@media\(prefers-reduced-motion:reduce\)/);
   assert.match(css, /\.picker-selection-slots/);
 });
+
+ 
+test("CYBER ARENA draft stage renders ten interactive team slots and a separate signature pick", async () => {
+  const html = await readFile(new URL("../public/index.html", import.meta.url), "utf8");
+  const app = await readFile(new URL("../public/app.js", import.meta.url), "utf8");
+  const css = await readFile(new URL("../public/style.css", import.meta.url), "utf8");
+  assert.match(html, /class="arena-draft-stage"/);
+  assert.match(html, /id="enemies" class="arena-slots enemy-slots"/);
+  assert.match(html, /id="allies" class="arena-slots ally-slots"/);
+  assert.match(html, /id="arenaMyHeroPortrait"/);
+  assert.match(app, /function drawTeams\(\)[\s\S]*?Array\.from\(\{length:5\}/);
+  assert.match(app, /data-side="\+side\+" data-i="\+slot/);
+  assert.match(app, /arenaMyHeroName/);
+  assert.match(css, /\.arena-slots\{display:grid;grid-template-columns:repeat\(5/);
+  assert.match(css, /\.enemy-team\{--arena-accent:#ff5eae/);
+  assert.match(css, /\.ally-team\{--arena-accent:#51eaff/);
+});
