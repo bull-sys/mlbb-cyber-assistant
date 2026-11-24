@@ -1331,3 +1331,15 @@ details.ency-info-card.visual>.ency-info-summary{display:grid}
  .arena-lane-row{grid-template-columns:1fr;gap:5px}
 }
 @media(prefers-reduced-motion:reduce){.arena-slot.filled{transition:none}}
+
+/* CYBER ARENA · deliberate draft feedback */
+.arena-completion{position:relative;margin:12px 2px 2px;padding:10px 12px;border:1px solid rgba(122,151,190,.24);border-radius:10px;background:rgba(15,27,44,.78);color:#8fa7c4;text-align:center;font-size:8px;font-weight:900;letter-spacing:.12em;line-height:1.5;transition:background .25s,border-color .25s,color .25s,box-shadow .25s}
+.arena-completion.is-complete{border-color:rgba(104,235,191,.58);background:linear-gradient(90deg,rgba(25,83,72,.3),rgba(15,38,54,.8),rgba(25,83,72,.3));color:#a6ffe0;box-shadow:0 0 22px rgba(69,226,174,.12),inset 0 0 18px rgba(69,226,174,.06)}
+.arena-slot-enter{animation:arena-slot-materialize .48s cubic-bezier(.2,.85,.25,1) both}
+.arena-own-enter{animation:arena-own-materialize .52s cubic-bezier(.2,.85,.25,1) both}
+.arena-report-enter{animation:arena-report-arrive .42s cubic-bezier(.2,.8,.2,1) both}
+@keyframes arena-slot-materialize{0%{opacity:0;transform:translateY(13px) scale(.82);filter:brightness(2.1) saturate(1.5)}65%{opacity:1;transform:translateY(-2px) scale(1.035);filter:brightness(1.35)}100%{opacity:1;transform:translateY(0) scale(1);filter:none}}
+@keyframes arena-own-materialize{0%{opacity:.35;transform:scale(.78);filter:brightness(2)}70%{opacity:1;transform:scale(1.06);filter:brightness(1.35)}100%{transform:scale(1);filter:none}}
+@keyframes arena-report-arrive{0%{opacity:0;transform:translateY(15px);filter:blur(5px)}100%{opacity:1;transform:translateY(0);filter:none}}
+@media(max-width:650px){.arena-completion{font-size:7px;padding:9px 7px;letter-spacing:.08em}}
+@media(prefers-reduced-motion:reduce){.arena-slot-enter,.arena-own-enter,.arena-report-enter{animation:none!important}.arena-completion{transition:none!important}}
