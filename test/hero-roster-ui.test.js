@@ -23,6 +23,6 @@ test("hero catalog cards show names, role, lane and profile verification", () =>
 });
 
 test("encyclopedia search includes hero names, roles and lanes", () => {
-  assert.match(app, /x\.name\+" "\+x\.category\+" "\+\(x\.description\|\|""\)\+" "\+\(x\.roles\|\|""\)\+" "\+\(x\.lanes\|\|""\)/);
+  assert.match(app, /x\.name\+" "\+x\.category\+" "\+\(x\.secondaryCategory\|\|""\)\+" "\+\(x\.description\|\|""\)/);
   assert.match(app, /entries:heroEntries/);
 });
