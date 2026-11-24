@@ -535,18 +535,24 @@ test("ranked matchup evidence is scored separately from lane eligibility and sta
   assert.equal(result.rankedMatchupMeta.laneScoped, false);
 });
 
-test("ranked matchup risk is retained and mixed with positive signals without claiming a lane counter", () => {
+test("ranked matchup risk remains visible alongside a positive ranked signal", () => {
   const enemy = heroProfiles.find(profile => profile.names.ru === "Эйдора");
-  const baseline = run({ lane: "Золото", enemies: ["Эйдора"] });
-  const baselineCandidate = baseline.counters.find(item => !item.matchedEnemies.length) || baseline.counters[2];
-  const candidate = heroProfiles.find(profile => profile.names.ru === baselineCandidate.name);
+  const secondEnemy = heroProfiles.find(profile => profile.names.ru === "Мия");
+  const candidate = heroProfiles.find(profile => profile.names.ru === "Кэрри");
   const result = run({
     lane: "Золото",
-    enemies: ["Эйдора"],
+    enemies: ["Эйдора", "Мия"],
     rankedMatchups: {
       [enemy.id]: {
         [candidate.id]: {
           opponentId: enemy.id, candidateId: candidate.id, source: "Rone Arena API",
+          rankBracket: "legend", windowDays: 15, lane: null, advantagePp: 4.2,
+          sampleSize: null, direction: "candidate-favourable"
+        }
+      },
+      [secondEnemy.id]: {
+        [candidate.id]: {
+          opponentId: secondEnemy.id, candidateId: candidate.id, source: "Rone Arena API",
           rankBracket: "legend", windowDays: 15, lane: null, advantagePp: -0.1,
           sampleSize: null, direction: "opponent-favourable"
         }
@@ -556,7 +562,8 @@ test("ranked matchup risk is retained and mixed with positive signals without cl
   });
   const recommendation = result.counters.find(item => item.name === candidate.names.ru);
   assert.ok(recommendation);
-  assert.ok(["ranked-risk", "mixed-matchup"].includes(recommendation.matchupType));
-  assert.ok(recommendation.riskyEnemies.includes("Эйдора"));
-  assert.match(recommendation.reason, /риск/i);
+  assert.equal(recommendation.matchupType, "mixed-matchup");
+  assert.ok(recommendation.matchedEnemies.includes("Эйдора"));
+  assert.ok(recommendation.riskyEnemies.includes("Мия"));
+  assert.match(recommendation.reason, /неоднозначный/i);
 });
