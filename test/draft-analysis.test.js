@@ -538,7 +538,8 @@ test("ranked matchup evidence is scored separately from lane eligibility and sta
 test("ranked matchup risk is retained and mixed with positive signals without claiming a lane counter", () => {
   const enemy = heroProfiles.find(profile => profile.names.ru === "Эйдора");
   const baseline = run({ lane: "Золото", enemies: ["Эйдора"] });
-  const candidate = heroProfiles.find(profile => profile.names.ru === baseline.counters[0].name);
+  const baselineCandidate = baseline.counters.find(item => !item.matchedEnemies.length) || baseline.counters[2];
+  const candidate = heroProfiles.find(profile => profile.names.ru === baselineCandidate.name);
   const result = run({
     lane: "Золото",
     enemies: ["Эйдора"],
