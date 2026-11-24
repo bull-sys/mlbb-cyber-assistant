@@ -55,12 +55,17 @@ test("verified catalog roles and lanes match the audited reference without dupli
       assert.deepEqual([...hero.role.values].sort(), reference.roles.map(item => item.en).sort(), hero.id + ": verified roles");
     }
     if (hero.lanes.status === "verified") {
-      assert.ok(hero.lanes.primary, hero.id + ": verified primary lane");
+      if (hero.id === "badang") {
+        assert.equal(hero.lanes.primary, null, "Badang: no forced primary lane");
+        assert.deepEqual(hero.lanes.flexible, ["EXP Lane", "Roam"], "Badang: verified flexible lanes");
+      } else {
+        assert.ok(hero.lanes.primary, hero.id + ": verified primary lane");
+      }
     }
   }
   assert.deepEqual(
     heroCatalog.filter(hero => hero.lanes.status === "pending_review").map(hero => hero.id),
-    ["badang"]
+    []
   );
 });
 
