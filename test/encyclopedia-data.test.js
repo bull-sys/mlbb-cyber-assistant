@@ -56,6 +56,15 @@ test("item encyclopedia records have descriptions and the six shop categories", 
   assert.deepEqual(items.find(item => item.englishName === "Fleeting Time").categories, ["Атака", "Магия", "Защита"]);
   assert.deepEqual(items.find(item => item.englishName === "Winter Crown").categories, ["Атака", "Магия"]);
   assert.ok(items.find(item => item.englishName === "Expert Gloves").stats.includes("+30 адаптивной атаки"));
+  const itemById = id => items.find(item => item.englishName === id);
+  assert.match(itemById("Dominance Ice").passive, /Lifebane/);
+  assert.match(itemById("Antique Cuirass").passive, /8%/);
+  assert.match(itemById("Immortality").passive, /210 секунд/);
+  assert.match(itemById("Sea Halberd").passive, /Punish/);
+  assert.match(itemById("Divine Glaive").passive, /20%/);
+  assert.match(itemById("Wind of Nature").passive, /90 секунд/);
+  assert.match(itemById("Berserker's Fury").passive, /12%/);
+  assert.equal(items.filter(item => item.verification === "checked against item detail page").length, 14);
   for (const item of items) {
     assert.ok(item.name, "item name is required");
     assert.ok(item.description?.length > 15, item.name + " needs a description");
