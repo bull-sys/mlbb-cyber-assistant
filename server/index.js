@@ -18,7 +18,7 @@ import { getHeroSkillAssets } from "./hero-skill-assets.js";
 import { getHeroKnowledge, getGameAssets } from "./mlbbdex-adapter.js";
 import { getHeroGrowthData } from "./hero-growth-adapter.js";
 import { getRankedMatchupEvidence, normalizeRankedMatchupRank } from "./ranked-matchup-adapter.js";
-import { getDraftHeroOptions, isCatalogHeroId, resolveDraftHeroSelection } from "./draft-hero-selection.js";
+import { getDraftHeroAnalysisProfiles, getDraftHeroOptions, isCatalogHeroId, resolveDraftHeroSelection } from "./draft-hero-selection.js";
 import { heroProfiles, validateHeroProfiles } from "./hero-profiles.js";
 import { normalizeRegistration } from "./registration.js";
 import { getOptionalUser } from "./auth.js";
@@ -52,6 +52,7 @@ if(!secret && process.env.NODE_ENV==="production") throw new Error("JWT_SECRET i
 const tokenSecret=secret||"development-only-change-me";
 const openai=process.env.OPENAI_API_KEY?new OpenAI({apiKey:process.env.OPENAI_API_KEY}):null;
 const roles=["Лес","Золото","Опыт","Мид","Роум"];
+const draftAnalysisProfiles=getDraftHeroAnalysisProfiles();
 const ranks=["Эпик","Легенда","Мифик","Мифическая слава","Мифическая бессмертие"];
 const styles=["Поднятие рейтинга","По фану","Кастомки"];
 const safeUser=id=>db.prepare("SELECT u.id,u.email,u.nickname,p.hero,p.role,p.rank,p.style,p.game_id,p.bio FROM users u LEFT JOIN profiles p ON p.user_id=u.id WHERE u.id=?").get(id);
@@ -169,8 +170,8 @@ function analyze({lane, enemies = [], allies = [], myHero = "", rankedMatchups =
     "Маг": "mage", "Танк": "tank", "Поддержка": "support"
   };
   const legacyByName = new Map(heroes.map(hero => [hero.name, hero]));
-  const profileByName = new Map(heroProfiles.map(profile => [profile.names?.ru, profile]).filter(([name]) => name));
-    const heroByName = new Map(heroProfiles.map(profile => {
+  const profileByName = new Map(draftAnalysisProfiles.map(profile => [profile.names?.ru, profile]).filter(([name]) => name));
+    const heroByName = new Map(draftAnalysisProfiles.map(profile => {
     const legacy = legacyByName.get(profile.names?.ru);
     const combat = profile.combat || {};
     const tags = new Set(legacy?.tags || []);
@@ -310,7 +311,7 @@ function analyze({lane, enemies = [], allies = [], myHero = "", rankedMatchups =
 
   // Контрпики строятся по всем 133 профилям, а не по старому списку из 32 героев.
   // Статистический матчап — сигнал для ранжирования, а не гарантия победы.
-  const candidates = !enemy.length ? [] : heroProfiles
+  const candidates = !enemy.length ? [] : draftAnalysisProfiles
     .filter(profile => {
       const hero = heroByName.get(profile.names?.ru);
       return hero &&
@@ -736,27 +737,10 @@ app.post("/api/ai/draft",guestDraftRateLimit,optionalAuth,async(req,res)=>{
 
  const selectedValues=[...b.enemies,...(b.allies||[]),...(b.myHero?[b.myHero]:[])];
  const selections=selectedValues.map(resolveDraftHeroSelection);
- const unsupported=[...new Map(selections
-  .filter(selection=>!selection?.analysisSupported)
-  .map(selection=>[selection.id,selection.name])).entries()]
-  .map(([id,name])=>({id,name}));
-
- if(unsupported.length){
-  return res.json({
-   analysisStatus:"limited",
-   unsupportedHeroes:unsupported,
-   threats:[],
-   counters:[],
-   build:[],
-   buildDetails:[],
-   emblem:null,
-   talentTiers:[],
-   spell:null,
-   timing:null,
-   note:"Полный анализ не рассчитан: для выбранных героев ещё нет подтверждённой связи с проверенной тактической базой. Чтобы не выдавать выдуманные контрпики, рекомендации временно скрыты."
-  });
+ const unresolved=selectedValues.filter((value,index)=>!selections[index]);
+ if(unresolved.length){
+  return res.status(400).json({error:"Не удалось сопоставить героев: "+unresolved.join(", ")});
  }
-
  const legacyName=value=>resolveDraftHeroSelection(value).legacyName;
  const resolvedDraft={
   ...b,
