@@ -706,9 +706,9 @@ function analyze({lane, enemies = [], allies = [], myHero = "", rankedMatchups =
     against: enemy.filter(hero => {
       const profile = enemyProfileByName.get(hero.name);
       return bootName === "Ботинки стойкости"
-        ? (profile?.combat?.damage === "magic" || hero.type === "mage" || (hero.tags || []).some(tag => ["control","engage","silence"].includes(tag)))
+        ? (hasCombatDamageKind(profile, hero, "magic") || (hero.tags || []).some(tag => ["control","engage","silence"].includes(tag)))
         : bootName === "Ботинки воина"
-          ? profile?.combat?.damage === "physical" || ["assassin","fighter","marksman"].includes(hero.type)
+          ? hasCombatDamageKind(profile, hero, "physical")
           : false;
     }).map(hero => hero.name),
     source: "https://metammo.com/mobile-legends-guide/items",
