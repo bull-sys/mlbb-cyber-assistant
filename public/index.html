@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#070910"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><link rel="manifest" href="/manifest.webmanifest"><link rel="apple-touch-icon" href="/icons/icon-192.png"><link rel="stylesheet" href="/style.css?v=20261125-11"><title>MLBB Cyber Assistant</title></head>
+<html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#070910"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><link rel="manifest" href="/manifest.webmanifest"><link rel="apple-touch-icon" href="/icons/icon-192.png"><link rel="stylesheet" href="/style.css?v=20261125-12"><title>MLBB Cyber Assistant</title></head>
 <body><div class="app">
 <header class="app-header"><div class="brand-lockup"><div class="brand">MLBB <b>CYBER</b></div><small>TACTICAL INTELLIGENCE</small></div><div class="header-actions"><button id="appBackButton" class="app-back-button hidden" type="button" aria-label="Вернуться на предыдущую страницу">← Назад</button><div id="authBadge" class="badge">● DEMO MODE</div></div></header>
 <details id="authPanel" class="auth-details"><summary>Войти или создать профиль</summary><div class="auth card"><div><h2>Вход в систему</h2><p>Драфт и контр-сборку можно попробовать без входа. Для анкеты и поиска реальных игроков создай профиль.</p></div><div class="authgrid"><input id="email" placeholder="Email" type="email"><input id="password" placeholder="Пароль (от 10 символов)" type="password"><input id="nickname" placeholder="Никнейм для регистрации"><div class="row"><button id="login" class="btn secondary">Войти</button><button id="register" class="btn">Регистрация</button></div></div><p id="authMessage" class="hint"></p></div></details>
@@ -47,7 +47,7 @@
  window.addEventListener("unhandledrejection",e=>send("unhandled-rejection",e.reason?.message||e.reason||"Promise rejected"));
 })();
 </script>
-<script src="/app.js?v=20261125-11" onerror="window.__MLBB_SCRIPT_LOAD_FAILED=true;window.__MLBB_REPORT_DIAG?.('script-load-error','app.js failed to load')"></script><script>
+<script src="/app.js?v=20261125-12" onerror="window.__MLBB_SCRIPT_LOAD_FAILED=true;window.__MLBB_REPORT_DIAG?.('script-load-error','app.js failed to load')"></script><script>
 (()=> {
  let pointer="нет",click="нет",panel=null,stateText="ожидаю запуска";
  const update=()=>{
