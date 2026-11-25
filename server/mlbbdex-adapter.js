@@ -216,7 +216,10 @@ const normalizeBuildName = value => String(value || "").normalize("NFKD")
 
 function normalizeObservedBuild(build) {
   const itemByEnglish = new Map(localItems.map(item => [normalizeBuildName(item.englishName), item]).filter(([name]) => name));
-  const emblemByEnglish = new Map(localEmblems.map(item => [normalizeBuildName(item.nameEn), item]).filter(([name]) => name));
+  const emblemByEnglish = new Map(localEmblems.flatMap(item => {
+    const names = [item.nameEn, String(item.nameEn || "").replace(/^Custom\\s+/u, ""), item.id];
+    return names.map(name => [normalizeBuildName(name), item]).filter(([name]) => name);
+  }));
   const talentByEnglish = new Map(localTalents.map(item => [normalizeBuildName(item.nameEn), item]).filter(([name]) => name));
   const itemNames = Array.isArray(build?.items) ? build.items.filter(value => typeof value === "string") : [];
   const items = itemNames.map(englishName => {
@@ -244,7 +247,7 @@ function normalizeObservedBuild(build) {
     aegis: "Щит",
     sprint: "Спринт",
     revitalize: "Исцеление",
-    vengeance: "Возмездие"
+    vengeance: "Месть"
   };
   const spellEn = typeof build?.spell === "string" ? build.spell : null;
   const spell = spellEn ? (spellNames[normalizeBuildName(spellEn).replace(/ /gu, "")] || spellEn) : null;
