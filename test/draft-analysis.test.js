@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
-import { heroes, items } from "../server/data.js";
+import { heroes, items, emblems, talents } from "../server/data.js";
 import { heroProfiles } from "../server/hero-profiles.js";
 import { getDraftHeroAnalysisProfiles } from "../server/draft-hero-selection.js";
 const draftAnalysisProfiles = getDraftHeroAnalysisProfiles();
@@ -101,7 +101,7 @@ if (serverSource.slice(analyzeEnd, endpointStart).trim() !== "") {
 const analyzeSource = serverSource.slice(analyzeStart, analyzeEnd);
 let analyze;
 try {
-  analyze = new Function("heroes", "items", "heroProfiles", "draftAnalysisProfiles", `${analyzeSource}\nreturn analyze;`)(heroes, items, heroProfiles, draftAnalysisProfiles);
+  analyze = new Function("heroes", "items", "emblems", "talents", "heroProfiles", "draftAnalysisProfiles", `${analyzeSource}\nreturn analyze;`)(heroes, items, emblems, talents, heroProfiles, draftAnalysisProfiles);
 } catch (error) {
   throw new Error(`Draft analysis tests could not compile the complete analyze() function from server/index.js: ${error.message}`, { cause: error });
 }
@@ -188,6 +188,42 @@ test("emblem selection follows selected hero archetype", async t => {
       assert.equal(run({ myHero }).emblem, expected);
     });
   }
+});
+
+test("emblem and talent recommendations use the selected hero profile and real catalogue entries", () => {
+  const talentById = new Map(talents.map(entry => [entry.id, entry]));
+  const emblemById = new Map(emblems.map(entry => [entry.id, entry]));
+
+  assert.equal(heroProfiles.length, 133);
+  for (const profile of heroProfiles) {
+    const configured = profile.emblemProfile;
+    assert.ok(configured?.emblemId, profile.id + " emblem ID");
+    assert.ok(emblemById.has(configured.emblemId), profile.id + " emblem exists in catalogue");
+    assert.equal(configured.talentIds?.length, 3, profile.id + " has three talent tiers");
+    const configuredTalents = configured.talentIds.map(id => talentById.get(id));
+    assert.ok(configuredTalents.every(Boolean), profile.id + " talents exist in catalogue");
+    assert.deepEqual(configuredTalents.map(entry => entry.tier).sort(), [1, 2, 3], profile.id + " has one talent per tier");
+
+    const result = run({ myHero: profile.names.ru });
+    assert.equal(result.emblemDetails?.id, configured.emblemId, profile.names.ru + " emblem");
+    assert.deepEqual(
+      result.talentRecommendations.map(entry => entry.id),
+      configured.talentIds,
+      profile.names.ru + " selected profile talents"
+    );
+    assert.deepEqual(
+      result.talentTiers,
+      configuredTalents.map(entry => entry.name),
+      profile.names.ru + " displayed talent names"
+    );
+  }
+});
+
+test("talent recommendations are empty when no own hero is selected", () => {
+  const result = run();
+  assert.deepEqual(result.talentTiers, []);
+  assert.deepEqual(result.talentRecommendations, []);
+  assert.equal(result.emblemDetails, null);
 });
 
 test("battle spell is Retribution only for the jungle lane", () => {
