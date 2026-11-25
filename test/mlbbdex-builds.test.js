@@ -33,6 +33,7 @@ test("normalizes observed builds by position and rank", () => {
   assert.equal(build.emblem.catalogMatched, true);
   assert.deepEqual(build.talents.map(talent => talent.name), ["Роковой удар", "Мастер оружия", "Боевой клич"]);
   assert.equal(build.spell.name, "Окаменение");
+  assert.equal(build.spell.catalogMatched, false);
   assert.equal(build.winRate, 68.87);
   assert.equal(build.pickRate, 2.5);
   assert.equal(result.sampleSizeAvailable, false);
@@ -56,13 +57,16 @@ test("rejects malformed build payloads instead of inventing an empty build", () 
   assert.equal(normalizeHeroBuildPayload({}).ok, false);
 });
 
-test("maps source aliases for the universal emblem and Weapon Master talent", () => {
+test("maps Weapon Master but preserves generic All emblem as unmatched", () => {
   const result = normalizeHeroBuildPayload({
     data: { Gold: { all: [{ items: [], emblem: "All", talents: ["Weapons Master"], spell: "Inspire" }] } }
   });
   const build = result.positions[0].ranks.all.builds[0];
-  assert.equal(build.emblem.id, "common");
-  assert.equal(build.emblem.catalogMatched, true);
+  assert.equal(build.emblem.id, null);
+  assert.equal(build.emblem.name, "All");
+  assert.equal(build.emblem.catalogMatched, false);
   assert.equal(build.talents[0].id, "weapon-master");
   assert.equal(build.talents[0].catalogMatched, true);
+  assert.equal(build.spell.name, "Вдохновение");
+  assert.equal(build.spell.catalogMatched, true);
 });
