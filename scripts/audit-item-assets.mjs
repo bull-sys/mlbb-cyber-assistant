@@ -45,7 +45,8 @@ console.log(JSON.stringify({
   upstreamItems: payload.data.length,
   matchedSlugs: checked.length,
   missingSlugs: missing,
-  brokenImages: broken
+  brokenImages: broken,
+  upstreamCatalog: payload.data.map(item => ({ name: item.name, slug: item.slug, category: item.category }))
 }, null, 2));
 assert.equal(missing.length, 0, "Some local items do not match current MLBBDex item slugs");
 assert.equal(broken.length, 0, "Some item image URLs do not return a valid image");
