@@ -488,6 +488,13 @@ test("very high magic burst recommends survival and magic-burst defense", () => 
   assert.ok(names.includes("Щит Валькирии"));
 });
 
+test("Dominance Ice remains a sustain counter, not an attack-speed counter", () => {
+  const result = run({ lane: "Роум", myHero: "Тигрил", enemies: ["Минотавр"] });
+  const item = result.buildDetails.find(entry => entry.name === "Господство льда");
+  assert.ok(item);
+  assert.ok(item.against.includes("Минотавр"));
+});
+
 test("attack-speed counterbuild uses Chastise Pauldron and Blade Armor, not obsolete Dominance Ice", () => {
   const result = run({ lane: "Роум", myHero: "Тигрил", enemies: ["Мия"] });
   const names = result.buildDetails.map(item => item.name);
@@ -500,11 +507,14 @@ test("attack-speed counterbuild uses Chastise Pauldron and Blade Armor, not obso
 test("counter build responds separately to healing, attack speed, and magic burst in a full enemy team", () => {
   const result = run({ lane: "Золото", myHero: "Мия", enemies: ["Эйдора", "Минотавр", "Мия"] });
   const names = result.buildDetails.map(item => item.name);
-  assert.ok(names.includes("Господство льда"));
   assert.ok(names.includes("Щит Валькирии"));
+  assert.ok(names.includes("Наплечник наказания"));
   assert.ok(names.includes("Шипованная броня"));
+  const antiHeal = result.buildDetails.find(item => item.tags.includes("anti-heal"));
+  assert.ok(antiHeal, "the build includes one anti-heal option");
+  assert.ok(antiHeal.against.includes("Минотавр"));
   assert.ok(result.enemyMatchups.find(item => item.name === "Эйдора").counterItems.some(item => item.name === "Щит Валькирии"));
-  assert.ok(result.enemyMatchups.find(item => item.name === "Минотавр").counterItems.some(item => item.name === "Господство льда"));
+  assert.ok(result.enemyMatchups.find(item => item.name === "Минотавр").counterItems.some(item => item.name === antiHeal.name));
 });
 
 test("without a selected hero the counter build does not guess offensive item compatibility", () => {
