@@ -783,30 +783,28 @@ test("mixed matchup classification preserves both positive and negative signals"
 
 
 
-test("ranked matchup evidence is scored separately from lane eligibility and static matchup links", () => {
+test("ranked matchup statistics are visible but never change counter-pick scores or ordering", () => {
   const enemy = heroProfiles.find(profile => profile.names.ru === "Эйдора");
-  const candidate = heroProfiles.find(profile => profile.names.ru === "Кэрри");
+  const enemies = ["Эйдора"];
+  const base = run({ lane: "Золото", enemies });
+  const rankedCandidates = Object.fromEntries(heroProfiles.map(profile => [profile.id, {
+    opponentId: enemy.id,
+    candidateId: profile.id,
+    source: "Rone Arena API",
+    sourceUrl: "https://arena.rone.dev/api/heroes/eudora/counters?rank=legend&days=15",
+    observedAt: "2026-11-24T12:00:00.000Z",
+    rankBracket: "legend",
+    windowDays: 15,
+    lane: null,
+    advantagePp: 4.2,
+    sampleSize: null,
+    direction: "candidate-favourable",
+    evidenceKind: "measured-ranked-pair"
+  }]));
   const result = run({
     lane: "Золото",
-    enemies: ["Эйдора"],
-    rankedMatchups: {
-      [enemy.id]: {
-        [candidate.id]: {
-          opponentId: enemy.id,
-          candidateId: candidate.id,
-          source: "Rone Arena API",
-          sourceUrl: "https://arena.rone.dev/api/heroes/eudora/counters?rank=legend&days=15",
-          observedAt: "2026-11-24T12:00:00.000Z",
-          rankBracket: "legend",
-          windowDays: 15,
-          lane: null,
-          advantagePp: 4.2,
-          sampleSize: null,
-          direction: "candidate-favourable",
-          evidenceKind: "measured-ranked-pair"
-        }
-      }
-    },
+    enemies,
+    rankedMatchups: { [enemy.id]: rankedCandidates },
     rankedMatchupMeta: {
       source: "Rone Arena API",
       rankBracket: "legend",
@@ -816,20 +814,21 @@ test("ranked matchup evidence is scored separately from lane eligibility and sta
       status: "available"
     }
   });
-  const recommendation = result.counters.find(item => item.name === "Кэрри");
-  assert.ok(recommendation, "Karrie remains eligible on Gold Lane");
-  assert.equal(recommendation.matchupType, "ranked-advantage");
-  assert.deepEqual(recommendation.matchedEnemies, ["Эйдора"]);
-  assert.equal(recommendation.profileEvidence.rankedMatchups[0].advantagePp, 4.2);
-  assert.equal(recommendation.profileEvidence.rankedMatchups[0].lane, null);
-  assert.equal(recommendation.profileEvidence.rankedMatchups[0].sampleSize, null);
+  assert.deepEqual(result.counters.map(item => item.name), base.counters.map(item => item.name));
+  assert.deepEqual(result.counters.map(item => item.score), base.counters.map(item => item.score));
+  assert.deepEqual(result.counters.map(item => item.matchupType), base.counters.map(item => item.matchupType));
+  assert.ok(result.counters.every(item => item.profileEvidence.rankedMatchups.length === 1));
+  assert.ok(result.counters.every(item => item.profileEvidence.rankedMatchups[0].advantagePp === 4.2));
+  assert.ok(result.counters.every(item => item.profileEvidence.rankedMatchups[0].lane === null));
+  assert.ok(result.counters.every(item => item.profileEvidence.rankedMatchups[0].sampleSize === null));
   assert.equal(result.rankedMatchupMeta.laneScoped, false);
 });
 
-test("ranked matchup risk remains visible alongside a positive ranked signal", () => {
+test("positive and negative ranked matchup signals remain informational, not matchup verdicts", () => {
   const enemy = heroProfiles.find(profile => profile.names.ru === "Эйдора");
   const secondEnemy = heroProfiles.find(profile => profile.names.ru === "Тигрил");
   const candidate = heroProfiles.find(profile => profile.names.ru === "Кэрри");
+  const base = run({ lane: "Золото", enemies: ["Эйдора", "Тигрил"] });
   const result = run({
     lane: "Золото",
     enemies: ["Эйдора", "Тигрил"],
@@ -851,32 +850,31 @@ test("ranked matchup risk remains visible alongside a positive ranked signal", (
     },
     rankedMatchupMeta: { rankBracket: "legend", laneScoped: false }
   });
+  assert.deepEqual(result.counters.map(item => item.name), base.counters.map(item => item.name));
+  assert.deepEqual(result.counters.map(item => item.score), base.counters.map(item => item.score));
+  assert.deepEqual(result.counters.map(item => item.matchedEnemies), base.counters.map(item => item.matchedEnemies));
+  assert.deepEqual(result.counters.map(item => item.riskyEnemies), base.counters.map(item => item.riskyEnemies));
   const recommendation = result.counters.find(item => item.name === candidate.names.ru);
-  assert.ok(recommendation);
-  assert.equal(recommendation.matchupType, "mixed-matchup");
-  assert.ok(recommendation.matchedEnemies.includes("Эйдора"));
-  assert.ok(recommendation.riskyEnemies.includes("Тигрил"));
-  assert.match(recommendation.reason, /неоднозначный/i);
+  if (recommendation) {
+    assert.equal(recommendation.profileEvidence.rankedMatchups.length, 2);
+    assert.deepEqual(recommendation.matchedEnemies, base.counters.find(item => item.name === candidate.names.ru).matchedEnemies);
+    assert.deepEqual(recommendation.riskyEnemies, base.counters.find(item => item.name === candidate.names.ru).riskyEnemies);
+  }
 });
 
-
-test("live-patch measured matchup fixtures remain visible inside five-enemy drafts", () => {
-  // Values transcribed from MLBBHub's Patch 2.2.23 matchup matrix.
-  // The page attributes measured edges to Moonton GMS, but publishes no pair
-  // sample sizes and does not scope these values to a specific lane.
+test("measured ranked matchup evidence does not promote a candidate into the top three", () => {
   const enemyNames = ["Циклоп", "Фредрин", "Теризла", "Ванван", "Белерик"];
   const fixtures = [
-    { candidate: "Lolita", candidateRu: "Лолита", lane: "Роум", opponent: "Cyclops", opponentRu: "Циклоп", advantagePp: 9.2 },
-    { candidate: "X.Borg", candidateRu: "Икс.Борг", lane: "Опыт", opponent: "Terizla", opponentRu: "Теризла", advantagePp: 4.2 },
-    { candidate: "Valir", candidateRu: "Валир", lane: "Мид", opponent: "Fredrinn", opponentRu: "Фредрин", advantagePp: 4.1 }
+    { candidate: "Lolita", lane: "Роум", opponent: "Cyclops", advantagePp: 9.2 },
+    { candidate: "X.Borg", lane: "Опыт", opponent: "Terizla", advantagePp: 4.2 },
+    { candidate: "Valir", lane: "Мид", opponent: "Fredrinn", advantagePp: 4.1 }
   ];
-
   for (const fixture of fixtures) {
     const candidate = heroProfiles.find(profile => profile.names.en === fixture.candidate);
     const opponent = heroProfiles.find(profile => profile.names.en === fixture.opponent);
     assert.ok(candidate, "catalogue contains " + fixture.candidate);
     assert.ok(opponent, "catalogue contains " + fixture.opponent);
-
+    const base = run({ lane: fixture.lane, enemies: enemyNames });
     const result = run({
       lane: fixture.lane,
       enemies: enemyNames,
@@ -905,20 +903,18 @@ test("live-patch measured matchup fixtures remain visible inside five-enemy draf
         status: "available"
       }
     });
-
-    const recommendation = result.counters.find(item => item.name === fixture.candidateRu);
-    assert.ok(recommendation, fixture.candidate + " remains in the top three for a five-enemy draft");
-    assert.ok(
-      ["ranked-advantage", "mixed-matchup"].includes(recommendation.matchupType),
-      fixture.candidate + " must retain a ranked-evidence label"
-    );
-    assert.ok(recommendation.matchedEnemies.includes(fixture.opponentRu));
-    assert.equal(recommendation.profileEvidence.rankedMatchups.length, 1);
-    assert.equal(recommendation.profileEvidence.rankedMatchups[0].advantagePp, fixture.advantagePp);
-    assert.equal(recommendation.profileEvidence.rankedMatchups[0].lane, null);
-    assert.equal(recommendation.profileEvidence.rankedMatchups[0].sampleSize, null);
+    assert.deepEqual(result.counters.map(item => item.name), base.counters.map(item => item.name));
+    assert.deepEqual(result.counters.map(item => item.score), base.counters.map(item => item.score));
+    assert.deepEqual(result.counters.map(item => item.matchupType), base.counters.map(item => item.matchupType));
     assert.ok(result.counters.every(item => item.role === fixture.lane));
     assert.ok(result.counters.every(item => !enemyNames.includes(item.name)));
+    const recommendation = result.counters.find(item => item.name === candidate.names.ru);
+    if (recommendation) {
+      assert.equal(recommendation.profileEvidence.rankedMatchups.length, 1);
+      assert.equal(recommendation.profileEvidence.rankedMatchups[0].advantagePp, fixture.advantagePp);
+      assert.equal(recommendation.profileEvidence.rankedMatchups[0].lane, null);
+      assert.equal(recommendation.profileEvidence.rankedMatchups[0].sampleSize, null);
+    }
   }
 });
 
