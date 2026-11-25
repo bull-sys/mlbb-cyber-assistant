@@ -296,3 +296,28 @@ The first runtime integration is implemented separately from counter-pick scorin
 The live Argus response was used as the contract fixture: the Exp position contains rank keys all, epic, legend, mythic, honor and glory; each build carries an item-name array, emblem, three talents, spell, winRate and pickRate. The endpoint may return three or four core items depending on the record, so the UI preserves the full list rather than truncating it to three.
 
 **Coverage limitation:** this is an on-demand integration, not yet a completed 133-hero coverage audit. Position/rank availability and item-name mapping still need to be measured across the full roster before the project can claim complete build coverage. No Render deployment has been performed as part of this change.
+
+## Full MLBBDex ranked-build coverage audit — 2026-11-25
+
+A rate-limited sequential audit completed successfully against the full source roster. It matched the local neutral reference roster to the source's 133 heroes by English name and fetched every hero-build endpoint without failures.
+
+| Measure | Result |
+|---|---:|
+| Local reference heroes | 133 |
+| Source heroes | 133 |
+| Successful build endpoints | 133 / 133 |
+| Heroes with at least one returned build | 133 / 133 |
+| Build records across positions and ranks | 2,913 |
+| Item entries matched to the local item catalog | 8,788 / 8,788 (100%) |
+| Emblem entries matched to the local emblem catalog | 2,762 / 2,913 (94.82%) |
+| Talent entries matched to the local talent catalog | 8,739 / 8,739 (100%) |
+
+Position coverage (heroes with at least one build / build records): EXP 42 / 741; Jungle 37 / 666; Mid 29 / 522; Gold 21 / 378; Roam 34 / 606. These are position-specific coverage counts; heroes can occur in more than one position.
+
+Rank coverage (heroes with at least one build / build records): All 133 / 489; Epic 133 / 486; Legend 132 / 483; Mythic 133 / 486; Honor 133 / 486; Glory 132 / 483. The API does not return a build for every hero in every rank/position combination, so do not infer universal lane/rank availability from roster-wide endpoint coverage.
+
+All item names and all talent names were mapped. The only unmatched emblem label in the audit was the generic source value "All" (151 records). It is deliberately not mapped to Basic Common: the source does not establish that "All" means that specific emblem. The UI preserves the source label and flags it as unmatched until the semantics can be verified.
+
+The audit ran sequentially with a delay between hero requests after an initial concurrent pass encountered HTTP 429 responses. The full sequential pass succeeded with 133/133 endpoints. The repeatable audit is available as npm run audit:builds; its detailed JSON report is archived as a GitHub Actions artifact for run 45590688091.
+
+**Interpretation:** the source has broad roster coverage and excellent item/talent name compatibility, but availability is not uniform by position/rank and emblem semantics still have one unresolved label. The endpoint returns observed builds and rates, not sample sizes or proof that a build is optimal. MLBBDex attributes ranked build statistics to arena.rone.dev, so these records are not an independent confirmation of the existing Rone-derived ranked evidence.
