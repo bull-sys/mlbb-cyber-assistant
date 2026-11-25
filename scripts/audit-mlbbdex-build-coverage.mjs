@@ -120,14 +120,22 @@ const worker = async () => {
               if (talentIndex.has(normalize(name))) record.matchedTalents++;
               else record.unmatchedTalents.push(name);
             }
-            if (typeof build?.spell === "string" && build.spell) {\n              record.spellCount++;\n              const key = build.spell.toLowerCase().replace(/[^a-z]/gu, "");\n              const localName = spellNames.get(key);\n              if (localName && localSpellNames.has(localName)) record.matchedSpells++;\n              else record.unmatchedSpells.push(build.spell);\n              if (!record.spells.includes(build.spell)) record.spells.push(build.spell);\n            }
+            if (typeof build?.spell === "string" && build.spell) {
+              record.spellCount++;
+              const key = build.spell.toLowerCase().replace(/[^a-z]/gu, "");
+              const localName = spellNames.get(key);
+              if (localName && localSpellNames.has(localName)) record.matchedSpells++;
+              else record.unmatchedSpells.push(build.spell);
+              if (!record.spells.includes(build.spell)) record.spells.push(build.spell);
+            }
           }
         }
         if (Object.keys(positionResult.ranks).length) record.positions.push(positionResult);
       }
       record.unmatchedItems = [...new Set(record.unmatchedItems)].sort();
       record.unmatchedEmblems = [...new Set(record.unmatchedEmblems)].sort();
-      record.unmatchedTalents = [...new Set(record.unmatchedTalents)].sort();\n      record.unmatchedSpells = [...new Set(record.unmatchedSpells)].sort();
+      record.unmatchedTalents = [...new Set(record.unmatchedTalents)].sort();
+      record.unmatchedSpells = [...new Set(record.unmatchedSpells)].sort();
     } catch (error) {
       record.status = "error";
       record.error = String(error?.message || error).slice(0, 180);
@@ -162,7 +170,8 @@ const report = {
   mappingRates: {
     items: totals.itemCount ? Number((totals.matchedItems / totals.itemCount * 100).toFixed(2)) : null,
     emblems: totals.emblemCount ? Number((totals.matchedEmblems / totals.emblemCount * 100).toFixed(2)) : null,
-    talents: totals.talentCount ? Number((totals.matchedTalents / totals.talentCount * 100).toFixed(2)) : null,\n    spells: totals.spellCount ? Number((totals.matchedSpells / totals.spellCount * 100).toFixed(2)) : null
+    talents: totals.talentCount ? Number((totals.matchedTalents / totals.talentCount * 100).toFixed(2)) : null,
+    spells: totals.spellCount ? Number((totals.matchedSpells / totals.spellCount * 100).toFixed(2)) : null
   },
   positionCoverage, rankCoverage,
   failedHeroes: results.filter(hero => hero.status !== "ok").map(({ id, nameEn, slug, error }) => ({ id, nameEn, slug, error })),
@@ -170,12 +179,14 @@ const report = {
   unmatchedNames: {
     items: [...new Set(results.flatMap(hero => hero.unmatchedItems))].sort(),
     emblems: [...new Set(results.flatMap(hero => hero.unmatchedEmblems))].sort(),
-    talents: [...new Set(results.flatMap(hero => hero.unmatchedTalents))].sort(),\n    spells: [...new Set(results.flatMap(hero => hero.unmatchedSpells))].sort()
+    talents: [...new Set(results.flatMap(hero => hero.unmatchedTalents))].sort(),
+    spells: [...new Set(results.flatMap(hero => hero.unmatchedSpells))].sort()
   },
   heroes: results
 };
 await mkdir("artifacts", { recursive: true });
-await writeFile("artifacts/mlbbdex-build-coverage.json", JSON.stringify(report, null, 2) + "\\n");
+await writeFile("artifacts/mlbbdex-build-coverage.json", JSON.stringify(report, null, 2) + "\
+");
 console.log(JSON.stringify({
   roster: report.roster, totals: report.totals, mappingRates: report.mappingRates,
   positionCoverage: report.positionCoverage, rankCoverage: report.rankCoverage,
