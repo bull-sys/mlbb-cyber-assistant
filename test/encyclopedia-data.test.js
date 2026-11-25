@@ -229,3 +229,9 @@ test("item records expose curated community nicknames and the current Sky Pierce
  assert.match(appSource,/Array\.isArray\(x\.aliases\)\?x\.aliases\.join\(" "\)/);
  assert.match(appSource,/ency-item-aliases/);
 });
+
+
+test("all 104 item records resolve to a deterministic MLBBDex artwork URL", () => {
+ assert.match(appSource,/visuels\/objets\/"+slug\+"\.webp/);
+ assert.match(appSource,/remote\?\.image\|\|\("https:\/\/mlbbdex\.com\/visuels\/objets\//);
+});
