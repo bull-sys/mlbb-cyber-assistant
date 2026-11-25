@@ -251,7 +251,8 @@ function normalizeObservedBuild(build) {
     vengeance: "Месть"
   };
   const spellEn = typeof build?.spell === "string" ? build.spell : null;
-  const spell = spellEn ? (spellNames[normalizeBuildName(spellEn).replace(/ /gu, "")] || spellEn) : null;
+  const spellKey = spellEn ? String(spellEn).toLowerCase().replace(/[^a-z]/gu, "") : "";
+  const spell = spellEn ? (spellNames[spellKey] || spellEn) : null;
   const winRate = build?.winRate !== null && build?.winRate !== undefined && Number.isFinite(Number(build.winRate)) ? Number(build.winRate) : null;
   const pickRate = build?.pickRate !== null && build?.pickRate !== undefined && Number.isFinite(Number(build.pickRate)) ? Number(build.pickRate) : null;
   return {
