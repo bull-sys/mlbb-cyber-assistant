@@ -165,7 +165,7 @@ nav button.active{background:linear-gradient(135deg,#123746,#252449);border-colo
 .loadout-card b{font-size:12px}
 .talent-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 3px;border-bottom:1px solid #29394e}
 .talent-row small{font-size:8px;color:#8ea4bd;letter-spacing:.1em}
-.talent-row b{font-size:11px;text-align:right}
+.talent-row b{font-size:11px;text-align:left}.talent-row{align-items:flex-start;flex-direction:column;gap:5px}.talent-row p{margin:0;color:#c1cede;font-size:10px;line-height:1.45}.talent-context-note{margin:7px 0;color:#91a5bd;font-size:9px;line-height:1.45}
 .phase-card{padding:11px 12px;border-left:2px solid #5acbd9;border-radius:0 10px 10px 0;background:#142436}
 .phase-card small{font-size:8px;color:#8fdce5;font-weight:900;letter-spacing:.13em}
 .phase-card p{margin:6px 0 0;font-size:11px;line-height:1.5;color:#c1cede}
