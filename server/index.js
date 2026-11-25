@@ -638,9 +638,8 @@ function analyze({lane, enemies = [], allies = [], myHero = "", rankedMatchups =
       return hero.type === "tank" || ["high", "very_high"].includes(profile?.combat?.durability) || (hero.tags || []).includes("frontline");
     }).map(hero => hero.name);
     if (tags.has("penetration") && tankTargets.length &&
-        ((physicalBuild && item.category === "Атака" && item.name === "Злобный рык") ||
-         (magicBuild && item.category === "Магия" && item.name === "Божественный меч"))) {
-      add(8, "Помогает пробивать защиту плотной передней линии", tankTargets);
+        physicalBuild && item.category === "Атака" && item.name === "Злобный рык") {
+      add(8, "Помогает пробивать физическую защиту плотной передней линии", tankTargets);
     }
 
     if (tags.has("survival") && hasBurstThreat) {
