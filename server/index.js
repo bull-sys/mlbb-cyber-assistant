@@ -19,6 +19,7 @@ import { getHeroSkillAssets } from "./hero-skill-assets.js";
 import { getHeroKnowledge, getHeroBuilds, getGameAssets } from "./mlbbdex-adapter.js";
 import { getHeroGrowthData } from "./hero-growth-adapter.js";
 import { getRankedMatchupEvidence, normalizeRankedMatchupRank } from "./ranked-matchup-adapter.js";
+import { selectObservedBuild } from "./observed-build-context.js";
 import { getDraftHeroAnalysisProfiles, getDraftHeroOptions, isCatalogHeroId, resolveDraftHeroSelection } from "./draft-hero-selection.js";
 import { heroProfiles, validateHeroProfiles } from "./hero-profiles.js";
 import { normalizeRegistration } from "./registration.js";
@@ -897,13 +898,23 @@ app.post("/api/ai/draft",guestDraftRateLimit,optionalAuth,async(req,res)=>{
   .map(value => resolveDraftHeroSelection(value))
   .map(selection => draftAnalysisProfiles.find(profile => profile.id === selection?.id))
   .filter(Boolean);
- const rankedEvidence = await getRankedMatchupEvidence(enemyProfilesForStats, requestedRank, heroProfiles);
+ const selectedOwnHero = b.myHero ? resolveDraftHeroSelection(b.myHero) : null;
+ const observedHeroReference = selectedOwnHero
+  ? heroReferenceData.find(hero => hero.id === selectedOwnHero.id)
+  : null;
+ const [rankedEvidence, observedBuildPayload] = await Promise.all([
+  getRankedMatchupEvidence(enemyProfilesForStats, requestedRank, heroProfiles),
+  observedHeroReference ? getHeroBuilds(observedHeroReference) : Promise.resolve(null)
+ ]);
  const result=analyze({
   ...resolvedDraft,
   rankedMatchups: rankedEvidence.byOpponent,
   rankedMatchupMeta: rankedEvidence.metadata
  });
  result.analysisStatus="complete";
+ result.observedBuild = b.myHero
+  ? selectObservedBuild(observedBuildPayload, { lane: b.lane, rank: requestedRank })
+  : { status: "not-selected", message: "Выбери своего героя, чтобы добавить статистическую основу сборки." };
  if(openai&&req.user){try{const response=await openai.chat.completions.create({model:process.env.OPENAI_MODEL||"gpt-4.1-mini",messages:[{role:"system",content:"Ты тактический помощник MLBB. Не выдумывай live статистику и точные параметры патча. Используй только переданные варианты. Кратко объясни тактику на русском."},{role:"user",content:JSON.stringify({lane:b.lane,enemies:b.enemies,allies:b.allies||[],myHero:b.myHero||"",rulesResult:result})}],max_tokens:450,temperature:.3});result.aiExplanation=response.choices[0]?.message?.content||""}catch{result.aiExplanation="AI-сервис временно недоступен; показан базовый анализ."}}
  res.json(result);
 });
