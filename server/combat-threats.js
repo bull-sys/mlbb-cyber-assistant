@@ -1,4 +1,4 @@
-const DAMAGE_KINDS = Object.freeze(["physical", "magic"]);
+const DAMAGE_KINDS = Object.freeze(["physical", "magic", "true"]);
 
 export function getCombatDamageKinds(profile, hero) {
   const raw = String(profile?.combat?.damage || "").toLowerCase();
@@ -6,6 +6,7 @@ export function getCombatDamageKinds(profile, hero) {
 
   if (raw.includes("physical")) kinds.add("physical");
   if (raw.includes("magic")) kinds.add("magic");
+  if (raw.includes("true")) kinds.add("true");
   if (raw === "mixed") {
     kinds.add("physical");
     kinds.add("magic");
