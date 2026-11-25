@@ -23,3 +23,8 @@ export function getCombatDamageKinds(profile, hero) {
 export function hasCombatDamageKind(profile, hero, kind) {
   return getCombatDamageKinds(profile, hero).includes(kind);
 }
+
+export function isHighBurstThreat(profile, hero) {
+  const burst = profile?.combat?.burst;
+  return burst === "high" || burst === "very_high" || (hero?.tags || []).includes("burst");
+}
