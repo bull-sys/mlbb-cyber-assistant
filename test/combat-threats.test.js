@@ -22,3 +22,10 @@ test("does not classify unknown or empty damage as physical or magic", () => {
   assert.equal(hasCombatDamageKind({ combat: { damage: "unknown" } }, { type: "fighter" }, "physical"), false);
   assert.equal(hasCombatDamageKind(null, { type: "assassin" }, "magic"), false);
 });
+
+test("treats very high burst as a defensive threat, not only high burst", async () => {
+  const { isHighBurstThreat } = await import("../server/combat-threats.js");
+  assert.equal(isHighBurstThreat({ combat: { burst: "very_high" } }, {}), true);
+  assert.equal(isHighBurstThreat({ combat: { burst: "high" } }, {}), true);
+  assert.equal(isHighBurstThreat({ combat: { burst: "medium" } }, {}), false);
+});
