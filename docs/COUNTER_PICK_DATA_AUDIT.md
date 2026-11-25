@@ -414,6 +414,8 @@ The corrected structural audit evaluates the actual profile array and confirms:
 - All matchup and synergy target IDs resolve to an existing profile.
 - `buildCounterPickDataAudit()` already checks the 12 combat fields, and the regression suite asserts zero incomplete profiles.
 
-The correct damage-profile distribution is: physical 67; magic 54; physical + true 4; physical + magic 2; mixed 3; magic + true 1; physical + true (alternate source label) 2. Karina's profile is `magic_and_true`; the combat-threat helper now preserves true damage as a separate kind. Phoveus remains `physical_and_magic`. Sora is physical damage; the name of his True Art skill is not used as evidence of true damage.
+The correct damage-profile distribution is: physical 66; magic 54; physical + true 5; physical + magic 2; mixed 3; magic + true 1; physical + true (alternate source label) 2. Karina's profile is `magic_and_true`; the combat-threat helper now preserves true damage as a separate kind. Phoveus remains `physical_and_magic`. Sora is physical damage; the name of his True Art skill is not used as evidence of true damage.
 
 This correction supersedes the earlier statements in this document that only 117 profiles were detailed or that 16 profiles were missing. It confirms structural coverage, not independent re-review of every qualitative combat rating or professional VOD for every hero.
+
+A focused review of the 16 profiles that were previously miscounted also found a genuine classification gap: Martis's execution ultimate deals true damage below its threshold. His combat type is now `physical_and_true`, with a regression test alongside Lesley's existing `physical_true` and Phoveus's `mixed` profile. This is a targeted mechanics correction, not the addition of missing hero records.
