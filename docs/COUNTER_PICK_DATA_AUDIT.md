@@ -152,3 +152,76 @@ The fixed regression roster uses each target hero plus Tigreal, Nana, Miya and N
 Seven of twelve candidates make the top three in this fixed five-enemy fixture. Five are displaced by other candidates with multiple positive matchup links or stronger total fit against the selected roster. These five are review cases, not automatically algorithm defects: a full-draft recommendation should account for all five opponents rather than maximize one isolated edge.
 
 The regression locks the observed candidate positions so later scoring changes cannot silently alter this reviewed comparison. It checks reproducibility of current ranking behaviour, not match outcome accuracy. The roster is intentionally fixed and is not a representative random sample of ranked drafts.
+
+
+## MLBBHub source/API feasibility review — 2026-11-25
+
+### What is publicly documented
+
+The public Matchup Matrix page exposes a Patch 2.2.23 snapshot with 133 heroes, 1,942 measured edges and 950 direction-only flagged counters. It provides Hero Lookup and Full Matrix views, plus Lane and Role filters. Its own methodology distinguishes:
+- **Measured edge (pp):** the difference in matchup outcome attributed to the row hero, expressed in percentage points; it is not the hero's absolute win rate.
+- **Direction-only counter:** a relationship from Moonton's in-game counter data, with no numeric effect size.
+- **No flagged counter:** neither source supports a claim for that pair.
+
+The site's About page says ranked matchup data comes from Moonton's GMS data, while counter lists come from in-game hero data. It says the matchup/counter tools refresh on Mondays and Fridays; the broad ranked hero-stat tables refresh daily. Therefore a page snapshot must retain its own observed timestamp and displayed patch rather than assuming daily matchup refresh.
+
+Primary references:
+- https://mlbbhub.com/matchups
+- https://mlbbhub.com/about
+
+### API finding and integration decision
+
+As of this review, the public pages and indexed documentation disclose no supported MLBBHub developer API, OpenAPI schema, public endpoint contract, authentication policy, rate limits, versioning policy, or machine-readable data export for the matchup matrix. The public page is usable interactively, but that alone does not establish a stable integration interface.
+
+This is **not proof that no private or undocumented endpoint exists**. It means no endpoint was sufficiently documented or contractually supportable from the public evidence reviewed. The page's frontend implementation was not treated as an API contract. No HTML scraping, guessed JSON endpoint, or undocumented browser-internal request was added to the production recommendation path.
+
+**Decision: do not connect MLBBHub to runtime recommendations yet.** Keep the existing Rone Arena adapter unchanged. It is preferable to show the current local/profile evidence with clear provenance than silently couple draft recommendations to a brittle page implementation.
+
+### Lane filter: important unresolved semantics
+
+The Matchup Matrix UI has a Lane filter, and its FAQ describes using it to focus on fights relevant to the lane. However, the public explanation does not define the exact aggregation semantics:
+- whether a matchup edge is calculated only from games where both heroes occupied the selected lane;
+- whether the filter merely limits the displayed hero pool using each hero's lane metadata;
+- how flex picks and dual-role heroes are assigned;
+- whether both sides must share the selected lane or only the row hero;
+- whether the underlying GMS matchup sample and time window change with the filter.
+
+Until these details and the underlying response schema are confirmed, the lane selector must not be interpreted as proof that a numeric edge is lane-scoped.
+
+### Required contract before any future adapter is enabled
+
+A supported feed or explicit maintainer confirmation must provide, at minimum:
+1. Stable hero identifiers for both sides, with a versioned mapping to this repository's 133 hero IDs.
+2. Patch/version and source observation/update timestamp.
+3. Evidence kind: measured edge versus direction-only counter list.
+4. For measured edges: exact pp semantics, population/rank scope, measurement window, and pair sample size or an explicit statement that it is unavailable.
+5. Lane-scope semantics and role/flex handling; unknown lane scope must remain `null`, never inferred.
+6. Pagination/completeness guarantees for the full matrix, including explicit representation of missing/unmeasured pairs.
+7. Documented access policy, rate limits, caching expectations, and a stable schema/version or change notice.
+8. A fail-open adapter: source outage, schema drift, stale patch, or incomplete response must fall back to local evidence and visibly mark MLBBHub data unavailable/stale.
+
+Suggested normalized evidence shape:
+
+```js
+{
+  source: "MLBBHub",
+  sourceUrl: "https://mlbbhub.com/matchups",
+  observedAt: "ISO-8601",
+  patch: "2.2.23",
+  candidateId: "lolita",
+  opponentId: "cyclops",
+  evidenceKind: "measured-ranked-pair", // or "direction-only-counter"
+  advantagePp: 9.2,                    // null for direction-only
+  lane: null,                           // until lane scope is explicitly proven
+  rankBracket: null,
+  windowDays: null,
+  sampleSize: null,
+  confidence: "source-reported"
+}
+```
+
+No missing rank, window, lane, or sample metadata should be filled from another provider or guessed from the page controls. A direction-only edge must never be assigned an invented pp value.
+
+### Current conclusion
+
+MLBBHub is a useful **manual QA/reference surface** and its public matrix supports stronger source-aware review than a bare counter list. It is not yet a verified machine integration target. The next safe step is to request the maintainer's supported data interface and clarify lane-filter semantics. If that is not available, use explicitly dated, reviewed snapshots for offline QA only; do not scrape the page into the live engine.
