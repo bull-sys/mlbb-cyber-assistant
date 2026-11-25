@@ -392,7 +392,8 @@ function analyze({lane, enemies = [], allies = [], myHero = "", rankedMatchups =
             sourceUrl: rankedEvidence.sourceUrl || null,
             observedAt: rankedEvidence.observedAt || rankedMatchupMeta?.observedAt || null
           });
-        } else {
+        }
+        {
           const ownStrongRank = (profile.matchups?.strongAgainst || []).indexOf(enemyProfile.id);
           const enemyWeakRank = (enemyProfile.matchups?.weakAgainst || []).indexOf(profile.id);
           const ownWeakRank = (profile.matchups?.weakAgainst || []).indexOf(enemyProfile.id);
