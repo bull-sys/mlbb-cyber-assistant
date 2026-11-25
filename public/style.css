@@ -1520,3 +1520,7 @@ html.hero-picker-open,body.hero-picker-open{overflow:hidden!important;overscroll
  .hero-portrait-wrap{width:45px;height:45px}
  .hero-card-title b{font-size:9px}
 }
+
+
+/* Community nicknames for MLBB items */
+.ency-item-aliases{display:block;margin:3px 0 7px;color:var(--cyan,#55eaff);font-size:11px;font-weight:700;letter-spacing:.02em;line-height:1.4}
