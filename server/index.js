@@ -601,9 +601,9 @@ function analyze({lane, enemies = [], allies = [], myHero = "", rankedMatchups =
 
     const magicDpsTargets = enemy.filter(hero => {
       const profile = enemyProfileByName.get(hero.name);
-      const burst = profile?.combat?.burst;
       return hasCombatDamageKind(profile, hero, "magic") &&
-        burst !== "high" && burst !== "very_high" && !(hero.tags || []).includes("burst");
+        ["high", "very_high"].includes(profile?.combat?.dps) &&
+        !isHighBurstThreat(profile, hero);
     }).map(hero => hero.name);
     if (tags.has("magic-dps") && magicDpsTargets.length) add(7, "Полезен против повторяющегося магического урона", magicDpsTargets);
 
