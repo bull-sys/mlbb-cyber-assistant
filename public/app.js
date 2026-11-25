@@ -6,7 +6,7 @@ const GUEST_DRAFT_STORAGE_KEY="mlbb_draft_state_v1_guest";
 let draftStorageKey=GUEST_DRAFT_STORAGE_KEY;
 try{if(!localStorage.getItem(GUEST_DRAFT_STORAGE_KEY)&&localStorage.getItem(LEGACY_DRAFT_STORAGE_KEY))localStorage.setItem(GUEST_DRAFT_STORAGE_KEY,localStorage.getItem(LEGACY_DRAFT_STORAGE_KEY));localStorage.removeItem(LEGACY_DRAFT_STORAGE_KEY)}catch{}
 let draftSyncTimer=null,draftSyncInFlight=false,draftSyncAgain=false;
-let token="";try{token=localStorage.getItem("mlbb_token")||""}catch{};let activeUserId=null,data={heroes:[],draftHeroOptions:[],heroCatalog:[],heroProfiles:[],items:[],talents:[],emblems:[],roles:[],ranks:[],styles:[]},enemies=[],allies=[],threats=new Set(),encyFilter="all",encyItemFilter="all",encyHeroLaneFilter="all",encyHeroRoleFilter="all",encyTalentTierFilter="all",encyTalentEffectFilter="all",encyEmblemClassFilter="all",ocrWorker=null,encyRemoteAssets=null,encyRemoteKnowledge=new Map(),encyGrowthKnowledge=new Map(),encyKnowledgeRequest=0;
+let token="";try{token=localStorage.getItem("mlbb_token")||""}catch{};let activeUserId=null,data={heroes:[],draftHeroOptions:[],heroCatalog:[],heroProfiles:[],items:[],talents:[],emblems:[],roles:[],ranks:[],styles:[]},enemies=[],allies=[],threats=new Set(),encyFilter="all",encyItemFilter="all",encyHeroLaneFilter="all",encyHeroRoleFilter="all",encyTalentTierFilter="all",encyTalentEffectFilter="all",encyEmblemClassFilter="all",ocrWorker=null,encyRemoteAssets=null,encyRemoteKnowledge=new Map(),encyGrowthKnowledge=new Map(),encyHeroBuildCache=new Map(),encyKnowledgeRequest=0;
 const threatDefs=[["heal","💚 Отхил / вампиризм"],["magic","🔮 2+ мага / прокаст"],["speed","⚡ Скорость атаки"],["tank","🛡 Жирные танки"],["cc","⛓ Тяжёлый контроль"],["physical","⚔ Много физического урона"],["burst","💥 Взрывной урон"]];
 const $api=async(path,opts={})=>{let r=await fetch("/api"+path,{...opts,headers:{"Content-Type":"application/json",...(token?{Authorization:"Bearer "+token}:{}),...(opts.headers||{})}});let d=await r.json().catch(()=>({error:"Ошибка сервера"}));if(!r.ok){if(r.status===401&&token&&!path.startsWith("/auth/"))logout();throw Error(d.error||"Ошибка")}return d};
 function toast(s){let el=document.createElement("div");el.textContent=s;el.style="position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#18384a;border:1px solid #39e5ff;padding:12px 17px;border-radius:10px;z-index:99;font-size:12px";document.body.append(el);setTimeout(()=>el.remove(),2500)}
@@ -840,6 +840,59 @@ async function loadEncyHeroGrowth(id,remote,request){
   renderEncyHeroRemoteProfile({...remote,growthUnavailable:true});
  }
 }
+function renderEncyHeroBuilds(payload,id){
+ const host=$("encyHeroBuilds");if(!host)return;
+ if(!payload?.ok||!Array.isArray(payload.positions)||!payload.positions.length){
+  host.innerHTML='<p class="ency-unverified">Для этого героя источник пока не вернул сборки по позициям. Локальные рекомендации не подменяют статистику.</p>';
+  return;
+ }
+ const hero=(data.heroCatalog||[]).find(entry=>entry.id===id);
+ const laneToPosition={"EXP Lane":"exp","Jungle":"jungle","Mid Lane":"mid","Gold Lane":"gold","Roam":"roam"};
+ const preferred=laneToPosition[hero?.lanes?.primary]||"";
+ const selectedPosition=payload.positions.find(entry=>entry.id===preferred)||payload.positions[0];
+ const positionOptions=payload.positions.map(entry=>'<option value="'+esc(entry.id)+'"'+(entry.id===selectedPosition.id?' selected':'')+'>'+esc(entry.label)+'</option>').join("");
+ const render=()=>{
+  const positionId=host.querySelector("#encyBuildPosition")?.value||selectedPosition.id;
+  const position=payload.positions.find(entry=>entry.id===positionId)||selectedPosition;
+  const rankSelect=host.querySelector("#encyBuildRank");
+  const rankKey=rankSelect?.value||"all";
+  const ranks=position.ranks||{};
+  const rankKeys=Object.keys(ranks);
+  const rankOptions=rankKeys.map(key=>'<option value="'+esc(key)+'"'+(key===rankKey?' selected':'')+'>'+esc(ranks[key].label)+'</option>').join("");
+  const activeRank=rankKeys.includes(rankKey)?rankKey:(rankKeys.includes("all")?"all":rankKeys[0]);
+  const builds=ranks[activeRank]?.builds||[];
+  const cards=builds.map((build,index)=>{
+   const itemMarkup=build.items.map(item=>'<span class="ency-build-item'+(item.catalogMatched?'':' unmatched')+'">'+esc(item.name)+(item.catalogMatched?'':' · нет в каталоге')+'</span>').join("");
+   const talents=build.talents.map(talent=>esc(talent.name)).join(" · ");
+   const emblem=build.emblem?.name||"Не указана";
+   const spell=build.spell?.name||"Не указан";
+   const rates=[Number.isFinite(build.winRate)?'WR '+build.winRate.toFixed(2)+'%':'',Number.isFinite(build.pickRate)?'Выбор '+build.pickRate.toFixed(2)+'%':''].filter(Boolean).join(" · ");
+   const coverage=build.catalogCoverage||{};
+   const warning=coverage.unmatchedItems?.length?'<p class="ency-build-warning">Не сопоставлены с локальным каталогом: '+coverage.unmatchedItems.map(esc).join(", ")+'. Названия сохранены как в источнике.</p>':"";
+   return '<article class="ency-observed-build"><div class="ency-observed-build-head"><b>Сборка '+(index+1)+'</b><span>'+esc(rates||"Статистика не указана")+'</span></div><div class="ency-build-items">'+itemMarkup+'</div><div class="ency-build-meta"><span><small>Эмблема</small><b>'+esc(emblem)+'</b></span><span><small>Заклинание</small><b>'+esc(spell)+'</b></span></div><p class="ency-build-talents"><small>Таланты</small><b>'+esc(talents||"Не указаны")+'</b></p>'+warning+'</article>';
+  }).join("");
+  host.innerHTML='<div class="ency-build-controls"><label>Позиция<select id="encyBuildPosition">'+positionOptions+'</select></label><label>Ранг<select id="encyBuildRank">'+rankOptions+'</select></label></div>'+(cards||'<p class="ency-unverified">Для выбранной позиции и ранга сборок пока нет.</p>')+
+   '<p class="ency-build-source-note">Наблюдаемые сборки из рейтинговых матчей. WR и частота выбора приведены источником; размер выборки по конкретной сборке не раскрыт, поэтому проценты не следует трактовать как гарантию результата.</p>'+
+   '<p class="ency-data-credit">Источник ответа: '+esc(payload.source?.name||"MLBBDex")+(payload.source?.url?' · <a href="'+esc(payload.source.url)+'" target="_blank" rel="noopener">атрибуция ↗</a>':'')+'. Методика: <a href="'+esc(payload.methodology||"https://mlbbdex.com/ru/methodology")+'" target="_blank" rel="noopener">MLBBDex ↗</a>. Статистика сборок агрегируется через community API arena.rone.dev; обновление источника — еженедельное.</p>';
+  const pos=host.querySelector("#encyBuildPosition"),rank=host.querySelector("#encyBuildRank");
+  if(pos)pos.addEventListener("change",()=>render());
+  if(rank)rank.addEventListener("change",()=>render());
+ };
+ render();
+}
+async function loadEncyHeroBuilds(id,request){
+ const host=$("encyHeroBuilds");if(!host)return;
+ try{
+  let payload=encyHeroBuildCache.get(id);
+  if(!payload){payload=await $api("/hero-builds/"+encodeURIComponent(id));encyHeroBuildCache.set(id,payload)}
+  if(request!==encyKnowledgeRequest||$("encyHeroModal")?.classList.contains("hidden")||$("encyHeroModalContent")?.dataset.heroId!==id)return;
+  renderEncyHeroBuilds(payload,id);
+ }catch(error){
+  if(request!==encyKnowledgeRequest)return;
+  const current=$("encyHeroBuilds");
+  if(current)current.innerHTML='<p class="ency-unverified">Не удалось загрузить реальные сборки. Проверь соединение и попробуй позже.</p>';
+ }
+}
 async function loadEncyHeroKnowledge(id){
   const request=++encyKnowledgeRequest;
   try{
@@ -849,7 +902,7 @@ async function loadEncyHeroKnowledge(id){
    const currentHero=(data.heroCatalog||[]).find(hero=>hero.id===id);
    renderEncyHeroDescription(remote,currentHero,(data.heroProfiles||[]).find(entry=>entry?.id===id)||null);
    renderEncyHeroRemoteProfile(remote);
-   loadEncyHeroGrowth(id,remote,request);
+   loadEncyHeroGrowth(id,remote,request);\n   loadEncyHeroBuilds(id,request);
    const badge=$("encyHeroProfileBadge");if(badge&&remote.profile)badge.textContent=remote.fallback?"Резервная база · 20.11.2026":"Справочные данные загружены";
    const portrait=remote.profile?.images?.portrait;
    if(portrait){
@@ -877,7 +930,7 @@ function renderEncyHeroModal(id){
  const hero=(data.heroCatalog||[]).find(x=>x.id===id);
  if(!hero)return;
  const p=(data.heroProfiles||[]).find(x=>x.id===id);
- const root=$("encyHeroModalContent"),name=hero.displayNameRu||hero.nameEn||hero.id,url=encyHeroPortrait(hero);
+ const root=$("encyHeroModalContent"),name=hero.displayNameRu||hero.nameEn||hero.id,url=encyHeroPortrait(hero);\n  root.dataset.heroId=id;
  const sources=Array.isArray(p?.sources)?p.sources:[];
   const reviewed=p?.patch?.reviewedAt||hero.research?.checkedAt||"Дата проверки не указана";
   const status=p?(p.confidence==="complete"?"Полный справочный профиль":"Частичный справочный профиль"):"Тактический профиль пока не заполнен";
@@ -885,7 +938,7 @@ function renderEncyHeroModal(id){
   '<div class="ency-profile-grid">'+
   '<section class="ency-profile-section wide"><h3>Паспорт персонажа</h3><div id="encyHeroDescription" class="ency-hero-description"><p class="ency-unverified">Загружаем описание персонажа...</p></div></section>'+
   '<section class="ency-profile-section wide"><h3>Умения персонажа</h3><div id="encyHeroSkills" class="ency-skill-list"><p class="ency-unverified">Загружаем описания навыков...</p></div></section>'+
-  '<section class="ency-profile-section wide"><h3>Характеристики и развитие</h3><div id="encyHeroRemoteProfile" class="ency-remote-panel"><p class="ency-unverified">Загружаем характеристики...</p></div></section>'+
+  '<section class="ency-profile-section wide"><h3>Реальные сборки по статистике</h3><div id="encyHeroBuilds" class="ency-remote-panel"><p class="ency-unverified">Загружаем сборки из рейтинговых матчей...</p></div></section>'+\n  '<section class="ency-profile-section wide"><h3>Характеристики и развитие</h3><div id="encyHeroRemoteProfile" class="ency-remote-panel"><p class="ency-unverified">Загружаем характеристики...</p></div></section>'+
   '<section class="ency-profile-section wide"><h3>Проверка данных</h3><p>Статус: '+esc(status)+' · Последняя проверка: '+esc(reviewed)+'. Данные могут меняться после обновлений игры.</p>'+(sources.length?'<div class="ency-source-list">'+sources.map((source,i)=>'<a href="'+esc(source)+'" target="_blank" rel="noopener">Источник '+(i+1)+' ↗</a>').join("")+'</div>':"")+'</section></div>';
   const modalFrame=$("encyHeroModal").querySelector(".ency-hero-modal");
   if(modalFrame)modalFrame.style.setProperty("--hero-accent",encyHeroAccent(hero));
