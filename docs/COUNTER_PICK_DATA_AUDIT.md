@@ -102,3 +102,29 @@ Added a regression set using three measured matchup examples displayed in the Pa
 Each example is injected into a five-enemy draft containing Cyclops, Fredrinn, Terizla, Wanwan, and Belerick. The test verifies that the corresponding candidate remains in the top three for its selected lane, the measured pair remains visible in the recommendation evidence, and occupied enemy picks are never recommended.
 
 Source: https://mlbbhub.com/matchups (Patch 2.2.23 snapshot, accessed 2026-11-25). The page attributes measured edges to Moonton GMS, but does not specify the rank bracket or measurement window, and does not publish pair sample sizes or lane-specific scope. The fixture deliberately leaves rank/window unspecified rather than inferring them from a different provider. It is a regression input for evidence handling, not independent verification of match outcomes or a claim that the listed candidate is always the best full-draft choice.
+
+
+## Full-draft cross-check against the live matchup matrix — 2026-11-25
+
+The 12 most decisive measured pairings shown in MLBBHub's Patch 2.2.23 Matchup Matrix were compared against the local tactical profile links:
+
+| Candidate | Opponent | Measured edge |
+|---|---|---:|
+| Lolita | Cyclops | +9.2 pp |
+| Phoveus | Wanwan | +6.5 pp |
+| Esmeralda | Lolita | +6.2 pp |
+| Lolita | Harley | +4.7 pp |
+| Natalia | Xavier | +4.6 pp |
+| X.Borg | Terizla | +4.2 pp |
+| Valir | Fredrinn | +4.1 pp |
+| Phoveus | Freya | +4.1 pp |
+| Estes | Alice | +3.8 pp |
+| Valir | Balmond | +3.6 pp |
+| Ruby | Sun | +3.5 pp |
+| Xavier | Belerick | +3.4 pp |
+
+All 12 directional edges are represented by the local static matchup links in at least one direction. A new regression test places each target into a five-enemy draft with four additional opponents and checks that the measured-edge candidate remains in the top three for its lane, all three recommendations stay lane-eligible, and no occupied enemy is recommended.
+
+Important distinction: the matrix's measured percentage-point edge is not copied into the local static score. The local profiles retain directional matchup evidence only; the exact pp values remain source-snapshot metadata. These are 12 notable examples selected by the source page, not a random or exhaustive sample of all 1,942 measured edges. Their presence in the local profiles is not independent confirmation because profile research may use the same upstream reference.
+
+Source: https://mlbbhub.com/matchups, Patch 2.2.23 snapshot accessed 2026-11-25. The source says measured edges come from Moonton's GMS ranked statistics, and distinguishes them from direction-only in-game counter lists.
