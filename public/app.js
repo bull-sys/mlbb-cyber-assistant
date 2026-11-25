@@ -223,29 +223,36 @@ function renderHeroPicker(){
  });
  $("heroPickerGrid").innerHTML=filtered.map(h=>heroTileMarkup(h)).join("")||'<p class="hint">Ничего не найдено. Попробуй другую роль или написание.</p>';
 }
+function setHeroPickerOpen(open){
+ const picker=$("heroPicker");
+ picker.classList.toggle("hidden",!open);
+ document.body.classList.toggle("hero-picker-open",open);
+ document.documentElement.classList.toggle("hero-picker-open",open);
+ if(open)picker.scrollTop=0;
+}
 function openHeroPicker(target){
  pickerTarget=target;pickerFilter="all";pickerRoleFilter="all";$("heroPickerSearch").value="";
  document.querySelectorAll("[data-picker-filter]").forEach(b=>b.classList.toggle("active",b.dataset.pickerFilter==="all"));
  $("pickerTitle").textContent=target==="enemies"?"Выбери героя противника":target==="allies"?"Выбери союзного героя":"Выбери своего героя";
- $("heroPicker").classList.remove("hidden");renderHeroPicker();$("heroPickerSearch").focus();
+ setHeroPickerOpen(true);renderHeroPicker();
 }
 function choosePickerHero(value){
  const entries=pickerEntries(),hero=entries.find(h=>h.value===value);if(!hero)return;
  if(pickerTarget==="myHero"){
-  $("myHero").value=value;$("myHeroChoice").textContent=hero.name;draftEntrance={side:"myHero",value};drawTeams();draftEntrance=null;saveDraft();rememberPickerHero(value);$("heroPicker").classList.add("hidden");return;
+  $("myHero").value=value;$("myHeroChoice").textContent=hero.name;draftEntrance={side:"myHero",value};drawTeams();draftEntrance=null;saveDraft();rememberPickerHero(value);setHeroPickerOpen(false);return;
  }
  const arr=pickerTarget==="enemies"?enemies:allies;
  if(arr.length>=(pickerTarget==="allies"?4:5))return toast("Команда уже заполнена");
  if(arr.includes(value))return toast("Этот герой уже выбран");
  invalidateOwnPick();arr.push(value);draftEntrance={side:pickerTarget,value};drawTeams();draftEntrance=null;saveDraft();rememberPickerHero(value);renderHeroPicker();
- if(arr.length>=(pickerTarget==="allies"?4:5)){$("heroPicker").classList.add("hidden");toast("Команда заполнена");}
+ if(arr.length>=(pickerTarget==="allies"?4:5)){setHeroPickerOpen(false);toast("Команда заполнена");}
 }
 $("openEnemyPicker").onclick=()=>openHeroPicker("enemies");
 $("openAllyPicker").onclick=()=>openHeroPicker("allies");
 
-$("closeHeroPicker").onclick=()=>$("heroPicker").classList.add("hidden");
-document.addEventListener("keydown",e=>{if(e.key==="Escape")$("heroPicker").classList.add("hidden")});
-$("heroPicker").onclick=e=>{if(e.target===$("heroPicker"))$("heroPicker").classList.add("hidden")};
+$("closeHeroPicker").onclick=()=>setHeroPickerOpen(false);
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("heroPicker").classList.contains("hidden"))setHeroPickerOpen(false)});
+$("heroPicker").onclick=e=>{if(e.target===$("heroPicker"))setHeroPickerOpen(false)};
 $("heroPickerGrid").onclick=e=>{const tile=e.target.closest("button[data-picker-value]");if(tile)choosePickerHero(tile.dataset.pickerValue)};
 $("heroPickerSearch").addEventListener("input",renderHeroPicker);
 $("heroPicker").querySelector(".picker-tabs").onclick=e=>{const b=e.target.closest("[data-picker-filter]");if(!b)return;pickerFilter=b.dataset.pickerFilter;document.querySelectorAll("[data-picker-filter]").forEach(x=>x.classList.toggle("active",x===b));renderHeroPicker()};
