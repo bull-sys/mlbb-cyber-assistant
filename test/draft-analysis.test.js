@@ -823,10 +823,11 @@ test("positive and negative ranked matchup signals remain informational, not mat
   const enemy = heroProfiles.find(profile => profile.names.ru === "Эйдора");
   const secondEnemy = heroProfiles.find(profile => profile.names.ru === "Тигрил");
   const candidate = heroProfiles.find(profile => profile.names.ru === "Кэрри");
-  const base = run({ lane: "Золото", enemies: ["Эйдора", "Тигрил"] });
+  const base = run({ lane: "Золото", enemies: ["Эйдора", "Тигрил"], myHero: "Кэрри" });
   const result = run({
     lane: "Золото",
     enemies: ["Эйдора", "Тигрил"],
+    myHero: "Кэрри",
     rankedMatchups: {
       [enemy.id]: {
         [candidate.id]: {
@@ -849,6 +850,9 @@ test("positive and negative ranked matchup signals remain informational, not mat
   assert.deepEqual(result.counters.map(item => item.score), base.counters.map(item => item.score));
   assert.deepEqual(result.counters.map(item => item.matchedEnemies), base.counters.map(item => item.matchedEnemies));
   assert.deepEqual(result.counters.map(item => item.riskyEnemies), base.counters.map(item => item.riskyEnemies));
+  assert.deepEqual(result.buildDetails, base.buildDetails);
+  assert.deepEqual(result.bootRecommendation, base.bootRecommendation);
+  assert.deepEqual(result.talentRecommendations, base.talentRecommendations);
   const recommendation = result.counters.find(item => item.name === candidate.names.ru);
   if (recommendation) {
     assert.equal(recommendation.profileEvidence.rankedMatchups.length, 2);
