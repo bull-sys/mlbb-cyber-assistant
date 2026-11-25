@@ -3,7 +3,7 @@ import { items } from "../server/data.js";
 
 const BASE = "https://mlbbdex.com";
 const slugify = value => String(value || "")
-  .normalize("NFKD").replace(/[\\u0300-\\u036f]/gu, "")
+  .normalize("NFKD").replace(/[\u0300-\u036f]/gu, "")
   .toLowerCase().replace(/&/g, "and").replace(/['’]/g, "")
   .replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
 
