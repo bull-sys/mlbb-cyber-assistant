@@ -232,6 +232,6 @@ test("item records expose curated community nicknames and the current Sky Pierce
 
 
 test("all 104 item records resolve to a deterministic MLBBDex artwork URL", () => {
- assert.match(appSource,/visuels\/objets\/"+slug\+"\.webp/);
+ assert.ok(appSource.includes('return remote?.image||("https://mlbbdex.com/visuels/objets/"+slug+".webp");'));
  assert.match(appSource,/remote\?\.image\|\|\("https:\/\/mlbbdex\.com\/visuels\/objets\//);
 });
