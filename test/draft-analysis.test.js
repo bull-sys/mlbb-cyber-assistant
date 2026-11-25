@@ -900,3 +900,52 @@ test("live-patch measured matchup fixtures remain visible inside five-enemy draf
     assert.ok(result.counters.every(item => !enemyNames.includes(item.name)));
   }
 });
+
+
+test("twelve live-patch measured counter edges survive realistic five-enemy draft contexts", () => {
+  // Patch 2.2.23 notable ranked edges published by MLBBHub on 2026-11-25.
+  // The local matchup links are checked separately from the measured pp value:
+  // pp is not added to the local score unless supplied by the live ranked adapter.
+  const fixtures = [
+    { candidate: "Lolita", opponent: "Cyclops", lane: "Роум", pp: 9.2 },
+    { candidate: "Phoveus", opponent: "Wanwan", lane: "Опыт", pp: 6.5 },
+    { candidate: "Esmeralda", opponent: "Lolita", lane: "Опыт", pp: 6.2 },
+    { candidate: "Lolita", opponent: "Harley", lane: "Роум", pp: 4.7 },
+    { candidate: "Natalia", opponent: "Xavier", lane: "Лес", pp: 4.6 },
+    { candidate: "X.Borg", opponent: "Terizla", lane: "Опыт", pp: 4.2 },
+    { candidate: "Valir", opponent: "Fredrinn", lane: "Мид", pp: 4.1 },
+    { candidate: "Phoveus", opponent: "Freya", lane: "Опыт", pp: 4.1 },
+    { candidate: "Estes", opponent: "Alice", lane: "Роум", pp: 3.8 },
+    { candidate: "Valir", opponent: "Balmond", lane: "Мид", pp: 3.6 },
+    { candidate: "Ruby", opponent: "Sun", lane: "Опыт", pp: 3.5 },
+    { candidate: "Xavier", opponent: "Belerick", lane: "Мид", pp: 3.4 }
+  ];
+  const fillers = ["Tigreal", "Nana", "Miya", "Nolan"];
+
+  for (const fixture of fixtures) {
+    const candidate = heroProfiles.find(profile => profile.names.en === fixture.candidate);
+    const opponent = heroProfiles.find(profile => profile.names.en === fixture.opponent);
+    assert.ok(candidate, "catalogue contains candidate " + fixture.candidate);
+    assert.ok(opponent, "catalogue contains opponent " + fixture.opponent);
+
+    const localPositive =
+      (candidate.matchups?.strongAgainst || []).includes(opponent.id) ||
+      (opponent.matchups?.weakAgainst || []).includes(candidate.id);
+    assert.ok(localPositive, fixture.candidate + " > " + fixture.opponent + " exists in local matchup evidence");
+
+    const enemyIds = [fixture.opponent, ...fillers.filter(name => name !== fixture.candidate && name !== fixture.opponent)];
+    const enemyNames = enemyIds.map(name => heroProfiles.find(profile => profile.names.en === name)?.names.ru).filter(Boolean);
+    assert.equal(enemyNames.length, 5, fixture.candidate + " five-enemy fixture resolves");
+
+    const result = run({ lane: fixture.lane, enemies: enemyNames });
+    assert.equal(result.counters.length, 3, fixture.candidate + " returns three recommendations");
+    assert.ok(result.counters.every(item => item.role === fixture.lane), fixture.candidate + " recommendations stay in lane");
+    assert.ok(result.counters.every(item => !enemyNames.includes(item.name)), fixture.candidate + " does not recommend an occupied enemy");
+    assert.ok(result.counters.every(item => item.reason?.trim()), fixture.candidate + " recommendations have explanations");
+
+    const recommendation = result.counters.find(item => item.name === candidate.names.ru);
+    assert.ok(recommendation, fixture.candidate + " remains in the top three against " + fixture.opponent + " in a five-enemy draft");
+    assert.ok(recommendation.matchedEnemies.includes(opponent.names.ru));
+    assert.ok(["direct-counter", "mixed-matchup"].includes(recommendation.matchupType));
+  }
+});
