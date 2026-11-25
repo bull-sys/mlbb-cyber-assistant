@@ -1603,3 +1603,30 @@ body.ency-item-modal-open{overflow:hidden!important;overscroll-behavior:none}
 .ency-filter-block .chip.active{border-color:#54dff3;background:linear-gradient(120deg,rgba(24,91,112,.76),rgba(26,49,72,.94));color:#e7fbff;box-shadow:0 0 13px rgba(55,202,231,.13)}
 .ency-filter-block .chip span{display:inline-grid;place-items:center;min-width:17px;height:17px;margin-left:3px;border-radius:5px;background:rgba(4,12,22,.55);color:#8dddeb;font-size:9px}
 @media(max-width:520px){.ency-filter-block{padding:9px}.ency-filter-block .chips{margin-bottom:7px}}
+
+/* CYBER ARENA · responsive encyclopedia filter containment */
+#page-ency,
+#page-ency>.card,
+#encyFilters,
+#encyItemCategories,
+#encyAdvancedFilters,
+.ency-filter-block,
+.ency-filter-block .chips{min-width:0;max-width:100%}
+#page-ency{width:100%;overflow-x:clip}
+#page-ency>.card{width:100%;overflow:hidden}
+#encyFilters{display:flex;flex-wrap:wrap;gap:7px}
+#encyFilters .chip{flex:0 0 auto;max-width:100%}
+#encyItemCategories,
+.ency-filter-block .chips{width:100%;min-width:0;max-width:100%;overflow-x:auto;overflow-y:hidden;flex-wrap:nowrap;overscroll-behavior-inline:contain;touch-action:pan-x}
+#encyAdvancedFilters{width:100%;grid-template-columns:minmax(0,1fr)}
+.ency-filter-block{width:100%;min-width:0;max-width:100%;overflow:hidden}
+.ency-filter-block>small{max-width:100%;overflow-wrap:anywhere}
+.ency-filter-block .chip{flex:0 0 auto;max-width:none}
+@media(max-width:650px){
+ #page-ency>.card{padding:12px}
+ #encyFilters{gap:6px}
+ #encyFilters .chip{min-height:38px;padding:7px 9px;font-size:10px}
+ #encyAdvancedFilters{gap:8px}
+ .ency-filter-block{padding:9px 8px}
+ #encyItemCategories{padding-inline:1px}
+}
