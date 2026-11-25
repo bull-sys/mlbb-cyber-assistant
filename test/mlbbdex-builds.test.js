@@ -47,6 +47,8 @@ test("preserves source item names when local catalog mapping is missing", () => 
   assert.equal(build.items[0].catalogMatched, false);
   assert.equal(build.catalogCoverage.unmatchedItems[0], "Uncatalogued Item");
   assert.equal(build.emblem.catalogMatched, false);
+  assert.equal(build.winRate, null);
+  assert.equal(build.pickRate, null);
 });
 
 test("rejects malformed build payloads instead of inventing an empty build", () => {
