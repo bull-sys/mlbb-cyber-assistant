@@ -58,7 +58,7 @@ const names = (archetype, threats) =>
 
 test("mage counter-build selects magic defense and anti-heal without physical attack items", () => {
   const result = names("Маг / взрывной урон", ["heal", "magic"]);
-  assert.ok(result.includes("Щит Афины"));
+  assert.ok(result.includes("Щит Валькирии"));
   assert.ok(result.includes("Пылающий жезл"));
   assert.ok(!result.includes("Трезубец"));
   assert.ok(!result.includes("Злобный рык"));
@@ -79,7 +79,7 @@ test("physical assassin build uses penetration against a tank and excludes magic
 
 test("tank build prioritizes magic protection and survival against burst", () => {
   const result = names("Танк / инициатор", ["magic", "burst"]);
-  assert.ok(result.includes("Щит Афины"));
+  assert.ok(result.includes("Щит Валькирии"));
   assert.ok(result.includes("Бессмертие"));
 });
 
