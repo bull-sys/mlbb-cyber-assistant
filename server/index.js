@@ -732,6 +732,26 @@ function analyze({lane, enemies = [], allies = [], myHero = "", rankedMatchups =
     : selected?.type === "support" ? "Поддержки"
     : selected?.type === "fighter" ? "Бойца"
     : "Убийцы";
+  const selectedEmblemProfile = selected?.profile?.emblemProfile || null;
+  const selectedEmblemData = selectedEmblemProfile
+    ? emblems.find(entry => entry.id === selectedEmblemProfile.emblemId) || null
+    : null;
+  const selectedTalentRecommendations = (selectedEmblemProfile?.talentIds || [])
+    .map((id, index) => {
+      const talent = talents.find(entry => entry.id === id);
+      return talent ? {
+        id: talent.id,
+        tier: talent.tier,
+        name: talent.name,
+        description: talent.description,
+        effect: talent.effect,
+        source: talent.source,
+        checkedAt: talent.checkedAt,
+        verification: talent.verification || "listed"
+      } : null;
+    })
+    .filter(Boolean)
+    .sort((a, b) => a.tier - b.tier);
 
   return {
     threats,
@@ -754,7 +774,19 @@ function analyze({lane, enemies = [], allies = [], myHero = "", rankedMatchups =
     bootRecommendation,
     roamRecommendation,
     emblem: selected ? emblem : null,
-    talentTiers: selected ? ["Разрыв", "Мастер-убийца", "Серия убийств"] : [],
+    emblemDetails: selectedEmblemData ? {
+      id: selectedEmblemData.id,
+      name: selectedEmblemData.name,
+      attributes: selectedEmblemData.attributes,
+      description: selectedEmblemData.description,
+      source: selectedEmblemData.source,
+      checkedAt: selectedEmblemData.checkedAt,
+      method: selectedEmblemProfile.method || "Классовый ориентир из профиля героя",
+      notes: selected.profile.emblemNotes || []
+    } : null,
+    talentTiers: selectedTalentRecommendations.map(entry => entry.name),
+    talentRecommendations: selectedTalentRecommendations,
+    talentNotes: selected?.profile?.talentNotes || [],
     spell: lane === "Лес" ? "Возмездие" : "Вспышка",
     timing: {
       early: "Контролируй ключевые участки карты и отслеживай перемещения противника.",
