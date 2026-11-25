@@ -95,3 +95,21 @@ test("maps every documented MLBBDex battle spell to the local catalogue", () => 
     assert.equal(result.positions[0].ranks.all.builds[0].catalogCoverage.totalSpells, 1, sourceSpell);
   }
 });
+
+
+test("rejects malformed or out-of-range observed rates instead of converting them to zero", () => {
+  const result = normalizeHeroBuildPayload({
+    data: { Mid: { all: [
+      { items: [], talents: [], spell: "Flicker", winRate: "", pickRate: " " },
+      { items: [], talents: [], spell: "Flicker", winRate: -1, pickRate: 101 },
+      { items: [], talents: [], spell: "Flicker", winRate: "54.25", pickRate: "3.5" }
+    ] } }
+  });
+  const builds = result.positions[0].ranks.all.builds;
+  assert.equal(builds[0].winRate, null);
+  assert.equal(builds[0].pickRate, null);
+  assert.equal(builds[1].winRate, null);
+  assert.equal(builds[1].pickRate, null);
+  assert.equal(builds[2].winRate, 54.25);
+  assert.equal(builds[2].pickRate, 3.5);
+});
