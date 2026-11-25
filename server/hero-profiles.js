@@ -3272,7 +3272,7 @@ const rawHeroProfiles = [
         "Линия опыта"
       ],
       "combat": {
-        "damage": "physical",
+        "damage": "physical_and_true",
         "range": "melee",
         "mobility": "high",
         "burst": "high",
