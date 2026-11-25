@@ -415,3 +415,22 @@ Sources checked:
 - https://liquipedia.net/mobilelegends/Leomord
 
 This is profile coverage and damage-type validation, not a claim that all 117 profiles' qualitative ratings have been independently re-reviewed against in-client match footage.
+
+
+### Missing tactical profiles completed — 2026-11-25
+
+Added the 16 hero profiles that were present in the 133-hero catalog but absent from the tactical profile array: Lesley, Lolita, Luo Yi, Lylia, Martis, Aamon, Alice, Angela, Odette, Phoveus, Popol and Kupa, Ruby, Saber, Selena, Silvanna and Sora.
+
+Each new record now includes the complete 12-field combat block, four skill/mechanics notes, strengths, weaknesses, itemization caveats, a teamfight plan, target priorities, tactical cautions and HTTPS references. The records use the catalog's reviewed role and lane values. All new profiles remain `partial`; this does not claim professional VOD review or complete patch-by-patch validation.
+
+Matchup arrays and `matchupEvidence` are included only for the existing 16-entry ranked matchup set already specified by the repository regression suite. These are statistical signals, not deterministic counter guarantees. Synergy arrays remain empty where no separately reviewed evidence is recorded.
+
+Damage classification is deliberately explicit:
+- Aamon, Alice, Angela, Luo Yi, Lylia, Odette and Selena are classified as magic damage.
+- Lesley, Lolita, Popol and Kupa, Ruby, Saber, Silvanna and Sora are classified as physical damage.
+- Martis is `physical_and_true` because his ultimate can deal true damage below its execution threshold.
+- Phoveus is `physical_and_magic`; his kit includes both damage types.
+
+Phoveus's mixed damage is important for defensive item recommendations: it must not be treated as purely physical or purely magical. Sora's True Art name is not treated as evidence of true damage; his current skill descriptions list physical damage.
+
+References for the new mechanics and role/lane checks are recorded in each hero profile and in `server/hero-catalog.js`. The 16 new profiles bring the tactical profile set to the full 133-hero catalog once the regression suite passes. The test run for this commit is not yet confirmed.
