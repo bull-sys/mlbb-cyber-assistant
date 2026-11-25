@@ -902,7 +902,8 @@ async function loadEncyHeroKnowledge(id){
    const currentHero=(data.heroCatalog||[]).find(hero=>hero.id===id);
    renderEncyHeroDescription(remote,currentHero,(data.heroProfiles||[]).find(entry=>entry?.id===id)||null);
    renderEncyHeroRemoteProfile(remote);
-   loadEncyHeroGrowth(id,remote,request);\n   loadEncyHeroBuilds(id,request);
+   loadEncyHeroGrowth(id,remote,request);
+   loadEncyHeroBuilds(id,request);
    const badge=$("encyHeroProfileBadge");if(badge&&remote.profile)badge.textContent=remote.fallback?"Резервная база · 20.11.2026":"Справочные данные загружены";
    const portrait=remote.profile?.images?.portrait;
    if(portrait){
