@@ -462,11 +462,10 @@ test("magic-damage assassin is not treated as a physical attacker by class", () 
   assert.ok(!names.includes("Злобный рык"));
 });
 
-test("physical penetration responds to durable fighter frontline, not only Tank class", () => {
+test("Malefic Roar is not recommended against a durable fighter without explicit physical-armor evidence", () => {
   const result = run({ lane: "Лес", myHero: "Роджер", enemies: ["Леоморд"] });
   const penetration = result.buildDetails.find(item => item.name === "Злобный рык");
-  assert.ok(penetration);
-  assert.ok(penetration.against.includes("Леоморд"));
+  assert.equal(penetration, undefined);
 });
 
 test("Radiant Armor is reserved for explicit high sustained magic DPS", () => {
