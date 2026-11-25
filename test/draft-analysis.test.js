@@ -154,12 +154,12 @@ test("allied composition is considered without restricting the candidate pool to
     enemies: ["Минотавр", "Эйдора", "Нана"]
   });
 
-  assert.ok(result.build.includes("Щит Афины"));
-  const athena = items.find(item => item.name === "Щит Афины");
+  assert.ok(result.build.includes("Щит Валькирии"));
+  const athena = items.find(item => item.name === "Щит Валькирии");
   assert.ok(athena.tags.includes("magic-defense"));
   assert.ok(athena.tags.includes("anti-magic-burst"));
-  assert.equal(items.filter(item => item.name === "Щит Афины").length, 1);
-  const athenaRecommendation = result.buildDetails.find(item => item.name === "Щит Афины");
+  assert.equal(items.filter(item => item.name === "Щит Валькирии").length, 1);
+  const athenaRecommendation = result.buildDetails.find(item => item.name === "Щит Валькирии");
   assert.ok(athenaRecommendation);
   assert.ok(athenaRecommendation.against.includes("Эйдора"));
   assert.ok(athenaRecommendation.against.includes("Нана"));
@@ -264,7 +264,7 @@ test("team plan adapts to enemy composition threats", () => {
 
 test("defensive, movement, and jungle utility catalogue entries have source and structured metadata", () => {
   const required = [
-    "Antique Cuirass", "Athena's Shield", "Black Ice Shield",
+    "Antique Cuirass", "Valkyrie's Shield", "Black Ice Shield",
     "Dreadnaught Armor", "Healing Necklace", "Hero's Ring",
     "Leather Jerkin", "Magic Resist Cloak", "Molten Essence",
     "Silence Robe", "Steel Legplates", "Vitality Crystal",
@@ -293,7 +293,7 @@ test("counter build adapts to Roger versus Helcurt without suggesting mage or ma
   const names = result.buildDetails.map(item => item.name);
   assert.ok(names.includes("Древняя кираса"));
   assert.ok(names.includes("Бессмертие"));
-  assert.ok(!names.includes("Щит Афины"));
+  assert.ok(!names.includes("Щит Валькирии"));
   assert.ok(!names.includes("Ветер природы"));
   assert.ok(result.buildDetails.every(item => item.against.includes("Хелкарт")));
   assert.ok(result.enemyMatchups.find(item => item.name === "Хелкарт").counterItems.length > 0);
@@ -303,9 +303,9 @@ test("counter build responds separately to healing, attack speed, and magic burs
   const result = run({ lane: "Золото", myHero: "Мия", enemies: ["Эйдора", "Минотавр", "Мия"] });
   const names = result.buildDetails.map(item => item.name);
   assert.ok(names.includes("Господство льда"));
-  assert.ok(names.includes("Щит Афины"));
+  assert.ok(names.includes("Щит Валькирии"));
   assert.ok(names.includes("Шипованная броня"));
-  assert.ok(result.enemyMatchups.find(item => item.name === "Эйдора").counterItems.some(item => item.name === "Щит Афины"));
+  assert.ok(result.enemyMatchups.find(item => item.name === "Эйдора").counterItems.some(item => item.name === "Щит Валькирии"));
   assert.ok(result.enemyMatchups.find(item => item.name === "Минотавр").counterItems.some(item => item.name === "Господство льда"));
 });
 
