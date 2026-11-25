@@ -895,6 +895,7 @@ async function loadEncyHeroBuilds(id,request){
 }
 async function loadEncyHeroKnowledge(id){
   const request=++encyKnowledgeRequest;
+  loadEncyHeroBuilds(id,request);
   try{
    let remote=encyRemoteKnowledge.get(id);
    if(!remote){remote=await $api("/hero-knowledge/"+encodeURIComponent(id));encyRemoteKnowledge.set(id,remote)}
@@ -903,7 +904,6 @@ async function loadEncyHeroKnowledge(id){
    renderEncyHeroDescription(remote,currentHero,(data.heroProfiles||[]).find(entry=>entry?.id===id)||null);
    renderEncyHeroRemoteProfile(remote);
    loadEncyHeroGrowth(id,remote,request);
-   loadEncyHeroBuilds(id,request);
    const badge=$("encyHeroProfileBadge");if(badge&&remote.profile)badge.textContent=remote.fallback?"Резервная база · 20.11.2026":"Справочные данные загружены";
    const portrait=remote.profile?.images?.portrait;
    if(portrait){
