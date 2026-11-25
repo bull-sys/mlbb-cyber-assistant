@@ -74,10 +74,15 @@ test("maps Weapon Master but preserves generic All emblem as unmatched", () => {
 test("maps every documented MLBBDex battle spell to the local catalogue", () => {
   const spells = [
     ["Petrify", "Окаменение"],
+    ["Flicker", "Вспышка"],
+    ["Retribution", "Возмездие"],
+    ["Inspire", "Вдохновение"],
+    ["Purify", "Очищение"],
+    ["Flameshot", "Пламя"],
     ["Aegis", "Щит"],
-    ["Vengeance", "Месть"],
+    ["Sprint", "Спринт"],
     ["Revitalize", "Исцеление"],
-    ["Flameshot", "Пламя"]
+    ["Vengeance", "Месть"]
   ];
   for (const [sourceSpell, localName] of spells) {
     const result = normalizeHeroBuildPayload({
@@ -86,5 +91,7 @@ test("maps every documented MLBBDex battle spell to the local catalogue", () => 
     const spell = result.positions[0].ranks.all.builds[0].spell;
     assert.equal(spell.name, localName, sourceSpell);
     assert.equal(spell.catalogMatched, true, sourceSpell);
+    assert.equal(result.positions[0].ranks.all.builds[0].catalogCoverage.matchedSpells, 1, sourceSpell);
+    assert.equal(result.positions[0].ranks.all.builds[0].catalogCoverage.totalSpells, 1, sourceSpell);
   }
 });
