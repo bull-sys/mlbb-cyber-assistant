@@ -68,7 +68,7 @@ On 2026-11-24, the automated scenario matrix exercised every one of the 133 cata
 Five additional multi-enemy scenarios covered 3- and 5-hero enemy drafts with allied picks present.
 
 The scoring model was then tightened:
-- Direct ranked matchup evidence is the primary scoring signal.
+- Local reviewed matchup evidence remains a counter-pick scoring signal; rank-scoped aggregates are displayed separately and are not a scoring signal.
 - Allied synergy and general composition-fit bonuses are combined and capped at +2 total, so they cannot accumulate across allies and overwhelm matchup evidence.
 - Direct matchup candidates win score ties against secondary-only options.
 - A candidate with both positive and negative matchup signals is labelled `mixed-matchup`, not as an unqualified direct counter; the report exposes both the advantage and risk.
@@ -345,3 +345,20 @@ The same pass corrected burst-threat handling so both `high` and `very_high` bur
 Build-feed validation also exposed three battle spells that were present in MLBBDex build records but absent from the local spell list: Petrify, Aegis and Vengeance. The local Russian spell catalog now includes Окаменение, Щит and Месть, and adapter tests cover their mappings. The full-roster audit now measures spell mapping coverage alongside items, emblems and talents; the exact roster-wide spell totals are intentionally not stated until the next full audit run completes.
 
 The automated CI workflow now syntax-checks the scheduled full-roster audit script. Its live API crawl remains manual/weekly and paced sequentially to avoid the HTTP 429 rate limiting observed during concurrent requests.
+
+
+## Rank evidence isolation and counter-build audit follow-up — 2026-11-25
+
+A code review found that rank-filtered Rone Arena matchup values were being added to counter-pick scores. The ranked branch also skipped the local profile matchup check for the same enemy/candidate pair. This coupled two distinct evidence sources and allowed rank selection to change the recommendation order or suppress local matchup evidence.
+
+The current implementation separates them:
+- Local profile matchup links remain the evidence used by the counter-pick score.
+- Rank-filtered Rone Arena values are retained in each returned candidate's `profileEvidence.rankedMatchups` for transparency only. They do not add or subtract score, change `matchedEnemies` / `riskyEnemies`, set a counter verdict, or affect sorting.
+- Local matchup evidence is evaluated independently even when a ranked aggregate exists for the same pair.
+- Rank selection still filters the observed MLBBDex build by the selected lane and rank. It does not change the mechanical counter-item rules.
+- Counter-items continue to use the selected hero's explicit damage profile and the enemy's explicit damage, burst, sustain, attack-speed, control and durability evidence. Hero class alone is not used to infer physical or magic damage.
+- The report explicitly says ranked aggregates are not lane-specific and do not affect counter-pick ranking. Rank labels for Honor and Glory are mapped to their correct Russian names.
+
+Regression tests compare candidate order, scores and matchup labels with and without ranked evidence, verify that positive/negative rank aggregates remain informational, and retain local matchup evidence when rank aggregates are present. CI on the current branch passed all tests, the live item catalog/artwork audit, scheduled-audit script syntax validation and the production Docker build.
+
+This is a code-level and regression audit. A fresh full 133-hero MLBBDex crawl is still pending; the previously recorded 2,913-build coverage report remains the latest roster-wide audit. No Render deployment was performed.
