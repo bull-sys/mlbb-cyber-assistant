@@ -612,9 +612,17 @@ function analyze({lane, enemies = [], allies = [], myHero = "", rankedMatchups =
     }).map(hero => hero.name);
     if (tags.has("magic-dps") && magicDpsTargets.length) add(7, "Полезен против повторяющегося магического урона", magicDpsTargets);
 
-    const speedTargets = enemy.filter(hero => (hero.tags || []).includes("attack-speed")).map(hero => hero.name);
-    if (tags.has("anti-attack-speed") && speedTargets.length) add(9, "Ослабляет героев, зависящих от частых базовых атак", speedTargets);
-    if (tags.has("attack-speed") && speedTargets.length && item.name === "Шипованная броня") add(7, "Даёт защитный ответ против частых физических атак", speedTargets);
+    const speedThreats = enemy.filter(hero => (hero.tags || []).includes("attack-speed"));
+    const speedTargets = speedThreats.map(hero => hero.name);
+    const physicalSpeedTargets = speedThreats.filter(hero =>
+      hasCombatDamageKind(enemyProfileByName.get(hero.name), hero, "physical")
+    ).map(hero => hero.name);
+    if (tags.has("anti-attack-speed") && speedTargets.length) {
+      add(9, "Ослабляет героев, зависящих от частых базовых атак", speedTargets);
+    }
+    if (tags.has("attack-speed") && physicalSpeedTargets.length && item.name === "Шипованная броня") {
+      add(7, "Даёт защитный ответ против частых физических базовых атак", physicalSpeedTargets);
+    }
 
     const physicalTargets = enemy.filter(hero => {
       const profile = enemyProfileByName.get(hero.name);
