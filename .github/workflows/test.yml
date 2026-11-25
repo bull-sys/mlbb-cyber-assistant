@@ -26,6 +26,8 @@ jobs:
         run: npm install --no-audit --no-fund
       - name: Run test suite
         run: npm test
+      - name: Validate scheduled build audit script syntax
+        run: node --check scripts/audit-mlbbdex-build-coverage.mjs
       - name: Audit live item catalog and artwork
         run: node scripts/audit-item-assets.mjs
       - name: Build production Docker image
