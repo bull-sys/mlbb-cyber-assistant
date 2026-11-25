@@ -510,7 +510,9 @@ test("counter build responds separately to healing, attack speed, and magic burs
   assert.ok(names.includes("Щит Валькирии"));
   assert.ok(names.includes("Наплечник наказания"));
   assert.ok(names.includes("Шипованная броня"));
-  const antiHeal = result.buildDetails.find(item => item.tags.includes("anti-heal"));
+  const antiHeal = result.buildDetails.find(item =>
+    items.find(source => source.name === item.name)?.tags.includes("anti-heal")
+  );
   assert.ok(antiHeal, "the build includes one anti-heal option");
   assert.ok(antiHeal.against.includes("Минотавр"));
   assert.ok(result.enemyMatchups.find(item => item.name === "Эйдора").counterItems.some(item => item.name === "Щит Валькирии"));
