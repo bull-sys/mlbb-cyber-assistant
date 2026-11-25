@@ -1,6 +1,6 @@
 import { heroReferenceData, HERO_REFERENCE_SOURCE } from "./hero-reference-data.js";
 import { heroLoreById, HERO_LORE_SOURCE } from "./hero-lore-data.js";
-import { items as localItems, emblems as localEmblems, talents as localTalents } from "./data.js";
+import { items as localItems, emblems as localEmblems, talents as localTalents, spells as localSpells } from "./data.js";
 
 const BASE = "https://mlbbdex.com";
 const TTL = 6 * 60 * 60 * 1000;
@@ -218,7 +218,7 @@ function normalizeObservedBuild(build) {
   const itemByEnglish = new Map(localItems.map(item => [normalizeBuildName(item.englishName), item]).filter(([name]) => name));
   const emblemByEnglish = new Map(localEmblems.flatMap(item => {
     const shortName = String(item.nameEn || "").startsWith("Custom ") ? String(item.nameEn).slice(7) : item.nameEn;
-    const names = [item.nameEn, shortName, item.id, ...(item.id === "common" ? ["All"] : [])];
+    const names = [item.nameEn, shortName, item.id];
     return names.map(name => [normalizeBuildName(name), item]).filter(([name]) => name);
   }));
   const talentByEnglish = new Map(localTalents.flatMap(item => [[normalizeBuildName(item.nameEn), item], ...(item.id === "weapon-master" ? [[normalizeBuildName("Weapons Master"), item]] : [])]).filter(([name]) => name));
@@ -244,7 +244,7 @@ function normalizeObservedBuild(build) {
     retribution: "Возмездие",
     inspire: "Вдохновение",
     purify: "Очищение",
-    flameshot: "Огненный выстрел",
+    flameshot: "Пламя",
     aegis: "Щит",
     sprint: "Спринт",
     revitalize: "Исцеление",
@@ -260,15 +260,22 @@ function normalizeObservedBuild(build) {
     emblem: emblem ? { id: emblem.id, name: emblem.name, nameEn: emblemName, catalogMatched: true } :
       (emblemName ? { id: null, name: emblemName, nameEn: emblemName, catalogMatched: false } : null),
     talents,
-    spell: spell ? { name: spell, nameEn: spellEn, catalogMatched: Boolean(spellEn && spell !== spellEn) } : null,
+    spell: spell ? { name: spell, nameEn: spellEn, catalogMatched: localSpells.includes(spell) } : null,
     winRate,
     pickRate,
     catalogCoverage: {
       matchedItems: items.filter(item => item.catalogMatched).length,
       totalItems: items.length,
       unmatchedItems: items.filter(item => !item.catalogMatched).map(item => item.englishName),
+      matchedEmblems: emblem?.catalogMatched ? 1 : 0,
+      totalEmblems: emblemName ? 1 : 0,
+      unmatchedEmblems: emblemName && !emblem?.catalogMatched ? [emblemName] : [],
       matchedTalents: talents.filter(item => item.catalogMatched).length,
-      totalTalents: talents.length
+      totalTalents: talents.length,
+      unmatchedTalents: talents.filter(item => !item.catalogMatched).map(item => item.nameEn),
+      matchedSpells: spell?.catalogMatched ? 1 : 0,
+      totalSpells: spellEn ? 1 : 0,
+      unmatchedSpells: spell && !spell.catalogMatched ? [spellEn] : []
     }
   };
 }
