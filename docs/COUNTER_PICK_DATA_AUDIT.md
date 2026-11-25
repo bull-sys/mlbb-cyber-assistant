@@ -225,3 +225,58 @@ No missing rank, window, lane, or sample metadata should be filled from another 
 ### Current conclusion
 
 MLBBHub is a useful **manual QA/reference surface** and its public matrix supports stronger source-aware review than a bare counter list. It is not yet a verified machine integration target. The next safe step is to request the maintainer's supported data interface and clarify lane-filter semantics. If that is not available, use explicitly dated, reviewed snapshots for offline QA only; do not scrape the page into the live engine.
+
+
+## MLBBDex public API feasibility review — 2026-11-25
+
+### Confirmed public contract
+
+MLBBDex documents a public JSON API at `https://mlbbdex.com/api/v1`, with no API key or registration. Its API documentation explicitly requires source attribution from each response. The documented endpoints relevant to draft analysis are:
+
+- `GET /heroes/{slug}/counters`: measured counter relationships, grouped by rank.
+- `GET /heroes/{slug}/builds`: observed builds grouped by position and rank.
+- `GET /heroes?lane={Gold|Jungle|Mid|Exp|Roam}`: hero catalogue filtered by lane.
+- `GET /heroes?role={Tank|Fighter|Assassin|Mage|Marksman|Support}`: catalogue filtered by role.
+
+The live Argus counter response was inspected. Its `data` object has rank keys `all`, `epic`, `legend`, `mythic`, `honor`, and `glory`. Each rank has `strong`, `weak`, and `winRate`; each strong/weak entry contains a hero `slug` and signed `advantage`. The example returned six strong and six weak entries per rank. The response also includes a `source` object with name, URL, and license.
+
+The live Argus builds response groups builds by position (the example includes `Exp`) and rank. Each build includes item names, emblem, talents, spell, win rate, and pick rate. This is materially more useful for lane-specific build research than the current generic counter-build heuristic, but it is not matchup evidence.
+
+### Source lineage and independence
+
+The API documentation says its ranked win/pick/ban rates and counterpicks are obtained through the community Rone Arena API. The repository's existing runtime ranked-matchup adapter also calls Rone Arena directly.
+
+Therefore MLBBDex counters and the current Rone adapter are **not independent statistical sources**. MLBBDex is a useful alternate normalized representation and a documented public endpoint, but adding its counter values on top of Rone values would double-count substantially overlapping upstream evidence. It must not be presented as a second independent confirmation.
+
+The public API docs state that data is synchronized weekly; the documentation snapshot inspected on 2026-11-25 reported its last sync as 2026-11-20. The counters endpoint itself does not expose a per-pair sample size or a clearly specified observation window in the inspected response. Preserve these fields as unknown rather than borrowing Rone's 15-day request setting.
+
+### Lane scope: what is and is not supported
+
+The hero-list endpoint supports a lane filter. The builds endpoint is explicitly grouped by position and rank. The counters endpoint, however, is documented and observed as grouped by rank only; no lane key or lane query parameter was present in the public contract or inspected response.
+
+Consequently:
+- MLBBDex provides **rank-scoped matchup values**, not verified lane-scoped matchup values.
+- Lane-filtered hero eligibility must not be confused with lane-filtered matchup outcomes.
+- Position-specific builds can be considered for build recommendations, but the observed build win/pick rates must retain their position and rank labels.
+- Do not infer a lane for a counter edge from either hero's preferred lane.
+
+### Attribution and reuse
+
+The API docs state that source data from Mobile Legends Wiki/Fandom is under CC BY-SA and that the API's `source` object must be attributed. The API docs separately identify site-authored analysis/build/counter content as MIT. Before persisting or redistributing fields, the adapter must retain the per-response `source` metadata and distinguish upstream wiki-derived fields from site-authored fields. This is an attribution/data-lineage requirement, not merely a UI credit.
+
+### Integration decision
+
+Do not add MLBBDex counter values to the live ranking score while the Rone Arena adapter is active: that would duplicate upstream data and still would not solve lane-specific matchup evidence.
+
+A future MLBBDex adapter is justified for two narrower purposes:
+1. **Offline contract/consistency QA:** normalize its rank-scoped counter response and compare it against the Rone adapter without adding both signals to one score. A disagreement should be surfaced for review, not averaged.
+2. **Position-specific build research:** evaluate `/heroes/{slug}/builds` as a separate data track for lane + rank builds, with item/emblem/talent/spell name mapping, patch freshness, and attribution. Do not replace the contextual counter-build logic until coverage and mapping are audited.
+
+Required metadata for any imported counter edge: source, source URL, retrieval time, source sync date if known, rank bracket, patch if explicitly provided, advantage semantics, lane=null, windowDays=null, sampleSize=null, and upstream lineage=`Rone Arena` where reported. Missing metadata remains null.
+
+### References inspected
+
+- Public API contract: https://mlbbdex.com/ru/api-doc
+- Live counter response: https://mlbbdex.com/api/v1/heroes/argus/counters
+- Live position/rank build response: https://mlbbdex.com/api/v1/heroes/argus/builds
+- API documentation states weekly synchronization and last sync 2026-11-20 as of this review.
