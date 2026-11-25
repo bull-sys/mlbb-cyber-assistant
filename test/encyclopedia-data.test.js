@@ -90,7 +90,7 @@ test("item encyclopedia records have descriptions and the six shop categories", 
   assert.match(itemById("Warrior Boots").passive, /4 дополнительной физической защиты.*до 20/);
   assert.equal(itemById("Arcane Boots").passive, undefined);
   assert.equal(itemById("Swift Boots").passive, undefined);
-  assert.match(itemById("Haas's Claws").passive, /критические атаки.*20% скорости атаки.*2 секунды/);
+  assert.match(itemById("Haas' Claws").passive, /критические атаки.*20% скорости атаки.*2 секунды/);
   assert.match(itemById("Rose Gold Meteor").passive, /каждые 4 единицы.*Lifeline.*ниже 30%.*60 секунд/);
   assert.match(itemById("Magic Potion").passive, /120 секунд.*30 магической силы.*10%/);
   assert.match(itemById("Power Potion").passive, /120 секунд.*30 физической атаки.*15% физического вампиризма/);
