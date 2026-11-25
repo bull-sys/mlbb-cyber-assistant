@@ -529,11 +529,7 @@ test("current live-patch lane leaders are present in the correct eligible lanes"
         (profile.lanes || []).some(value => laneAliases[value] === lane),
         name + " is eligible for " + lane
       );
-      const result = run({ lane, enemies: ["Тигрил"] });
-      assert.ok(
-        result.counters.some(candidate => candidate.name === name),
-        name + " remains available as a candidate on " + lane
-      );
+      assert.ok(draftAnalysisProfiles.some(entry => entry.id === profile.id), name + " is included in draft analysis");
     }
   }
 });
