@@ -6,7 +6,7 @@ const GUEST_DRAFT_STORAGE_KEY="mlbb_draft_state_v1_guest";
 let draftStorageKey=GUEST_DRAFT_STORAGE_KEY;
 try{if(!localStorage.getItem(GUEST_DRAFT_STORAGE_KEY)&&localStorage.getItem(LEGACY_DRAFT_STORAGE_KEY))localStorage.setItem(GUEST_DRAFT_STORAGE_KEY,localStorage.getItem(LEGACY_DRAFT_STORAGE_KEY));localStorage.removeItem(LEGACY_DRAFT_STORAGE_KEY)}catch{}
 let draftSyncTimer=null,draftSyncInFlight=false,draftSyncAgain=false;
-let token="";try{token=localStorage.getItem("mlbb_token")||""}catch{};let activeUserId=null,data={heroes:[],draftHeroOptions:[],heroCatalog:[],heroProfiles:[],items:[],talents:[],emblems:[],roles:[],ranks:[],styles:[]},enemies=[],allies=[],threats=new Set(),encyFilter="all",ocrWorker=null,encyRemoteAssets=null,encyRemoteKnowledge=new Map(),encyGrowthKnowledge=new Map(),encyKnowledgeRequest=0;
+let token="";try{token=localStorage.getItem("mlbb_token")||""}catch{};let activeUserId=null,data={heroes:[],draftHeroOptions:[],heroCatalog:[],heroProfiles:[],items:[],talents:[],emblems:[],roles:[],ranks:[],styles:[]},enemies=[],allies=[],threats=new Set(),encyFilter="all",encyItemFilter="all",ocrWorker=null,encyRemoteAssets=null,encyRemoteKnowledge=new Map(),encyGrowthKnowledge=new Map(),encyKnowledgeRequest=0;
 const threatDefs=[["heal","💚 Отхил / вампиризм"],["magic","🔮 2+ мага / прокаст"],["speed","⚡ Скорость атаки"],["tank","🛡 Жирные танки"],["cc","⛓ Тяжёлый контроль"],["physical","⚔ Много физического урона"],["burst","💥 Взрывной урон"]];
 const $api=async(path,opts={})=>{let r=await fetch("/api"+path,{...opts,headers:{"Content-Type":"application/json",...(token?{Authorization:"Bearer "+token}:{}),...(opts.headers||{})}});let d=await r.json().catch(()=>({error:"Ошибка сервера"}));if(!r.ok){if(r.status===401&&token&&!path.startsWith("/auth/"))logout();throw Error(d.error||"Ошибка")}return d};
 function toast(s){let el=document.createElement("div");el.textContent=s;el.style="position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#18384a;border:1px solid #39e5ff;padding:12px 17px;border-radius:10px;z-index:99;font-size:12px";document.body.append(el);setTimeout(()=>el.remove(),2500)}
@@ -469,9 +469,14 @@ function renderEncy(){
  });
  const groups=[{type:"hero",title:"Герои",entries:heroEntries},{type:"item",title:"Предметы",entries:items},{type:"emblem",title:"Эмблемы",entries:emblems},{type:"talent",title:"Таланты и атрибуты",entries:talents}];
  const selected=groups.filter(group=>encyFilter==="all"||group.type===encyFilter);
+ const itemCategories=["Все предметы","Атака","Магия","Защита","Передвижение","Роум","Лес"];
+ const categoryCounts=items.reduce((counts,item)=>{const category=item.category||"Предмет";counts[category]=(counts[category]||0)+1;return counts;},{});
+ const categoryMarkup=itemCategories.map((label,index)=>{const value=index===0?"all":label;const count=index===0?items.length:(categoryCounts[label]||0);return '<button type="button" class="chip'+(encyItemFilter===value?" active":"")+'" data-item-category="'+esc(value)+'" aria-pressed="'+(encyItemFilter===value)+'">'+esc(label)+' <span>'+count+'</span></button>';}).join("");
+ const categoryHost=$("encyItemCategories");
+ if(categoryHost){categoryHost.innerHTML=categoryMarkup;categoryHost.classList.toggle("hidden",encyFilter!=="all"&&encyFilter!=="item");}
  let html='<div class="ency-catalog-counts"><span><b>'+emblems.length+'</b> эмблем</span><span><b>'+talents.length+'</b> талантов</span><span><b>8 / 8 / 10</b> по уровням</span></div>';
  for(const group of selected){
-  const list=group.entries.filter(x=>(x.name+" "+x.category+" "+(x.secondaryCategory||"")+" "+(x.description||"")+" "+(Array.isArray(x.aliases)?x.aliases.join(" "):"")+" "+(x.roles||"")+" "+(x.lanes||"")).toLocaleLowerCase("ru").includes(q));
+  const list=group.entries.filter(x=>(group.type!=="item"||encyItemFilter==="all"||x.category===encyItemFilter)&&(x.name+" "+x.category+" "+(x.secondaryCategory||"")+" "+(x.description||"")+" "+(Array.isArray(x.aliases)?x.aliases.join(" "):"")+" "+(x.roles||"")+" "+(x.lanes||"")).toLocaleLowerCase("ru").includes(q));
   if(!list.length)continue;
   if(group.type==="item")list.sort((a,b)=>a.category.localeCompare(b.category,"ru")||a.name.localeCompare(b.name,"ru"));
   html+='<div class="ency-group-heading"><b>'+group.title+'</b><small>'+list.length+(group.type==="item"?' · иконки MLBBDex':'')+'</small></div>';
@@ -877,7 +882,7 @@ document.addEventListener("keydown",e=>{
   if(history.state?.encyHeroModal)history.back();
  }
 });
-$("encySearch").oninput=renderEncy;$("encyFilters").onclick=e=>{let b=e.target.closest("[data-filter]");if(!b)return;encyFilter=b.dataset.filter;document.querySelectorAll("#encyFilters .chip").forEach(x=>x.classList.toggle("active",x===b));renderEncy()};
+$("encySearch").oninput=renderEncy;$("encyFilters").onclick=e=>{let b=e.target.closest("[data-filter]");if(!b)return;encyFilter=b.dataset.filter;document.querySelectorAll("#encyFilters .chip").forEach(x=>x.classList.toggle("active",x===b));renderEncy()};$("encyItemCategories").onclick=e=>{const b=e.target.closest("[data-item-category]");if(!b)return;encyItemFilter=b.dataset.itemCategory;renderEncy()};
 $("ocr").onclick=async()=>{let f=$("screenshot").files[0];if(!f)return toast("Выбери скриншот");$("ocrStatus").textContent="Загружаю OCR-движок и распознаю текст...";try{if(!window.Tesseract){await new Promise((ok,no)=>{let s=document.createElement("script");s.src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js";s.onload=ok;s.onerror=no;document.head.append(s)})}let result=await Tesseract.recognize(f,"eng+rus");let text=result.data.text.toLowerCase();let found=data.heroes.map(h=>h.name).filter(n=>text.includes(n.toLowerCase()));$("ocrStatus").textContent=found.length?"Кандидаты распознавания: "+found.join(", ")+". Добавь проверенных героев вручную.":"Не удалось уверенно распознать названия. Попробуй более чёткий скриншот или добавь героев вручную.";if(found.length)found.forEach(h=>{if(enemies.length<5&&!enemies.includes(h))enemies.push(h)});drawTeams();saveDraft()}catch(e){$("ocrStatus").textContent="OCR не загрузился. Проверь подключение к интернету и попробуй ещё раз."}};
 document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="visible")syncDraftState()});
 window.addEventListener("online",syncDraftState);
