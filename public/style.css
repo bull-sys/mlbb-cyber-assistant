@@ -1651,3 +1651,25 @@ body.ency-item-modal-open{overflow:hidden!important;overscroll-behavior:none}
 .ency-build-source-note{margin:12px 0 6px;color:var(--muted,#aab2c7);font-size:.77rem;line-height:1.5}
 .ency-build-source-note+.ency-data-credit{margin-top:0}
 @media(max-width:560px){.ency-build-controls{grid-template-columns:1fr}.ency-observed-build-head{align-items:flex-start;flex-direction:column}.ency-observed-build-head span{text-align:left}}
+
+/* Ranked build evidence embedded in the draft report */
+.observed-draft-wrap{margin:12px 0 16px;padding:14px;border:1px solid rgba(93,143,218,.28);border-radius:16px;background:linear-gradient(145deg,rgba(20,32,54,.72),rgba(12,18,30,.92))}
+.observed-draft-heading{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:10px}
+.observed-draft-heading b{font-size:.9rem}
+.observed-draft-heading small,.observed-draft-note,.observed-draft-source{color:var(--muted,#aab2c7);font-size:.74rem;line-height:1.5}
+.observed-draft-card{padding:12px 0;border-top:1px solid rgba(140,160,195,.15)}
+.observed-draft-card-head{display:flex;justify-content:space-between;gap:12px;align-items:center}
+.observed-draft-card-head b{font-size:.85rem}
+.observed-draft-card-head small{font-size:.72rem;color:#9fe4d1;text-align:right}
+.observed-draft-card ol{margin:9px 0 12px;padding-left:22px;display:grid;gap:5px;font-size:.82rem}
+.observed-draft-card ol small{color:#f0bb78}
+.observed-draft-meta{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.observed-draft-meta span{display:grid;gap:3px}
+.observed-draft-meta small,.observed-draft-card p small{font-size:.66rem;color:var(--muted,#aab2c7)}
+.observed-draft-meta b,.observed-draft-card p b{font-size:.78rem}
+.observed-draft-card>p{display:grid;gap:4px;margin:10px 0 0}
+.observed-draft-note{margin:8px 0}
+.observed-draft-source{display:block;margin-top:8px}
+.observed-draft-source a{color:inherit;text-decoration:underline}
+.observed-draft-empty{padding:12px;margin:10px 0;border:1px dashed rgba(140,160,195,.25);border-radius:12px;color:var(--muted,#aab2c7);font-size:.8rem}
+@media(max-width:560px){.observed-draft-heading,.observed-draft-card-head{align-items:flex-start;flex-direction:column}.observed-draft-card-head small{text-align:left}}
