@@ -273,9 +273,9 @@ function normalizeObservedBuild(build) {
       matchedTalents: talents.filter(item => item.catalogMatched).length,
       totalTalents: talents.length,
       unmatchedTalents: talents.filter(item => !item.catalogMatched).map(item => item.nameEn),
-      matchedSpells: spell?.catalogMatched ? 1 : 0,
+      matchedSpells: spell && localSpells.includes(spell) ? 1 : 0,
       totalSpells: spellEn ? 1 : 0,
-      unmatchedSpells: spell && !spell.catalogMatched ? [spellEn] : []
+      unmatchedSpells: spell && !localSpells.includes(spell) ? [spellEn] : []
     }
   };
 }
