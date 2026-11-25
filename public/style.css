@@ -1584,3 +1584,10 @@ body.ency-item-modal-open{overflow:hidden!important;overscroll-behavior:none}
 }
 @media(max-width:360px){.ency-item-stat-grid{grid-template-columns:1fr}.ency-item-modal-head{gap:9px}.ency-item-modal-art{flex-basis:54px;width:54px;height:54px}}
 @media(prefers-reduced-motion:reduce){.ency-item-tile{transition:none}.ency-item-tile:hover{transform:none}}
+
+/* CYBER ITEM SCANNER · category filters */
+.ency-item-categories{display:flex;gap:7px;overflow-x:auto;overscroll-behavior-x:contain;padding:4px 1px 12px;margin:0 0 5px;scrollbar-width:thin}
+.ency-item-categories.hidden{display:none!important}
+.ency-item-categories .chip{display:inline-flex;align-items:center;gap:7px;flex:0 0 auto;white-space:nowrap;border:1px solid rgba(91,175,207,.24);background:rgba(17,34,51,.82)}
+.ency-item-categories .chip.active{border-color:#54dff3;background:linear-gradient(120deg,rgba(24,91,112,.72),rgba(26,49,72,.9));box-shadow:0 0 14px rgba(55,202,231,.12)}
+.ency-item-categories .chip span{display:inline-grid;place-items:center;min-width:18px;height:18px;padding:0 4px;border-radius:6px;background:rgba(4,12,22,.48);color:#8dddeb;font-size:9px}
