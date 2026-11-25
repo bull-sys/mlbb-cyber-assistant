@@ -9,7 +9,7 @@ test("normalizes observed builds by position and rank", () => {
         all: [{
           items: ["Corrosion Scythe", "Windtalker", "Berserker's Fury"],
           emblem: "Marksman",
-          talents: ["Fatal", "Bargain Hunter", "War Cry"],
+          talents: ["Fatal", "Weapons Master", "War Cry"],
           spell: "Petrify",
           winRate: 68.87,
           pickRate: 2.5
@@ -31,7 +31,7 @@ test("normalizes observed builds by position and rank", () => {
   assert.equal(build.items[0].catalogMatched, true);
   assert.equal(build.emblem.name, "Эмблема стрелка");
   assert.equal(build.emblem.catalogMatched, true);
-  assert.deepEqual(build.talents.map(talent => talent.name), ["Роковой удар", "Охотник за скидками", "Боевой клич"]);
+  assert.deepEqual(build.talents.map(talent => talent.name), ["Роковой удар", "Мастер оружия", "Боевой клич"]);
   assert.equal(build.spell.name, "Окаменение");
   assert.equal(build.winRate, 68.87);
   assert.equal(build.pickRate, 2.5);
@@ -54,4 +54,15 @@ test("preserves source item names when local catalog mapping is missing", () => 
 test("rejects malformed build payloads instead of inventing an empty build", () => {
   assert.equal(normalizeHeroBuildPayload({ data: [] }).ok, false);
   assert.equal(normalizeHeroBuildPayload({}).ok, false);
+});
+
+test("maps source aliases for the universal emblem and Weapon Master talent", () => {
+  const result = normalizeHeroBuildPayload({
+    data: { Gold: { all: [{ items: [], emblem: "All", talents: ["Weapons Master"], spell: "Inspire" }] } }
+  });
+  const build = result.positions[0].ranks.all.builds[0];
+  assert.equal(build.emblem.id, "common");
+  assert.equal(build.emblem.catalogMatched, true);
+  assert.equal(build.talents[0].id, "weapon-master");
+  assert.equal(build.talents[0].catalogMatched, true);
 });
