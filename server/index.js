@@ -55,7 +55,7 @@ const tokenSecret=secret||"development-only-change-me";
 const openai=process.env.OPENAI_API_KEY?new OpenAI({apiKey:process.env.OPENAI_API_KEY}):null;
 const roles=["Лес","Золото","Опыт","Мид","Роум"];
 const draftAnalysisProfiles=getDraftHeroAnalysisProfiles();
-const ranks=["Эпик","Легенда","Мифик","Мифическая слава","Мифическая бессмертие"];
+const ranks=["Эпик","Легенда","Мифик","Мифическая честь","Мифическая слава","Мифическая бессмертие"];
 const styles=["Поднятие рейтинга","По фану","Кастомки"];
 const safeUser=id=>db.prepare("SELECT u.id,u.email,u.nickname,p.hero,p.role,p.rank,p.style,p.game_id,p.bio FROM users u LEFT JOIN profiles p ON p.user_id=u.id WHERE u.id=?").get(id);
 function auth(req,res,next){const h=req.headers.authorization||"";try{if(!h.startsWith("Bearer "))throw 0;req.user=jwt.verify(h.slice(7),tokenSecret);next()}catch{return res.status(401).json({error:"Требуется авторизация"})}}
