@@ -253,8 +253,13 @@ function normalizeObservedBuild(build) {
   const spellEn = typeof build?.spell === "string" ? build.spell : null;
   const spellKey = spellEn ? String(spellEn).toLowerCase().replace(/[^a-z]/gu, "") : "";
   const spell = spellEn ? (spellNames[spellKey] || spellEn) : null;
-  const winRate = build?.winRate !== null && build?.winRate !== undefined && Number.isFinite(Number(build.winRate)) ? Number(build.winRate) : null;
-  const pickRate = build?.pickRate !== null && build?.pickRate !== undefined && Number.isFinite(Number(build.pickRate)) ? Number(build.pickRate) : null;
+  const parseRate = value => {
+    if (value === null || value === undefined || (typeof value === "string" && !value.trim())) return null;
+    const parsed = Number(value);
+    return Number.isFinite(parsed) && parsed >= 0 && parsed <= 100 ? parsed : null;
+  };
+  const winRate = parseRate(build?.winRate);
+  const pickRate = parseRate(build?.pickRate);
   return {
     items,
     emblem: emblem ? { id: emblem.id, name: emblem.name, nameEn: emblemName, catalogMatched: true } :
