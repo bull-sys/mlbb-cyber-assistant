@@ -218,7 +218,7 @@ function normalizeObservedBuild(build) {
   const itemByEnglish = new Map(localItems.map(item => [normalizeBuildName(item.englishName), item]).filter(([name]) => name));
   const emblemByEnglish = new Map(localEmblems.flatMap(item => {
     const shortName = String(item.nameEn || "").startsWith("Custom ") ? String(item.nameEn).slice(7) : item.nameEn;
-    const names = [item.nameEn, shortName, item.id];
+    const names = [item.nameEn, shortName, item.id, ...(item.id === "common" ? ["All"] : [])];
     return names.map(name => [normalizeBuildName(name), item]).filter(([name]) => name);
   }));
   const talentByEnglish = new Map(localTalents.flatMap(item => [[normalizeBuildName(item.nameEn), item], ...(item.id === "weapon-master" ? [[normalizeBuildName("Weapons Master"), item]] : [])]).filter(([name]) => name));
