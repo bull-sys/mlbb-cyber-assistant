@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { mkdir, writeFile } from "node:fs/promises";
 import { heroReferenceData } from "../server/hero-reference-data.js";
-import { items, emblems, talents } from "../server/data.js";
+import { items, emblems, talents, spells } from "../server/data.js";
 
 const BASE = "https://mlbbdex.com";
 const RANKS = ["all", "epic", "legend", "mythic", "honor", "glory"];
@@ -63,7 +63,7 @@ const spellNames = new Map(Object.entries({
   purify: "Очищение", flameshot: "Пламя", aegis: "Щит", sprint: "Спринт",
   revitalize: "Исцеление", vengeance: "Месть"
 }));
-const localSpellNames = new Set(["Возмездие","Вспышка","Очищение","Окаменение","Вдохновение","Пламя","Исцеление","Спринт","Щит","Месть"]);
+const localSpellNames = new Set(spells);
 talentIndex.set(normalize("Weapons Master"), talents.find(talent => talent.id === "weapon-master"));
 
 const heroList = await getJson(BASE + "/api/v1/heroes");
