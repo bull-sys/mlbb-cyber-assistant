@@ -9,8 +9,9 @@ import { heroProfiles } from "../server/hero-profiles.js";
 
 test("rank labels normalize to the upstream rank filters", () => {
   assert.equal(normalizeRankedMatchupRank("Легенда"), "legend");
-  assert.equal(normalizeRankedMatchupRank("Мифическая слава"), "honor");
-  assert.equal(normalizeRankedMatchupRank("Мифическая бессмертие"), "glory");
+  assert.equal(normalizeRankedMatchupRank("Мифическая честь"), "honor");
+  assert.equal(normalizeRankedMatchupRank("Мифическая слава"), "glory");
+  assert.equal(normalizeRankedMatchupRank("Мифическая бессмертие"), null);
   assert.equal(normalizeRankedMatchupRank("all"), "all");
   assert.equal(normalizeRankedMatchupRank("unknown"), null);
 });
