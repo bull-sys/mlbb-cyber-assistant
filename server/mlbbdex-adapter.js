@@ -1,5 +1,6 @@
 import { heroReferenceData, HERO_REFERENCE_SOURCE } from "./hero-reference-data.js";
 import { heroLoreById, HERO_LORE_SOURCE } from "./hero-lore-data.js";
+import { items as localItems, emblems as localEmblems, talents as localTalents } from "./data.js";
 
 const BASE = "https://mlbbdex.com";
 const TTL = 6 * 60 * 60 * 1000;
@@ -192,4 +193,117 @@ export async function getGameAssets() {
     sources: [emblemsResult?.source, itemsResult?.source].filter(Boolean),
     updatedAt: new Date().toISOString()
   };
+}
+
+
+const buildPositions = {
+  Exp: { id: "exp", label: "Опыт" },
+  Jungle: { id: "jungle", label: "Лес" },
+  Mid: { id: "mid", label: "Мид" },
+  Gold: { id: "gold", label: "Золото" },
+  Roam: { id: "roam", label: "Роум" }
+};
+const buildRanks = {
+  all: "Все ранги",
+  epic: "Эпик",
+  legend: "Легенда",
+  mythic: "Мифик",
+  honor: "Мифическая честь",
+  glory: "Мифическая слава"
+};
+const normalizeBuildName = value => String(value || "").normalize("NFKD")
+  .replace(/[\\u0300-\\u036f]/gu, "").toLowerCase().replace(/[^a-z0-9]+/gu, " ").trim();
+
+function normalizeObservedBuild(build) {
+  const itemByEnglish = new Map(localItems.map(item => [normalizeBuildName(item.englishName), item]).filter(([name]) => name));
+  const emblemByEnglish = new Map(localEmblems.map(item => [normalizeBuildName(item.nameEn), item]).filter(([name]) => name));
+  const talentByEnglish = new Map(localTalents.map(item => [normalizeBuildName(item.nameEn), item]).filter(([name]) => name));
+  const itemNames = Array.isArray(build?.items) ? build.items.filter(value => typeof value === "string") : [];
+  const items = itemNames.map(englishName => {
+    const local = itemByEnglish.get(normalizeBuildName(englishName));
+    return local
+      ? { name: local.name, englishName, category: local.category || null, catalogMatched: true }
+      : { name: englishName, englishName, category: null, catalogMatched: false };
+  });
+  const emblemName = typeof build?.emblem === "string" ? build.emblem : null;
+  const emblem = emblemName ? emblemByEnglish.get(normalizeBuildName(emblemName)) : null;
+  const talentNames = Array.isArray(build?.talents) ? build.talents.filter(value => typeof value === "string") : [];
+  const talents = talentNames.map(nameEn => {
+    const local = talentByEnglish.get(normalizeBuildName(nameEn));
+    return local
+      ? { id: local.id, name: local.name, nameEn, tier: local.tier, catalogMatched: true }
+      : { id: null, name: nameEn, nameEn, tier: null, catalogMatched: false };
+  });
+  const spellNames = {
+    petrify: "Окаменение",
+    flicker: "Вспышка",
+    retribution: "Возмездие",
+    inspire: "Вдохновение",
+    purify: "Очищение",
+    flameshot: "Огненный выстрел",
+    aegis: "Щит",
+    sprint: "Спринт",
+    revitalize: "Исцеление",
+    vengeance: "Возмездие"
+  };
+  const spellEn = typeof build?.spell === "string" ? build.spell : null;
+  const spell = spellEn ? (spellNames[normalizeBuildName(spellEn).replace(/ /gu, "")] || spellEn) : null;
+  const winRate = Number.isFinite(Number(build?.winRate)) ? Number(build.winRate) : null;
+  const pickRate = Number.isFinite(Number(build?.pickRate)) ? Number(build.pickRate) : null;
+  return {
+    items,
+    emblem: emblem ? { id: emblem.id, name: emblem.name, nameEn: emblemName, catalogMatched: true } :
+      (emblemName ? { id: null, name: emblemName, nameEn: emblemName, catalogMatched: false } : null),
+    talents,
+    spell: spell ? { name: spell, nameEn: spellEn, catalogMatched: Boolean(spellEn && spell !== spellEn) } : null,
+    winRate,
+    pickRate,
+    catalogCoverage: {
+      matchedItems: items.filter(item => item.catalogMatched).length,
+      totalItems: items.length,
+      unmatchedItems: items.filter(item => !item.catalogMatched).map(item => item.englishName),
+      matchedTalents: talents.filter(item => item.catalogMatched).length,
+      totalTalents: talents.length
+    }
+  };
+}
+
+export function normalizeHeroBuildPayload(payload) {
+  const raw = payload?.data;
+  if (!raw || typeof raw !== "object" || Array.isArray(raw)) {
+    return { ok: false, error: "Источник не вернул структуру сборок героя." };
+  }
+  const positions = Object.entries(raw).flatMap(([key, rankData]) => {
+    const position = buildPositions[key];
+    if (!position || !rankData || typeof rankData !== "object") return [];
+    const ranks = {};
+    for (const [rankKey, rankLabel] of Object.entries(buildRanks)) {
+      const builds = rankData[rankKey];
+      if (Array.isArray(builds)) ranks[rankKey] = { label: rankLabel, builds: builds.map(normalizeObservedBuild) };
+    }
+    return Object.keys(ranks).length ? [{ ...position, ranks }] : [];
+  });
+  return {
+    ok: true,
+    positions,
+    source: payload?.source || null,
+    sourcePage: "https://mlbbdex.com/ru/api-doc",
+    methodology: "https://mlbbdex.com/ru/methodology",
+    dataLineage: "Рейтинговые сборки MLBBDex получает через community API arena.rone.dev; это статистика использования, а не редакторская гарантия оптимальности.",
+    sampleSizeAvailable: false,
+    updatedAt: new Date().toISOString()
+  };
+}
+
+export async function getHeroBuilds(hero) {
+  const slug = slugify(hero?.id || hero?.nameEn);
+  if (!slug || !heroReferenceBySlug.has(slug)) {
+    return { ok: false, error: "Герой не найден в проверенном справочнике." };
+  }
+  try {
+    const payload = await cachedJson("builds:" + slug, BASE + "/api/v1/heroes/" + encodeURIComponent(slug) + "/builds");
+    return normalizeHeroBuildPayload(payload);
+  } catch (error) {
+    return { ok: false, error: "Не удалось загрузить реальные сборки героя.", detail: String(error?.message || error).slice(0, 160) };
+  }
 }
