@@ -258,5 +258,5 @@ test("item encyclopedia uses compact scanner tiles and a tabbed fixed detail she
  assert.match(appSource,/data-item-category/);
  assert.match(appSource,/encyItemFilter==="all"\|\|x.category===encyItemFilter/);
  assert.match(appSource,/itemCategories=\["Все предметы","Атака","Магия","Защита","Передвижение","Роум","Лес"\]/);
- assert.match(htmlSource,/id="encyItemCategories"/);
+ assert.match(appSource,/\$\("encyItemCategories"\)/);
 });
