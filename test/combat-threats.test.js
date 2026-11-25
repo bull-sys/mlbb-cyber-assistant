@@ -29,3 +29,12 @@ test("treats very high burst as a defensive threat, not only high burst", async 
   assert.equal(isHighBurstThreat({ combat: { burst: "high" } }, {}), true);
   assert.equal(isHighBurstThreat({ combat: { burst: "medium" } }, {}), false);
 });
+
+
+test("recognizes Karina-style magic plus true damage without treating true damage as physical", () => {
+  const profile = { combat: { damage: "magic_and_true" } };
+  assert.deepEqual(getCombatDamageKinds(profile), ["magic", "true"]);
+  assert.equal(hasCombatDamageKind(profile, {}, "magic"), true);
+  assert.equal(hasCombatDamageKind(profile, {}, "true"), true);
+  assert.equal(hasCombatDamageKind(profile, {}, "physical"), false);
+});
