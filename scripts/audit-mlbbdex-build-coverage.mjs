@@ -141,9 +141,10 @@ const worker = async () => {
       record.error = String(error?.message || error).slice(0, 180);
     }
     results.push(record);
+    await new Promise(resolve => setTimeout(resolve, 750));
   }
 };
-await Promise.all(Array.from({ length: 4 }, worker));
+await worker();
 results.sort((a, b) => a.id.localeCompare(b.id));
 
 const successful = results.filter(hero => hero.status === "ok");
