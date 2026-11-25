@@ -863,12 +863,17 @@ function renderEncyHeroBuilds(payload,id){
   const builds=ranks[activeRank]?.builds||[];
   const cards=builds.map((build,index)=>{
    const itemMarkup=build.items.map(item=>'<span class="ency-build-item'+(item.catalogMatched?'':' unmatched')+'">'+esc(item.name)+(item.catalogMatched?'':' · нет в каталоге')+'</span>').join("");
-   const talents=build.talents.map(talent=>esc(talent.name)).join(" · ");
-   const emblem=build.emblem?.name||"Не указана";
-   const spell=build.spell?.name||"Не указан";
+   const talents=build.talents.map(talent=>esc(talent.name)+(talent.catalogMatched?"":" · нет в каталоге")).join(" · ");
+   const emblem=(build.emblem?.name||"Не указана")+(build.emblem&&!build.emblem.catalogMatched?" · нет в каталоге":"");
+   const spell=(build.spell?.name||"Не указан")+(build.spell&&!build.spell.catalogMatched?" · нет в каталоге":"");
    const rates=[Number.isFinite(build.winRate)?'WR '+build.winRate.toFixed(2)+'%':'',Number.isFinite(build.pickRate)?'Выбор '+build.pickRate.toFixed(2)+'%':''].filter(Boolean).join(" · ");
    const coverage=build.catalogCoverage||{};
-   const warning=coverage.unmatchedItems?.length?'<p class="ency-build-warning">Не сопоставлены с локальным каталогом: '+coverage.unmatchedItems.map(esc).join(", ")+'. Названия сохранены как в источнике.</p>':"";
+   const unmatched=[];
+   if(coverage.unmatchedItems?.length)unmatched.push("предметы: "+coverage.unmatchedItems.join(", "));
+   if(coverage.unmatchedEmblems?.length)unmatched.push("эмблемы: "+coverage.unmatchedEmblems.join(", "));
+   if(coverage.unmatchedTalents?.length)unmatched.push("таланты: "+coverage.unmatchedTalents.join(", "));
+   if(coverage.unmatchedSpells?.length)unmatched.push("заклинания: "+coverage.unmatchedSpells.join(", "));
+   const warning=unmatched.length?'<p class="ency-build-warning">Не сопоставлено с каталогом: '+esc(unmatched.join("; "))+'. Названия сохранены как в источнике.</p>':"";
    return '<article class="ency-observed-build"><div class="ency-observed-build-head"><b>Сборка '+(index+1)+'</b><span>'+esc(rates||"Статистика не указана")+'</span></div><div class="ency-build-items">'+itemMarkup+'</div><div class="ency-build-meta"><span><small>Эмблема</small><b>'+esc(emblem)+'</b></span><span><small>Заклинание</small><b>'+esc(spell)+'</b></span></div><p class="ency-build-talents"><small>Таланты</small><b>'+esc(talents||"Не указаны")+'</b></p>'+warning+'</article>';
   }).join("");
   host.innerHTML='<div class="ency-build-controls"><label>Позиция<select id="encyBuildPosition">'+positionOptions+'</select></label><label>Ранг<select id="encyBuildRank">'+rankOptions+'</select></label></div>'+(cards||'<p class="ency-unverified">Для выбранной позиции и ранга сборок пока нет.</p>')+
