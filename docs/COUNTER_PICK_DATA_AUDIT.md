@@ -89,3 +89,16 @@ The draft test suite now also includes:
 Live-patch lane snapshot source: https://mlbbdex.com/en/meta (updated 2026-11-24, patch 2.2.23). The report lists Gold Lane: Obsidia, Hanabi, Bruno; Jungle: Hirara, Sun, Saber; Mid: Eudora, Valir, Xavier; EXP: Masha, Sun, Gloo; Roam: Marcel, Belerick, Estes.
 
 These checks strengthen catalogue and ranking invariants. They still do not substitute for expert-reviewed draft outcomes, lane-specific matchup samples, or labelled match/VOD data.
+
+
+## Five-enemy measured-matchup fixtures — 2026-11-25
+
+Added a regression set using three measured matchup examples displayed in the Patch 2.2.23 MLBBHub matchup matrix:
+
+- Lolita over Cyclops: +9.2 percentage points.
+- X.Borg over Terizla: +4.2 percentage points.
+- Valir over Fredrinn: +4.1 percentage points.
+
+Each example is injected into a five-enemy draft containing Cyclops, Fredrinn, Terizla, Wanwan, and Belerick. The test verifies that the corresponding candidate remains in the top three for its selected lane, the measured pair remains visible in the recommendation evidence, and occupied enemy picks are never recommended.
+
+Source: https://mlbbhub.com/matchups (Patch 2.2.23 snapshot, accessed 2026-11-25). The page attributes measured edges to Moonton GMS, but does not publish pair sample sizes or lane-specific scope. The fixture is therefore a regression input for evidence handling, not independent verification of match outcomes or a claim that the listed candidate is always the best full-draft choice.
