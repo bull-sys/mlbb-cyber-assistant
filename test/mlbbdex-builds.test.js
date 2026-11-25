@@ -27,11 +27,11 @@ test("normalizes observed builds by position and rank", () => {
   assert.equal(exp.label, "Опыт");
   assert.equal(exp.ranks.all.builds.length, 1);
   const build = exp.ranks.all.builds[0];
-  assert.equal(build.items[0].name, "Коррозионная коса");
+  assert.equal(build.items[0].name, "Коса коррозии");
   assert.equal(build.items[0].catalogMatched, true);
   assert.equal(build.emblem.name, "Эмблема стрелка");
   assert.equal(build.emblem.catalogMatched, true);
-  assert.deepEqual(build.talents.map(talent => talent.name), ["Роковой удар", "Охотник за скидками", "Воинский клич"]);
+  assert.deepEqual(build.talents.map(talent => talent.name), ["Роковой удар", "Охотник за скидками", "Боевой клич"]);
   assert.equal(build.spell.name, "Окаменение");
   assert.equal(build.winRate, 68.87);
   assert.equal(build.pickRate, 2.5);
