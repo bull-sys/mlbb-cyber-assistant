@@ -76,3 +76,16 @@ The scoring model was then tightened:
 
 The matrix is automated regression coverage, not a claim that 665 picks were independently validated against match outcome data. The latter requires lane-specific ranked samples or reviewed match/VOD evidence.
 
+
+
+## Extended quality regression — 2026-11-25
+
+The draft test suite now also includes:
+
+- A live-patch lane-eligibility smoke test for the top-three heroes listed per lane in MLBBDex's November 24, 2026 report for Original Server patch 2.2.23. This checks that the current high-performing lane options are represented in the tactical catalogue and assigned to the corresponding lane. It does **not** force meta picks into counter-pick recommendations.
+- A ranked-evidence stress case: a +4.2 percentage-point ranked matchup signal is checked against capped synergy and generic composition bonuses. The source does not publish pair sample sizes and does not scope these pair signals to a lane.
+- An input-order invariance check: reversing enemy and ally selection order must not change the ranked candidate order, scores, matchup labels, or sorted positive/negative matchup signals.
+
+Live-patch lane snapshot source: https://mlbbdex.com/en/meta (updated 2026-11-24, patch 2.2.23). The report lists Gold Lane: Obsidia, Hanabi, Bruno; Jungle: Hirara, Sun, Saber; Mid: Eudora, Valir, Xavier; EXP: Masha, Sun, Gloo; Roam: Marcel, Belerick, Estes.
+
+These checks strengthen catalogue and ranking invariants. They still do not substitute for expert-reviewed draft outcomes, lane-specific matchup samples, or labelled match/VOD data.
