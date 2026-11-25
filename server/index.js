@@ -784,7 +784,7 @@ function analyze({lane, enemies = [], allies = [], myHero = "", rankedMatchups =
     "war-cry": { tier: 3, score: ["high", "very_high"].includes(selectedCombat.dps) ? 6 : 0, reason: "Высокий постоянный урон помогает чаще реализовывать усиление после серии попаданий." },
     "brave-smite": { tier: 3, score: selected?.type === "fighter" && ["high", "very_high"].includes(selectedCombat.sustain) ? 6 : 0, reason: "Боец с устойчивостью и частым применением навыков получает дополнительное восстановление здоровья." }
   };
-  const selectedTalentRecommendations = [1, 2, 3].map(tier => {
+  const selectedTalentRecommendations = selected ? [1, 2, 3].map(tier => {
     const baselineId = baselineTalentIds.find(id => talents.find(entry => entry.id === id && entry.tier === tier));
     const candidatesForTier = talents.filter(entry => entry.tier === tier);
     const scored = candidatesForTier.map(talent => {
@@ -807,7 +807,7 @@ function analyze({lane, enemies = [], allies = [], myHero = "", rankedMatchups =
       contextual: Boolean(chosen.reason),
       baseline: talent.id === baselineId
     };
-  }).filter(Boolean);
+  }).filter(Boolean) : [];
 
   return {
     threats,
