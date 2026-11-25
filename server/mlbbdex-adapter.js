@@ -251,8 +251,8 @@ function normalizeObservedBuild(build) {
   };
   const spellEn = typeof build?.spell === "string" ? build.spell : null;
   const spell = spellEn ? (spellNames[normalizeBuildName(spellEn).replace(/ /gu, "")] || spellEn) : null;
-  const winRate = Number.isFinite(Number(build?.winRate)) ? Number(build.winRate) : null;
-  const pickRate = Number.isFinite(Number(build?.pickRate)) ? Number(build.pickRate) : null;
+  const winRate = build?.winRate !== null && build?.winRate !== undefined && Number.isFinite(Number(build.winRate)) ? Number(build.winRate) : null;
+  const pickRate = build?.pickRate !== null && build?.pickRate !== undefined && Number.isFinite(Number(build.pickRate)) ? Number(build.pickRate) : null;
   return {
     items,
     emblem: emblem ? { id: emblem.id, name: emblem.name, nameEn: emblemName, catalogMatched: true } :
