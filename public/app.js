@@ -850,7 +850,6 @@ function renderEncyHeroBuilds(payload,id){
  const laneToPosition={"EXP Lane":"exp","Jungle":"jungle","Mid Lane":"mid","Gold Lane":"gold","Roam":"roam"};
  const preferred=laneToPosition[hero?.lanes?.primary]||"";
  const selectedPosition=payload.positions.find(entry=>entry.id===preferred)||payload.positions[0];
- const positionOptions=payload.positions.map(entry=>'<option value="'+esc(entry.id)+'"'+(entry.id===selectedPosition.id?' selected':'')+'>'+esc(entry.label)+'</option>').join("");
  const render=()=>{
   const positionId=host.querySelector("#encyBuildPosition")?.value||selectedPosition.id;
   const position=payload.positions.find(entry=>entry.id===positionId)||selectedPosition;
@@ -858,8 +857,9 @@ function renderEncyHeroBuilds(payload,id){
   const rankKey=rankSelect?.value||"all";
   const ranks=position.ranks||{};
   const rankKeys=Object.keys(ranks);
-  const rankOptions=rankKeys.map(key=>'<option value="'+esc(key)+'"'+(key===rankKey?' selected':'')+'>'+esc(ranks[key].label)+'</option>').join("");
   const activeRank=rankKeys.includes(rankKey)?rankKey:(rankKeys.includes("all")?"all":rankKeys[0]);
+  const positionOptions=payload.positions.map(entry=>'<option value="'+esc(entry.id)+'"'+(entry.id===position.id?' selected':'')+'>'+esc(entry.label)+'</option>').join("");
+  const rankOptions=rankKeys.map(key=>'<option value="'+esc(key)+'"'+(key===activeRank?' selected':'')+'>'+esc(ranks[key].label)+'</option>').join("");
   const builds=ranks[activeRank]?.builds||[];
   const cards=builds.map((build,index)=>{
    const itemMarkup=build.items.map(item=>'<span class="ency-build-item'+(item.catalogMatched?'':' unmatched')+'">'+esc(item.name)+(item.catalogMatched?'':' · нет в каталоге')+'</span>').join("");
