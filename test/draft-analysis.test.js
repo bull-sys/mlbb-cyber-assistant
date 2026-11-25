@@ -907,22 +907,20 @@ test("twelve live-patch measured counter edges survive realistic five-enemy draf
   // The local matchup links are checked separately from the measured pp value:
   // pp is not added to the local score unless supplied by the live ranked adapter.
   const fixtures = [
-    { candidate: "Lolita", opponent: "Cyclops", lane: "Роум", pp: 9.2 },
-    { candidate: "Phoveus", opponent: "Wanwan", lane: "Опыт", pp: 6.5 },
-    { candidate: "Esmeralda", opponent: "Lolita", lane: "Опыт", pp: 6.2 },
-    { candidate: "Lolita", opponent: "Harley", lane: "Роум", pp: 4.7 },
-    { candidate: "Natalia", opponent: "Xavier", lane: "Лес", pp: 4.6 },
-    { candidate: "X.Borg", opponent: "Terizla", lane: "Опыт", pp: 4.2 },
-    { candidate: "Valir", opponent: "Fredrinn", lane: "Мид", pp: 4.1 },
-    { candidate: "Phoveus", opponent: "Freya", lane: "Опыт", pp: 4.1 },
-    { candidate: "Estes", opponent: "Alice", lane: "Роум", pp: 3.8 },
-    { candidate: "Valir", opponent: "Balmond", lane: "Мид", pp: 3.6 },
-    { candidate: "Ruby", opponent: "Sun", lane: "Опыт", pp: 3.5 },
-    { candidate: "Xavier", opponent: "Belerick", lane: "Мид", pp: 3.4 }
+    { candidate: "Lolita", opponent: "Cyclops", lane: "Роум", pp: 9.2, expectedRank: 3 },
+    { candidate: "Phoveus", opponent: "Wanwan", lane: "Опыт", pp: 6.5, expectedRank: 3 },
+    { candidate: "Esmeralda", opponent: "Lolita", lane: "Опыт", pp: 6.2, expectedRank: null },
+    { candidate: "Lolita", opponent: "Harley", lane: "Роум", pp: 4.7, expectedRank: null },
+    { candidate: "Natalia", opponent: "Xavier", lane: "Лес", pp: 4.6, expectedRank: 1 },
+    { candidate: "X.Borg", opponent: "Terizla", lane: "Опыт", pp: 4.2, expectedRank: 1 },
+    { candidate: "Valir", opponent: "Fredrinn", lane: "Мид", pp: 4.1, expectedRank: 1 },
+    { candidate: "Phoveus", opponent: "Freya", lane: "Опыт", pp: 4.1, expectedRank: null },
+    { candidate: "Estes", opponent: "Alice", lane: "Роум", pp: 3.8, expectedRank: null },
+    { candidate: "Valir", opponent: "Balmond", lane: "Мид", pp: 3.6, expectedRank: 2 },
+    { candidate: "Ruby", opponent: "Sun", lane: "Опыт", pp: 3.5, expectedRank: null },
+    { candidate: "Xavier", opponent: "Belerick", lane: "Мид", pp: 3.4, expectedRank: 1 }
   ];
   const fillers = ["Tigreal", "Nana", "Miya", "Nolan"];
-  const auditResults = [];
-
   for (const fixture of fixtures) {
     const candidate = heroProfiles.find(profile => profile.names.en === fixture.candidate);
     const opponent = heroProfiles.find(profile => profile.names.en === fixture.opponent);
@@ -949,19 +947,11 @@ test("twelve live-patch measured counter edges survive realistic five-enemy draf
       assert.ok(recommendation.matchedEnemies.includes(opponent.names.ru));
       assert.ok(["direct-counter", "mixed-matchup"].includes(recommendation.matchupType));
     }
-    auditResults.push({
-      edge: fixture.candidate + " > " + fixture.opponent,
-      measuredEdgePp: fixture.pp,
-      lane: fixture.lane,
-      candidateRank: recommendation ? result.counters.indexOf(recommendation) + 1 : null,
-      topThree: result.counters.map(item => ({
-        name: item.name,
-        score: item.score,
-        matchupType: item.matchupType,
-        matchedEnemies: item.matchedEnemies,
-        riskyEnemies: item.riskyEnemies
-      }))
-    });
+    const candidateRank = recommendation ? result.counters.indexOf(recommendation) + 1 : null;
+    assert.equal(
+      candidateRank,
+      fixture.expectedRank,
+      fixture.candidate + " > " + fixture.opponent + " expected rank in five-enemy regression"
+    );
   }
-  console.log("FULL_DRAFT_MATCHUP_AUDIT=" + JSON.stringify(auditResults));
 });
