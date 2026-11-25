@@ -121,10 +121,11 @@ test("counter recommendations distinguish direct matchup evidence from situation
   const css = await readFile(new URL("../public/style.css", import.meta.url), "utf8");
   assert.match(app, /item\.matchupType==="direct-counter"/);
   assert.match(app, /item\.matchupType==="mixed-matchup"/);
-  assert.match(app, /item\.matchupType==="ranked-advantage"/);
-  assert.match(app, /item\.matchupType==="ranked-risk"/);
   assert.match(app, /rankedMatchupMeta/);
-  assert.match(app, /не статистика выбранной линии/);\n  assert.match(app, /не влияет на ранжирование контрпиков/);\n  assert.doesNotMatch(app, /item\\.matchupType==="ranked-advantage"/);\n  assert.doesNotMatch(app, /item\\.matchupType==="ranked-risk"/);
+  assert.match(app, /не статистика выбранной линии/);
+  assert.match(app, /не влияет на ранжирование контрпиков/);
+  assert.doesNotMatch(app, /item\.matchupType==="ranked-advantage"/);
+  assert.doesNotMatch(app, /item\.matchupType==="ranked-risk"/);
   assert.match(app, /counter-ranked-evidence/);
   assert.match(css, /\.counter-ranked-evidence/);
   assert.match(app, /СМЕШАННЫЙ МАТЧАП/);
