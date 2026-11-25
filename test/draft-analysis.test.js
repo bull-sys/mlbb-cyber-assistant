@@ -456,6 +456,26 @@ test("counter build adapts to Roger versus Helcurt without suggesting mage or ma
   assert.ok(result.enemyMatchups.find(item => item.name === "Хелкарт").counterItems.length > 0);
 });
 
+test("magic-damage assassin is not treated as a physical attacker by class", () => {
+  const result = run({ lane: "Лес", myHero: "Карина", enemies: ["Леоморд"] });
+  const names = result.buildDetails.map(item => item.name);
+  assert.ok(!names.includes("Злобный рык"));
+});
+
+test("physical penetration responds to durable fighter frontline, not only Tank class", () => {
+  const result = run({ lane: "Лес", myHero: "Роджер", enemies: ["Леоморд"] });
+  const penetration = result.buildDetails.find(item => item.name === "Злобный рык");
+  assert.ok(penetration);
+  assert.ok(penetration.against.includes("Леоморд"));
+});
+
+test("very high magic burst recommends survival and magic-burst defense", () => {
+  const result = run({ lane: "Лес", myHero: "Роджер", enemies: ["Кадита"] });
+  const names = result.buildDetails.map(item => item.name);
+  assert.ok(names.includes("Бессмертие"));
+  assert.ok(names.includes("Щит Валькирии"));
+});
+
 test("counter build responds separately to healing, attack speed, and magic burst in a full enemy team", () => {
   const result = run({ lane: "Золото", myHero: "Мия", enemies: ["Эйдора", "Минотавр", "Мия"] });
   const names = result.buildDetails.map(item => item.name);
