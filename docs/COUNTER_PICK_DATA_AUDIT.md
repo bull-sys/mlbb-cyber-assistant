@@ -55,7 +55,7 @@ Source pages:
 
 ## Important limits
 
-The current MLBB.io matchup tables are aggregated ranked statistical signals. They are not a complete lane-vs-lane dataset and do not by themselves prove that a hero is a direct counter in a specific lane, rank bracket, draft order, or team composition. Professional tournament/VOD evidence remains a separate research track. The recommendation engine therefore treats these records as evidence for ranking candidates, not as guarantees.
+The current MLBB.io matchup tables are aggregated statistical signals. They are not a complete lane-vs-lane dataset and do not by themselves prove that a hero is a direct counter in a specific lane, rank bracket, draft order, or team composition. Reviewed local profile links derived from this evidence remain available to the counter-pick model; the separate user-selected, rank-filtered Rone Arena aggregates are retained as supplemental context only and do not affect scores, ordering, or counter-item recommendations. Professional tournament/VOD evidence remains a separate research track.
 
 ## Automated checks
 
@@ -83,8 +83,8 @@ The matrix is automated regression coverage, not a claim that 665 picks were ind
 The draft test suite now also includes:
 
 - A live-patch lane-eligibility smoke test for the top-three heroes listed per lane in MLBBDex's November 24, 2026 report for Original Server patch 2.2.23. This checks that the current high-performing lane options are represented in the tactical catalogue and assigned to the corresponding lane. It does **not** force meta picks into counter-pick recommendations.
-- A ranked-evidence stress case: a +4.2 percentage-point ranked matchup signal is checked against capped synergy and generic composition bonuses. The source does not publish pair sample sizes and does not scope these pair signals to a lane.
-- An input-order invariance check: reversing enemy and ally selection order must not change the ranked candidate order, scores, matchup labels, or sorted positive/negative matchup signals.
+- A rank-isolation regression: a +4.2 percentage-point Rone Arena aggregate is retained as visible evidence but must not change candidate scores, order, local matchup labels, or counter-item recommendations. The source does not publish pair sample sizes and does not scope these pair signals to a lane.
+- An input-order invariance check: reversing enemy and ally selection order must not change counter-pick candidate order, scores, matchup labels, or sorted positive/negative matchup signals.
 
 Live-patch lane snapshot source: https://mlbbdex.com/en/meta (updated 2026-11-24, patch 2.2.23). The report lists Gold Lane: Obsidia, Hanabi, Bruno; Jungle: Hirara, Sun, Saber; Mid: Eudora, Valir, Xavier; EXP: Masha, Sun, Gloo; Roam: Marcel, Belerick, Estes.
 
