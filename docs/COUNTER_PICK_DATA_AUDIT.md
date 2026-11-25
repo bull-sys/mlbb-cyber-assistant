@@ -334,3 +334,14 @@ The observed-build feed is now connected to both build workflows:
 - The source lookup is cached server-side for six hours; the API response is additionally cached by the browser/server response headers. Ranked source calls are not made for every enemy individually.
 
 The pure lane/rank selection behavior is covered by tests: exact lane+rank selection, explicit all-ranks fallback, no cross-lane substitution, and unavailable-source handling. The full-roster audit remains a separate manual/weekly workflow so the 133-endpoint crawl does not run on every code commit.
+
+
+## Follow-up verification: build compatibility and threat classification — 2026-11-25
+
+The counter-build audit found that part of the draft item logic inferred damage type from hero class. That is unsafe for MLBB: an Assassin or Fighter can deal magic damage, and a Mage can deal physical damage. Draft counter-build eligibility, enemy damage counts, defensive boot explanations and damage-target matching now use the structured `combat.damage` profile (or an explicit physical/magic tag when the profile value is absent). Unknown damage remains unknown; the engine no longer guesses from class.
+
+The same pass corrected burst-threat handling so both `high` and `very_high` burst profiles can trigger survival recommendations. Penetration recommendations now also recognize durable frontliners, not only heroes whose primary class is Tank.
+
+Build-feed validation also exposed three battle spells that were present in MLBBDex build records but absent from the local spell list: Petrify, Aegis and Vengeance. The local Russian spell catalog now includes Окаменение, Щит and Месть, and adapter tests cover their mappings. The full-roster audit now measures spell mapping coverage alongside items, emblems and talents; the exact roster-wide spell totals are intentionally not stated until the next full audit run completes.
+
+The automated CI workflow now syntax-checks the scheduled full-roster audit script. Its live API crawl remains manual/weekly and paced sequentially to avoid the HTTP 429 rate limiting observed during concurrent requests.
