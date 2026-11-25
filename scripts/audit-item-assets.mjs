@@ -19,13 +19,14 @@ const missing = [];
 const broken = [];
 const checked = [];
 for (const item of items) {
-  const slug = slugify(item.englishName || item.name);
+  const slug = item.assetSlug || slugify(item.englishName || item.name);
   const sourceItem = upstream.get(slug);
+  if (item.assetImage) { checked.push({ name: item.name, slug, image: item.assetImage, source: "dedicated" }); continue; }
   if (!sourceItem) {
     missing.push({ name: item.name, englishName: item.englishName, slug });
     continue;
   }
-  checked.push({ name: item.name, slug, image: BASE + "/visuels/objets/" + sourceItem.slug + ".webp" });
+  checked.push({ name: item.name, slug, image: BASE + "/visuels/objets/" + sourceItem.slug + ".webp", source: "MLBBDex" });
 }
 for (let offset = 0; offset < checked.length; offset += 8) {
   const batch = checked.slice(offset, offset + 8);
@@ -43,7 +44,8 @@ for (let offset = 0; offset < checked.length; offset += 8) {
 console.log(JSON.stringify({
   localItems: items.length,
   upstreamItems: payload.data.length,
-  matchedSlugs: checked.length,
+  matchedSlugs: checked.filter(item => item.source === "MLBBDex").length,
+  dedicatedImages: checked.filter(item => item.source === "dedicated").length,
   missingSlugs: missing,
   brokenImages: broken,
   upstreamCatalog: payload.data.map(item => ({ name: item.name, slug: item.slug, category: item.category }))
