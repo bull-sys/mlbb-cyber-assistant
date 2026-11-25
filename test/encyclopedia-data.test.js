@@ -10,6 +10,9 @@ const assetAdapterSource = await readFile(new URL("../server/mlbbdex-adapter.js"
 test("encyclopedia has all seven emblem sets with visible factual attributes", () => {
   assert.equal(emblems.length, 7);
   assert.equal(new Set(emblems.map(item => item.id)).size, 7);
+  const common = emblems.find(emblem => emblem.id === "common");
+  assert.equal(common?.name, "Универсальная эмблема");
+  assert.deepEqual(common?.aliases, ["Обычная эмблема", "Базовая общая эмблема", "Basic Common", "Common"]);
   for (const emblem of emblems) {
     assert.ok(emblem.name, "emblem name is required");
     assert.ok(emblem.image?.startsWith("https://"), emblem.name + " needs an HTTPS icon");
