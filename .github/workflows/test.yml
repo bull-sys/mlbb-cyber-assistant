@@ -26,5 +26,7 @@ jobs:
         run: npm install --no-audit --no-fund
       - name: Run test suite
         run: npm test
+      - name: Audit live item catalog and artwork
+        run: node scripts/audit-item-assets.mjs
       - name: Build production Docker image
         run: docker build -t mlbb-cyber-assistant:test .
