@@ -742,8 +742,12 @@ function analyze({lane, enemies = [], allies = [], myHero = "", rankedMatchups =
     return value === "high" || value === "very_high" || (hero.tags || []).includes("burst");
   }).length;
   const enemyPhysicalCount = enemy.filter(hero => {
-    const profile = enemyProfileByName.get(hero.name);
-    return profile?.combat?.damage === "physical" || ["assassin", "fighter", "marksman"].includes(hero.type);
+    const damage = String(enemyProfileByName.get(hero.name)?.combat?.damage || "");
+    return damage.includes("physical") || damage === "mixed";
+  }).length;
+  const enemyMagicCount = enemy.filter(hero => {
+    const damage = String(enemyProfileByName.get(hero.name)?.combat?.damage || "");
+    return damage.includes("magic") || damage === "mixed";
   }).length;
   const enemyFrontlineCount = enemy.filter(hero => {
     const profile = enemyProfileByName.get(hero.name);
@@ -762,7 +766,7 @@ function analyze({lane, enemies = [], allies = [], myHero = "", rankedMatchups =
   const baselineTalentIds = selectedEmblemProfile?.talentIds || [];
   const talentContextRules = {
     rupture: { tier: 1, score: enemyFrontlineCount >= 2 ? 6 : 0, reason: "Против нескольких плотных героев полезнее адаптивное пробивание." },
-    firmness: { tier: 1, score: enemyPhysicalCount >= 2 ? 6 : 0, reason: "В составе противника несколько источников физического урона: дополнительная защита повышает устойчивость." },
+    firmness: { tier: 1, score: enemyPhysicalCount > 0 && enemyMagicCount > 0 ? 6 : 0, reason: "Во вражеском составе есть и физический, и магический урон: гибридная защита полезна против смешанной угрозы." },
     vitality: { tier: 1, score: enemyBurstCount >= 2 ? 7 : 0, reason: "У противника несколько героев с высоким взрывным уроном: запас здоровья помогает пережить стартовую комбинацию." },
     swift: { tier: 1, score: selected?.type === "marksman" && selectedCombat.dps === "high" ? 4 : 0, reason: "Стрелку с высоким постоянным уроном полезна дополнительная скорость атаки." },
     agility: { tier: 1, score: lane === "Роум" ? 5 : 0, reason: "Для роумера скорость перемещения помогает быстрее занимать позиции и перемещаться между линиями." },
