@@ -497,6 +497,105 @@ test("enemy heroes outside the old 32-entry list are resolved from the full prof
   assert.equal(result.counters.length, 3);
 });
 
+test("current live-patch lane leaders are present in the correct eligible lanes", () => {
+  // Snapshot of MLBBDex's 2026-11-24 Original Server report for patch 2.2.23.
+  // This is a lane-eligibility smoke test, not a claim that meta leaders are counters.
+  const laneAliases = {
+    "Лес": "Лес",
+    "Линия опыта": "Опыт",
+    "EXP-линия": "Опыт",
+    "Опыт": "Опыт",
+    "Золотая линия": "Золото",
+    "Линия золота": "Золото",
+    "Золото": "Золото",
+    "Средняя линия": "Мид",
+    "Центр": "Мид",
+    "Мид": "Мид",
+    "Роум": "Роум"
+  };
+  const leaders = {
+    "Золото": ["Обсидия", "Ханаби", "Бруно"],
+    "Лес": ["Хирара", "Сан", "Сабер"],
+    "Мид": ["Эйдора", "Валир", "Ксавьер"],
+    "Опыт": ["Маша", "Сан", "Глу"],
+    "Роум": ["Марсель", "Белерик", "Эстес"]
+  };
+
+  for (const [lane, names] of Object.entries(leaders)) {
+    for (const name of names) {
+      const profile = heroProfiles.find(entry => entry.names?.ru === name);
+      assert.ok(profile, name + " exists in the tactical profile catalogue");
+      assert.ok(
+        (profile.lanes || []).some(value => laneAliases[value] === lane),
+        name + " is eligible for " + lane
+      );
+      const result = run({ lane, enemies: ["Тигрил"] });
+      assert.ok(
+        result.counters.some(candidate => candidate.name === name),
+        name + " remains available as a candidate on " + lane
+      );
+    }
+  }
+});
+
+test("ranked matchup advantage remains stronger than capped synergy and composition bonuses", () => {
+  const enemy = heroProfiles.find(profile => profile.names.ru === "Эйдора");
+  const candidate = heroProfiles.find(profile => profile.names.ru === "Кэрри");
+  const result = run({
+    lane: "Золото",
+    enemies: ["Эйдора"],
+    allies: ["Валир"],
+    rankedMatchups: {
+      [enemy.id]: {
+        [candidate.id]: {
+          opponentId: enemy.id,
+          candidateId: candidate.id,
+          source: "Rone Arena API",
+          sourceUrl: "https://arena.rone.dev/api/heroes/eudora/counters?rank=legend&days=15",
+          rankBracket: "legend",
+          windowDays: 15,
+          lane: null,
+          advantagePp: 4.2,
+          sampleSize: null,
+          direction: "candidate-favourable",
+          evidenceKind: "measured-ranked-pair"
+        }
+      }
+    },
+    rankedMatchupMeta: { rankBracket: "legend", laneScoped: false, sampleSizeAvailable: false }
+  });
+  const karrie = result.counters.find(candidate => candidate.name === "Кэрри");
+  assert.ok(karrie, "ranked-positive Karrie remains in the top three");
+  assert.equal(karrie.matchupType, "ranked-advantage");
+  const secondaryOnly = result.counters.filter(candidate =>
+    ["team-synergy", "situational"].includes(candidate.matchupType)
+  );
+  for (const candidate of secondaryOnly) {
+    assert.ok(karrie.score > candidate.score, "strong measured pair signal outranks secondary-only candidate");
+  }
+});
+
+test("enemy and ally input order does not change counterpick ranking", () => {
+  const first = run({
+    lane: "Мид",
+    enemies: ["Хелкарт", "Тигрил", "Эйдора"],
+    allies: ["Ангела", "Бруно"]
+  });
+  const reversed = run({
+    lane: "Мид",
+    enemies: ["Эйдора", "Тигрил", "Хелкарт"],
+    allies: ["Бруно", "Ангела"]
+  });
+  const compact = result => result.counters.map(candidate => ({
+    name: candidate.name,
+    score: candidate.score,
+    matchupType: candidate.matchupType,
+    matchedEnemies: [...candidate.matchedEnemies].sort(),
+    riskyEnemies: [...candidate.riskyEnemies].sort()
+  }));
+  assert.deepEqual(compact(reversed), compact(first));
+});
+
 test("full draft scenario matrix: every catalogue hero can be analyzed against all five selected lanes", () => {
   const lanes = ["Лес", "Золото", "Опыт", "Мид", "Роум"];
   const failures = [];
