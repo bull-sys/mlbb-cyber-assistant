@@ -12,8 +12,8 @@ const rankAliases = new Map([
   ["all", "all"], ["Эпик", "epic"], ["epic", "epic"],
   ["Легенда", "legend"], ["legend", "legend"],
   ["Мифик", "mythic"], ["mythic", "mythic"],
-  ["Мифическая слава", "honor"], ["honor", "honor"],
-  ["Мифическая бессмертие", "glory"], ["glory", "glory"]
+  ["Мифическая честь", "honor"], ["honor", "honor"],
+  ["Мифическая слава", "glory"], ["glory", "glory"]
 ]);
 
 export function normalizeRankedMatchupRank(value) {
