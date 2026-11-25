@@ -469,6 +469,18 @@ test("physical penetration responds to durable fighter frontline, not only Tank 
   assert.ok(penetration.against.includes("Леоморд"));
 });
 
+test("Radiant Armor is reserved for explicit high sustained magic DPS", () => {
+  const lowDps = run({ lane: "Роум", myHero: "Тигрил", enemies: ["Флорин"] });
+  const lowDpsNames = lowDps.buildDetails.map(item => item.name);
+  assert.ok(!lowDpsNames.includes("Сияющая броня"));
+  assert.ok(!lowDpsNames.includes("Проклятый шлем"));
+
+  const highDps = run({ lane: "Роум", myHero: "Тигрил", enemies: ["Валир"] });
+  assert.ok(highDps.buildDetails.some(item =>
+    item.name === "Сияющая броня" && item.against.includes("Валир")
+  ));
+});
+
 test("very high magic burst recommends survival and magic-burst defense", () => {
   const result = run({ lane: "Лес", myHero: "Роджер", enemies: ["Кадита"] });
   const names = result.buildDetails.map(item => item.name);
