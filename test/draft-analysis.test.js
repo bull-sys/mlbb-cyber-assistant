@@ -494,6 +494,14 @@ test("Dominance Ice remains a sustain counter, not an attack-speed counter", () 
   assert.ok(item.against.includes("Минотавр"));
 });
 
+test("resource regeneration is not mistaken for health restoration by anti-heal", () => {
+  const result = run({ lane: "Лес", myHero: "Роджер", enemies: ["Линг"] });
+  const antiHealItems = result.buildDetails.filter(item =>
+    ["Господство льда", "Трезубец", "Пылающий жезл"].includes(item.name)
+  );
+  assert.deepEqual(antiHealItems, []);
+});
+
 test("attack-speed counterbuild uses Chastise Pauldron and Blade Armor, not obsolete Dominance Ice", () => {
   const result = run({ lane: "Роум", myHero: "Тигрил", enemies: ["Мия"] });
   const names = result.buildDetails.map(item => item.name);
