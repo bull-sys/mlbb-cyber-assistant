@@ -2676,7 +2676,7 @@ const rawHeroProfiles = [
     names: { ru: "Карина", en: "Karina", aliases: [] },
     roles: ["Убийца"],
     lanes: ["Лес"],
-    combat: {"damage":"magic","range":"melee","mobility":"high","burst":"high","dps":"medium","durability":"low","sustain":"medium","control":"slow","engage":"high","disengage":"high","waveClear":"high","objectiveDamage":"medium"},
+    combat: {"damage":"magic_and_true","range":"melee","mobility":"high","burst":"high","dps":"medium","durability":"low","sustain":"medium","control":"slow","engage":"high","disengage":"high","waveClear":"high","objectiveDamage":"medium"},
     mechanics: [
       "Пассивный эффект «Теневое комбо» усиливает каждую третью последовательную атаку по одной цели дополнительным чистым уроном, зависящим от потерянного здоровья противника. Попадание по герою также сокращает перезарядки обычных навыков.",
       "Первый навык «Танец клинков» временно ускоряет Карину и блокирует базовые атаки противника. Заблокированные атаки вызывают ответный эффект; собственная усиленная базовая атака или ультимейт завершают состояние.",
