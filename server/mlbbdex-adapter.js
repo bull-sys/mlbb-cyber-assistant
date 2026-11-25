@@ -217,7 +217,8 @@ const normalizeBuildName = value => String(value || "").normalize("NFKD")
 function normalizeObservedBuild(build) {
   const itemByEnglish = new Map(localItems.map(item => [normalizeBuildName(item.englishName), item]).filter(([name]) => name));
   const emblemByEnglish = new Map(localEmblems.flatMap(item => {
-    const names = [item.nameEn, String(item.nameEn || "").replace(/^Custom\\s+/u, ""), item.id];
+    const shortName = String(item.nameEn || "").startsWith("Custom ") ? String(item.nameEn).slice(7) : item.nameEn;
+    const names = [item.nameEn, shortName, item.id];
     return names.map(name => [normalizeBuildName(name), item]).filter(([name]) => name);
   }));
   const talentByEnglish = new Map(localTalents.map(item => [normalizeBuildName(item.nameEn), item]).filter(([name]) => name));
