@@ -193,7 +193,7 @@ function analyze({lane, enemies = [], allies = [], myHero = "", rankedMatchups =
     if (["high", "very_high"].includes(combat.sustain)) tags.add("sustain");
     if (["high", "very_high"].includes(combat.engage)) tags.add("engage");
     if (combat.control && !["none", "low", "unknown"].includes(combat.control)) tags.add("control");
-    if (combat.damage === "magic" || type === "mage") tags.add("magic");
+    if (combat.damage === "magic") tags.add("magic");
     if (type === "marksman") tags.add("marksman");
     if (type === "tank") tags.add("frontline");
     const profileText = [
@@ -238,7 +238,7 @@ function analyze({lane, enemies = [], allies = [], myHero = "", rankedMatchups =
   if (has("heal") || has("sustain"))
     threats.push("Восстановление здоровья и устойчивость");
 
-  if (enemyTypes.filter(t => t === "mage").length >= 2)
+  if (enemy.filter(hero => hasCombatDamageKind(hero.profile, hero, "magic")).length >= 2)
     threats.push("Высокая магическая угроза");
 
   if (has("attack-speed"))
@@ -381,7 +381,6 @@ function analyze({lane, enemies = [], allies = [], myHero = "", rankedMatchups =
 
         if (rankedEvidence && Number.isFinite(Number(rankedEvidence.advantagePp))) {
           const advantagePp = Number(rankedEvidence.advantagePp);
-          const points = Math.max(-5, Math.min(5, advantagePp));
           rankedEvidenceList.push({
             opponent: opponent.name,
             advantagePp,
@@ -393,13 +392,6 @@ function analyze({lane, enemies = [], allies = [], myHero = "", rankedMatchups =
             sourceUrl: rankedEvidence.sourceUrl || null,
             observedAt: rankedEvidence.observedAt || rankedMatchupMeta?.observedAt || null
           });
-          if (advantagePp > 0) {
-            add(points, "Ранговое преимущество против " + opponent.name + ": +" + advantagePp.toFixed(1) + " п.п.");
-            matchedEnemies.push(opponent.name);
-          } else if (advantagePp < 0) {
-            add(points, "Ранговый риск против " + opponent.name + ": " + advantagePp.toFixed(1) + " п.п.");
-            riskyEnemies.push(opponent.name);
-          }
         } else {
           const ownStrongRank = (profile.matchups?.strongAgainst || []).indexOf(enemyProfile.id);
           const enemyWeakRank = (enemyProfile.matchups?.weakAgainst || []).indexOf(profile.id);
@@ -481,7 +473,7 @@ function analyze({lane, enemies = [], allies = [], myHero = "", rankedMatchups =
       if (enemyHasLowDurability && ["high", "very_high"].includes(combat.burst)) {
         noteSecondary(2, "Взрывной урон может наказывать уязвимых противников");
       }
-      if (enemy.some(opponent => opponent.type === "mage") &&
+      if (enemy.some(opponent => hasCombatDamageKind(opponent.profile, opponent, "magic")) &&
           combat.range === "ranged" &&
           ["high", "very_high"].includes(combat.dps)) {
         noteSecondary(1, "Дальняя атака и постоянный урон дают возможность безопаснее отвечать на мага");
@@ -494,21 +486,15 @@ function analyze({lane, enemies = [], allies = [], myHero = "", rankedMatchups =
 
       const hasPositiveMatchup = matchedEnemies.length > 0;
       const hasRisk = riskyEnemies.length > 0;
-      const hasRankedPositive = rankedEvidenceList.some(entry => entry.advantagePp > 0);
-      const hasRankedNegative = rankedEvidenceList.some(entry => entry.advantagePp < 0);
       const matchupType = !enemy.length
         ? "first-pick"
         : hasPositiveMatchup && hasRisk
         ? "mixed-matchup"
-        : hasRankedPositive
-          ? "ranked-advantage"
-          : hasRankedNegative
-            ? "ranked-risk"
-            : staticMatchedEnemies.length
-              ? "direct-counter"
-              : synergies.length
-                ? "team-synergy"
-                : "situational";
+        : staticMatchedEnemies.length
+          ? "direct-counter"
+          : synergies.length
+            ? "team-synergy"
+            : "situational";
       if (!enemy.length) {
         reasons.push("FIRST PICK: оценка по гибкости линии, устойчивости и заполненности профиля. Вражеские матчапы пока неизвестны.");
       } else if (!reasons.length) {
@@ -518,7 +504,7 @@ function analyze({lane, enemies = [], allies = [], myHero = "", rankedMatchups =
       } else if (hasPositiveMatchup && hasRisk) {
         reasons.push("Матчап неоднозначный: есть и положительные, и отрицательные статистические сигналы.");
       } else if (hasRisk) {
-        reasons.push("В ранговых или профильных данных обнаружен неблагоприятный сигнал; учитывай риск этого матчапа.");
+        reasons.push("В тактическом профиле обнаружен неблагоприятный сигнал; учитывай риск этого матчапа.");
       }
 
       const matchupEvidence = profile.matchupEvidence || null;
@@ -545,7 +531,7 @@ function analyze({lane, enemies = [], allies = [], myHero = "", rankedMatchups =
       };
     })
     .sort((a, b) => {
-      const priority = { "ranked-advantage": 4, "mixed-matchup": 3, "direct-counter": 2, "ranked-risk": 1, "team-synergy": 1, "situational": 0 };
+      const priority = { "mixed-matchup": 3, "direct-counter": 2, "team-synergy": 1, "situational": 0 };
       return b.rawScore - a.rawScore ||
         priority[b.matchupType] - priority[a.matchupType] ||
         a.hero.name.localeCompare(b.hero.name, "ru");
