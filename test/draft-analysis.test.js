@@ -555,13 +555,13 @@ test("current live-patch lane leaders are present in the correct eligible lanes"
   }
 });
 
-test("ranked matchup advantage remains stronger than capped synergy and composition bonuses", () => {
+test("ranked matchup evidence cannot override ally synergy or composition scoring", () => {
   const enemy = heroProfiles.find(profile => profile.names.ru === "Эйдора");
   const candidate = heroProfiles.find(profile => profile.names.ru === "Кэрри");
+  const input = { lane: "Золото", enemies: ["Эйдора"], allies: ["Валир"] };
+  const base = run(input);
   const result = run({
-    lane: "Золото",
-    enemies: ["Эйдора"],
-    allies: ["Валир"],
+    ...input,
     rankedMatchups: {
       [enemy.id]: {
         [candidate.id]: {
@@ -581,15 +581,10 @@ test("ranked matchup advantage remains stronger than capped synergy and composit
     },
     rankedMatchupMeta: { rankBracket: "legend", laneScoped: false, sampleSizeAvailable: false }
   });
-  const karrie = result.counters.find(candidate => candidate.name === "Кэрри");
-  assert.ok(karrie, "ranked-positive Karrie remains in the top three");
-  assert.equal(karrie.matchupType, "ranked-advantage");
-  const secondaryOnly = result.counters.filter(candidate =>
-    ["team-synergy", "situational"].includes(candidate.matchupType)
-  );
-  for (const candidate of secondaryOnly) {
-    assert.ok(karrie.score > candidate.score, "strong measured pair signal outranks secondary-only candidate");
-  }
+  assert.deepEqual(result.counters.map(item => item.name), base.counters.map(item => item.name));
+  assert.deepEqual(result.counters.map(item => item.score), base.counters.map(item => item.score));
+  assert.deepEqual(result.counters.map(item => item.matchupType), base.counters.map(item => item.matchupType));
+  assert.ok(result.counters.every(item => item.role === "Золото"));
 });
 
 test("enemy and ally input order does not change counterpick ranking", () => {
