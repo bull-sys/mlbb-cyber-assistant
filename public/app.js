@@ -418,7 +418,8 @@ function itemAssetSlug(value){
 }
 function encyItemImage(item){
  if(item?.image)return item.image;
- const slug=itemAssetSlug(item?.englishName||item?.name);
+ if(item?.assetImage)return item.assetImage;
+ const slug=item?.assetSlug||itemAssetSlug(item?.englishName||item?.name);
  const remote=(encyRemoteAssets?.items||[]).find(entry=>entry?.slug===slug);
  return remote?.image||("https://mlbbdex.com/visuels/objets/"+slug+".webp");
 }
