@@ -185,8 +185,7 @@ const report = {
   heroes: results
 };
 await mkdir("artifacts", { recursive: true });
-await writeFile("artifacts/mlbbdex-build-coverage.json", JSON.stringify(report, null, 2) + "\
-");
+await writeFile("artifacts/mlbbdex-build-coverage.json", JSON.stringify(report, null, 2) + String.fromCharCode(10));
 console.log(JSON.stringify({
   roster: report.roster, totals: report.totals, mappingRates: report.mappingRates,
   positionCoverage: report.positionCoverage, rankCoverage: report.rankCoverage,
