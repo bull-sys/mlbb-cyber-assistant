@@ -931,7 +931,8 @@ function renderEncyHeroModal(id){
  const hero=(data.heroCatalog||[]).find(x=>x.id===id);
  if(!hero)return;
  const p=(data.heroProfiles||[]).find(x=>x.id===id);
- const root=$("encyHeroModalContent"),name=hero.displayNameRu||hero.nameEn||hero.id,url=encyHeroPortrait(hero);\n  root.dataset.heroId=id;
+ const root=$("encyHeroModalContent"),name=hero.displayNameRu||hero.nameEn||hero.id,url=encyHeroPortrait(hero);
+  root.dataset.heroId=id;
  const sources=Array.isArray(p?.sources)?p.sources:[];
   const reviewed=p?.patch?.reviewedAt||hero.research?.checkedAt||"Дата проверки не указана";
   const status=p?(p.confidence==="complete"?"Полный справочный профиль":"Частичный справочный профиль"):"Тактический профиль пока не заполнен";
@@ -939,7 +940,8 @@ function renderEncyHeroModal(id){
   '<div class="ency-profile-grid">'+
   '<section class="ency-profile-section wide"><h3>Паспорт персонажа</h3><div id="encyHeroDescription" class="ency-hero-description"><p class="ency-unverified">Загружаем описание персонажа...</p></div></section>'+
   '<section class="ency-profile-section wide"><h3>Умения персонажа</h3><div id="encyHeroSkills" class="ency-skill-list"><p class="ency-unverified">Загружаем описания навыков...</p></div></section>'+
-  '<section class="ency-profile-section wide"><h3>Реальные сборки по статистике</h3><div id="encyHeroBuilds" class="ency-remote-panel"><p class="ency-unverified">Загружаем сборки из рейтинговых матчей...</p></div></section>'+\n  '<section class="ency-profile-section wide"><h3>Характеристики и развитие</h3><div id="encyHeroRemoteProfile" class="ency-remote-panel"><p class="ency-unverified">Загружаем характеристики...</p></div></section>'+
+  '<section class="ency-profile-section wide"><h3>Реальные сборки по статистике</h3><div id="encyHeroBuilds" class="ency-remote-panel"><p class="ency-unverified">Загружаем сборки из рейтинговых матчей...</p></div></section>'+
+  '<section class="ency-profile-section wide"><h3>Характеристики и развитие</h3><div id="encyHeroRemoteProfile" class="ency-remote-panel"><p class="ency-unverified">Загружаем характеристики...</p></div></section>'+
   '<section class="ency-profile-section wide"><h3>Проверка данных</h3><p>Статус: '+esc(status)+' · Последняя проверка: '+esc(reviewed)+'. Данные могут меняться после обновлений игры.</p>'+(sources.length?'<div class="ency-source-list">'+sources.map((source,i)=>'<a href="'+esc(source)+'" target="_blank" rel="noopener">Источник '+(i+1)+' ↗</a>').join("")+'</div>':"")+'</section></div>';
   const modalFrame=$("encyHeroModal").querySelector(".ency-hero-modal");
   if(modalFrame)modalFrame.style.setProperty("--hero-accent",encyHeroAccent(hero));
