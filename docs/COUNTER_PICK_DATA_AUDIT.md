@@ -128,3 +128,27 @@ All 12 directional edges are represented by the local static matchup links in at
 Important distinction: the matrix's measured percentage-point edge is not copied into the local static score. The local profiles retain directional matchup evidence only; the exact pp values remain source-snapshot metadata. These are 12 notable examples selected by the source page, not a random or exhaustive sample of all 1,942 measured edges. Their presence in the local profiles is not independent confirmation because profile research may use the same upstream reference.
 
 Source: https://mlbbhub.com/matchups, Patch 2.2.23 snapshot accessed 2026-11-25. The source says measured edges come from Moonton's GMS ranked statistics, and distinguishes them from direction-only in-game counter lists.
+
+
+### Observed top-three placement in the five-enemy regression
+
+The fixed regression roster uses each target hero plus Tigreal, Nana, Miya and Nolan (excluding a duplicate target). Current local-engine placement:
+
+| Measured edge | Candidate position | Other top-three picks |
+|---|---:|---|
+| Lolita > Cyclops | 3 | Belerick, Kусака |
+| Phoveus > Wanwan | 3 | Alice, Kусака |
+| Esmeralda > Lolita | Outside top 3 | Alice, Hylos, Gloo |
+| Lolita > Harley | Outside top 3 | Akai, Gloo, Belerick |
+| Natalia > Xavier | 1 | Akai, Helcurt |
+| X.Borg > Terizla | 1 | Alice, Kусака |
+| Valir > Fredrinn | 1 | Gord, Zetian |
+| Phoveus > Freya | Outside top 3 | Alice, Kусака, Minsitthar |
+| Estes > Alice | Outside top 3 | Angela, Belerick, Kусака |
+| Valir > Balmond | 2 | Zetian, Aurora |
+| Ruby > Sun | Outside top 3 | Alice, Hylos, Alucard |
+| Xavier > Belerick | 1 | Zetian, Aurora |
+
+Seven of twelve candidates make the top three in this fixed five-enemy fixture. Five are displaced by other candidates with multiple positive matchup links or stronger total fit against the selected roster. These five are review cases, not automatically algorithm defects: a full-draft recommendation should account for all five opponents rather than maximize one isolated edge.
+
+The regression locks the observed candidate positions so later scoring changes cannot silently alter this reviewed comparison. It checks reproducibility of current ranking behaviour, not match outcome accuracy. The roster is intentionally fixed and is not a representative random sample of ranked drafts.
