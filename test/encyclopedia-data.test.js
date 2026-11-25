@@ -67,7 +67,7 @@ test("item encyclopedia records have descriptions and the six shop categories", 
   
   assert.match(itemById("Guardian Helmet").passive, /2,5%.*0,5%.*Defender/);
   assert.match(itemById("Queen's Wings").passive, /30%.*60 секунд.*15%/);
-  assert.match(itemById("Chastise Pauldron").passive, /75%.*60 секунд/);
+  assert.match(itemById("Chastise Pauldron").passive, /80%.*60 секунд/);
   assert.match(itemById("Brute Force Breastplate").passive, /8 адаптивной атаки.*6 зарядов.*25%/);
   assert.match(itemById("Cursed Helmet").passive, /1,2%.*125.*15.*3 зарядов/);
   assert.match(itemById("Oracle").passive, /25%/);
