@@ -245,3 +245,14 @@ test("special equipment uses dedicated current icon assets and renamed equipment
  assert.equal(byEnglish("Magic Shoes").assetSlug,"magic-shoes");
  assert.equal(byEnglish("Berserker's Fury").assetSlug,"berserker-s-fury");
 });
+
+
+test("item encyclopedia uses compact scanner tiles and a tabbed fixed detail sheet", () => {
+ assert.match(appSource,/class="ency-item-tile"[^>]*data-open-item=/);
+ assert.match(appSource,/function itemModalMarkup\(item,tab="overview"\)/);
+ assert.match(appSource,/data-item-tab="effects"/);
+ assert.match(appSource,/data-item-tab="build"/);
+ assert.match(appSource,/function openEncyItemModal\(index\)/);
+ assert.match(appSource,/function closeEncyItemModal/);
+ assert.doesNotMatch(appSource,/details class="ency-info-card visual item"/);
+});
