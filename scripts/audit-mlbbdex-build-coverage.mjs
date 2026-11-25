@@ -55,7 +55,7 @@ const emblemIndex = new Map();
 for (const emblem of emblems) {
   const full = normalize(emblem.nameEn);
   const short = normalize(String(emblem.nameEn || "").replace(/^Custom /u, ""));
-  for (const key of [full, short, normalize(emblem.id), ...(emblem.id === "common" ? ["all"] : [])]) if (key) emblemIndex.set(key, emblem);
+  for (const key of [full, short, normalize(emblem.id)]) if (key) emblemIndex.set(key, emblem);
 }
 const talentIndex = catalogIndex(talents, "nameEn");
 talentIndex.set(normalize("Weapons Master"), talents.find(talent => talent.id === "weapon-master"));
