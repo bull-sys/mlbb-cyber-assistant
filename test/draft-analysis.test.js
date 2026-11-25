@@ -222,6 +222,56 @@ test("emblem and talent recommendations use the selected hero profile and real c
   }
 });
 
+test("current patch talent catalogue matches the verified 2.2.23 reference snapshot", () => {
+  const byId = new Map(talents.map(talent => [talent.id, talent]));
+  const expected = {
+    fatal: "+10% дополнительного критического урона",
+    firmness: "+6 физической и магической защиты",
+    "festival-of-blood": "максимум 8 стаков",
+    "master-assassin": "+7% урона",
+    "pull-yourself-together": "−15%",
+    tenacity: "+15 физической и магической защиты",
+    "weapon-master": "+5%",
+    "quantum-charge": "Перезарядка — 8 секунд",
+    "killing-spree": "После устранения вражеского героя",
+    "war-cry": "Перезарядка — 6 секунд"
+  };
+
+  for (const [id, phrase] of Object.entries(expected)) {
+    assert.ok(byId.has(id), id + " exists");
+    assert.ok(byId.get(id).effect.includes(phrase), id + " has current effect text");
+    assert.equal(byId.get(id).checkedAt, "2026-11-25", id + " has current review date");
+    assert.equal(byId.get(id).source, "https://mlbbnexus.com/academy/emblems", id + " has provenance");
+  }
+  assert.ok(byId.get("impure-rage").effect.includes("восстанавливает 1% здоровья"));
+  assert.ok(!byId.get("focusing-mark").effect.includes("+10% скорости передвижения"));
+  assert.ok(byId.get("weakness-finder").effect.includes("не ниже 3 секунд"));
+});
+
+test("hybrid defense talent uses verified damage types, not hero class labels", () => {
+  const magicOnly = run({
+    lane: "Роум",
+    myHero: "Тигрил",
+    enemies: ["Карина", "Циклоп"]
+  });
+  const mixedDamage = run({
+    lane: "Роум",
+    myHero: "Тигрил",
+    enemies: ["Карина", "Тигрил"]
+  });
+
+  assert.notEqual(
+    magicOnly.talentRecommendations.find(entry => entry.tier === 1)?.id,
+    "firmness",
+    "two magic-damage heroes should not be mislabeled as physical threats by their classes"
+  );
+  assert.equal(
+    mixedDamage.talentRecommendations.find(entry => entry.tier === 1)?.id,
+    "firmness",
+    "hybrid defense is prioritized when the enemy composition contains both physical and magic damage"
+  );
+});
+
 test("talent recommendations adapt to lane and confirmed enemy threats", () => {
   const marksman = heroProfiles.find(profile => profile.roles?.includes("Стрелок") && profile.combat?.dps === "high");
   const burstEnemies = heroProfiles.filter(profile => profile.id !== marksman?.id &&
