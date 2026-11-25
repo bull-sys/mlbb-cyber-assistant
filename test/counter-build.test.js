@@ -66,7 +66,7 @@ test("mage counter-build selects magic defense and anti-heal without physical at
 
 test("marksman build can include defensive answers to attack speed and physical damage", () => {
   const result = names("Стрелок / скорость атаки", ["speed", "physical"]);
-  assert.ok(result.includes("Господство льда"));
+  assert.ok(result.includes("Наплечник наказания"));
   assert.ok(result.includes("Древняя кираса"));
 });
 
