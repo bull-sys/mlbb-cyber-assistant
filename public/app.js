@@ -262,7 +262,7 @@ document.addEventListener("click",e=>{let b=e.target.closest("[data-side]");if(b
 function showAppPage(page,{push=true,scroll=true}={}){if(!document.getElementById("page-"+page))return;const current=document.querySelector(".page:not(.hidden)")?.id?.replace("page-","");if(current===page)return;document.querySelectorAll("#nav [data-page]").forEach(x=>x.classList.toggle("active",x.dataset.page===page));document.querySelectorAll(".page").forEach(x=>x.classList.toggle("hidden",x.id!=="page-"+page));const back=$("appBackButton");if(back)back.classList.toggle("hidden",page==="home");if(push){history.pushState({mlbbPage:page,mlbbPrevious:current||null},"","#"+page)}if(scroll)window.scrollTo({top:0,behavior:"smooth"})}
 document.addEventListener("click",e=>{const b=e.target.closest("[data-page]");if(!b)return;showAppPage(b.dataset.page)});
 const backButton=$("appBackButton");if(backButton)backButton.addEventListener("click",()=>{if(history.state?.mlbbPrevious)history.back();else showAppPage("home",{push:false})});
-window.addEventListener("popstate",event=>{const page=event.state?.mlbbPage||location.hash.replace(/^#/,"")||"home";showAppPage(page,{push:false,scroll:false});if(!$("encyHeroModal").classList.contains("hidden")){ $("encyHeroModal").classList.add("hidden");document.body.classList.remove("ency-modal-open");}});
+window.addEventListener("popstate",event=>{const page=event.state?.mlbbPage||location.hash.replace(/^#/,"")||"home";showAppPage(page,{push:false,scroll:false});if(!$("encyHeroModal").classList.contains("hidden")){ $("encyHeroModal").classList.add("hidden");document.body.classList.remove("ency-modal-open");}if(!$("encyItemModal").classList.contains("hidden")){ $("encyItemModal").classList.add("hidden");document.body.classList.remove("ency-item-modal-open");}});
 history.replaceState({...(history.state||{}),mlbbPage:document.querySelector(".page:not(.hidden)")?.id?.replace("page-","")||"home",mlbbPrevious:null},"",location.href);
 $("testDraft").onclick=()=>{enemies=["Тигрил","Эйдора","Кэрри","dyrroth","Атлас"];allies=["Ангела","Линг","Теризла"];$("lane").value="Лес";$("myHero").value="";draftRecommendations=[];drawTeams();saveDraft();runDraft()};
 function animateDraftReport(){
@@ -497,11 +497,52 @@ function renderEncy(){
     const source=x.source?'<div class="ency-info-source-wrap"><a class="ency-info-source" href="'+esc(x.source)+'" target="_blank" rel="noopener">Источник ↗</a>'+(x.checkedAt?'<small class="ency-info-checked">Проверено: '+esc(x.checkedAt)+'</small>':"")+'</div>':"";
     const verification=x.verification==="partial"?'<small class="ency-info-verification">Требуется дополнительная сверка с текущей версией игры</small>':"";
     const categoryHeading=x.type==="item"&&(index===0||list[index-1].category!==x.category)?'<div class="ency-subgroup-heading"><b>'+esc(x.category)+'</b><small>'+list.filter(entry=>entry.category===x.category).length+'</small></div>':"";
+    if(x.type==="item"){
+     const itemIndex=data.items.findIndex(item=>item.name===x.name);
+     const statPreview=(Array.isArray(x.stats)?x.stats:[]).slice(0,2).map(value=>'<span>'+esc(String(value))+'</span>').join("");
+     const aliasPreview=Array.isArray(x.aliases)&&x.aliases.length?'<small class="ency-item-aliases">'+x.aliases.map(alias=>esc(alias)).join(" · ")+'</small>':"";
+     const priceLabel=x.priceGold!==undefined||x.price!==undefined?esc(String(x.priceGold??x.price))+" золота":"Цена уточняется";
+     return categoryHeading+'<button class="ency-item-tile" type="button" data-open-item="'+itemIndex+'" aria-label="Открыть предмет '+esc(x.name)+'"><span class="ency-item-art">'+visual+'</span><span class="ency-item-tile-copy"><b>'+esc(x.name)+'</b><small>'+esc(x.category||"Предмет")+' · '+priceLabel+'</small>'+aliasPreview+'<span class="ency-item-stat-preview">'+statPreview+'</span><span class="ency-item-open-hint">СКАНИРОВАТЬ ПРЕДМЕТ <i>↗</i></span></span></button>';
+    }
     return categoryHeading+'<details class="ency-info-card visual '+x.type+'"><summary class="ency-info-summary"><div class="ency-info-visual">'+visual+'</div><div class="ency-info-copy"><b>'+esc(x.name)+'</b><small>'+esc((Array.isArray(x.categories)?x.categories:[x.category,x.secondaryCategory].filter(Boolean)).join(" · ")||"")+'</small><span class="ency-expand-hint">Нажми, чтобы открыть сведения <i>＋</i></span></div></summary><div class="ency-info-expanded">'+aliasesMarkup+'<p>'+esc(details)+'</p>'+factsMarkup+passive+effect+tags+expandedMeta+verification+source+'</div></details>';
    }
   }).join("");
  }
  $("encyList").innerHTML=html||"<p>Ничего не найдено</p>";
+}
+function itemModalMarkup(item,tab="overview"){
+ const stats=Array.isArray(item.stats)?item.stats:[];
+ const aliases=Array.isArray(item.aliases)&&item.aliases.length?'<div class="ency-item-alias-block"><small>ИГРОВЫЕ НАЗВАНИЯ</small><b>'+item.aliases.map(esc).join(" · ")+'</b></div>':"";
+ const price=item.priceGold??item.price;
+ const meta=[price!==undefined?esc(String(price))+" золота":"Цена не указана",item.tier?"Тир T"+esc(String(item.tier)):null,item.category?esc(item.category):null].filter(Boolean).join(" · ");
+ const statsMarkup=stats.length?'<div class="ency-item-stat-grid">'+stats.map(value=>'<div class="ency-item-stat">'+esc(String(value))+'</div>').join("")+'</div>':'<p class="ency-item-muted">Характеристики в каталоге пока не указаны.</p>';
+ const passive=item.passive?'<section class="ency-item-effect"><small>УНИКАЛЬНАЯ ПАССИВКА</small><h4>'+esc(item.passiveName||"Пассивный эффект")+'</h4><p>'+esc(item.passive)+'</p></section>':"";
+ const active=item.effect?'<section class="ency-item-effect"><small>АКТИВНЫЙ ЭФФЕКТ</small><h4>'+esc(item.effectName||"Активный эффект")+'</h4><p>'+esc(item.effect)+'</p></section>':"";
+ const overview='<section class="ency-item-section"><small>НАЗНАЧЕНИЕ</small><p>'+esc(item.description||item.summary||"Тактическое назначение предмета уточняется.")+'</p></section><section class="ency-item-section"><small>ХАРАКТЕРИСТИКИ</small>'+statsMarkup+'</section>'+aliases;
+ const effects=(passive||active)?passive+active:'<p class="ency-item-muted">Отдельные эффекты для этого предмета в каталоге не указаны.</p>';
+ const recipeKeys=["components","buildsFrom","buildPath","recipe","buildsInto"];
+ const recipes=recipeKeys.filter(key=>Array.isArray(item[key])&&item[key].length).map(key=>'<section class="ency-item-section"><small>'+({components:"СОСТАВ",buildsFrom:"СОБИРАЕТСЯ ИЗ",buildPath:"ПУТЬ СБОРКИ",recipe:"РЕЦЕПТ",buildsInto:"УЛУЧШАЕТСЯ В"}[key]||key.toUpperCase())+'</small><div class="ency-item-recipe-list">'+item[key].map(part=>'<span>'+esc(typeof part==="string"?part:(part.name||part.englishName||"Компонент"))+'</span>').join("")+'</div></section>').join("");
+ const build=recipes||'<p class="ency-item-muted">Дерево сборки для этого предмета пока не заполнено. Не будем придумывать компоненты — добавим их после сверки с игровой базой.</p>';
+ const source=item.source?'<a class="ency-item-source" href="'+esc(item.source)+'" target="_blank" rel="noopener">Открыть источник ↗</a>':"";
+ const body=tab==="effects"?effects:tab==="build"?build:overview;
+ return '<div class="ency-item-modal-head"><div class="ency-item-modal-art">'+(item.image?'<img src="'+esc(item.image)+'" alt="" onerror="this.style.opacity=0">':'<span>✦</span>')+'</div><div class="ency-item-modal-title"><small>CYBER ITEM SCANNER</small><h2>'+esc(item.name)+'</h2><p>'+meta+'</p></div><button type="button" class="ency-item-close" data-item-close aria-label="Закрыть">×</button></div><nav class="ency-item-tabs" aria-label="Разделы предмета"><button type="button" data-item-tab="overview" class="'+(tab==="overview"?"active":"")+'">ОБЗОР</button><button type="button" data-item-tab="effects" class="'+(tab==="effects"?"active":"")+'">ЭФФЕКТЫ</button><button type="button" data-item-tab="build" class="'+(tab==="build"?"active":"")+'">СБОРКА</button></nav><div class="ency-item-modal-body">'+body+'<div class="ency-item-verification">'+(item.checkedAt?"Проверено: "+esc(item.checkedAt):"Данные каталога")+(item.verification==="partial"?" · Требуется дополнительная сверка":"")+'</div>'+source+'</div>';
+}
+function openEncyItemModal(index){
+ const item=data.items[Number(index)];
+ if(!item)return;
+ const host=$("encyItemModal"),content=$("encyItemModalContent");
+ if(!host||!content)return;
+ content.innerHTML=itemModalMarkup(item);
+ host.classList.remove("hidden");
+ document.body.classList.add("ency-item-modal-open");
+ history.pushState({...(history.state||{}),encyItemModal:true},"","#ency/item/"+encodeURIComponent(item.name));
+}
+function closeEncyItemModal({back=true}={}){
+ const host=$("encyItemModal");
+ if(!host||host.classList.contains("hidden"))return;
+ host.classList.add("hidden");
+ document.body.classList.remove("ency-item-modal-open");
+ if(back&&history.state?.encyItemModal)history.back();
 }
 let encySkillRequestId=0;
 function encySkillSlotLabel(index){
@@ -805,9 +846,20 @@ function renderEncyHeroModal(id){
   loadEncyHeroKnowledge(id);
 }
 $("encyList").addEventListener("click",e=>{
+ const itemCard=e.target.closest("[data-open-item]");
+ if(itemCard){openEncyItemModal(itemCard.dataset.openItem);return;}
  const card=e.target.closest("[data-open-hero]");
  if(card)renderEncyHeroModal(card.dataset.openHero);
 });
+$("encyItemModal").addEventListener("click",e=>{
+ if(e.target===$("encyItemModal")||e.target.closest("[data-item-close]")){closeEncyItemModal();return;}
+ const tab=e.target.closest("[data-item-tab]");
+ if(!tab)return;
+ const itemName=decodeURIComponent(location.hash.split("/").slice(2).join("/")||"");
+ const item=data.items.find(entry=>entry.name===itemName)||data.items.find(entry=>entry.name===$("encyItemModalContent").querySelector(".ency-item-modal-title h2")?.textContent);
+ if(item)$("encyItemModalContent").innerHTML=itemModalMarkup(item,tab.dataset.itemTab);
+});
+
 $("encyHeroModal").addEventListener("click",e=>{
  if(e.target=== $("encyHeroModal")||e.target.closest("[data-ency-close]")){
   $("encyHeroModal").classList.add("hidden");
@@ -816,6 +868,7 @@ $("encyHeroModal").addEventListener("click",e=>{
  }
 });
 document.addEventListener("keydown",e=>{
+ if(e.key==="Escape"&&!$("encyItemModal").classList.contains("hidden")){closeEncyItemModal();return;}
  if(e.key==="Escape"&&!$("encyHeroModal").classList.contains("hidden")){
   $("encyHeroModal").classList.add("hidden");
   document.body.classList.remove("ency-modal-open");
