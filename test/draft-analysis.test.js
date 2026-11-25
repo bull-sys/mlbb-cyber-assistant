@@ -219,6 +219,30 @@ test("emblem and talent recommendations use the selected hero profile and real c
   }
 });
 
+test("talent recommendations adapt to lane and confirmed enemy threats", () => {
+  const marksman = heroProfiles.find(profile => profile.roles?.includes("Стрелок") && profile.combat?.dps === "high");
+  const burstEnemies = heroProfiles.filter(profile => profile.id !== marksman?.id &&
+    ["high", "very_high"].includes(profile.combat?.burst)).slice(0, 2);
+  assert.ok(marksman, "a high-DPS marksman profile exists");
+  assert.equal(burstEnemies.length, 2, "two high-burst enemy profiles exist");
+  const result = run({
+    lane: "Золото",
+    myHero: marksman.names.ru,
+    enemies: burstEnemies.map(profile => profile.names.ru)
+  });
+  assert.equal(result.talentRecommendations.length, 3);
+  assert.equal(result.talentRecommendations.find(entry => entry.tier === 1)?.id, "vitality");
+  assert.equal(result.talentRecommendations.find(entry => entry.tier === 2)?.id, "tenacity");
+  assert.ok(result.talentRecommendations.filter(entry => entry.contextual).length >= 2);
+  assert.ok(result.talentRecommendations.every(entry => entry.reason && entry.effect));
+});
+
+test("jungle lane prioritizes Seasoned Hunter for the second talent tier", () => {
+  const assassin = heroProfiles.find(profile => profile.roles?.includes("Убийца"));
+  const result = run({ lane: "Лес", myHero: assassin.names.ru, enemies: [] });
+  assert.equal(result.talentRecommendations.find(entry => entry.tier === 2)?.id, "seasoned-hunter");
+});
+
 test("talent recommendations are empty when no own hero is selected", () => {
   const result = run();
   assert.deepEqual(result.talentTiers, []);
