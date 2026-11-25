@@ -321,3 +321,16 @@ All item names and all talent names were mapped. The only unmatched emblem label
 The audit ran sequentially with a delay between hero requests after an initial concurrent pass encountered HTTP 429 responses. The full sequential pass succeeded with 133/133 endpoints. The repeatable audit is available as npm run audit:builds; its detailed JSON report is archived as a GitHub Actions artifact for run 45590688091.
 
 **Interpretation:** the source has broad roster coverage and excellent item/talent name compatibility, but availability is not uniform by position/rank and emblem semantics still have one unresolved label. The endpoint returns observed builds and rates, not sample sizes or proof that a build is optimal. MLBBDex attributes ranked build statistics to arena.rone.dev, so these records are not an independent confirmation of the existing Rone-derived ranked evidence.
+
+## Draft Assistant and Build Engine use of observed builds — 2026-11-25
+
+The observed-build feed is now connected to both build workflows:
+
+- In the Draft Assistant, selecting a personal hero adds a server-side MLBBDex build lookup in parallel with ranked matchup retrieval. The server selects the build for the requested draft lane and rank. If that exact rank has no build but the same lane has an all-ranks record, it explicitly labels the fallback. It never substitutes another lane.
+- The report displays up to three source build variants with their source item order, emblem, talents, spell, published WR and pick rate. Unknown catalog labels remain visible and are marked as unmatched.
+- The standalone Build Engine now lets the user choose a hero, position and rank. It displays the source's first returned build as the statistical baseline, then shows separate situational item additions from the existing archetype/threat-tag heuristic, excluding items already in the baseline.
+- The observed baseline and situational suggestions are deliberately separate. The heuristic does not rewrite the source build order or claim to be a measured win-rate improvement.
+- If no personal hero is selected, the Draft Assistant reports that no statistical baseline can be attached. If the selected position is absent, it reports that absence rather than silently borrowing a different lane.
+- The source lookup is cached server-side for six hours; the API response is additionally cached by the browser/server response headers. Ranked source calls are not made for every enemy individually.
+
+The pure lane/rank selection behavior is covered by tests: exact lane+rank selection, explicit all-ranks fallback, no cross-lane substitution, and unavailable-source handling. The full-roster audit remains a separate manual/weekly workflow so the 133-endpoint crawl does not run on every code commit.
