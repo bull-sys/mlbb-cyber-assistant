@@ -1129,3 +1129,13 @@ test("the final 16 matchup records are source-backed and match the current ranke
     assert.ok(hero.sources.includes(hero.matchupEvidence.source), id + " evidence source");
   }
 });
+
+
+test("Martis and Lesley profiles preserve their true-damage mechanics", () => {
+  const martis = heroProfiles.find(hero => hero.id === "martis");
+  const lesley = heroProfiles.find(hero => hero.id === "lesley");
+  const phoveus = heroProfiles.find(hero => hero.id === "phoveus");
+  assert.equal(martis.combat.damage, "physical_and_true");
+  assert.equal(lesley.combat.damage, "physical_true");
+  assert.equal(phoveus.combat.damage, "mixed");
+});
