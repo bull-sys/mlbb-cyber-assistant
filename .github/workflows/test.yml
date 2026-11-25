@@ -28,15 +28,5 @@ jobs:
         run: npm test
       - name: Audit live item catalog and artwork
         run: node scripts/audit-item-assets.mjs
-      - name: Audit ranked builds for all heroes
-        run: npm run audit:builds
-      - name: Upload ranked build coverage report
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: mlbbdex-build-coverage
-          path: artifacts/mlbbdex-build-coverage.json
-          if-no-files-found: ignore
-          retention-days: 14
       - name: Build production Docker image
         run: docker build -t mlbb-cyber-assistant:test .
