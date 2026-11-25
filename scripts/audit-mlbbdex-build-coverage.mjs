@@ -57,7 +57,8 @@ for (const emblem of emblems) {
   const short = normalize(String(emblem.nameEn || "").replace(/^Custom /u, ""));
   for (const key of [full, short, normalize(emblem.id), ...(emblem.id === "common" ? ["all"] : [])]) if (key) emblemIndex.set(key, emblem);
 }
-const talentIndex = catalogIndex(talents, "nameEn");\ntalentIndex.set(normalize("Weapons Master"), talents.find(talent => talent.id === "weapon-master"));
+const talentIndex = catalogIndex(talents, "nameEn");
+talentIndex.set(normalize("Weapons Master"), talents.find(talent => talent.id === "weapon-master"));
 
 const heroList = await getJson(BASE + "/api/v1/heroes");
 const slugByName = getHeroSlugMap(heroList);
