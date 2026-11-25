@@ -340,7 +340,7 @@ The pure lane/rank selection behavior is covered by tests: exact lane+rank selec
 
 The counter-build audit found that part of the draft item logic inferred damage type from hero class. That is unsafe for MLBB: an Assassin or Fighter can deal magic damage, and a Mage can deal physical damage. Draft counter-build eligibility, enemy damage counts, defensive boot explanations and damage-target matching now use the structured `combat.damage` profile (or an explicit physical/magic tag when the profile value is absent). Unknown damage remains unknown; the engine no longer guesses from class.
 
-The same pass corrected burst-threat handling so both `high` and `very_high` burst profiles can trigger survival recommendations. Penetration recommendations now also recognize durable frontliners, not only heroes whose primary class is Tank.
+The same pass corrected burst-threat handling so both `high` and `very_high` burst profiles can trigger survival recommendations. Penetration recommendations are restricted to explicit physical-armour evidence; Tank class and general durability are not treated as proof of high physical defence.
 
 Build-feed validation also exposed three battle spells that were present in MLBBDex build records but absent from the local spell list: Petrify, Aegis and Vengeance. The local Russian spell catalog now includes Окаменение, Щит and Месть, and adapter tests cover their mappings. The full-roster audit now measures spell mapping coverage alongside items, emblems and talents; the exact roster-wide spell totals are intentionally not stated until the next full audit run completes.
 
@@ -389,3 +389,13 @@ The counter-item report previously stored an item's reasons globally, then copie
 A separate data-coverage limitation remains open: the current draft-analysis profile builder imports legacy hero tags, and only Miya currently has the explicit `attack-speed` tag in that legacy catalogue. The 133-hero structured profile catalogue has no dedicated attack-speed field or explicit attack-speed mentions. Therefore the Chastise Pauldron / Blade Armor attack-speed trigger is currently narrow and must not be described as complete roster coverage. Do not infer attack-speed dependence from Marksman class alone; the missing hero-specific classifications require patch-checked evidence before they can be added.
 
 The first CI run after the scorer change passed 267/267 tests and the build checks. Adding the dedicated per-enemy regression then exposed that the target-reason map was not yet copied into the final build-detail projection; this was corrected in the follow-up commit. Final CI passed 268/268 tests, audit-script syntax validation, live item catalogue/artwork audit and the production Docker build. No live 133-hero build crawl or Render deployment was performed in this pass.
+
+
+### Follow-up: physical penetration and basic-attack counter precision — 2026-11-25
+
+A further review found two overly broad recommendation conditions:
+
+- Malefic Roar was recommended against any durable frontline, including a durable Fighter, even when the enemy profile did not confirm high physical defence. General durability is not equivalent to physical armour. The rule now requires an explicit enemy tag identifying physical defence / high physical defence / armour stacking. Until hero-specific armour evidence is curated, the engine intentionally abstains rather than guessing.
+- Blade Armor's attack-speed bonus could be attributed to an attack-speed hero without confirming that the hero's basic attacks are physical. The special Blade Armor counter bonus now requires both the attack-speed tag and a confirmed physical damage profile. Chastise Pauldron remains tied to attack-speed dependence because its attack-speed reduction applies to the attacker regardless of damage type.
+
+The Malefic Roar regression now asserts that a durable Leomord profile without explicit physical-armour evidence does not trigger the item. Existing Miya attack-speed tests continue to cover Chastise Pauldron and Blade Armor. These are code-level safeguards; they do not imply that all 133 heroes already have complete attack-speed or physical-defence classifications. CI for these latest commits has not yet been verified in this audit pass.
