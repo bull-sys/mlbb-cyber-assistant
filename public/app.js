@@ -528,11 +528,13 @@ function itemModalMarkup(item,tab="overview"){
  return '<div class="ency-item-modal-head"><div class="ency-item-modal-art">'+(item.image?'<img src="'+esc(item.image)+'" alt="" onerror="this.style.opacity=0">':'<span>✦</span>')+'</div><div class="ency-item-modal-title"><small>CYBER ITEM SCANNER</small><h2>'+esc(item.name)+'</h2><p>'+meta+'</p></div><button type="button" class="ency-item-close" data-item-close aria-label="Закрыть">×</button></div><nav class="ency-item-tabs" aria-label="Разделы предмета"><button type="button" data-item-tab="overview" class="'+(tab==="overview"?"active":"")+'">ОБЗОР</button><button type="button" data-item-tab="effects" class="'+(tab==="effects"?"active":"")+'">ЭФФЕКТЫ</button><button type="button" data-item-tab="build" class="'+(tab==="build"?"active":"")+'">СБОРКА</button></nav><div class="ency-item-modal-body">'+body+'<div class="ency-item-verification">'+(item.checkedAt?"Проверено: "+esc(item.checkedAt):"Данные каталога")+(item.verification==="partial"?" · Требуется дополнительная сверка":"")+'</div>'+source+'</div>';
 }
 function openEncyItemModal(index){
- const item=data.items[Number(index)];
- if(!item)return;
+ const rawItem=data.items[Number(index)];
+ if(!rawItem)return;
+ const item={...rawItem,image:encyItemImage(rawItem)};
  const host=$("encyItemModal"),content=$("encyItemModalContent");
  if(!host||!content)return;
  content.innerHTML=itemModalMarkup(item);
+ host.dataset.itemName=item.name;
  host.classList.remove("hidden");
  document.body.classList.add("ency-item-modal-open");
  history.pushState({...(history.state||{}),encyItemModal:true},"","#ency/item/"+encodeURIComponent(item.name));
@@ -855,8 +857,8 @@ $("encyItemModal").addEventListener("click",e=>{
  if(e.target===$("encyItemModal")||e.target.closest("[data-item-close]")){closeEncyItemModal();return;}
  const tab=e.target.closest("[data-item-tab]");
  if(!tab)return;
- const itemName=decodeURIComponent(location.hash.split("/").slice(2).join("/")||"");
- const item=data.items.find(entry=>entry.name===itemName)||data.items.find(entry=>entry.name===$("encyItemModalContent").querySelector(".ency-item-modal-title h2")?.textContent);
+ const itemName=$("encyItemModal").dataset.itemName;
+ const item=data.items.find(entry=>entry.name===itemName);
  if(item)$("encyItemModalContent").innerHTML=itemModalMarkup(item,tab.dataset.itemTab);
 });
 
