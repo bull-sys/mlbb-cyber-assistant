@@ -633,7 +633,10 @@ function analyze({lane, enemies = [], allies = [], myHero = "", rankedMatchups =
       add(5, "Добавляет защиту против физического урона", physicalTargets);
     }
 
-    const tankTargets = enemy.filter(hero => {\n      const profile = enemyProfileByName.get(hero.name);\n      return hero.type === "tank" || ["high", "very_high"].includes(profile?.combat?.durability) || (hero.tags || []).includes("frontline");\n    }).map(hero => hero.name);
+    const tankTargets = enemy.filter(hero => {
+      const profile = enemyProfileByName.get(hero.name);
+      return hero.type === "tank" || ["high", "very_high"].includes(profile?.combat?.durability) || (hero.tags || []).includes("frontline");
+    }).map(hero => hero.name);
     if (tags.has("penetration") && tankTargets.length &&
         ((physicalBuild && item.category === "Атака" && item.name === "Злобный рык") ||
          (magicBuild && item.category === "Магия" && item.name === "Божественный меч"))) {
