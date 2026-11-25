@@ -280,3 +280,19 @@ Required metadata for any imported counter edge: source, source URL, retrieval t
 - Live counter response: https://mlbbdex.com/api/v1/heroes/argus/counters
 - Live position/rank build response: https://mlbbdex.com/api/v1/heroes/argus/builds
 - API documentation states weekly synchronization and last sync 2026-11-20 as of this review.
+
+## MLBBDex observed builds integration — 2026-11-25
+
+The first runtime integration is implemented separately from counter-pick scoring:
+
+- server/mlbbdex-adapter.js fetches /api/v1/heroes/{slug}/builds on demand and caches each hero response for six hours.
+- GET /api/hero-builds/:id exposes normalized build data to the encyclopedia. The UI offers position and rank selectors and renders the source's build order without re-ranking the records.
+- Position keys are normalized for EXP, Jungle, Mid, Gold and Roam. Rank keys are normalized for all, Epic, Legend, Mythic, Honor and Glory.
+- Item, emblem and talent names are matched against the local catalog by English source name. Unmatched entries retain the exact source label and are visibly flagged; they are not silently substituted.
+- The API's win-rate and pick-rate values are displayed as published. Pair/build sample sizes are not supplied by the inspected response, so no sample size, confidence interval or reliability score is invented.
+- The adapter preserves the response attribution object and links the MLBBDex methodology. MLBBDex says its ranked builds are aggregated through arena.rone.dev; they are not an independent source from the existing Rone ranked adapter.
+- The encyclopedia's observed build panel is explicitly a statistical snapshot of what is played, not an automatic claim that the first build is optimal for every draft. Contextual counter-build recommendations remain a separate layer.
+
+The live Argus response was used as the contract fixture: the Exp position contains rank keys all, epic, legend, mythic, honor and glory; each build carries an item-name array, emblem, three talents, spell, winRate and pickRate. The endpoint may return three or four core items depending on the record, so the UI preserves the full list rather than truncating it to three.
+
+**Coverage limitation:** this is an on-demand integration, not yet a completed 133-hero coverage audit. Position/rank availability and item-name mapping still need to be measured across the full roster before the project can claim complete build coverage. No Render deployment has been performed as part of this change.
