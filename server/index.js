@@ -20,7 +20,7 @@ import { getHeroKnowledge, getHeroBuilds, getGameAssets } from "./mlbbdex-adapte
 import { getHeroGrowthData } from "./hero-growth-adapter.js";
 import { getRankedMatchupEvidence, normalizeRankedMatchupRank } from "./ranked-matchup-adapter.js";
 import { selectObservedBuild } from "./observed-build-context.js";
-import { hasCombatDamageKind } from "./combat-threats.js";
+import { hasCombatDamageKind, isHighBurstThreat } from "./combat-threats.js";
 import { getDraftHeroAnalysisProfiles, getDraftHeroOptions, isCatalogHeroId, resolveDraftHeroSelection } from "./draft-hero-selection.js";
 import { heroProfiles, validateHeroProfiles } from "./hero-profiles.js";
 import { normalizeRegistration } from "./registration.js";
@@ -555,13 +555,7 @@ function analyze({lane, enemies = [], allies = [], myHero = "", rankedMatchups =
   // Контрсборка: совместимость с выбранным героем + подтверждённые угрозы врагов.
   const selectedProfile = profileByName.get(myHero) || null;
   const enemyProfileByName = new Map(enemy.map(hero => [hero.name, profileByName.get(hero.name)]));
-  let hasBurstThreat = false;
-  for (const hero of enemy) {
-    const profile = enemyProfileByName.get(hero.name);
-    const damage = profile?.combat?.damage || "";
-    const burst = profile?.combat?.burst || ((hero.tags || []).includes("burst") ? "high" : "unknown");
-    if (burst === "high") hasBurstThreat = true;
-  }
+  const hasBurstThreat = enemy.some(hero => isHighBurstThreat(enemyProfileByName.get(hero.name), hero));
 
   const physicalBuild = hasCombatDamageKind(selectedProfile, selected, "physical");
   const magicBuild = hasCombatDamageKind(selectedProfile, selected, "magic");
@@ -639,7 +633,7 @@ function analyze({lane, enemies = [], allies = [], myHero = "", rankedMatchups =
       add(5, "Добавляет защиту против физического урона", physicalTargets);
     }
 
-    const tankTargets = enemy.filter(hero => hero.type === "tank").map(hero => hero.name);
+    const tankTargets = enemy.filter(hero => {\n      const profile = enemyProfileByName.get(hero.name);\n      return hero.type === "tank" || ["high", "very_high"].includes(profile?.combat?.durability) || (hero.tags || []).includes("frontline");\n    }).map(hero => hero.name);
     if (tags.has("penetration") && tankTargets.length &&
         ((physicalBuild && item.category === "Атака" && item.name === "Злобный рык") ||
          (magicBuild && item.category === "Магия" && item.name === "Божественный меч"))) {
@@ -649,7 +643,7 @@ function analyze({lane, enemies = [], allies = [], myHero = "", rankedMatchups =
     if (tags.has("survival") && hasBurstThreat) {
       const burstTargets = enemy.filter(hero => {
         const profile = enemyProfileByName.get(hero.name);
-        return profile?.combat?.burst === "high" || (hero.tags || []).includes("burst");
+        return isHighBurstThreat(profile, hero);
       }).map(hero => hero.name);
       add(5, "Повышает шанс пережить вражеский взрывной урон", burstTargets);
     }
