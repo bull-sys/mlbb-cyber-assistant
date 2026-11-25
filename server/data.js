@@ -188,4 +188,4 @@ export const talents = [
  {id:"weakness-finder",slug:"weakness-finder",name:"Поиск слабости",nameEn:"Weakness Finder",tier:3,image:"https://mlbb.tools/emblems/talents/weakness-finder.webp",description:"Базовые атаки временно замедляют цель и снижают её скорость атаки.",effect:"Базовые атаки замедляют цель на 50% и снижают её скорость атаки на 30% на 1 секунду. Перезарядка — 10 секунд; каждое попадание базовой атакой сокращает её на 1 секунду, но не ниже 3 секунд.",source:"https://mlbbnexus.com/academy/emblems",checkedAt:"2026-11-25"}
 ];
 
-export const spells = ["Возмездие","Вспышка","Очищение","Вдохновение","Пламя","Исцеление","Спринт"];
+export const spells = ["Возмездие","Вспышка","Очищение","Окаменение","Вдохновение","Пламя","Исцеление","Спринт","Щит","Месть"];
