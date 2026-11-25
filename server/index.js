@@ -562,10 +562,15 @@ function analyze({lane, enemies = [], allies = [], myHero = "", rankedMatchups =
     let score = 0;
     const reasons = [];
     const targets = [];
+    const targetReasons = {};
     const add = (points, reason, against = []) => {
       score += points;
       reasons.push(reason);
-      for (const name of against) if (!targets.includes(name)) targets.push(name);
+      for (const name of against) {
+        if (!targets.includes(name)) targets.push(name);
+        targetReasons[name] ||= [];
+        if (!targetReasons[name].includes(reason)) targetReasons[name].push(reason);
+      }
     };
     if (physicalBuild && item.category === "Атака" &&
         (tags.has("burst") || tags.has("physical") || tags.has("penetration") ||
@@ -637,7 +642,7 @@ function analyze({lane, enemies = [], allies = [], myHero = "", rankedMatchups =
       add(5, "Повышает шанс пережить вражеский взрывной урон", burstTargets);
     }
 
-    return {name:item.name,category:item.category,description:item.description,tags:[...tags],score,reasons:[...new Set(reasons)],targets};
+    return {name:item.name,category:item.category,description:item.description,tags:[...tags],score,reasons:[...new Set(reasons)],targets,targetReasons};
   });
 
   const buildDetails = itemScores
@@ -659,7 +664,7 @@ function analyze({lane, enemies = [], allies = [], myHero = "", rankedMatchups =
   const enemyMatchupsWithItems = enemyMatchups.map(matchup => ({
     ...matchup,
     counterItems:buildDetails.filter(item=>item.against.includes(matchup.name))
-      .map(item=>({name:item.name,reason:item.reasons.join("; "),priority:item.priority}))
+      .map(item=>({name:item.name,reason:(item.targetReasons?.[matchup.name] || []).join("; "),priority:item.priority}))
   }));
 
   // Boots and roam blessings are selected separately from the six main item slots.
