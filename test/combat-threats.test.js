@@ -9,7 +9,9 @@ test("uses the explicit damage profile instead of guessing from hero class", () 
 
 test("recognizes hybrid and physical-plus-true damage profiles", () => {
   assert.deepEqual(getCombatDamageKinds({ combat: { damage: "physical_and_magic" } }), ["physical", "magic"]);
-  assert.deepEqual(getCombatDamageKinds({ combat: { damage: "physical_and_true" } }), ["physical"]);
+  assert.deepEqual(getCombatDamageKinds({ combat: { damage: "physical_and_true" } }), ["physical", "true"]);
+  assert.deepEqual(getCombatDamageKinds({ combat: { damage: "physical_true" } }), ["physical", "true"]);
+  assert.deepEqual(getCombatDamageKinds({ combat: { damage: "magic_and_true" } }), ["magic", "true"]);
   assert.deepEqual(getCombatDamageKinds({ combat: { damage: "mixed" } }), ["physical", "magic"]);
 });
 
