@@ -20,6 +20,12 @@ async function getJson(url) {
         headers: { "user-agent": "MLBB-Cyber-Assistant-build-coverage-audit/1.0" },
         signal: AbortSignal.timeout(15000)
       });
+      if (response.status === 429) {
+        const retryAfter = Number(response.headers.get("retry-after"));
+        const waitMs = Number.isFinite(retryAfter) && retryAfter > 0 ? Math.min(retryAfter * 1000, 120000) : 15000;
+        if (attempt === 0) { await new Promise(resolve => setTimeout(resolve, waitMs)); continue; }
+        throw new Error("HTTP 429 after retry delay");
+      }
       if (!response.ok) throw new Error("HTTP " + response.status);
       return await response.json();
     } catch (error) {
@@ -49,9 +55,9 @@ const emblemIndex = new Map();
 for (const emblem of emblems) {
   const full = normalize(emblem.nameEn);
   const short = normalize(String(emblem.nameEn || "").replace(/^Custom /u, ""));
-  for (const key of [full, short, normalize(emblem.id)]) if (key) emblemIndex.set(key, emblem);
+  for (const key of [full, short, normalize(emblem.id), ...(emblem.id === "common" ? ["all"] : [])]) if (key) emblemIndex.set(key, emblem);
 }
-const talentIndex = catalogIndex(talents, "nameEn");
+const talentIndex = catalogIndex(talents, "nameEn");\ntalentIndex.set(normalize("Weapons Master"), talents.find(talent => talent.id === "weapon-master"));
 
 const heroList = await getJson(BASE + "/api/v1/heroes");
 const slugByName = getHeroSlugMap(heroList);
