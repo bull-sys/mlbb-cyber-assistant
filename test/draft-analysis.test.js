@@ -272,6 +272,49 @@ test("hybrid defense talent uses verified damage types, not hero class labels", 
   );
 });
 
+test("mass talent matrix returns valid tiered recommendations for every hero across enemy archetypes", () => {
+  const laneMap = {
+    "Лес": "Лес",
+    "Золото": "Золото",
+    "Золотая линия": "Золото",
+    "Линия золота": "Золото",
+    "Опыт": "Опыт",
+    "EXP-линия": "Опыт",
+    "Линия опыта": "Опыт",
+    "Мид": "Мид",
+    "Средняя линия": "Мид",
+    "Центр": "Мид",
+    "Роум": "Роум"
+  };
+  const enemySets = [
+    ["Карина", "Эйдора", "Хелкарт"],
+    ["Тигрил", "Минотавр", "Теризла"],
+    ["Нана", "Мия", "Эстес"]
+  ];
+  const talentById = new Map(talents.map(entry => [entry.id, entry]));
+  let scenarios = 0;
+
+  for (const profile of heroProfiles) {
+    const lane = (profile.lanes || []).map(value => laneMap[value]).find(Boolean);
+    assert.ok(lane, profile.names.ru + " has a supported lane");
+    for (const enemySet of enemySets) {
+      const enemies = enemySet.filter(name => name !== profile.names.ru);
+      const result = run({ lane, myHero: profile.names.ru, enemies });
+      assert.equal(result.talentRecommendations.length, 3, profile.names.ru + " returns three talents");
+      assert.deepEqual(result.talentRecommendations.map(entry => entry.tier), [1, 2, 3]);
+      assert.equal(new Set(result.talentRecommendations.map(entry => entry.id)).size, 3);
+      for (const recommendation of result.talentRecommendations) {
+        assert.ok(talentById.has(recommendation.id), profile.names.ru + " uses a catalog talent");
+        assert.equal(talentById.get(recommendation.id).tier, recommendation.tier);
+        assert.ok(recommendation.reason && recommendation.effect);
+      }
+      scenarios += 1;
+    }
+  }
+
+  assert.equal(scenarios, heroProfiles.length * enemySets.length);
+});
+
 test("talent recommendations adapt to lane and confirmed enemy threats", () => {
   const marksman = heroProfiles.find(profile => profile.roles?.includes("Стрелок") && profile.combat?.dps === "high");
   const burstEnemies = heroProfiles.filter(profile => profile.id !== marksman?.id &&
