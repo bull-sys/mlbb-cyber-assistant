@@ -651,7 +651,7 @@ function analyze({lane, enemies = [], allies = [], myHero = "", rankedMatchups =
     .filter((item,index,array) => !item.tags.includes("anti-heal") || array.findIndex(candidate => candidate.tags.includes("anti-heal")) === index)
     .slice(0,5)
     .map((item,index) => ({
-      name:item.name,category:item.category,description:item.description,reasons:item.reasons,against:item.targets,
+      name:item.name,category:item.category,description:item.description,reasons:item.reasons,against:item.targets,targetReasons:item.targetReasons,
       priority:item.score>=10?"Высокий приоритет":item.score>=8?"Ключевой контрпредмет":"Ситуативный выбор",
       timing:item.tags.includes("anti-heal")?"Покупай, когда противники начинают активно восстанавливать здоровье"
         :item.tags.includes("magic-burst")?"Рассмотри до крупных командных боёв против магического прокаста"
