@@ -206,16 +206,19 @@ test("emblem and talent recommendations use the selected hero profile and real c
 
     const result = run({ myHero: profile.names.ru });
     assert.equal(result.emblemDetails?.id, configured.emblemId, profile.names.ru + " emblem");
+    assert.equal(result.talentRecommendations.length, 3, profile.names.ru + " has three selected talents");
     assert.deepEqual(
-      result.talentRecommendations.map(entry => entry.id),
-      configured.talentIds,
-      profile.names.ru + " selected profile talents"
+      result.talentRecommendations.map(entry => entry.tier),
+      [1, 2, 3],
+      profile.names.ru + " has one recommendation per tier"
     );
-    assert.deepEqual(
-      result.talentTiers,
-      configuredTalents.map(entry => entry.name),
-      profile.names.ru + " displayed talent names"
-    );
+    for (const recommendation of result.talentRecommendations) {
+      assert.ok(talentById.has(recommendation.id), profile.names.ru + " recommendation exists in catalogue");
+      if (!recommendation.contextual) {
+        assert.equal(recommendation.id, configured.talentIds[recommendation.tier - 1], profile.names.ru + " retains baseline when no contextual rule wins");
+      }
+    }
+    assert.deepEqual(result.talentTiers, result.talentRecommendations.map(entry => entry.name));
   }
 });
 
