@@ -476,6 +476,15 @@ test("very high magic burst recommends survival and magic-burst defense", () => 
   assert.ok(names.includes("Щит Валькирии"));
 });
 
+test("attack-speed counterbuild uses Chastise Pauldron and Blade Armor, not obsolete Dominance Ice", () => {
+  const result = run({ lane: "Роум", myHero: "Тигрил", enemies: ["Мия"] });
+  const names = result.buildDetails.map(item => item.name);
+  assert.ok(names.includes("Наплечник наказания"));
+  assert.ok(names.includes("Шипованная броня"));
+  assert.ok(!names.includes("Господство льда"));
+  assert.ok(result.buildDetails.find(item => item.name === "Наплечник наказания").against.includes("Мия"));
+});
+
 test("counter build responds separately to healing, attack speed, and magic burst in a full enemy team", () => {
   const result = run({ lane: "Золото", myHero: "Мия", enemies: ["Эйдора", "Минотавр", "Мия"] });
   const names = result.buildDetails.map(item => item.name);
