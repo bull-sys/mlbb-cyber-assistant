@@ -218,3 +218,14 @@ test("game asset adapter returns verified MLBBDex item image URLs", async () => 
     globalThis.fetch = originalFetch;
   }
 });
+
+
+test("item records expose curated community nicknames and the current Sky Piercer label", () => {
+ const byEnglish=name=>items.find(item=>item.englishName===name);
+ assert.deepEqual(byEnglish("Sky Piercer").aliases,["Пронзайка","Небесный пронзатель"]);
+ assert.equal(byEnglish("Sky Piercer").name,"Пронзающий небеса");
+ assert.deepEqual(byEnglish("Endless Battle").aliases,["ББ","Бесконечка"]);
+ for(const item of items.filter(item=>item.aliases))assert.equal(new Set(item.aliases).size,item.aliases.length,item.englishName+" aliases must be unique");
+ assert.match(appSource,/Array\.isArray\(x\.aliases\)\?x\.aliases\.join\(" "\)/);
+ assert.match(appSource,/ency-item-aliases/);
+});
