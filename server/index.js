@@ -14,6 +14,7 @@ import { fileURLToPath } from "node:url";
 import { heroes, items, talents, spells, emblems } from "./data.js";
 import { getHeroCatalogApiFields, isLegacyHeroName } from "./hero-catalog-adapter.js";
 import { heroCatalog } from "./hero-catalog.js";
+import { heroReferenceData } from "./hero-reference-data.js";
 import { getHeroSkillAssets } from "./hero-skill-assets.js";
 import { getHeroKnowledge, getHeroBuilds, getGameAssets } from "./mlbbdex-adapter.js";
 import { getHeroGrowthData } from "./hero-growth-adapter.js";
@@ -77,8 +78,8 @@ app.get("/api/data",(req,res)=>res.json({
 }));
 app.get("/api/hero-knowledge/:id",async(req,res)=>{
  const id=String(req.params.id||"").toLowerCase();
- const hero=heroCatalog.find(entry=>entry.id===id);
- if(!hero)return res.status(404).json({ok:false,error:"Герой не найден в каталоге"});
+ const hero=heroReferenceData.find(entry=>entry.id===id);
+ if(!hero)return res.status(404).json({ok:false,error:"Герой не найден в справочнике"});
  const result=await getHeroKnowledge(hero);
  if(!result.ok)return res.status(503).json(result);
  res.set("Cache-Control","public, max-age=300, stale-while-revalidate=3600");
@@ -86,8 +87,8 @@ app.get("/api/hero-knowledge/:id",async(req,res)=>{
 });
 app.get("/api/hero-builds/:id",async(req,res)=>{
  const id=String(req.params.id||"").toLowerCase();
- const hero=heroCatalog.find(entry=>entry.id===id);
- if(!hero)return res.status(404).json({ok:false,error:"Герой не найден в каталоге"});
+ const hero=heroReferenceData.find(entry=>entry.id===id);
+ if(!hero)return res.status(404).json({ok:false,error:"Герой не найден в справочнике"});
  const result=await getHeroBuilds(hero);
  if(!result.ok)return res.status(503).json(result);
  res.set("Cache-Control","public, max-age=1800, stale-while-revalidate=21600");
