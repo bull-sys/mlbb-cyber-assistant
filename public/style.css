@@ -1309,7 +1309,7 @@ details.ency-info-card.visual>.ency-info-summary{display:grid}
 .arena-own-empty{color:#a98cff;font-size:25px}
 .arena-own-card .picker-open{grid-column:3;grid-row:1;min-height:42px;margin:0;text-align:center;font-size:10px}
 .arena-own-card .draft-data-select,.arena-own-card .picker-current{display:none}
-.arena-lane-row{display:grid;grid-template-columns:auto minmax(150px,260px);align-items:center;gap:12px;margin:0 0 12px}
+.arena-lane-row{display:grid;grid-template-columns:auto minmax(130px,1fr) auto minmax(150px,1fr);align-items:center;gap:10px;margin:0 0 12px}
 .arena-lane-row label{margin:0;color:#a9bdd7;font-size:11px}
 @media(max-width:650px){
  .arena-draft-stage{margin:12px -4px;padding:10px;border-radius:17px}
@@ -1328,7 +1328,7 @@ details.ency-info-card.visual>.ency-info-summary{display:grid}
  .arena-own-card{grid-template-columns:minmax(0,1fr) 52px;gap:8px;padding:10px}
  .arena-own-portrait-wrap{width:50px;height:50px;grid-column:2;grid-row:1}
  .arena-own-card .picker-open{grid-column:1/-1;grid-row:2}
- .arena-lane-row{grid-template-columns:1fr;gap:5px}
+ .arena-lane-row{grid-template-columns:1fr 1fr;gap:6px 10px}.arena-lane-row label{align-self:end}.arena-lane-row select{min-width:0;width:100%}
 }
 @media(prefers-reduced-motion:reduce){.arena-slot.filled{transition:none}}
 
