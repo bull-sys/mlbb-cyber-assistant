@@ -837,3 +837,69 @@ test("ranked matchup risk remains visible alongside a positive ranked signal", (
   assert.ok(recommendation.riskyEnemies.includes("Тигрил"));
   assert.match(recommendation.reason, /неоднозначный/i);
 });
+
+
+test("live-patch measured matchup fixtures remain visible inside five-enemy drafts", () => {
+  // Values transcribed from MLBBHub's Patch 2.2.23 matchup matrix.
+  // The page attributes measured edges to Moonton GMS, but publishes no pair
+  // sample sizes and does not scope these values to a specific lane.
+  const enemyNames = ["Циклоп", "Фредрин", "Теризла", "Ванван", "Белерик"];
+  const fixtures = [
+    { candidate: "Lolita", candidateRu: "Лолита", lane: "Роум", opponent: "Cyclops", opponentRu: "Циклоп", advantagePp: 9.2 },
+    { candidate: "X.Borg", candidateRu: "Икс.Борг", lane: "Опыт", opponent: "Terizla", opponentRu: "Теризла", advantagePp: 4.2 },
+    { candidate: "Valir", candidateRu: "Валир", lane: "Мид", opponent: "Fredrinn", opponentRu: "Фредрин", advantagePp: 4.1 }
+  ];
+
+  for (const fixture of fixtures) {
+    const candidate = heroProfiles.find(profile => profile.names.en === fixture.candidate);
+    const opponent = heroProfiles.find(profile => profile.names.en === fixture.opponent);
+    assert.ok(candidate, "catalogue contains " + fixture.candidate);
+    assert.ok(opponent, "catalogue contains " + fixture.opponent);
+
+    const result = run({
+      lane: fixture.lane,
+      enemies: enemyNames,
+      rankedMatchups: {
+        [opponent.id]: {
+          [candidate.id]: {
+            opponentId: opponent.id,
+            candidateId: candidate.id,
+            source: "MLBBHub matchup matrix (Moonton GMS attribution)",
+            sourceUrl: "https://mlbbhub.com/matchups",
+            observedAt: "2026-11-25T00:00:00.000Z",
+            rankBracket: "all",
+            windowDays: 15,
+            lane: null,
+            advantagePp: fixture.advantagePp,
+            sampleSize: null,
+            direction: "candidate-favourable",
+            evidenceKind: "measured-ranked-pair"
+          }
+        }
+      },
+      rankedMatchupMeta: {
+        source: "MLBBHub matchup matrix (Moonton GMS attribution)",
+        rankBracket: "all",
+        windowDays: 15,
+        laneScoped: false,
+        sampleSizeAvailable: false,
+        observedAt: "2026-11-25T00:00:00.000Z",
+        status: "available"
+      }
+    });
+
+    const recommendation = result.counters.find(item => item.name === fixture.candidateRu);
+    assert.ok(recommendation, fixture.candidate + " remains in the top three for a five-enemy draft");
+    assert.ok(
+      ["ranked-advantage", "mixed-matchup"].includes(recommendation.matchupType),
+      fixture.candidate + " must retain a ranked-evidence label"
+    );
+    assert.ok(recommendation.matchedEnemies.includes(fixture.opponentRu));
+    assert.equal(recommendation.profileEvidence.rankedMatchups.length, 1);
+    assert.equal(recommendation.profileEvidence.rankedMatchups[0].advantagePp, fixture.advantagePp);
+    assert.equal(recommendation.profileEvidence.rankedMatchups[0].lane, null);
+    assert.equal(recommendation.profileEvidence.rankedMatchups[0].sampleSize, null);
+    assert.ok(result.counters.every(item => item.role === fixture.lane));
+    assert.ok(result.counters.every(item => !enemyNames.includes(item.name)));
+  }
+});
