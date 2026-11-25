@@ -26,7 +26,7 @@ test("selects the exact lane and rank from observed hero builds", () => {
 });
 
 test("falls back to all ranks only when the requested rank has no build", () => {
-  const result = selectObservedBuild(sample, { lane: "Лес", rank: "glory" });
+  const result = selectObservedBuild(sample, { lane: "Лес", rank: "epic" });
   assert.equal(result.status, "available");
   assert.equal(result.rankUsed, "all");
   assert.equal(result.rankFallback, true);
