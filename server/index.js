@@ -20,6 +20,7 @@ import { getHeroKnowledge, getHeroBuilds, getGameAssets } from "./mlbbdex-adapte
 import { getHeroGrowthData } from "./hero-growth-adapter.js";
 import { getRankedMatchupEvidence, normalizeRankedMatchupRank } from "./ranked-matchup-adapter.js";
 import { selectObservedBuild } from "./observed-build-context.js";
+import { hasCombatDamageKind } from "./combat-threats.js";
 import { getDraftHeroAnalysisProfiles, getDraftHeroOptions, isCatalogHeroId, resolveDraftHeroSelection } from "./draft-hero-selection.js";
 import { heroProfiles, validateHeroProfiles } from "./hero-profiles.js";
 import { normalizeRegistration } from "./registration.js";
@@ -557,13 +558,13 @@ function analyze({lane, enemies = [], allies = [], myHero = "", rankedMatchups =
   let hasBurstThreat = false;
   for (const hero of enemy) {
     const profile = enemyProfileByName.get(hero.name);
-    const damage = profile?.combat?.damage || (hero.type === "mage" ? "magic" : ["assassin","fighter","marksman"].includes(hero.type) ? "physical" : "unknown");
+    const damage = profile?.combat?.damage || "";
     const burst = profile?.combat?.burst || ((hero.tags || []).includes("burst") ? "high" : "unknown");
     if (burst === "high") hasBurstThreat = true;
   }
 
-  const physicalBuild = ["assassin","fighter","marksman"].includes(selected?.type);
-  const magicBuild = selected?.type === "mage" || selectedProfile?.combat?.damage === "magic";
+  const physicalBuild = hasCombatDamageKind(selectedProfile, selected, "physical");
+  const magicBuild = hasCombatDamageKind(selectedProfile, selected, "magic");
   const canUseItem = item => {
     const tags = new Set(item.tags || []);
     if (item.category === "Защита") return true;
@@ -601,15 +602,13 @@ function analyze({lane, enemies = [], allies = [], myHero = "", rankedMatchups =
 
     const magicDamageTargets = enemy.filter(hero => {
       const profile = enemyProfileByName.get(hero.name);
-      return profile?.combat?.damage === "magic" || hero.type === "mage" ||
-        (hero.tags || []).includes("magic");
+      return hasCombatDamageKind(profile, hero, "magic");
     }).map(hero => hero.name);
 
     const magicBurstTargets = enemy.filter(hero => {
       const profile = enemyProfileByName.get(hero.name);
       const burst = profile?.combat?.burst;
-      return (profile?.combat?.damage === "magic" || hero.type === "mage" ||
-        (hero.tags || []).includes("magic")) &&
+      return hasCombatDamageKind(profile, hero, "magic") &&
         (burst === "high" || burst === "very_high" || (hero.tags || []).includes("burst"));
     }).map(hero => hero.name);
     if ((tags.has("magic-burst") || tags.has("anti-magic-burst")) && magicBurstTargets.length) {
@@ -622,7 +621,7 @@ function analyze({lane, enemies = [], allies = [], myHero = "", rankedMatchups =
     const magicDpsTargets = enemy.filter(hero => {
       const profile = enemyProfileByName.get(hero.name);
       const burst = profile?.combat?.burst;
-      return (profile?.combat?.damage === "magic" || hero.type === "mage") &&
+      return hasCombatDamageKind(profile, hero, "magic") &&
         burst !== "high" && burst !== "very_high" && !(hero.tags || []).includes("burst");
     }).map(hero => hero.name);
     if (tags.has("magic-dps") && magicDpsTargets.length) add(7, "Полезен против повторяющегося магического урона", magicDpsTargets);
@@ -633,7 +632,7 @@ function analyze({lane, enemies = [], allies = [], myHero = "", rankedMatchups =
 
     const physicalTargets = enemy.filter(hero => {
       const profile = enemyProfileByName.get(hero.name);
-      return profile?.combat?.damage === "physical" || ["assassin","fighter","marksman"].includes(hero.type);
+      return hasCombatDamageKind(profile, hero, "physical");
     }).map(hero => hero.name);
     if (tags.has("physical") && item.category === "Защита" &&
         (!tags.has("attack-speed") || speedTargets.length) && physicalTargets.length) {
@@ -683,11 +682,11 @@ function analyze({lane, enemies = [], allies = [], myHero = "", rankedMatchups =
   // Boots and roam blessings are selected separately from the six main item slots.
   const magicEnemyCount = enemy.filter(hero => {
     const profile = enemyProfileByName.get(hero.name);
-    return profile?.combat?.damage === "magic" || hero.type === "mage";
+    return hasCombatDamageKind(profile, hero, "magic");
   }).length;
   const physicalEnemyCount = enemy.filter(hero => {
     const profile = enemyProfileByName.get(hero.name);
-    return profile?.combat?.damage === "physical" || ["assassin","fighter","marksman"].includes(hero.type);
+    return hasCombatDamageKind(profile, hero, "physical");
   }).length;
   const controlEnemyCount = enemy.filter(hero =>
     (hero.tags || []).some(tag => ["control","engage","silence"].includes(tag))
@@ -753,12 +752,10 @@ function analyze({lane, enemies = [], allies = [], myHero = "", rankedMatchups =
     return value === "high" || value === "very_high" || (hero.tags || []).includes("burst");
   }).length;
   const enemyPhysicalCount = enemy.filter(hero => {
-    const damage = String(enemyProfileByName.get(hero.name)?.combat?.damage || "");
-    return damage.includes("physical") || damage === "mixed";
+    return hasCombatDamageKind(enemyProfileByName.get(hero.name), hero, "physical");
   }).length;
   const enemyMagicCount = enemy.filter(hero => {
-    const damage = String(enemyProfileByName.get(hero.name)?.combat?.damage || "");
-    return damage.includes("magic") || damage === "mixed";
+    return hasCombatDamageKind(enemyProfileByName.get(hero.name), hero, "magic");
   }).length;
   const enemyFrontlineCount = enemy.filter(hero => {
     const profile = enemyProfileByName.get(hero.name);
