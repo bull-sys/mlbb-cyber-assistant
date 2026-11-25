@@ -944,7 +944,7 @@ test("twelve live-patch measured counter edges survive realistic five-enemy draf
     assert.ok(result.counters.every(item => item.reason?.trim()), fixture.candidate + " recommendations have explanations");
 
     const recommendation = result.counters.find(item => item.name === candidate.names.ru);
-    assert.ok(recommendation, fixture.candidate + " remains in the top three against " + fixture.opponent + " in a five-enemy draft");
+    assert.ok(recommendation, fixture.candidate + " remains in the top three against " + fixture.opponent + " in a five-enemy draft; top3=" + JSON.stringify(result.counters.map(item => ({ name: item.name, score: item.score, matchupType: item.matchupType, matchedEnemies: item.matchedEnemies, riskyEnemies: item.riskyEnemies, reason: item.reason }))));
     assert.ok(recommendation.matchedEnemies.includes(opponent.names.ru));
     assert.ok(["direct-counter", "mixed-matchup"].includes(recommendation.matchupType));
   }
