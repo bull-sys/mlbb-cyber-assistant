@@ -374,3 +374,10 @@ Sources checked:
 - https://mlbb.tools/items/chastise-pauldron
 
 A regression now checks that an attack-speed-only enemy triggers Chastise Pauldron and Blade Armor, but not Dominance Ice. Existing sustain tests continue to check Dominance Ice as an anti-heal option.
+
+
+### Magic-DPS counter validation — 2026-11-25
+
+A second item-tag review found that the draft engine treated every non-burst magic-damage hero as a sustained magic-DPS threat. This incorrectly classified low-DPS magic supports such as Floryn or Estes as Radiant Armor targets. The rule now requires an explicit `combat.dps` value of `high` or `very_high`, an explicit magic damage type, and no high-burst classification. Low/medium/unknown DPS is not promoted to sustained magic DPS by exclusion.
+
+Cursed Helmet's `magic-dps` tag described its own Burning Soul damage-over-time effect, not a defensive counter role. It is now tagged `magic-damage-over-time`; Radiant Armor retains the `magic-dps` counter tag. Tests verify that low-DPS Floryn does not trigger Radiant Armor or Cursed Helmet as counter-items, while high-DPS Valir does trigger Radiant Armor. The attack-speed and anti-heal regressions also remain separate: Chastise Pauldron is the explicit attack-speed counter, while Dominance Ice remains an anti-heal option.
