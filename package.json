@@ -8,7 +8,8 @@
     "start": "node server/index.js",
     "dev": "node --watch server/index.js",
     "test": "node --test",
-    "audit:heroes": "node scripts/audit-hero-data.mjs"
+    "audit:heroes": "node scripts/audit-hero-data.mjs",
+    "audit:builds": "node scripts/audit-mlbbdex-build-coverage.mjs"
   },
   "engines": {
     "node": "22.x"
