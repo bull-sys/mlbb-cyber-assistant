@@ -162,3 +162,16 @@ test("draft automatically supports FIRST PICK with no enemy heroes and labels bl
   assert.match(server, /FIRST PICK: оценка по гибкости линии, устойчивости/);
   assert.match(server, /Вражеский состав неизвестен/);
 });
+
+
+test("mobile hero picker avoids automatic iOS input zoom and uses a full-screen scrollable selector", async () => {
+  const app = await readFile(new URL("../public/app.js", import.meta.url), "utf8");
+  const css = await readFile(new URL("../public/style.css", import.meta.url), "utf8");
+  assert.match(app, /function setHeroPickerOpen\(open\)/);
+  assert.match(app, /setHeroPickerOpen\(true\);renderHeroPicker\(\)/);
+  assert.doesNotMatch(app, /heroPickerSearch"\)\.focus\(\)/);
+  assert.match(css, /input#heroPickerSearch\{[\s\S]*?font-size:16px!important/);
+  assert.match(css, /height:100dvh;[\s\S]*?overflow-y:auto/);
+  assert.match(css, /hero-picker-open/);
+  assert.match(css, /grid-template-columns:repeat\(3,minmax\(0,1fr\)\)!important/);
+});
