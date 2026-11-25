@@ -200,7 +200,11 @@ function analyze({lane, enemies = [], allies = [], myHero = "", rankedMatchups =
       ...(profile.strengths || []),
       ...(profile.mechanics || [])
     ].join(" ").toLocaleLowerCase("ru");
-    if (/лечени|восстановлени|вампир/.test(profileText)) tags.add("heal");
+    // Anti-heal must follow actual HP restoration, not generic resource or
+    // cooldown recovery (e.g. Ling's Lightness Points or Fanny's energy).
+    if (/(?:лечени|вампир|регенерац.{0,30}(?:здоров|hp)|восстанов.{0,30}(?:здоров|жизн|hp)|(?:здоров|жизн|hp).{0,30}восстанов)/.test(profileText)) {
+      tags.add("heal");
+    }
     if (/задн.{0,12}лини|уязвим.{0,12}цели/.test(profileText)) tags.add("backline");
     if (/изолированн.{0,12}цел/.test(profileText)) tags.add("isolated-targets");
     if (/мобильн.{0,12}противник/.test(profileText)) tags.add("mobile-targets");
@@ -583,7 +587,9 @@ function analyze({lane, enemies = [], allies = [], myHero = "", rankedMatchups =
     if (selected?.type === "fighter" && tags.has("fighter")) add(3, "Подходит бойцу для продолжительных разменов");
     if (selected?.type === "marksman" && tags.has("marksman")) add(3, "Подходит стрелку");
 
-    const antiHealTargets = enemy.filter(hero => (hero.tags || []).some(tag => ["heal","sustain"].includes(tag))).map(hero => hero.name);
+    // Generic sustain includes shields, damage reduction and other forms of
+    // durability; only explicit HP restoration is a valid anti-heal target.
+    const antiHealTargets = enemy.filter(hero => (hero.tags || []).includes("heal")).map(hero => hero.name);
     if (tags.has("anti-heal") && antiHealTargets.length) add(10, "Снижает эффективность лечения и восстановления здоровья", antiHealTargets);
 
     const magicDamageTargets = enemy.filter(hero => {
