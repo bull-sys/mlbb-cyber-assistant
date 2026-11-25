@@ -124,7 +124,7 @@ test("counter recommendations distinguish direct matchup evidence from situation
   assert.match(app, /item\.matchupType==="ranked-advantage"/);
   assert.match(app, /item\.matchupType==="ranked-risk"/);
   assert.match(app, /rankedMatchupMeta/);
-  assert.match(app, /не статистика выбранной линии/);
+  assert.match(app, /не статистика выбранной линии/);\n  assert.match(app, /не влияет на ранжирование контрпиков/);\n  assert.doesNotMatch(app, /item\\.matchupType==="ranked-advantage"/);\n  assert.doesNotMatch(app, /item\\.matchupType==="ranked-risk"/);
   assert.match(app, /counter-ranked-evidence/);
   assert.match(css, /\.counter-ranked-evidence/);
   assert.match(app, /СМЕШАННЫЙ МАТЧАП/);
