@@ -15,7 +15,7 @@ import { heroes, items, talents, spells, emblems } from "./data.js";
 import { getHeroCatalogApiFields, isLegacyHeroName } from "./hero-catalog-adapter.js";
 import { heroCatalog } from "./hero-catalog.js";
 import { getHeroSkillAssets } from "./hero-skill-assets.js";
-import { getHeroKnowledge, getGameAssets } from "./mlbbdex-adapter.js";
+import { getHeroKnowledge, getHeroBuilds, getGameAssets } from "./mlbbdex-adapter.js";
 import { getHeroGrowthData } from "./hero-growth-adapter.js";
 import { getRankedMatchupEvidence, normalizeRankedMatchupRank } from "./ranked-matchup-adapter.js";
 import { getDraftHeroAnalysisProfiles, getDraftHeroOptions, isCatalogHeroId, resolveDraftHeroSelection } from "./draft-hero-selection.js";
@@ -82,6 +82,15 @@ app.get("/api/hero-knowledge/:id",async(req,res)=>{
  const result=await getHeroKnowledge(hero);
  if(!result.ok)return res.status(503).json(result);
  res.set("Cache-Control","public, max-age=300, stale-while-revalidate=3600");
+ res.json(result);
+});
+app.get("/api/hero-builds/:id",async(req,res)=>{
+ const id=String(req.params.id||"").toLowerCase();
+ const hero=heroCatalog.find(entry=>entry.id===id);
+ if(!hero)return res.status(404).json({ok:false,error:"Герой не найден в каталоге"});
+ const result=await getHeroBuilds(hero);
+ if(!result.ok)return res.status(503).json(result);
+ res.set("Cache-Control","public, max-age=1800, stale-while-revalidate=21600");
  res.json(result);
 });
 app.get("/api/hero-growth/:id",async(req,res)=>{
