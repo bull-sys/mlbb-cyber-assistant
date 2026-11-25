@@ -313,15 +313,13 @@ async function runDraft(){
   }).join("")||'<div class="report-empty">Для выбранных героев пока нет отдельных тактических карточек.</div>';
   const teamPlan=(d.teamPlan||[]).map(item=>'<article class="team-plan-card"><b>'+esc(item.title)+'</b><p>'+esc(item.detail)+'</p></article>').join("");
   const rankedMeta=d.rankedMatchupMeta||null;
-  const rankNames={all:"Все ранги",epic:"Эпик",legend:"Легенда",mythic:"Мифик",honor:"Мифическая слава",glory:"Мифическая бессмертие"};
+  const rankNames={all:"Все ранги",epic:"Эпик",legend:"Легенда",mythic:"Мифик",honor:"Мифическая честь",glory:"Мифическая слава"};
   const rankedSummary=rankedMeta
-   ?'<small class="counter-method-note">Rone Arena · '+esc(rankNames[rankedMeta.rankBracket]||rankedMeta.rankBracket||"ранг не указан")+' · окно '+esc(rankedMeta.windowDays||15)+' дней · общекомандная статистика, не статистика выбранной линии · размер выборки не опубликован'+(rankedMeta.status==="unavailable"?' · источник временно недоступен':rankedMeta.status==="partial"?' · часть матчапов недоступна':"")+'</small>'
+   ?'<small class="counter-method-note">Rone Arena · '+esc(rankNames[rankedMeta.rankBracket]||rankedMeta.rankBracket||"ранг не указан")+' · окно '+esc(rankedMeta.windowDays||15)+' дней · общекомандная статистика, не статистика выбранной линии · не влияет на ранжирование контрпиков · размер выборки не опубликован'+(rankedMeta.status==="unavailable"?' · источник временно недоступен':rankedMeta.status==="partial"?' · часть матчапов недоступна':"")+'</small>'
    :"";
   const counters=(d.counters||[]).map((item,index)=>{
    const profile=item.profileEvidence;
    const kindLabel=item.matchupType==="first-pick"?"FIRST PICK · УНИВЕРСАЛЬНЫЙ ВЫБОР"
-    :item.matchupType==="ranked-advantage"?"РАНГОВОЕ ПРЕИМУЩЕСТВО"
-    :item.matchupType==="ranked-risk"?"РАНГОВЫЙ РИСК"
     :item.matchupType==="direct-counter"?"ЕСТЬ СИГНАЛ В МАТЧАП-ДАННЫХ"
     :item.matchupType==="mixed-matchup"?"СМЕШАННЫЙ МАТЧАП · ЕСТЬ РИСК"
     :item.matchupType==="team-synergy"?"СИНЕРГИЯ С СОЮЗНИКАМИ":"СИТУАЦИОННЫЙ ВАРИАНТ";
