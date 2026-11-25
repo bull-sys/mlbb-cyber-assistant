@@ -256,7 +256,7 @@ test("item encyclopedia uses compact scanner tiles and a tabbed fixed detail she
  assert.match(appSource,/function closeEncyItemModal/);
  assert.doesNotMatch(appSource,/details class="ency-info-card visual item"/);
  assert.match(appSource,/data-item-category/);
- assert.match(appSource,/encyItemFilter==="all"\|\|x.category===encyItemFilter/);
+ assert.match(appSource,/group.type==="item"&&encyItemFilter!=="all"&&x.category!==encyItemFilter/);
  assert.match(appSource,/itemCategories=\["Все предметы","Атака","Магия","Защита","Передвижение","Роум","Лес"\]/);
  assert.match(appSource,/\$\("encyItemCategories"\)/);
 });
