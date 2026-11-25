@@ -736,22 +736,78 @@ function analyze({lane, enemies = [], allies = [], myHero = "", rankedMatchups =
   const selectedEmblemData = selectedEmblemProfile
     ? emblems.find(entry => entry.id === selectedEmblemProfile.emblemId) || null
     : null;
-  const selectedTalentRecommendations = (selectedEmblemProfile?.talentIds || [])
-    .map((id, index) => {
-      const talent = talents.find(entry => entry.id === id);
-      return talent ? {
-        id: talent.id,
-        tier: talent.tier,
-        name: talent.name,
-        description: talent.description,
-        effect: talent.effect,
-        source: talent.source,
-        checkedAt: talent.checkedAt,
-        verification: talent.verification || "listed"
-      } : null;
-    })
-    .filter(Boolean)
-    .sort((a, b) => a.tier - b.tier);
+  const selectedCombat = selected?.profile?.combat || {};
+  const enemyBurstCount = enemy.filter(hero => {
+    const value = enemyProfileByName.get(hero.name)?.combat?.burst;
+    return value === "high" || value === "very_high" || (hero.tags || []).includes("burst");
+  }).length;
+  const enemyPhysicalCount = enemy.filter(hero => {
+    const profile = enemyProfileByName.get(hero.name);
+    return profile?.combat?.damage === "physical" || ["assassin", "fighter", "marksman"].includes(hero.type);
+  }).length;
+  const enemyFrontlineCount = enemy.filter(hero => {
+    const profile = enemyProfileByName.get(hero.name);
+    return hero.type === "tank" || ["high", "very_high"].includes(profile?.combat?.durability);
+  }).length;
+  const enemyControlCount = enemy.filter(hero => {
+    const profile = enemyProfileByName.get(hero.name);
+    return ["high", "very_high"].includes(profile?.combat?.control) || (hero.tags || []).includes("control");
+  }).length;
+  const enemySquishyCount = enemy.filter(hero => {
+    const profile = enemyProfileByName.get(hero.name);
+    return ["low", "very_low"].includes(profile?.combat?.durability);
+  }).length;
+  const ownTags = new Set(selected?.tags || []);
+  const allyHasEngage = team.some(hero => (hero.tags || []).some(tag => ["engage", "control"].includes(tag)));
+  const baselineTalentIds = selectedEmblemProfile?.talentIds || [];
+  const talentContextRules = {
+    rupture: { tier: 1, score: enemyFrontlineCount >= 2 ? 6 : 0, reason: "Против нескольких плотных героев полезнее адаптивное пробивание." },
+    firmness: { tier: 1, score: enemyPhysicalCount >= 2 ? 6 : 0, reason: "В составе противника несколько источников физического урона: дополнительная защита повышает устойчивость." },
+    vitality: { tier: 1, score: enemyBurstCount >= 2 ? 7 : 0, reason: "У противника несколько героев с высоким взрывным уроном: запас здоровья помогает пережить стартовую комбинацию." },
+    swift: { tier: 1, score: selected?.type === "marksman" && selectedCombat.dps === "high" ? 4 : 0, reason: "Стрелку с высоким постоянным уроном полезна дополнительная скорость атаки." },
+    agility: { tier: 1, score: lane === "Роум" ? 5 : 0, reason: "Для роумера скорость перемещения помогает быстрее занимать позиции и перемещаться между линиями." },
+    inspire: { tier: 1, score: selected?.type === "mage" && ["high", "very_high"].includes(selectedCombat.control) ? 4 : 0, reason: "Герой-мага с выраженным контролем чаще зависит от доступности навыков." },
+    "seasoned-hunter": { tier: 2, score: lane === "Лес" ? 12 : 0, reason: "Для лесной позиции талант усиливает урон по крупным нейтральным целям." },
+    "wilderness-blessing": { tier: 2, score: lane === "Роум" ? 8 : 0, reason: "Для роумера важны быстрые перемещения по реке и лесным проходам." },
+    tenacity: { tier: 2, score: enemyBurstCount >= 2 || enemyControlCount >= 2 ? 7 : 0, reason: "Несколько угроз взрывного урона или контроля повышают ценность защитного эффекта при низком здоровье." },
+    "master-assassin": { tier: 2, score: selected?.type === "assassin" && enemySquishyCount >= 2 ? 6 : 0, reason: "В составе противника несколько менее выносливых целей: талант поддерживает игру через изоляцию одиночной цели." },
+    "festival-of-blood": { tier: 2, score: ["high", "very_high"].includes(selectedCombat.sustain) ? 5 : 0, reason: "Профиль героя указывает на устойчивость в затяжных боях: вампиризм от навыков усиливает этот стиль." },
+    "weapon-master": { tier: 2, score: selected?.type === "marksman" && selectedCombat.dps === "high" ? 5 : 0, reason: "Стрелок с высоким уроном получает дополнительную пользу от усиления бонусных характеристик." },
+    "pull-yourself-together": { tier: 2, score: selected?.type === "support" && allyHasEngage ? 5 : 0, reason: "Союзная команда располагает инициированием: сокращение перезарядки заклинания и активных эффектов полезнее." },
+    "focusing-mark": { tier: 3, score: (selected?.type === "support" || lane === "Роум") && team.length >= 2 ? 7 : 0, reason: "Герой играет на поддержку команды: метка усиливает урон союзников по общей цели." },
+    "concussive-blast": { tier: 3, score: selected?.type === "tank" && ownTags.has("engage") ? 7 : 0, reason: "Танк с возможностью входа в бой может чаще активировать дополнительный урон по области." },
+    "impure-rage": { tier: 3, score: selected?.type === "mage" ? 6 : 0, reason: "Маг регулярно наносит урон навыками: талант добавляет урон и восстанавливает ману." },
+    "killing-spree": { tier: 3, score: selected?.type === "assassin" && (ownTags.has("pickoff") || ["high", "very_high"].includes(selectedCombat.mobility)) ? 7 : 0, reason: "Мобильный убийца может завершать устранения и использовать восстановление со скоростью для продолжения атаки или выхода." },
+    "lethal-ignition": { tier: 3, score: ["high", "very_high"].includes(selectedCombat.burst) ? 7 : 0, reason: "Профиль героя подтверждает высокий взрывной урон: талант усиливает серию сильных попаданий." },
+    "weakness-finder": { tier: 3, score: selected?.type === "marksman" ? 7 : 0, reason: "Стрелку полезно замедлять цель и снижать её скорость атаки обычными попаданиями." },
+    "quantum-charge": { tier: 3, score: selected?.type === "marksman" && ["high", "very_high"].includes(selectedCombat.dps) ? 6 : 0, reason: "Стрелок с высоким уроном от базовых атак получает дополнительную мобильность и восстановление." },
+    "war-cry": { tier: 3, score: ["high", "very_high"].includes(selectedCombat.dps) ? 6 : 0, reason: "Высокий постоянный урон помогает чаще реализовывать усиление после серии попаданий." },
+    "brave-smite": { tier: 3, score: selected?.type === "fighter" && ["high", "very_high"].includes(selectedCombat.sustain) ? 6 : 0, reason: "Боец с устойчивостью и частым применением навыков получает дополнительное восстановление здоровья." }
+  };
+  const selectedTalentRecommendations = [1, 2, 3].map(tier => {
+    const baselineId = baselineTalentIds.find(id => talents.find(entry => entry.id === id && entry.tier === tier));
+    const candidatesForTier = talents.filter(entry => entry.tier === tier);
+    const scored = candidatesForTier.map(talent => {
+      const rule = talentContextRules[talent.id];
+      return { talent, score: (talent.id === baselineId ? 5 : 0) + (rule?.score || 0), reason: rule?.score ? rule.reason : "" };
+    }).sort((a, b) => b.score - a.score || Number(b.talent.id === baselineId) - Number(a.talent.id === baselineId));
+    const chosen = scored[0];
+    if (!chosen || chosen.score <= 0) return null;
+    const talent = chosen.talent;
+    return {
+      id: talent.id,
+      tier: talent.tier,
+      name: talent.name,
+      description: talent.description,
+      effect: talent.effect,
+      source: talent.source,
+      checkedAt: talent.checkedAt,
+      verification: talent.verification || "listed",
+      reason: chosen.reason || "Базовый ориентир из профиля героя; матчап-условия не дали достаточных оснований менять этот талант.",
+      contextual: Boolean(chosen.reason),
+      baseline: talent.id === baselineId
+    };
+  }).filter(Boolean);
 
   return {
     threats,
@@ -786,7 +842,7 @@ function analyze({lane, enemies = [], allies = [], myHero = "", rankedMatchups =
     } : null,
     talentTiers: selectedTalentRecommendations.map(entry => entry.name),
     talentRecommendations: selectedTalentRecommendations,
-    talentNotes: selected?.profile?.talentNotes || [],
+    talentNotes: selected ? [...(selected.profile.talentNotes || []), ...(enemy.length ? ["Ситуативные замены учитывают состав противника и выбранную линию; если явного преимущества нет, сохраняется базовый профиль героя."] : ["Без выбранных врагов используются базовые рекомендации профиля героя."])] : [],
     spell: lane === "Лес" ? "Возмездие" : "Вспышка",
     timing: {
       early: "Контролируй ключевые участки карты и отслеживай перемещения противника.",
