@@ -9,7 +9,9 @@ const sample = {
     id: "jungle", label: "Лес",
     ranks: {
       all: { label: "Все ранги", builds: [{ items: ["A"] }] },
-      legend: { label: "Легенда", builds: [{ items: ["B"] }, { items: ["C"] }] }
+      legend: { label: "Легенда", builds: [{ items: ["B"] }, { items: ["C"] }] },
+      honor: { label: "Мифическая честь", builds: [{ items: ["D"] }] },
+      glory: { label: "Мифическая слава", builds: [{ items: ["E"] }] }
     }
   }]
 };
@@ -41,4 +43,16 @@ test("reports source failures without fabricating a build", () => {
   const result = selectObservedBuild({ ok: false, error: "HTTP 503" }, { lane: "Лес" });
   assert.equal(result.status, "unavailable");
   assert.equal(result.message, "HTTP 503");
+});
+
+
+test("supports Mythical Honor and Mythical Glory as distinct source ranks", () => {
+  const honor = selectObservedBuild(sample, { lane: "Лес", rank: "honor" });
+  const glory = selectObservedBuild(sample, { lane: "Лес", rank: "glory" });
+  assert.equal(honor.rankUsed, "honor");
+  assert.equal(honor.rankLabel, "Мифическая честь");
+  assert.equal(honor.builds[0].items[0], "D");
+  assert.equal(glory.rankUsed, "glory");
+  assert.equal(glory.rankLabel, "Мифическая слава");
+  assert.equal(glory.builds[0].items[0], "E");
 });
