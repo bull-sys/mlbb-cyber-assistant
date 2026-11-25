@@ -30,6 +30,17 @@ for(let id of ["enemyPick","allyPick","myHero"])draftOptions($(id));
 for(let id of ["profileHero","filterHero"])options($(id),data.heroes);
 for(let id of ["lane","profileRole","filterRole"])options($(id),data.roles);
 for(let id of ["profileRank","filterRank"])options($(id),data.ranks);
+const buildHeroSelect=$("buildHero");
+if(buildHeroSelect){
+ const buildHeroes=[...(data.heroCatalog||[])].sort((a,b)=>(a.displayNameRu||a.nameEn).localeCompare(b.displayNameRu||b.nameEn,"ru"));
+ buildHeroSelect.innerHTML='<option value="">Не выбрано · только ситуативные рекомендации</option>'+buildHeroes.map(hero=>'<option value="'+esc(hero.id)+'">'+esc((hero.displayNameRu||hero.nameEn)+" ("+hero.nameEn+")")+'</option>').join("");
+ buildHeroSelect.addEventListener("change",()=>{
+  const hero=buildHeroes.find(entry=>entry.id===buildHeroSelect.value);
+  const laneToPosition={"EXP Lane":"exp","Jungle":"jungle","Mid Lane":"mid","Gold Lane":"gold","Roam":"roam"};
+  const position=laneToPosition[hero?.lanes?.primary];
+  if(position)$("buildPosition").value=position;
+ });
+}
 for(let id of ["profileStyle","filterStyle"])options($(id),data.styles);
 $("threats").innerHTML=threatDefs.map(([id,name])=>`<button class="chip" data-threat="${id}">${name}</button>`).join("");
 restoreDraft();drawTeams();renderEncy();$api("/game-assets").then(result=>{if(result?.ok){encyRemoteAssets=result;renderEncy()}}).catch(()=>{});if(token)await refreshMe();
@@ -400,11 +411,44 @@ function recommendBuild({items,archetype,threats=[]}){
   return score?{name:item.name,category:item.category,description:item.description,score,reasons:[...new Set(reasons)],index}:null;
  }).filter(Boolean).sort((a,b)=>b.score-a.score||a.index-b.index).slice(0,6);
 }
-$("buildBtn").onclick=()=>{
- const result=recommendBuild({items:data.items,archetype:$("archetype").value,threats:[...threats]});
- $("buildResult").innerHTML=result.length
-  ?`<h3>Рекомендованный порядок</h3>${result.map((item,i)=>`<div class="result"><b>${i+1}. ${esc(item.name)}</b><small> · ${esc(item.category)}</small><p>${esc(item.reasons.join(" · "))}</p><p class="hint">${esc(item.description||"Ситуативный предмет")}</p></div>`).join("")}<p class="hint">Учитываются архетип и отмеченные угрозы. Это рекомендация по тегам каталога, а не расчёт винрейта или точных параметров текущего патча.</p>`
-  :'<p class="hint">Для этого сочетания архетипа и угроз в каталоге пока нет подходящих предметов.</p>';
+$("buildBtn").onclick=async()=>{
+ const button=$("buildBtn"),originalLabel=button.textContent;
+ button.disabled=true;button.textContent="Сверяю статистику…";
+ try{
+  const heroId=$("buildHero")?.value||"";
+  const positionId=$("buildPosition")?.value||"exp";
+  const rankKey=$("buildRank")?.value||"all";
+  let observedMarkup="",baselineNames=new Set(),observedBuild=null;
+  if(heroId){
+   try{
+    const payload=await $api("/hero-builds/"+encodeURIComponent(heroId));
+    const position=payload.positions?.find(entry=>entry.id===positionId);
+    let rankUsed=rankKey,rankData=position?.ranks?.[rankUsed],rankFallback=false;
+    if((!rankData?.builds?.length)&&rankKey!=="all"&&position?.ranks?.all?.builds?.length){rankUsed="all";rankData=position.ranks.all;rankFallback=true}
+    const hero=(data.heroCatalog||[]).find(entry=>entry.id===heroId);
+    if(!payload.ok)throw new Error(payload.error||"Источник сборок недоступен");
+    if(!position)observedMarkup='<div class="observed-draft-empty">Источник пока не вернул сборки для выбранной позиции.</div>';
+    else if(!rankData?.builds?.length)observedMarkup='<div class="observed-draft-empty">Для выбранной позиции и ранга сборок пока нет.</div>';
+    else{
+     observedBuild=rankData.builds[0];
+     const itemList=(observedBuild.items||[]).map((item,index)=>{if(item.catalogMatched)baselineNames.add(item.name.toLowerCase().trim());return '<li>'+esc(item.name)+(item.catalogMatched?'':' <small>· не сопоставлено</small>')+'</li>'}).join("");
+     const talents=(observedBuild.talents||[]).map(talent=>esc(talent.name)+(talent.catalogMatched?'':' · не сопоставлено')).join(" · ");
+     const emblem=observedBuild.emblem?.name?esc(observedBuild.emblem.name)+(observedBuild.emblem.catalogMatched?'':' · не сопоставлено'):"Не указана";
+     const spell=observedBuild.spell?.name?esc(observedBuild.spell.name)+(observedBuild.spell.catalogMatched?'':' · не сопоставлено'):"Не указан";
+     const rates=[Number.isFinite(observedBuild.winRate)?'WR '+observedBuild.winRate.toFixed(2)+'%':'',Number.isFinite(observedBuild.pickRate)?'Выбор '+observedBuild.pickRate.toFixed(2)+'%':''].filter(Boolean).join(" · ");
+     observedMarkup='<section class="observed-draft-wrap"><div class="observed-draft-heading"><b>Статистическая основа · '+esc(hero?.displayNameRu||hero?.nameEn||heroId)+'</b><small>'+esc(position.label)+' · '+esc(rankData.label||rankKey)+'</small></div>'+(rankFallback?'<p class="observed-draft-note">Для выбранного ранга нет записи — показаны все ранги.</p>':'')+'<article class="observed-draft-card"><div class="observed-draft-card-head"><b>Вариант из источника</b><small>'+esc(rates||"Статистика не указана")+'</small></div><ol>'+itemList+'</ol><div class="observed-draft-meta"><span><small>ЭМБЛЕМА</small><b>'+emblem+'</b></span><span><small>ЗАКЛИНАНИЕ</small><b>'+spell+'</b></span></div><p><small>ТАЛАНТЫ</small><b>'+talents+'</b></p></article><small class="observed-draft-source">Источник: '+esc(payload.source?.name||"MLBBDex")+(payload.source?.url?' · <a href="'+esc(payload.source.url)+'" target="_blank" rel="noopener noreferrer">атрибуция</a>':'')+'. <a href="'+esc(payload.methodology||"https://mlbbdex.com/ru/methodology")+'" target="_blank" rel="noopener noreferrer">Методика</a>. Размер выборки не опубликован.</small></section>';
+    }
+   }catch(error){observedMarkup='<div class="observed-draft-empty">Не удалось загрузить статистическую основу: '+esc(error.message||"ошибка источника")+'</div>'}
+  }
+  const result=recommendBuild({items:data.items,archetype:$("archetype").value,threats:[...threats]})
+   .filter(item=>!baselineNames.has(item.name.toLowerCase().trim()))
+   .slice(0,heroId?3:6);
+  const recommendations=result.length
+   ?'<h3>'+(heroId?"Ситуативные дополнения к основе":"Рекомендованный порядок")+'</h3>'+result.map((item,i)=>'<div class="result"><b>'+(i+1)+'. '+esc(item.name)+'</b><small> · '+esc(item.category)+'</small><p>'+esc(item.reasons.join(" · "))+'</p><p class="hint">'+esc(item.description||"Ситуативный предмет")+'</p></div>').join("")
+   :'<p class="hint">По выбранному архетипу и угрозам новых ситуативных предметов не найдено. Проверь, нет ли нужного предмета уже в статистической основе.</p>';
+  $("buildResult").innerHTML=observedMarkup+recommendations+'<p class="hint">Статистическая основа показывает наблюдаемые рейтинговые сборки. Ситуативные дополнения рассчитываются отдельно по архетипу и угрозам; это эвристика, не гарантия оптимальности или победы.</p>';
+ }catch(error){$("buildResult").innerHTML='<p class="hint">'+esc(error.message||"Не удалось собрать рекомендации.")+'</p>'}
+ finally{button.disabled=false;button.textContent=originalLabel}
 };
 async function auth(action){let body={email:$("email").value,password:$("password").value,nickname:$("nickname").value};try{let d=await $api("/auth/"+action,{method:"POST",body:JSON.stringify(body)});token=d.token;localStorage.setItem("mlbb_token",token);const restored=await refreshMe();$("authMessage").textContent=restored?"Успешный вход":"Не удалось подтвердить сессию. Войди ещё раз."}catch(e){$("authMessage").textContent=e.message}}
 $("login").onclick=()=>auth("login");$("register").onclick=()=>auth("register");
