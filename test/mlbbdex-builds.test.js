@@ -33,7 +33,7 @@ test("normalizes observed builds by position and rank", () => {
   assert.equal(build.emblem.catalogMatched, true);
   assert.deepEqual(build.talents.map(talent => talent.name), ["Роковой удар", "Мастер оружия", "Боевой клич"]);
   assert.equal(build.spell.name, "Окаменение");
-  assert.equal(build.spell.catalogMatched, false);
+  assert.equal(build.spell.catalogMatched, true);
   assert.equal(build.winRate, 68.87);
   assert.equal(build.pickRate, 2.5);
   assert.equal(result.sampleSizeAvailable, false);
@@ -69,4 +69,22 @@ test("maps Weapon Master but preserves generic All emblem as unmatched", () => {
   assert.equal(build.talents[0].catalogMatched, true);
   assert.equal(build.spell.name, "Вдохновение");
   assert.equal(build.spell.catalogMatched, true);
+});
+
+test("maps every documented MLBBDex battle spell to the local catalogue", () => {
+  const spells = [
+    ["Petrify", "Окаменение"],
+    ["Aegis", "Щит"],
+    ["Vengeance", "Месть"],
+    ["Revitalize", "Исцеление"],
+    ["Flameshot", "Пламя"]
+  ];
+  for (const [sourceSpell, localName] of spells) {
+    const result = normalizeHeroBuildPayload({
+      data: { Mid: { all: [{ items: [], emblem: "All", talents: [], spell: sourceSpell }] } }
+    });
+    const spell = result.positions[0].ranks.all.builds[0].spell;
+    assert.equal(spell.name, localName, sourceSpell);
+    assert.equal(spell.catalogMatched, true, sourceSpell);
+  }
 });
