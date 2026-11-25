@@ -1630,3 +1630,24 @@ body.ency-item-modal-open{overflow:hidden!important;overscroll-behavior:none}
  .ency-filter-block{padding:9px 8px}
  #encyItemCategories{padding-inline:1px}
 }
+
+/* Observed ranked hero builds */
+.ency-build-controls{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:0 0 14px}
+.ency-build-controls label{display:grid;gap:6px;color:var(--muted,#aab2c7);font-size:.78rem}
+.ency-build-controls select{width:100%;min-width:0;padding:11px 12px;border:1px solid rgba(130,150,190,.28);border-radius:12px;background:#101522;color:inherit;font:inherit}
+.ency-observed-build{padding:14px;margin:10px 0;border:1px solid rgba(92,126,190,.24);border-radius:15px;background:linear-gradient(145deg,rgba(24,34,56,.82),rgba(12,17,29,.92))}
+.ency-observed-build-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:11px}
+.ency-observed-build-head b{font-size:.92rem}
+.ency-observed-build-head span{font-size:.75rem;color:#9fe4d1;text-align:right}
+.ency-build-items{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:12px}
+.ency-build-item{display:inline-flex;align-items:center;padding:7px 9px;border-radius:9px;background:rgba(85,133,211,.14);border:1px solid rgba(104,151,225,.2);font-size:.8rem}
+.ency-build-item.unmatched{border-color:rgba(255,180,90,.38);color:#f5c78c}
+.ency-build-meta{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.ency-build-meta span,.ency-build-talents{display:grid;gap:4px}
+.ency-build-meta small,.ency-build-talents small{color:var(--muted,#aab2c7);font-size:.7rem}
+.ency-build-meta b,.ency-build-talents b{font-size:.82rem;font-weight:650}
+.ency-build-talents{margin:10px 0 0}
+.ency-build-warning{margin:9px 0 0;color:#f1bd7d;font-size:.75rem;line-height:1.45}
+.ency-build-source-note{margin:12px 0 6px;color:var(--muted,#aab2c7);font-size:.77rem;line-height:1.5}
+.ency-build-source-note+.ency-data-credit{margin-top:0}
+@media(max-width:560px){.ency-build-controls{grid-template-columns:1fr}.ency-observed-build-head{align-items:flex-start;flex-direction:column}.ency-observed-build-head span{text-align:left}}
