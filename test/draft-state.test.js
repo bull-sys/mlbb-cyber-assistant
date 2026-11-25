@@ -11,6 +11,7 @@ const valid = {
   enemies: ["saber", "Тигрил"],
   allies: ["Хелкарт"],
   lane: "Лес",
+  rank: "legend",
   myHero: "saber",
   threats: ["heal", "cc"],
   savedAt: 1795370000000
@@ -20,6 +21,12 @@ test("draft state accepts known legacy names and catalog IDs", () => {
   assert.deepEqual(normalizeDraftState(valid, options), valid);
 });
 
+test("draft state preserves the selected rank and supports older drafts without one", () => {
+  assert.equal(normalizeDraftState({ ...valid, rank: "glory" }, options).rank, "glory");
+  const { rank, ...legacyDraft } = valid;
+  assert.equal(normalizeDraftState(legacyDraft, options).rank, "");
+});
+
 test("draft state accepts a partially completed draft without a selected lane", () => {
   assert.equal(normalizeDraftState({ ...valid, lane: "" }, options).lane, "");
 });
@@ -27,6 +34,7 @@ test("draft state accepts a partially completed draft without a selected lane", 
 test("draft state rejects unknown hero identifiers and invalid lanes", () => {
   assert.equal(normalizeDraftState({ ...valid, enemies: ["unknown"] }, options), null);
   assert.equal(normalizeDraftState({ ...valid, lane: "unknown" }, options), null);
+  assert.equal(normalizeDraftState({ ...valid, rank: "immortal" }, options), null);
 });
 
 test("draft state enforces team size, uniqueness and threat allowlist", () => {
