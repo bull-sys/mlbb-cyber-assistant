@@ -401,36 +401,19 @@ A further review found two overly broad recommendation conditions:
 The Malefic Roar regression now asserts that a durable Leomord profile without explicit physical-armour evidence does not trigger the item. Existing Miya attack-speed tests continue to cover Chastise Pauldron and Blade Armor. These are code-level safeguards; they do not imply that all 133 heroes already have complete attack-speed or physical-defence classifications. CI for these latest commits has not yet been verified in this audit pass.
 
 
-### Profile coverage correction — 2026-11-25
 
-A follow-up parser review corrected an earlier undercount. Five combat profiles (Joy, Kadita, Karina, Lancelot and Leomord) use quoted JSON-style keys for their combat fields; the previous audit expression only counted unquoted keys. All 117 detailed hero profiles currently contain all 12 combat fields (damage, range, mobility, burst, DPS, durability, sustain, control, engage, disengage, wave clear and objective damage). The hero catalog has 133 entries, so 16 heroes still use baseline/unverified profiles rather than detailed combat profiles. No missing combat block was found among the 117 detailed profiles.
+### Full roster profile audit correction — 2026-11-25
 
-The five profiles were reviewed against current skill references. Joy and Kadita deal magic damage; Lancelot and Leomord deal physical damage. Karina's kit is primarily magic damage but her passive adds true damage. Her profile now uses `magic_and_true`, and the combat-threat helper preserves true damage as its own kind rather than silently dropping it or misclassifying it as physical. Counter-item logic still queries physical and magic separately; true damage is not treated as reducible by physical or magic defence.
+A parser review found that 16 existing profile records use JSON-style quoted keys (for example, `"id"`) while the other records use unquoted JavaScript keys. Earlier regex-only counts matched only 117 records and incorrectly reported the remaining 16 as missing. No new hero profiles were needed; all 16 were already present in `rawHeroProfiles`.
 
-Sources checked:
-- https://liquipedia.net/mobilelegends/Joy
-- https://mlbb.io/en/hero/kadita
-- https://mobile-legends.fandom.com/wiki/Karina
-- https://mobile-legends.fandom.com/wiki/Lancelot
-- https://liquipedia.net/mobilelegends/Leomord
+The corrected structural audit evaluates the actual profile array and confirms:
+- 133 profile records and 133 unique hero IDs.
+- Exact coverage of the 133-entry `heroCatalog`: no missing profiles and no profiles outside the catalog.
+- All 133 profiles contain all 12 required combat fields: damage, range, mobility, burst, DPS, durability, sustain, control, engage, disengage, wave clear and objective damage.
+- All profiles pass the required structural checks for mechanics, strengths, weaknesses, item notes, teamfight guidance, HTTPS sources, patch metadata and confidence.
+- All matchup and synergy target IDs resolve to an existing profile.
+- `buildCounterPickDataAudit()` already checks the 12 combat fields, and the regression suite asserts zero incomplete profiles.
 
-This is profile coverage and damage-type validation, not a claim that all 117 profiles' qualitative ratings have been independently re-reviewed against in-client match footage.
+The correct damage-profile distribution is: physical 67; magic 54; physical + true 4; physical + magic 2; mixed 3; magic + true 1; physical + true (alternate source label) 2. Karina's profile is `magic_and_true`; the combat-threat helper now preserves true damage as a separate kind. Phoveus remains `physical_and_magic`. Sora is physical damage; the name of his True Art skill is not used as evidence of true damage.
 
-
-### Missing tactical profiles completed — 2026-11-25
-
-Added the 16 hero profiles that were present in the 133-hero catalog but absent from the tactical profile array: Lesley, Lolita, Luo Yi, Lylia, Martis, Aamon, Alice, Angela, Odette, Phoveus, Popol and Kupa, Ruby, Saber, Selena, Silvanna and Sora.
-
-Each new record now includes the complete 12-field combat block, four skill/mechanics notes, strengths, weaknesses, itemization caveats, a teamfight plan, target priorities, tactical cautions and HTTPS references. The records use the catalog's reviewed role and lane values. All new profiles remain `partial`; this does not claim professional VOD review or complete patch-by-patch validation.
-
-Matchup arrays and `matchupEvidence` are included only for the existing 16-entry ranked matchup set already specified by the repository regression suite. These are statistical signals, not deterministic counter guarantees. Synergy arrays remain empty where no separately reviewed evidence is recorded.
-
-Damage classification is deliberately explicit:
-- Aamon, Alice, Angela, Luo Yi, Lylia, Odette and Selena are classified as magic damage.
-- Lesley, Lolita, Popol and Kupa, Ruby, Saber, Silvanna and Sora are classified as physical damage.
-- Martis is `physical_and_true` because his ultimate can deal true damage below its execution threshold.
-- Phoveus is `physical_and_magic`; his kit includes both damage types.
-
-Phoveus's mixed damage is important for defensive item recommendations: it must not be treated as purely physical or purely magical. Sora's True Art name is not treated as evidence of true damage; his current skill descriptions list physical damage.
-
-References for the new mechanics and role/lane checks are recorded in each hero profile and in `server/hero-catalog.js`. The 16 new profiles bring the tactical profile set to the full 133-hero catalog once the regression suite passes. The test run for this commit is not yet confirmed.
+This correction supersedes the earlier statements in this document that only 117 profiles were detailed or that 16 profiles were missing. It confirms structural coverage, not independent re-review of every qualitative combat rating or professional VOD for every hero.
