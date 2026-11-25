@@ -4,7 +4,7 @@ import test from "node:test";
 import { heroes, items, emblems, talents } from "../server/data.js";
 import { heroProfiles } from "../server/hero-profiles.js";
 import { getDraftHeroAnalysisProfiles } from "../server/draft-hero-selection.js";
-import { hasCombatDamageKind } from "../server/combat-threats.js";
+import { hasCombatDamageKind, isHighBurstThreat } from "../server/combat-threats.js";
 const draftAnalysisProfiles = getDraftHeroAnalysisProfiles();
 
 // Keep production code untouched: load the local analyze() declaration from
@@ -102,7 +102,7 @@ if (serverSource.slice(analyzeEnd, endpointStart).trim() !== "") {
 const analyzeSource = serverSource.slice(analyzeStart, analyzeEnd);
 let analyze;
 try {
-  analyze = new Function("heroes", "items", "emblems", "talents", "heroProfiles", "draftAnalysisProfiles", "hasCombatDamageKind", `${analyzeSource}\nreturn analyze;`)(heroes, items, emblems, talents, heroProfiles, draftAnalysisProfiles, hasCombatDamageKind);
+  analyze = new Function("heroes", "items", "emblems", "talents", "heroProfiles", "draftAnalysisProfiles", "hasCombatDamageKind", "isHighBurstThreat", `${analyzeSource}\nreturn analyze;`)(heroes, items, emblems, talents, heroProfiles, draftAnalysisProfiles, hasCombatDamageKind, isHighBurstThreat);
 } catch (error) {
   throw new Error(`Draft analysis tests could not compile the complete analyze() function from server/index.js: ${error.message}`, { cause: error });
 }
