@@ -58,6 +58,12 @@ for (const emblem of emblems) {
   for (const key of [full, short, normalize(emblem.id)]) if (key) emblemIndex.set(key, emblem);
 }
 const talentIndex = catalogIndex(talents, "nameEn");
+const spellNames = new Map(Object.entries({
+  petrify: "Окаменение", flicker: "Вспышка", retribution: "Возмездие", inspire: "Вдохновение",
+  purify: "Очищение", flameshot: "Пламя", aegis: "Щит", sprint: "Спринт",
+  revitalize: "Исцеление", vengeance: "Месть"
+}));
+const localSpellNames = new Set(["Возмездие","Вспышка","Очищение","Окаменение","Вдохновение","Пламя","Исцеление","Спринт","Щит","Месть"]);
 talentIndex.set(normalize("Weapons Master"), talents.find(talent => talent.id === "weapon-master"));
 
 const heroList = await getJson(BASE + "/api/v1/heroes");
@@ -76,7 +82,7 @@ const worker = async () => {
       itemCount: 0, matchedItems: 0, unmatchedItems: [],
       emblemCount: 0, matchedEmblems: 0, unmatchedEmblems: [],
       talentCount: 0, matchedTalents: 0, unmatchedTalents: [],
-      spells: [], error: null
+      spells: [], spellCount: 0, matchedSpells: 0, unmatchedSpells: [], error: null
     };
     try {
       const payload = await getJson(BASE + "/api/v1/heroes/" + encodeURIComponent(slug) + "/builds");
@@ -114,14 +120,14 @@ const worker = async () => {
               if (talentIndex.has(normalize(name))) record.matchedTalents++;
               else record.unmatchedTalents.push(name);
             }
-            if (typeof build?.spell === "string" && !record.spells.includes(build.spell)) record.spells.push(build.spell);
+            if (typeof build?.spell === "string" && build.spell) {\n              record.spellCount++;\n              const key = build.spell.toLowerCase().replace(/[^a-z]/gu, "");\n              const localName = spellNames.get(key);\n              if (localName && localSpellNames.has(localName)) record.matchedSpells++;\n              else record.unmatchedSpells.push(build.spell);\n              if (!record.spells.includes(build.spell)) record.spells.push(build.spell);\n            }
           }
         }
         if (Object.keys(positionResult.ranks).length) record.positions.push(positionResult);
       }
       record.unmatchedItems = [...new Set(record.unmatchedItems)].sort();
       record.unmatchedEmblems = [...new Set(record.unmatchedEmblems)].sort();
-      record.unmatchedTalents = [...new Set(record.unmatchedTalents)].sort();
+      record.unmatchedTalents = [...new Set(record.unmatchedTalents)].sort();\n      record.unmatchedSpells = [...new Set(record.unmatchedSpells)].sort();
     } catch (error) {
       record.status = "error";
       record.error = String(error?.message || error).slice(0, 180);
@@ -135,9 +141,9 @@ results.sort((a, b) => a.id.localeCompare(b.id));
 const successful = results.filter(hero => hero.status === "ok");
 const withBuilds = successful.filter(hero => hero.buildCount > 0);
 const totals = results.reduce((acc, hero) => {
-  for (const key of ["buildCount", "itemCount", "matchedItems", "emblemCount", "matchedEmblems", "talentCount", "matchedTalents"]) acc[key] += hero[key] || 0;
+  for (const key of ["buildCount", "itemCount", "matchedItems", "emblemCount", "matchedEmblems", "talentCount", "matchedTalents", "spellCount", "matchedSpells"]) acc[key] += hero[key] || 0;
   return acc;
-}, { buildCount: 0, itemCount: 0, matchedItems: 0, emblemCount: 0, matchedEmblems: 0, talentCount: 0, matchedTalents: 0 });
+}, { buildCount: 0, itemCount: 0, matchedItems: 0, emblemCount: 0, matchedEmblems: 0, talentCount: 0, matchedTalents: 0, spellCount: 0, matchedSpells: 0 });
 const positionCoverage = Object.fromEntries(POSITIONS.map(position => [position, {
   heroes: withBuilds.filter(hero => hero.positions.some(entry => entry.position === position)).length,
   builds: successful.reduce((sum, hero) => sum + (hero.positions.find(entry => entry.position === position)?.ranks
@@ -156,7 +162,7 @@ const report = {
   mappingRates: {
     items: totals.itemCount ? Number((totals.matchedItems / totals.itemCount * 100).toFixed(2)) : null,
     emblems: totals.emblemCount ? Number((totals.matchedEmblems / totals.emblemCount * 100).toFixed(2)) : null,
-    talents: totals.talentCount ? Number((totals.matchedTalents / totals.talentCount * 100).toFixed(2)) : null
+    talents: totals.talentCount ? Number((totals.matchedTalents / totals.talentCount * 100).toFixed(2)) : null,\n    spells: totals.spellCount ? Number((totals.matchedSpells / totals.spellCount * 100).toFixed(2)) : null
   },
   positionCoverage, rankCoverage,
   failedHeroes: results.filter(hero => hero.status !== "ok").map(({ id, nameEn, slug, error }) => ({ id, nameEn, slug, error })),
@@ -164,7 +170,7 @@ const report = {
   unmatchedNames: {
     items: [...new Set(results.flatMap(hero => hero.unmatchedItems))].sort(),
     emblems: [...new Set(results.flatMap(hero => hero.unmatchedEmblems))].sort(),
-    talents: [...new Set(results.flatMap(hero => hero.unmatchedTalents))].sort()
+    talents: [...new Set(results.flatMap(hero => hero.unmatchedTalents))].sort(),\n    spells: [...new Set(results.flatMap(hero => hero.unmatchedSpells))].sort()
   },
   heroes: results
 };
