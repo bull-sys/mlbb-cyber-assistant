@@ -625,13 +625,15 @@ function analyze({lane, enemies = [], allies = [], myHero = "", rankedMatchups =
       add(5, "Добавляет защиту против физического урона", physicalTargets);
     }
 
-    const tankTargets = enemy.filter(hero => {
-      const profile = enemyProfileByName.get(hero.name);
-      return hero.type === "tank" || ["high", "very_high"].includes(profile?.combat?.durability) || (hero.tags || []).includes("frontline");
-    }).map(hero => hero.name);
-    if (tags.has("penetration") && tankTargets.length &&
+    // Malefic Roar is a response to physical defence, not to the Tank role
+    // or general durability. Only recommend it when the enemy catalogue
+    // explicitly records a physical-defence/armour-stacking threat.
+    const physicalArmorTargets = enemy.filter(hero =>
+      (hero.tags || []).some(tag => ["physical-defense", "high-physical-defense", "armor-stack"].includes(tag))
+    ).map(hero => hero.name);
+    if (tags.has("penetration") && physicalArmorTargets.length &&
         physicalBuild && item.category === "Атака" && item.name === "Злобный рык") {
-      add(8, "Помогает пробивать физическую защиту плотной передней линии", tankTargets);
+      add(8, "Помогает пробивать подтверждённую высокую физическую защиту", physicalArmorTargets);
     }
 
     if (tags.has("survival") && hasBurstThreat) {
