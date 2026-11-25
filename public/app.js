@@ -480,7 +480,7 @@ function renderEncy(){
  const filterHost=$("encyAdvancedFilters");
  if(filterHost){
   const make=(items,attr,current)=>items.map(([value,label])=>'<button type="button" class="chip'+(current===value?" active":"")+'" data-'+attr+'="'+value+'" aria-pressed="'+(current===value)+'">'+label+'</button>').join("");
-  const counts=(entries,key)=>entries.reduce((out,x)=>{const k=key(x);if(k)out[k]=(out[k]||0)+1;return out;},{});
+  const counts=(entries,key)=>entries.reduce((out,x)=>{const value=key(x);for(const k of (Array.isArray(value)?value:[value]))if(k)out[k]=(out[k]||0)+1;return out;},{});
   const laneCounts=counts(heroEntries,x=>[x.hero.lanes?.primary,...(x.hero.lanes?.flexible||[])].map(laneKey).filter(Boolean));
   const roleCounts=counts(heroEntries,x=>(x.hero.role?.values||[]).map(roleKey).filter(Boolean));
   const tierCounts=[1,2,3].map(tier=>talents.filter(x=>Number(x.tier)===tier).length);
