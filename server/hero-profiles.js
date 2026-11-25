@@ -520,7 +520,7 @@ const rawHeroProfiles = [
   },
 
     {
-      "id": "saber",
+      id: "saber",
       "names": {
         "ru": "Сабер",
         "en": "Saber",
@@ -2873,7 +2873,7 @@ const rawHeroProfiles = [
 
   
     {
-      "id": "lesley",
+      id: "lesley",
       "names": {
         "ru": "Лесли",
         "en": "Lesley",
@@ -2969,7 +2969,7 @@ const rawHeroProfiles = [
       "confidence": "partial"
     },
     {
-      "id": "lolita",
+      id: "lolita",
       "names": {
         "ru": "Лолита",
         "en": "Lolita",
@@ -3066,7 +3066,7 @@ const rawHeroProfiles = [
       "confidence": "partial"
     },
     {
-      "id": "luo-yi",
+      id: "luo-yi",
       "names": {
         "ru": "Ло Йи",
         "en": "Luo Yi",
@@ -3162,7 +3162,7 @@ const rawHeroProfiles = [
       "confidence": "partial"
     },
     {
-      "id": "lylia",
+      id: "lylia",
       "names": {
         "ru": "Лилия",
         "en": "Lylia",
@@ -3258,7 +3258,7 @@ const rawHeroProfiles = [
       "confidence": "partial"
     },
     {
-      "id": "martis",
+      id: "martis",
       "names": {
         "ru": "Мартис",
         "en": "Martis",
@@ -3750,7 +3750,7 @@ const rawHeroProfiles = [
     confidence: "partial"
   },
   {
-    "id": "aamon",
+    id: "aamon",
     "names": {
       "ru": "Эймон",
       "en": "Aamon",
@@ -3851,7 +3851,7 @@ const rawHeroProfiles = [
     "confidence": "partial"
   },
   {
-    "id": "alice",
+    id: "alice",
     "names": {
       "ru": "Алиса",
       "en": "Alice",
@@ -3953,7 +3953,7 @@ const rawHeroProfiles = [
     "confidence": "partial"
   },
   {
-    "id": "angela",
+    id: "angela",
     "names": {
       "ru": "Ангела",
       "en": "Angela",
@@ -4054,7 +4054,7 @@ const rawHeroProfiles = [
     "confidence": "partial"
   },
   {
-    "id": "odette",
+    id: "odette",
     "names": {
       "ru": "Одетта",
       "en": "Odette",
@@ -4155,7 +4155,7 @@ const rawHeroProfiles = [
     "confidence": "partial"
   },
   {
-    "id": "phoveus",
+    id: "phoveus",
     "names": {
       "ru": "Фовиус",
       "en": "Phoveus",
@@ -4257,7 +4257,7 @@ const rawHeroProfiles = [
     "confidence": "partial"
   },
   {
-    "id": "popol-and-kupa",
+    id: "popol-and-kupa",
     "names": {
       "ru": "Пополь и Купа",
       "en": "Popol and Kupa",
@@ -4360,7 +4360,7 @@ const rawHeroProfiles = [
     "confidence": "partial"
   },
   {
-    "id": "ruby",
+    id: "ruby",
     "names": {
       "ru": "Руби",
       "en": "Ruby",
@@ -4462,7 +4462,7 @@ const rawHeroProfiles = [
     "confidence": "partial"
   },
   {
-    "id": "selena",
+    id: "selena",
     "names": {
       "ru": "Селена",
       "en": "Selena",
@@ -4565,7 +4565,7 @@ const rawHeroProfiles = [
     "confidence": "partial"
   },
   {
-    "id": "silvanna",
+    id: "silvanna",
     "names": {
       "ru": "Сильвана",
       "en": "Silvanna",
@@ -4665,7 +4665,7 @@ const rawHeroProfiles = [
     "confidence": "partial"
   },
   {
-    "id": "sora",
+    id: "sora",
     "names": {
       "ru": "Сора",
       "en": "Sora",
