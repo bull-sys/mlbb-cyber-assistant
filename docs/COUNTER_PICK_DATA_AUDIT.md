@@ -362,3 +362,15 @@ The current implementation separates them:
 Regression tests compare candidate order, scores and matchup labels with and without ranked evidence, verify that positive/negative rank aggregates remain informational, and retain local matchup evidence when rank aggregates are present. CI on the current branch passed all tests, the live item catalog/artwork audit, scheduled-audit script syntax validation and the production Docker build.
 
 This is a code-level and regression audit. A fresh full 133-hero MLBBDex crawl is still pending; the previously recorded 2,913-build coverage report remains the latest roster-wide audit. No Render deployment was performed.
+
+
+### Item-effect audit — Attack Speed counters (2026-11-25)
+
+A current-patch review found an obsolete `anti-attack-speed` tag on Dominance Ice. Patch 2.1.30 removed Dominance Ice's Arctic Cold attack-speed reduction and moved that counter effect to Chastise Pauldron; patch 2.2.23 further nerfed Chastise's reduction to 80% of normal. The local Dominance Ice passive description was already updated to Fortress Shield + Lifebane, but its tags had not been updated. The stale tag is removed, while its `anti-heal` tag is retained. Chastise Pauldron remains the explicit anti-attack-speed item, and Blade Armor remains a separate response to frequent physical basic attacks.
+
+Sources checked:
+- https://liquipedia.net/mobilelegends/Patch_2.1.30
+- https://liquipedia.net/mobilelegends/Patch_2.2.23
+- https://mlbb.tools/items/chastise-pauldron
+
+A regression now checks that an attack-speed-only enemy triggers Chastise Pauldron and Blade Armor, but not Dominance Ice. Existing sustain tests continue to check Dominance Ice as an anti-heal option.
