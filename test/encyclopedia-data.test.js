@@ -60,7 +60,7 @@ test("item encyclopedia records have descriptions and the six shop categories", 
   assert.ok(items.find(item => item.englishName === "Expert Gloves").stats.includes("+30 адаптивной атаки"));
   const itemById = id => items.find(item => item.englishName === id);
   assert.match(itemById("Dominance Ice").passive, /Lifebane/);
-  assert.match(itemById("Athena's Shield").passive, /25%.*3 секунды/);
+  assert.match(itemById("Valkyrie's Shield").passive, /25%.*3 секунды/);
   assert.match(itemById("Radiant Armor").passive, /0,4 секунды/);
   assert.match(itemById("Genius Wand").passive, /2,5.*3 раз/);
   assert.match(itemById("Blade of Despair").passive, /ниже 50%.*25%/);
@@ -83,8 +83,8 @@ test("item encyclopedia records have descriptions and the six shop categories", 
   assert.match(itemById("Great Dragon Spear").passive, /После применения ультимейта.*30%.*7,5 секунды/);
   assert.match(itemById("Malefic Gun").passive, /30%.*12%.*10% скорости/);
   assert.match(itemById("Windtalker").passive, /5–2 секунды.*150–362.*200%/);
-  assert.match(itemById("Demon Boots").passive, /Mysticism.*4% маны.*2 секунд/);
-  assert.equal(itemById("Magic Boots").passive, undefined);
+  assert.match(itemById("Demon Shoes").passive, /Mysticism.*4% маны.*2 секунд/);
+  assert.equal(itemById("Magic Shoes").passive, undefined);
   assert.equal(itemById("Rapid Boots").passive, undefined);
   assert.match(itemById("Tough Boots").passive, /25%/);
   assert.match(itemById("Warrior Boots").passive, /4 дополнительной физической защиты.*до 20/);
@@ -234,4 +234,14 @@ test("item records expose curated community nicknames and the current Sky Pierce
 test("all 104 item records resolve to a deterministic MLBBDex artwork URL", () => {
  assert.ok(appSource.includes('return remote?.image||("https://mlbbdex.com/visuels/objets/"+slug+".webp");'));
  assert.match(appSource,/remote\?\.image\|\|\("https:\/\/mlbbdex\.com\/visuels\/objets\//);
+});
+
+ 
+test("special equipment uses dedicated current icon assets and renamed equipment keeps verified asset slugs", () => {
+ const byEnglish=name=>items.find(item=>item.englishName===name);
+ for(const name of ["Allow Throw","Broken Heart","Bloody Retribution","Flame Retribution","Ice Retribution","Conceal","Dire Hit","Encourage","Favor","Throw Forbidden"]) assert.ok(byEnglish(name)?.assetImage?.endsWith(".png"),name+" needs a dedicated icon");
+ assert.equal(byEnglish("Valkyrie's Shield").assetSlug,"valkyrie-s-shield");
+ assert.equal(byEnglish("Demon Shoes").assetSlug,"demon-shoes");
+ assert.equal(byEnglish("Magic Shoes").assetSlug,"magic-shoes");
+ assert.equal(byEnglish("Berserker's Fury").assetSlug,"berserker-s-fury");
 });
