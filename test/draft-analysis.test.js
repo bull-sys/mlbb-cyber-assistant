@@ -504,6 +504,24 @@ test("attack-speed counterbuild uses Chastise Pauldron and Blade Armor, not obso
   assert.ok(result.buildDetails.find(item => item.name === "Наплечник наказания").against.includes("Мия"));
 });
 
+test("counter-item explanations stay attached to the enemy each effect counters", () => {
+  const result = run({ lane: "Роум", myHero: "Тигрил", enemies: ["Мия", "Леоморд"] });
+  const chastise = result.buildDetails.find(item => item.name === "Наплечник наказания");
+  assert.ok(chastise);
+  assert.ok(chastise.against.includes("Мия"));
+  assert.ok(chastise.against.includes("Леоморд"));
+
+  const miyaItem = result.enemyMatchups.find(matchup => matchup.name === "Мия")
+    .counterItems.find(item => item.name === "Наплечник наказания");
+  const leomordItem = result.enemyMatchups.find(matchup => matchup.name === "Леоморд")
+    .counterItems.find(item => item.name === "Наплечник наказания");
+  assert.ok(miyaItem);
+  assert.ok(leomordItem);
+  assert.match(miyaItem.reason, /Ослабляет героев, зависящих от частых базовых атак/);
+  assert.doesNotMatch(leomordItem.reason, /Ослабляет героев, зависящих от частых базовых атак/);
+  assert.match(leomordItem.reason, /Добавляет защиту против физического урона/);
+});
+
 test("counter build responds to attack speed and magic burst in a full enemy team", () => {
   const result = run({ lane: "Золото", myHero: "Мия", enemies: ["Эйдора", "Минотавр", "Мия"] });
   const names = result.buildDetails.map(item => item.name);
