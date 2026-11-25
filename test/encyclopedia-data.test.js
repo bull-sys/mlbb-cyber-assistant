@@ -263,11 +263,11 @@ test("item encyclopedia uses compact scanner tiles and a tabbed fixed detail she
 
 
 test("encyclopedia provides independent lane, role, talent-tier, effect and emblem-class filters", () => {
- assert.match(appSource,/data-hero-lane/);
- assert.match(appSource,/data-hero-role/);
- assert.match(appSource,/data-talent-tier/);
- assert.match(appSource,/data-talent-effect/);
- assert.match(appSource,/data-emblem-class/);
+ assert.match(appSource, /attr:"hero-lane"/);
+ assert.match(appSource, /attr:"hero-role"/);
+ assert.match(appSource, /attr:"talent-tier"/);
+ assert.match(appSource, /"talent-effect"/);
+ assert.match(appSource, /attr:"emblem-class"/);
  assert.match(appSource,/encyHeroLaneFilter!=="all"/);
  assert.match(appSource,/encyHeroRoleFilter!=="all"/);
  assert.match(appSource,/encyTalentTierFilter!=="all"/);
