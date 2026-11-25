@@ -257,7 +257,7 @@ test("hybrid defense talent uses verified damage types, not hero class labels", 
   const mixedDamage = run({
     lane: "Роум",
     myHero: "Тигрил",
-    enemies: ["Карина", "Тигрил"]
+    enemies: ["Карина", "Минотавр"]
   });
 
   assert.notEqual(
