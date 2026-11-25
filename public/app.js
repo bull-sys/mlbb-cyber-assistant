@@ -95,7 +95,7 @@ function renderOwnHeroRecommendations(){
   host.innerHTML='<small class="own-recommendation-caption">'+mode+' · ВЫБЕРИ ОДНОГО ИЗ ТРЁХ · '+esc($("lane").value||"ЛИНИЯ НЕ ВЫБРАНА")+'</small><div class="own-recommendation-list">'+draftRecommendations.map((item,index)=>{const hero=pickerEntries().find(entry=>entry.value===item.id||entry.name===item.name);const portrait=hero?heroPortraitUrl(hero):"";const value=hero?.value||item.id||item.name;return '<button type="button" class="own-recommendation" data-own-recommendation="'+esc(value)+'"><span class="own-recommendation-rank">0'+(index+1)+'</span>'+(portrait?'<img src="'+portrait+'" alt="" loading="lazy"> ':'<span class="own-recommendation-fallback">'+esc(item.name.slice(0,1))+'</span>')+'<span><b>'+esc(item.name)+'</b><small>'+esc(item.role||$("lane").value)+'</small></span><i>ВЫБРАТЬ</i></button>'}).join("")+'</div>';
  }
  function invalidateOwnPick(){if($("myHero").value){$("myHero").value="";$("myHeroChoice").textContent="Не выбран"}draftRecommendations=[];}
- function draftSnapshot(){return {version:1,enemies:[...enemies],allies:[...allies],lane:$("lane").value,myHero:$("myHero").value,threats:[...threats],savedAt:Date.now()}}
+ function draftSnapshot(){return {version:1,enemies:[...enemies],allies:[...allies],lane:$("lane").value,rank:$("draftRank")?.value||"",myHero:$("myHero").value,threats:[...threats],savedAt:Date.now()}}
 function setDraftStatus(message){const el=$("draftSaveStatus");if(el)el.textContent=message}
 function saveDraft(){
  const snapshot=draftSnapshot();
@@ -112,6 +112,7 @@ function applyDraftState(saved){
  enemies=Array.isArray(saved.enemies)?saved.enemies.map(normalizeName).filter(x=>names.has(x)).slice(0,5):[];
  allies=Array.isArray(saved.allies)?saved.allies.map(normalizeName).filter(x=>names.has(x)).slice(0,4):[];
  if(data.roles.includes(saved.lane))$("lane").value=saved.lane;
+ if(["","all","epic","legend","mythic","honor","glory"].includes(saved.rank||""))$("draftRank").value=saved.rank||"";
  const savedMyHero=normalizeName(saved.myHero);
  if(names.has(savedMyHero)){$("myHero").value=savedMyHero;$("myHeroChoice").textContent=draftHeroLabel(savedMyHero)}else $("myHeroChoice").textContent="Не выбран";
  const allowed=new Set(threatDefs.map(([id])=>id));
@@ -282,7 +283,7 @@ function animateDraftReport(){
  void report.offsetWidth;
  report.classList.add("arena-report-enter");
 }
-$("analyze").onclick=runDraft;$("lane").addEventListener("change",()=>{$("myHero").value="";$("myHeroChoice").textContent="Не выбран";draftRecommendations=[];drawTeams();saveDraft();runDraft()});$("myHero").addEventListener("change",()=>{$("myHeroChoice").textContent=$("myHero").value?draftHeroLabel($("myHero").value):"Не выбран";drawTeams();saveDraft()});
+$("analyze").onclick=runDraft;$("lane").addEventListener("change",()=>{$("myHero").value="";$("myHeroChoice").textContent="Не выбран";draftRecommendations=[];drawTeams();saveDraft();runDraft()});$("draftRank").addEventListener("change",()=>{saveDraft();if(!$("draftResult").classList.contains("hidden"))runDraft()});$("myHero").addEventListener("change",()=>{$("myHeroChoice").textContent=$("myHero").value?draftHeroLabel($("myHero").value):"Не выбран";drawTeams();saveDraft()});
 async function runDraft(){
  if(!$("lane").value)return toast("Выбери свою линию");
  saveDraft();
@@ -292,7 +293,7 @@ async function runDraft(){
  $("draftResult").classList.remove("hidden");
  $("draftResult").innerHTML='<div class="report-loading"><span class="report-loader"></span><div><b>'+(enemies.length?"Собираю тактический отчёт":"Подбираю героя для первого выбора")+'</b><small>'+(enemies.length?"Проверяю угрозы и доступные контрпики":"Оцениваю универсальность и устойчивость героев выбранной линии")+'</small></div></div>';
  try{
-  const d=await $api("/ai/draft",{method:"POST",body:JSON.stringify({lane:$("lane").value,enemies,allies,myHero:$("myHero").value})});
+  const d=await $api("/ai/draft",{method:"POST",body:JSON.stringify({lane:$("lane").value,rank:$("draftRank")?.value||undefined,enemies,allies,myHero:$("myHero").value})});
   if(!$("myHero").value)draftRecommendations=(d.counters||[]).slice(0,3);
   if(d.analysisStatus==="limited"){
    const unsupported=(d.unsupportedHeroes||[]).map(hero=>'<div class="report-hero-row"><b>'+esc(hero.name)+'</b><small>'+esc(hero.id)+'</small></div>').join("");
