@@ -399,3 +399,19 @@ A further review found two overly broad recommendation conditions:
 - Blade Armor's attack-speed bonus could be attributed to an attack-speed hero without confirming that the hero's basic attacks are physical. The special Blade Armor counter bonus now requires both the attack-speed tag and a confirmed physical damage profile. Chastise Pauldron remains tied to attack-speed dependence because its attack-speed reduction applies to the attacker regardless of damage type.
 
 The Malefic Roar regression now asserts that a durable Leomord profile without explicit physical-armour evidence does not trigger the item. Existing Miya attack-speed tests continue to cover Chastise Pauldron and Blade Armor. These are code-level safeguards; they do not imply that all 133 heroes already have complete attack-speed or physical-defence classifications. CI for these latest commits has not yet been verified in this audit pass.
+
+
+### Profile coverage correction — 2026-11-25
+
+A follow-up parser review corrected an earlier undercount. Five combat profiles (Joy, Kadita, Karina, Lancelot and Leomord) use quoted JSON-style keys for their combat fields; the previous audit expression only counted unquoted keys. All 117 detailed hero profiles currently contain all 12 combat fields (damage, range, mobility, burst, DPS, durability, sustain, control, engage, disengage, wave clear and objective damage). The hero catalog has 133 entries, so 16 heroes still use baseline/unverified profiles rather than detailed combat profiles. No missing combat block was found among the 117 detailed profiles.
+
+The five profiles were reviewed against current skill references. Joy and Kadita deal magic damage; Lancelot and Leomord deal physical damage. Karina's kit is primarily magic damage but her passive adds true damage. Her profile now uses `magic_and_true`, and the combat-threat helper preserves true damage as its own kind rather than silently dropping it or misclassifying it as physical. Counter-item logic still queries physical and magic separately; true damage is not treated as reducible by physical or magic defence.
+
+Sources checked:
+- https://liquipedia.net/mobilelegends/Joy
+- https://mlbb.io/en/hero/kadita
+- https://mobile-legends.fandom.com/wiki/Karina
+- https://mobile-legends.fandom.com/wiki/Lancelot
+- https://liquipedia.net/mobilelegends/Leomord
+
+This is profile coverage and damage-type validation, not a claim that all 117 profiles' qualitative ratings have been independently re-reviewed against in-client match footage.
